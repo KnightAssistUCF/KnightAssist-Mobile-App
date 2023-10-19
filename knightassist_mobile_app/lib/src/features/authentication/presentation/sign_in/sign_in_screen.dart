@@ -1,6 +1,5 @@
-import 'package:knightassist_mobile_app/src/features/authentication/presentation/sign_in/email_password_sign_in_controller.dart';
-import 'package:knightassist_mobile_app/src/features/authentication/presentation/sign_in/email_password_sign_in_form_type.dart';
-import 'package:knightassist_mobile_app/src/features/authentication/presentation/sign_in/email_password_sign_in_validators.dart';
+import 'package:knightassist_mobile_app/src/features/authentication/presentation/sign_in/sign_in_controller.dart';
+import 'package:knightassist_mobile_app/src/features/authentication/presentation/sign_in/auth_validators.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/sign_in/string_validators.dart';
 import 'package:knightassist_mobile_app/src/utils/async_value_ui.dart';
 import 'package:knightassist_mobile_app/src/common_widgets/custom_text_button.dart';
@@ -11,9 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class EmailPasswordSignInScreen extends StatelessWidget {
-  const EmailPasswordSignInScreen({super.key, required this.formType});
-  final EmailPasswordSignInFormType formType;
+class SignInScreen extends StatelessWidget {
+  const SignInScreen({super.key});
 
   static const emailKey = Key('email');
   static const passwordKey = Key('password');
@@ -22,25 +20,21 @@ class EmailPasswordSignInScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Sign In')),
-      body: EmailPasswordSignInContents(formType: formType),
+      body: const SignInContents(),
     );
   }
 }
 
-class EmailPasswordSignInContents extends ConsumerStatefulWidget {
-  const EmailPasswordSignInContents(
-      {super.key, this.onSignedIn, required this.formType});
+class SignInContents extends ConsumerStatefulWidget {
+  const SignInContents({super.key, this.onSignedIn});
   final VoidCallback? onSignedIn;
-  final EmailPasswordSignInFormType formType;
 
   @override
-  ConsumerState<EmailPasswordSignInContents> createState() =>
-      _EmailPasswordSignInContentsState();
+  ConsumerState<SignInContents> createState() => _SignInContentsState();
 }
 
-class _EmailPasswordSignInContentsState
-    extends ConsumerState<EmailPasswordSignInContents>
-    with EmailAndPasswordValidators {
+class _SignInContentsState extends ConsumerState<SignInContents>
+    with AuthValidators {
   final _formKey = GlobalKey<FormState>();
   final _node = FocusScopeNode();
   final _emailController = TextEditingController();
@@ -50,8 +44,6 @@ class _EmailPasswordSignInContentsState
   String get password => _passwordController.text;
 
   var _submitted = false;
-
-  late var _formType = widget.formType;
 
   @override
   void dispose() {
@@ -67,10 +59,8 @@ class _EmailPasswordSignInContentsState
     });
 
     if (_formKey.currentState!.validate()) {
-      final controller =
-          ref.read(emailPasswordSignInControllerProvider.notifier);
-      final success = await controller.submit(
-          email: email, password: password, formType: _formType);
+      final controller = ref.read(signInControllerProvider.notifier);
+      final success = await controller.submit(email: email, password: password);
       if (success) {
         widget.onSignedIn?.call();
       }
@@ -91,16 +81,11 @@ class _EmailPasswordSignInContentsState
     _submit();
   }
 
-  void _updateFormType() {
-    setState(() => _formType = _formType.secondaryActionFormType);
-    _passwordController.clear();
-  }
-
   @override
   Widget build(BuildContext context) {
-    ref.listen<AsyncValue>(emailPasswordSignInControllerProvider,
+    ref.listen<AsyncValue>(signInControllerProvider,
         (_, state) => state.showAlertDialogOnError(context));
-    final state = ref.watch(emailPasswordSignInControllerProvider);
+    final state = ref.watch(signInControllerProvider);
     return ResponsiveScrollableCard(
         child: FocusScope(
       node: _node,
@@ -111,7 +96,7 @@ class _EmailPasswordSignInContentsState
           children: <Widget>[
             gapH8,
             TextFormField(
-              key: EmailPasswordSignInScreen.emailKey,
+              key: SignInScreen.emailKey,
               controller: _emailController,
               decoration: InputDecoration(
                 labelText: 'Email',
@@ -133,16 +118,15 @@ class _EmailPasswordSignInContentsState
             ),
             gapH8,
             TextFormField(
-              key: EmailPasswordSignInScreen.passwordKey,
+              key: SignInScreen.passwordKey,
               controller: _passwordController,
               decoration: InputDecoration(
-                labelText: _formType.passwordLabelText,
+                labelText: 'Password',
                 enabled: !state.isLoading,
               ),
               autovalidateMode: AutovalidateMode.onUserInteraction,
-              validator: (password) => !_submitted
-                  ? null
-                  : passwordErrorText(password ?? '', _formType),
+              validator: (password) =>
+                  !_submitted ? null : passwordSignInErrorText(password ?? ''),
               obscureText: true,
               autocorrect: false,
               textInputAction: TextInputAction.done,
@@ -151,14 +135,15 @@ class _EmailPasswordSignInContentsState
             ),
             gapH8,
             PrimaryButton(
-              text: _formType.primaryButtonText,
+              text: 'Sign In',
               isLoading: state.isLoading,
               onPressed: state.isLoading ? null : () => _submit(),
             ),
             gapH8,
             CustomTextButton(
-              text: _formType.secondaryButtonText,
-              onPressed: state.isLoading ? null : _updateFormType,
+              text: 'Register',
+              // TODO: Move to register page if state not loading
+              onPressed: state.isLoading ? null : null,
             ),
           ],
         ),

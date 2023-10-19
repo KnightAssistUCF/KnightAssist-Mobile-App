@@ -6,7 +6,7 @@ part of 'auth_repository.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$authRepositoryHash() => r'd3ae5e3a1038da1ebf66dc733301302def31bce0';
+String _$authRepositoryHash() => r'0cc3e7f40050606e28a4835718baf726a2cb5d09';
 
 /// See also [authRepository].
 @ProviderFor(authRepository)
@@ -36,36 +36,5 @@ final authStateChangesProvider = StreamProvider<AppUser?>.internal(
 );
 
 typedef AuthStateChangesRef = StreamProviderRef<AppUser?>;
-String _$idTokenChangesHash() => r'e6058ad0b90d6e10b628af4b3dbd180a67b7146e';
-
-/// See also [idTokenChanges].
-@ProviderFor(idTokenChanges)
-final idTokenChangesProvider = StreamProvider<AppUser?>.internal(
-  idTokenChanges,
-  name: r'idTokenChangesProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$idTokenChangesHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-typedef IdTokenChangesRef = StreamProviderRef<AppUser?>;
-String _$isCurrentUserAdminHash() =>
-    r'7a9469c94639721af05bb3fe4c7c3d9c3aec66a4';
-
-/// See also [isCurrentUserAdmin].
-@ProviderFor(isCurrentUserAdmin)
-final isCurrentUserAdminProvider = FutureProvider<bool>.internal(
-  isCurrentUserAdmin,
-  name: r'isCurrentUserAdminProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$isCurrentUserAdminHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-typedef IsCurrentUserAdminRef = FutureProviderRef<bool>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

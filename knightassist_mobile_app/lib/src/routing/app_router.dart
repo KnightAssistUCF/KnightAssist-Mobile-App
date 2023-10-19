@@ -1,6 +1,5 @@
 import 'package:knightassist_mobile_app/src/features/authentication/data/auth_repository.dart';
-import 'package:knightassist_mobile_app/src/features/authentication/presentation/sign_in/email_password_sign_in_form_type.dart';
-import 'package:knightassist_mobile_app/src/features/authentication/presentation/sign_in/email_password_sign_in_screen.dart';
+import 'package:knightassist_mobile_app/src/features/authentication/presentation/sign_in/sign_in_screen.dart';
 import 'package:knightassist_mobile_app/src/routing/go_router_refresh_stream.dart';
 import 'package:knightassist_mobile_app/src/routing/not_found_screen.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +8,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'app_router.g.dart';
 
-enum AppRoute { home, account, signIn }
+enum AppRoute { home, event, account, signIn }
 
 @Riverpod(keepAlive: true)
 GoRouter goRouter(GoRouterRef ref) {
@@ -66,9 +65,7 @@ GoRouter goRouter(GoRouterRef ref) {
                   path: 'signIn',
                   name: AppRoute.signIn.name,
                   pageBuilder: (context, state) => const MaterialPage(
-                      fullscreenDialog: true,
-                      child: EmailPasswordSignInScreen(
-                          formType: EmailPasswordSignInFormType.signIn)))
+                      fullscreenDialog: true, child: SignInScreen()))
             ])
       ],
       errorBuilder: (context, state) => const NotFoundScreen());
