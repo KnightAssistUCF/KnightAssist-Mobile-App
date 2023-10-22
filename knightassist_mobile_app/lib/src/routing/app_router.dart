@@ -1,5 +1,10 @@
 import 'package:knightassist_mobile_app/src/features/authentication/data/auth_repository.dart';
+import 'package:knightassist_mobile_app/src/features/authentication/presentation/account/account_screen.dart';
+import 'package:knightassist_mobile_app/src/features/authentication/presentation/sign_in/register_organization_screen.dart';
+import 'package:knightassist_mobile_app/src/features/authentication/presentation/sign_in/register_student_screen.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/sign_in/sign_in_screen.dart';
+import 'package:knightassist_mobile_app/src/features/events/presentation/event_screen.dart';
+import 'package:knightassist_mobile_app/src/features/events/presentation/events_list.dart';
 import 'package:knightassist_mobile_app/src/routing/go_router_refresh_stream.dart';
 import 'package:knightassist_mobile_app/src/routing/not_found_screen.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +13,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'app_router.g.dart';
 
-enum AppRoute { home, event, account, signIn }
+enum AppRoute { home, event, account, signIn, registerStudent, registerOrg }
 
 @Riverpod(keepAlive: true)
 GoRouter goRouter(GoRouterRef ref) {
@@ -36,26 +41,16 @@ GoRouter goRouter(GoRouterRef ref) {
         GoRoute(
             path: '/',
             name: AppRoute.home.name,
-            builder: (context, state) => const HomeScreen(),
+            builder: (context, state) =>
+                const EventsListScreen(), // TEMP, change this to whatever screen you want to test (will need to rerun)
             routes: [
               GoRoute(
                   path: 'event/:id',
                   name: AppRoute.event.name,
                   builder: (context, state) {
                     final eventId = state.pathParameters['id']!;
-                    return EventScreen(eventId: eventId);
-                  },
-                  routes: [
-                    GoRoute(
-                        path: 'eventRegister',
-                        name: AppRoute.eventRegister.name,
-                        pageBuilder: (context, state) {
-                          final eventId = state.pathParameters['id']!;
-                          return MaterialPage(
-                              fullscreenDialog: true,
-                              child: eventRegisterScreen(eventId: eventId));
-                        }),
-                  ]),
+                    return EventScreen(eventID: eventId);
+                  }),
               GoRoute(
                   path: 'account',
                   name: AppRoute.account.name,
@@ -65,7 +60,18 @@ GoRouter goRouter(GoRouterRef ref) {
                   path: 'signIn',
                   name: AppRoute.signIn.name,
                   pageBuilder: (context, state) => const MaterialPage(
-                      fullscreenDialog: true, child: SignInScreen()))
+                      fullscreenDialog: true, child: SignInScreen())),
+              GoRoute(
+                  path: 'registerStudent',
+                  name: AppRoute.registerStudent.name,
+                  pageBuilder: (context, state) => const MaterialPage(
+                      fullscreenDialog: true, child: RegisterStudentScreen())),
+              GoRoute(
+                  path: 'registerOrg',
+                  name: AppRoute.registerOrg.name,
+                  pageBuilder: (context, state) => const MaterialPage(
+                      fullscreenDialog: true,
+                      child: RegisterOrganizationScreen())),
             ])
       ],
       errorBuilder: (context, state) => const NotFoundScreen());

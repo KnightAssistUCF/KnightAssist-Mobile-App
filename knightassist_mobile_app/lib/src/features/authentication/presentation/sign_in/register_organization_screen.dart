@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:knightassist_mobile_app/src/common_widgets/custom_text_button.dart';
 import 'package:knightassist_mobile_app/src/common_widgets/primary_button.dart';
 import 'package:knightassist_mobile_app/src/common_widgets/responsive_scrollable_card.dart';
 import 'package:knightassist_mobile_app/src/constants/app_sizes.dart';
@@ -193,12 +192,6 @@ class _RegisterOrganizationContentsState
               isLoading: state.isLoading,
               onPressed: state.isLoading ? null : () => _submit(),
             ),
-            gapH8,
-            CustomTextButton(
-              text: 'Sign In',
-              // TODO: Move to sign in page if state not loading
-              onPressed: state.isLoading ? null : null,
-            )
           ],
         ),
       ),

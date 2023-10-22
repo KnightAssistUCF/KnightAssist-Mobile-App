@@ -1,6 +1,8 @@
+import 'package:go_router/go_router.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/sign_in/sign_in_controller.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/sign_in/auth_validators.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/sign_in/string_validators.dart';
+import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 import 'package:knightassist_mobile_app/src/utils/async_value_ui.dart';
 import 'package:knightassist_mobile_app/src/common_widgets/custom_text_button.dart';
 import 'package:knightassist_mobile_app/src/common_widgets/primary_button.dart';
@@ -141,9 +143,17 @@ class _SignInContentsState extends ConsumerState<SignInContents>
             ),
             gapH8,
             CustomTextButton(
-              text: 'Register',
-              // TODO: Move to register page if state not loading
-              onPressed: state.isLoading ? null : null,
+              text: 'Register Student',
+              onPressed: () => state.isLoading
+                  ? null
+                  : context.pushNamed(AppRoute.registerStudent.name),
+            ),
+            gapH4,
+            CustomTextButton(
+              text: 'Register Organization',
+              onPressed: () => state.isLoading
+                  ? null
+                  : context.pushNamed(AppRoute.registerOrg.name),
             ),
           ],
         ),
