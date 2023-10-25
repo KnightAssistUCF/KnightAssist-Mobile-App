@@ -1,5 +1,5 @@
 import 'package:knightassist_mobile_app/src/features/authentication/domain/app_user.dart';
-import 'package:knightassist_mobile_app/src/features/authentication/domain/event.dart';
+import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
 
 class StudentUser extends AppUser {
   const StudentUser(
