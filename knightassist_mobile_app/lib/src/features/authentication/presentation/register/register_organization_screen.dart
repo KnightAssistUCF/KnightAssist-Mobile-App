@@ -5,52 +5,49 @@ import 'package:knightassist_mobile_app/src/common_widgets/primary_button.dart';
 import 'package:knightassist_mobile_app/src/common_widgets/responsive_scrollable_card.dart';
 import 'package:knightassist_mobile_app/src/constants/app_sizes.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/sign_in/auth_validators.dart';
-import 'package:knightassist_mobile_app/src/features/authentication/presentation/sign_in/register_student_controller.dart';
+import 'package:knightassist_mobile_app/src/features/authentication/presentation/register/register_organization_controller.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/sign_in/string_validators.dart';
 import 'package:knightassist_mobile_app/src/utils/async_value_ui.dart';
 
-class RegisterStudentScreen extends StatelessWidget {
-  const RegisterStudentScreen({super.key});
+class RegisterOrganizationScreen extends StatelessWidget {
+  const RegisterOrganizationScreen({super.key});
 
   static const emailKey = Key('email');
   static const passwordKey = Key('password');
   static const repeatPasswordKey = Key('repeatPassword');
-  static const firstNameKey = Key('firstName');
-  static const lastNameKey = Key('lastName');
+  static const nameKey = Key('name');
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Register Student')),
-      body: const RegisterStudentContents(),
+      appBar: AppBar(title: const Text('Register Organization')),
+      body: const RegisterOrganizationContents(),
     );
   }
 }
 
-class RegisterStudentContents extends ConsumerStatefulWidget {
-  const RegisterStudentContents({super.key, this.onRegistered});
+class RegisterOrganizationContents extends ConsumerStatefulWidget {
+  const RegisterOrganizationContents({super.key, this.onRegistered});
   final VoidCallback? onRegistered;
 
   @override
-  ConsumerState<RegisterStudentContents> createState() =>
-      _RegisterStudentContentsState();
+  ConsumerState<RegisterOrganizationContents> createState() =>
+      _RegisterOrganizationContentsState();
 }
 
-class _RegisterStudentContentsState
-    extends ConsumerState<RegisterStudentContents> with AuthValidators {
+class _RegisterOrganizationContentsState
+    extends ConsumerState<RegisterOrganizationContents> with AuthValidators {
   final _formKey = GlobalKey<FormState>();
   final _node = FocusScopeNode();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _repeatPasswordController = TextEditingController();
-  final _firstNameController = TextEditingController();
-  final _lastNameController = TextEditingController();
+  final _nameController = TextEditingController();
 
   String get email => _emailController.text;
   String get password => _passwordController.text;
   String get repeatPassword => _repeatPasswordController.text;
-  String get firstName => _firstNameController.text;
-  String get lastName => _lastNameController.text;
+  String get name => _nameController.text;
 
   var _submitted = false;
 
@@ -60,8 +57,7 @@ class _RegisterStudentContentsState
     _emailController.dispose();
     _passwordController.dispose();
     _repeatPasswordController.dispose();
-    _firstNameController.dispose();
-    _lastNameController.dispose();
+    _nameController.dispose();
     super.dispose();
   }
 
@@ -69,14 +65,11 @@ class _RegisterStudentContentsState
     setState(() {
       _submitted = true;
     });
-
     if (_formKey.currentState!.validate()) {
-      final controller = ref.read(registerStudentControllerProvider.notifier);
-      final success = await controller.submit(
-          email: email,
-          password: password,
-          firstName: firstName,
-          lastName: lastName);
+      final controller =
+          ref.read(registerOrganizationControllerProvider.notifier);
+      final success =
+          await controller.submit(email: email, password: password, name: name);
       if (success) {
         widget.onRegistered?.call();
       }
@@ -89,14 +82,8 @@ class _RegisterStudentContentsState
     }
   }
 
-  void _firstNameEditingComplete() {
-    if (canSubmitName(firstName)) {
-      _node.nextFocus();
-    }
-  }
-
-  void _lastNameEditingComplete() {
-    if (canSubmitName(lastName)) {
+  void _nameEditingComplete() {
+    if (canSubmitName(name)) {
       _node.nextFocus();
     }
   }
@@ -109,8 +96,7 @@ class _RegisterStudentContentsState
 
   void _repeatPasswordEditingComplete() {
     if (!canSubmitEmail(email) ||
-        !canSubmitName(firstName) ||
-        !canSubmitName(lastName) ||
+        !canSubmitName(name) ||
         !canRegisterSubmitPassword(password)) {
       _node.unfocus();
       return;
@@ -120,9 +106,9 @@ class _RegisterStudentContentsState
 
   @override
   Widget build(BuildContext context) {
-    ref.listen<AsyncValue>(registerStudentControllerProvider,
+    ref.listen<AsyncValue>(registerOrganizationControllerProvider,
         (_, state) => state.showAlertDialogOnError(context));
-    final state = ref.watch(registerStudentControllerProvider);
+    final state = ref.watch(registerOrganizationControllerProvider);
 
     return ResponsiveScrollableCard(
         child: FocusScope(
@@ -134,7 +120,7 @@ class _RegisterStudentContentsState
           children: <Widget>[
             gapH8,
             TextFormField(
-              key: RegisterStudentScreen.emailKey,
+              key: RegisterOrganizationScreen.emailKey,
               controller: _emailController,
               decoration: InputDecoration(
                   labelText: 'Email',
@@ -155,8 +141,8 @@ class _RegisterStudentContentsState
             ),
             gapH8,
             TextFormField(
-                key: RegisterStudentScreen.firstNameKey,
-                controller: _firstNameController,
+                key: RegisterOrganizationScreen.nameKey,
+                controller: _nameController,
                 decoration: InputDecoration(
                     labelText: 'First Name', enabled: !state.isLoading),
                 autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -165,23 +151,10 @@ class _RegisterStudentContentsState
                 autocorrect: false,
                 textInputAction: TextInputAction.next,
                 keyboardAppearance: Brightness.light,
-                onEditingComplete: () => _firstNameEditingComplete()),
+                onEditingComplete: () => _nameEditingComplete()),
             gapH8,
             TextFormField(
-                key: RegisterStudentScreen.lastNameKey,
-                controller: _lastNameController,
-                decoration: InputDecoration(
-                    labelText: 'Last name', enabled: !state.isLoading),
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                validator: (lastName) =>
-                    !_submitted ? null : nameErrorText(lastName ?? ''),
-                autocorrect: false,
-                textInputAction: TextInputAction.next,
-                keyboardAppearance: Brightness.light,
-                onEditingComplete: () => _lastNameEditingComplete()),
-            gapH8,
-            TextFormField(
-              key: RegisterStudentScreen.passwordKey,
+              key: RegisterOrganizationScreen.passwordKey,
               controller: _passwordController,
               decoration: InputDecoration(
                 labelText: 'Password',
@@ -199,7 +172,7 @@ class _RegisterStudentContentsState
             ),
             gapH8,
             TextFormField(
-              key: RegisterStudentScreen.repeatPasswordKey,
+              key: RegisterOrganizationScreen.repeatPasswordKey,
               controller: _repeatPasswordController,
               decoration: InputDecoration(
                   labelText: 'Repeat Password', enabled: !state.isLoading),
@@ -215,7 +188,7 @@ class _RegisterStudentContentsState
             ),
             gapH8,
             PrimaryButton(
-              text: 'Register Student',
+              text: 'Register Organization',
               isLoading: state.isLoading,
               onPressed: state.isLoading ? null : () => _submit(),
             ),
