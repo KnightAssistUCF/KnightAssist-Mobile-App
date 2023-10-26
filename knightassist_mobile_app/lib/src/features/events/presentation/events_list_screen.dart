@@ -28,19 +28,20 @@ class EventCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    final style = theme.textTheme.displayMedium!.copyWith(
-      color: theme.colorScheme.onPrimary,
-    );
+    const style = TextStyle(fontSize: 20, fontWeight: FontWeight.normal);
 
     return Card(
       color: theme.colorScheme.primary,
       elevation: 5,
       child: Padding(
         padding: const EdgeInsets.all(20.0),
-        child: Text(
-          "event",
-          style: style,
-          selectionColor: Colors.green,
+        child: ListTile(
+          title: const Text('event date', style: style),
+          subtitle: const Text('event org',
+              style: TextStyle(fontWeight: FontWeight.w900, fontSize: 15)),
+          trailing: const Text('event time', style: style),
+          textColor: Colors.white,
+          selectedColor: theme.colorScheme.onSecondary,
         ),
       ),
     );
