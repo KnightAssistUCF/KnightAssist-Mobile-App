@@ -14,10 +14,11 @@ class MyApp extends ConsumerWidget {
       restorationScopeId: 'app',
       onGenerateTitle: (BuildContext context) => 'KnightAssist',
       theme: ThemeData(
-          useMaterial3: false,
+          useMaterial3: true,
           primarySwatch: Colors.grey,
+          fontFamily: 'League Spartan',
           appBarTheme: const AppBarTheme(
-              backgroundColor: Colors.black87,
+              backgroundColor: Color.fromARGB(255, 101, 184, 145),
               foregroundColor: Colors.white,
               elevation: 0),
           elevatedButtonTheme: ElevatedButtonThemeData(
