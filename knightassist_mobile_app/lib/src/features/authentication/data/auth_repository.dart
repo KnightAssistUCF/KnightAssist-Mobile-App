@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:knightassist_mobile_app/src/features/authentication/domain/app_user.dart';
-import 'package:knightassist_mobile_app/src/features/authentication/domain/organization.dart';
+import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/domain/student_user.dart';
 import 'package:knightassist_mobile_app/src/utils/in_memory_store.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';

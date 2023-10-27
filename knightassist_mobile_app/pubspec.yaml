@@ -34,3 +34,11 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets: 
+    - assets/KnightAssistCoATransparent.png
+    - assets/KnightAssistCoA2.png
+    - assets/KnightAssistCoA3.png
+  fonts:
+    - family: League Spartan
+      fonts:
+       - asset: fonts/LeagueSpartan-VariableFont_wght.ttf
