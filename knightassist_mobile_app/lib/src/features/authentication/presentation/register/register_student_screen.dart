@@ -171,7 +171,7 @@ class _RegisterStudentContentsState
                 key: RegisterStudentScreen.lastNameKey,
                 controller: _lastNameController,
                 decoration: InputDecoration(
-                    labelText: 'Last name', enabled: !state.isLoading),
+                    labelText: 'Last Name', enabled: !state.isLoading),
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 validator: (lastName) =>
                     !_submitted ? null : nameErrorText(lastName ?? ''),
@@ -214,10 +214,13 @@ class _RegisterStudentContentsState
               onEditingComplete: () => _repeatPasswordEditingComplete(),
             ),
             gapH8,
-            PrimaryButton(
-              text: 'Register Student',
-              isLoading: state.isLoading,
-              onPressed: state.isLoading ? null : () => _submit(),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: PrimaryButton(
+                text: 'Register Student',
+                isLoading: state.isLoading,
+                onPressed: state.isLoading ? null : () => _submit(),
+              ),
             ),
           ],
         ),

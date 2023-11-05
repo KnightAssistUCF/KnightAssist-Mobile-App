@@ -144,10 +144,10 @@ class _RegisterOrganizationContentsState
                 key: RegisterOrganizationScreen.nameKey,
                 controller: _nameController,
                 decoration: InputDecoration(
-                    labelText: 'First Name', enabled: !state.isLoading),
+                    labelText: 'Organization Name', enabled: !state.isLoading),
                 autovalidateMode: AutovalidateMode.onUserInteraction,
-                validator: (firstName) =>
-                    !_submitted ? null : nameErrorText(firstName ?? ''),
+                validator: (orgName) =>
+                    !_submitted ? null : nameErrorText(orgName ?? ''),
                 autocorrect: false,
                 textInputAction: TextInputAction.next,
                 keyboardAppearance: Brightness.light,
@@ -187,10 +187,13 @@ class _RegisterOrganizationContentsState
               onEditingComplete: () => _repeatPasswordEditingComplete(),
             ),
             gapH8,
-            PrimaryButton(
-              text: 'Register Organization',
-              isLoading: state.isLoading,
-              onPressed: state.isLoading ? null : () => _submit(),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: PrimaryButton(
+                text: 'Register Organization',
+                isLoading: state.isLoading,
+                onPressed: state.isLoading ? null : () => _submit(),
+              ),
             ),
           ],
         ),
