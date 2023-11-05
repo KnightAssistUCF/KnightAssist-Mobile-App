@@ -1,5 +1,6 @@
 import 'package:knightassist_mobile_app/src/features/authentication/data/auth_repository.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/account/account_screen.dart';
+import 'package:knightassist_mobile_app/src/features/authentication/presentation/register/register_emailconfirmed_screen.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/register/register_organization_screen.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/register/register_student_screen.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/sign_in/sign_in_screen.dart';
@@ -42,7 +43,7 @@ GoRouter goRouter(GoRouterRef ref) {
             path: '/',
             name: AppRoute.home.name,
             builder: (context, state) =>
-                const SignInScreen(), // TEMP, change this to whatever screen you want to test (will need to rerun)
+                const ConfirmScreen(), // TEMP, change this to whatever screen you want to test (will need to rerun)
             routes: [
               GoRoute(
                   path: 'event/:id',
