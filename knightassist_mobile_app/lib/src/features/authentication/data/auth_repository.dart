@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/domain/app_user.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/domain/student_user.dart';
@@ -24,13 +25,22 @@ class AuthRepository {
     var uri =
         Uri.parse('https://knightassist-43ab3aeaada9.herokuapp.com/api/Login');
     var response = await http.post(uri, body: parameters);
-    if (response.statusCode == 200) {
-      // TODO: Determine if response is student or org
-    } else {
-      // Handle error
-      var body = jsonDecode(response.body);
-      String err = body["error"];
-      throw Exception(err);
+
+    switch (response.statusCode) {
+      case 200:
+        // Successful Login
+        // Check if user or org
+        break;
+      case 400:
+        // Send InvalidPassword exception
+        break;
+      case 404:
+        // Send UserNotFound exception
+        break;
+      default:
+        var body = jsonDecode(response.body);
+        String err = body["error"];
+        throw Exception(err);
     }
   }
 
@@ -42,28 +52,22 @@ class AuthRepository {
       "firstName": firstName,
       "lastName": lastName
     };
-    // TODO: Insert register student endpoint (may need to change http method)
-    var uri = Uri.parse('temp');
+    var uri = Uri.parse(
+        'https://knightassist-43ab3aeaada9.herokuapp.com/api/userStudentSignUp');
     var response = await http.post(uri, body: parameters);
-    if (response.statusCode == 201) {
-      final user = StudentUser(
-          id: jsonDecode(response.body)['studentID'],
-          email: jsonDecode(response.body)['email'],
-          firstName: jsonDecode(response.body)['firstName'],
-          lastName: jsonDecode(response.body)['lastName'],
-          profilePicture: jsonDecode(response.body)['profilePicture'],
-          favoritedOrganizations:
-              jsonDecode(response.body)['favoritedOrganizations'],
-          eventsRSVP: jsonDecode(response.body)['eventsRSVP'],
-          totalVolunteerHours: jsonDecode(response.body)['totalVolunteerHours'],
-          semesterVolunteerHours:
-              jsonDecode(response.body)['semesterVolunteerHours']);
-      _authState.value = user;
-    } else {
-      // Handle error
-      var body = jsonDecode(response.body);
-      String err = body["error"];
-      throw Exception(err);
+    debugPrint(response.body);
+    switch (response.statusCode) {
+      case 200:
+        // Student user created
+        // Direct user to confirm email address
+        break;
+      case 409:
+        // Send StudentUserAlreadyExists exception
+        break;
+      default:
+        var body = jsonDecode(response.body);
+        String err = body["error"];
+        throw Exception(err);
     }
   }
 
@@ -74,29 +78,26 @@ class AuthRepository {
       "password": password,
       "name": name
     };
-    // TODO: Insert register org endpoint (may need to change http method)
-    var uri = Uri.parse('temp');
+    var uri = Uri.parse(
+        'https://knightassist-43ab3aeaada9.herokuapp.com/api/organizationSignUp');
     var response = await http.post(uri, body: parameters);
-    if (response.statusCode == 201) {
-      final user = Organization(
-          id: jsonDecode(response.body)['id'],
-          name: jsonDecode(response.body)['name'],
-          email: jsonDecode(response.body)['email'],
-          logo: jsonDecode(response.body)['logo'],
-          background: jsonDecode(response.body)['background'],
-          events: jsonDecode(response.body)['events'],
-          followers: jsonDecode(response.body)['followers']);
-      _authState.value = user;
-    } else {
-      // Handle error
-      var body = jsonDecode(response.body);
-      String err = body["error"];
-      throw Exception(err);
+    switch (response.statusCode) {
+      case 200:
+        // Organization created
+        // Direct user to confirm email address
+        break;
+      case 409:
+        // Send OrganizationAlreadyExists exception
+        break;
+      default:
+        var body = jsonDecode(response.body);
+        String err = body["error"];
+        throw Exception(err);
     }
   }
 
   Future<void> signOut() async {
-    // Send and await sign out request
+    // Dispose of recovery token
     _authState.value = null;
   }
 

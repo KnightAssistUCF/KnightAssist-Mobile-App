@@ -6,6 +6,9 @@ import 'package:knightassist_mobile_app/src/features/authentication/presentation
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/sign_in/sign_in_screen.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/event_screen.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/events_list_screen.dart';
+import 'package:knightassist_mobile_app/src/features/home/presentation/home_screen.dart';
+import 'package:knightassist_mobile_app/src/features/organizations/presentation/organization_screen.dart';
+import 'package:knightassist_mobile_app/src/features/organizations/presentation/organizations_list_screen.dart';
 import 'package:knightassist_mobile_app/src/routing/go_router_refresh_stream.dart';
 import 'package:knightassist_mobile_app/src/routing/not_found_screen.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +17,17 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'app_router.g.dart';
 
-enum AppRoute { home, event, account, signIn, registerStudent, registerOrg }
+enum AppRoute {
+  home,
+  events,
+  event,
+  organizations,
+  organization,
+  account,
+  signIn,
+  registerStudent,
+  registerOrg
+}
 
 @Riverpod(keepAlive: true)
 GoRouter goRouter(GoRouterRef ref) {
@@ -42,16 +55,43 @@ GoRouter goRouter(GoRouterRef ref) {
         GoRoute(
             path: '/',
             name: AppRoute.home.name,
+<<<<<<< HEAD
             builder: (context, state) =>
                 const ConfirmScreen(), // TEMP, change this to whatever screen you want to test (will need to rerun)
+=======
+            builder: (context, state) => const HomeScreen(),
+>>>>>>> 8b4afefcd7aa0021c8bee4ea2d78e7beac36f8c1
             routes: [
               GoRoute(
-                  path: 'event/:id',
-                  name: AppRoute.event.name,
+                  path: 'events',
+                  name: AppRoute.events.name,
                   builder: (context, state) {
-                    final eventId = state.pathParameters['id']!;
-                    return EventScreen(eventID: eventId);
-                  }),
+                    return EventsListScreen();
+                  },
+                  routes: [
+                    GoRoute(
+                        path: 'events/:id',
+                        name: AppRoute.event.name,
+                        builder: (context, state) {
+                          final eventID = state.pathParameters['id']!;
+                          return EventScreen(eventID: eventID);
+                        })
+                  ]),
+              GoRoute(
+                  path: 'organizations',
+                  name: AppRoute.events.name,
+                  builder: (context, state) {
+                    return OrganizationsListScreen();
+                  },
+                  routes: [
+                    GoRoute(
+                        path: 'organizations/:id',
+                        name: AppRoute.event.name,
+                        builder: (context, state) {
+                          final orgID = state.pathParameters['id']!;
+                          return OrganizationScreen(orgID: orgID);
+                        })
+                  ]),
               GoRoute(
                   path: 'account',
                   name: AppRoute.account.name,

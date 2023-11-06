@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
 
-class EventScreen extends ConsumerWidget {
-  const EventScreen({super.key, required this.eventID});
-  final String eventID;
+class OrganizationScreen extends ConsumerWidget {
+  const OrganizationScreen({super.key, required this.orgID});
+  final String orgID;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Event'),
+        title: const Text('Organization'),
       ),
       body: const Center(child: Text("PLACEHOLDER")),
     );
