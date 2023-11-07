@@ -22,7 +22,15 @@ class RegisterStudentScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Register Student')),
-      body: const RegisterStudentContents(),
+      body: const Column(
+        children: [
+          Image(
+            image: AssetImage('assets/KnightAssistCoA3.png'),
+            height: 60,
+          ),
+          RegisterStudentContents(),
+        ],
+      ),
     );
   }
 }

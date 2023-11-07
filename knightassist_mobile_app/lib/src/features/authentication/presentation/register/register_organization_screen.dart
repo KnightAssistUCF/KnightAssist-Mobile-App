@@ -21,7 +21,15 @@ class RegisterOrganizationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Register Organization')),
-      body: const RegisterOrganizationContents(),
+      body: const Column(
+        children: [
+          Image(
+            image: AssetImage('assets/KnightAssistCoA3.png'),
+            height: 60,
+          ),
+          RegisterOrganizationContents(),
+        ],
+      ),
     );
   }
 }
