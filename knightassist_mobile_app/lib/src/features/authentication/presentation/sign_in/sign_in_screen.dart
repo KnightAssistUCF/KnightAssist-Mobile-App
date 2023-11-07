@@ -22,7 +22,24 @@ class SignInScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Sign In')),
-      body: const SignInContents(),
+      body: const Column(
+        children: [
+          Image(
+            image: AssetImage('assets/KnightAssistCoA3.png'),
+            height: 60,
+          ),
+          Text('welcome to',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
+          Text('KnightAssist',
+              style: TextStyle(fontSize: 30, fontWeight: FontWeight.w700)),
+          Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text('easier volunteering is just a step away!',
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400)),
+          ),
+          SignInContents(),
+        ],
+      ),
     );
   }
 }
@@ -136,21 +153,39 @@ class _SignInContentsState extends ConsumerState<SignInContents>
               onEditingComplete: () => _passwordEditingComplete(),
             ),
             gapH8,
-            PrimaryButton(
-              text: 'Sign In',
-              isLoading: state.isLoading,
-              onPressed: state.isLoading ? null : () => _submit(),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: PrimaryButton(
+                text: 'Sign In',
+                isLoading: state.isLoading,
+                onPressed: state.isLoading ? null : () => _submit(),
+              ),
             ),
             gapH8,
+            const Row(children: <Widget>[
+              Expanded(
+                  child: Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Divider(),
+              )),
+              Text("OR"),
+              Expanded(
+                  child: Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Divider(),
+              )),
+            ]),
             CustomTextButton(
-              text: 'Register Student',
+              text: 'Register as a Student',
+              style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 15),
               onPressed: () => state.isLoading
                   ? null
                   : context.pushNamed(AppRoute.registerStudent.name),
             ),
             gapH4,
             CustomTextButton(
-              text: 'Register Organization',
+              text: 'Register as an Organization',
+              style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 15),
               onPressed: () => state.isLoading
                   ? null
                   : context.pushNamed(AppRoute.registerOrg.name),

@@ -4,7 +4,7 @@ import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
 
 class EventScreen extends ConsumerWidget {
   const EventScreen({super.key, required this.eventID});
-  final EventID eventID;
+  final String eventID;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
