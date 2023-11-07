@@ -70,7 +70,7 @@ GoRouter goRouter(GoRouterRef ref) {
                   },
                   routes: [
                     GoRoute(
-                        path: 'events/:id',
+                        path: 'event/:id',
                         name: AppRoute.event.name,
                         builder: (context, state) {
                           final eventID = state.pathParameters['id']!;
@@ -79,14 +79,14 @@ GoRouter goRouter(GoRouterRef ref) {
                   ]),
               GoRoute(
                   path: 'organizations',
-                  name: AppRoute.events.name,
+                  name: AppRoute.organizations.name,
                   builder: (context, state) {
                     return OrganizationsListScreen();
                   },
                   routes: [
                     GoRoute(
-                        path: 'organizations/:id',
-                        name: AppRoute.event.name,
+                        path: 'organization/:id',
+                        name: AppRoute.organization.name,
                         builder: (context, state) {
                           final orgID = state.pathParameters['id']!;
                           return OrganizationScreen(orgID: orgID);
