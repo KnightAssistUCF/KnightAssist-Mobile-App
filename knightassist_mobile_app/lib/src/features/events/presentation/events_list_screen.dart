@@ -6,19 +6,37 @@ class EventsListScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    double h = MediaQuery.of(context).size.height;
+    double w = MediaQuery.of(context).size.width;
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Volunteer Shifts'),
-      ),
-      body: ListView(
-        children: const <Widget>[
-          EventCard(),
-          EventCard(),
-        ],
+      //appBar: AppBar(
+      //title: const Text('Volunteer Shifts'),
+      //),
+      body: Container(
+        height: h,
+        child: Column(
+          children: [
+            Stack(
+              children: [
+                _topSection(),
+              ],
+            ),
+            const EventCard(),
+            const EventCard(),
+          ],
+        ),
       ),
     );
-    //const Center(child: Text("PLACEHOLDER")),
   }
+}
+
+_topSection() {
+  return Container(
+      height: 150,
+      color: const Color.fromARGB(255, 0, 108, 81),
+      child: const Stack(
+        children: [],
+      ));
 }
 
 class EventCard extends StatelessWidget {
@@ -31,7 +49,14 @@ class EventCard extends StatelessWidget {
     const style = TextStyle(fontSize: 20, fontWeight: FontWeight.normal);
 
     return Card(
-      color: theme.colorScheme.primary,
+      shape: RoundedRectangleBorder(
+        side: const BorderSide(
+          color: Colors.black26,
+          width: 1.0,
+        ),
+        borderRadius: BorderRadius.circular(20.0),
+      ),
+      color: Colors.white,
       elevation: 5,
       child: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -40,7 +65,7 @@ class EventCard extends StatelessWidget {
           subtitle: const Text('event org',
               style: TextStyle(fontWeight: FontWeight.w900, fontSize: 15)),
           trailing: const Text('event time', style: style),
-          textColor: Colors.white,
+          textColor: Colors.black,
           selectedColor: theme.colorScheme.onSecondary,
         ),
       ),
