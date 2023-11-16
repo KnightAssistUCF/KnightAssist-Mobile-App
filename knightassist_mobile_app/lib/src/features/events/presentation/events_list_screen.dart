@@ -18,7 +18,8 @@ class EventsListScreen extends ConsumerWidget {
         height: h,
         child: Column(
           children: [
-            Stack(
+            _topSection(),
+            /*Stack(
               children: [
                 _topSection(),
                 const Column(
@@ -42,7 +43,7 @@ class EventsListScreen extends ConsumerWidget {
                   ],
                 ),
               ],
-            ),
+            ),*/
             Flexible(
               child: ListView(
                 scrollDirection: Axis.vertical,
@@ -62,10 +63,31 @@ class EventsListScreen extends ConsumerWidget {
 
 _topSection() {
   return Container(
-      height: 150,
+      //height: 200,
       color: const Color.fromARGB(255, 0, 108, 81),
       child: const Stack(
-        children: [],
+        children: [
+          Column(
+            children: [
+              SafeArea(
+                          child: Text(
+                            'Volunteer Shift Events',
+                            style: TextStyle(
+                                fontSize: 40,
+                                fontWeight: FontWeight.w800,
+                                color: Colors.white),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: SearchBar(
+                        hintText: 'Search Events',
+                      ),
+                    ),],
+            
+          ),
+        ],
       ));
 }
 
