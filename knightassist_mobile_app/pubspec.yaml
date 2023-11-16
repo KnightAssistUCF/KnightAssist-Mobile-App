@@ -37,6 +37,18 @@ flutter:
     - assets/KnightAssistCoATransparent.png
     - assets/KnightAssistCoA2.png
     - assets/KnightAssistCoA3.png
+    - assets/example.png
+    - assets/profile pictures/icon_apple.png
+    - assets/profile pictures/icon_cat.png
+    - assets/profile pictures/icon_cookie.png
+    - assets/profile pictures/icon_controller.png
+    - assets/profile pictures/icon_heart.png
+    - assets/profile pictures/icon_leaf.png
+    - assets/profile pictures/icon_musicnote.png
+    - assets/profile pictures/icon_paintbrush.png
+    - assets/profile pictures/icon_planet.png
+    - assets/profile pictures/icon_soccer.png
+    - assets/profile pictures/icon_weight.png
   fonts:
     - family: League Spartan
       fonts:
