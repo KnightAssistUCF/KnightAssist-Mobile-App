@@ -26,7 +26,8 @@ enum AppRoute {
   account,
   signIn,
   registerStudent,
-  registerOrg
+  registerOrg, 
+  emailConfirmed
 }
 
 @Riverpod(keepAlive: true)
@@ -109,6 +110,11 @@ GoRouter goRouter(GoRouterRef ref) {
                   pageBuilder: (context, state) => const MaterialPage(
                       fullscreenDialog: true,
                       child: RegisterOrganizationScreen())),
+                      GoRoute(
+                  path: 'emailConfirmed',
+                  name: AppRoute.emailConfirmed.name,
+                  pageBuilder: (context, state) => const MaterialPage(
+                      fullscreenDialog: true, child: ConfirmScreen())),
             ])
       ],
       errorBuilder: (context, state) => const NotFoundScreen());

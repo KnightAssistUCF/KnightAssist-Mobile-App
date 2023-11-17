@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:knightassist_mobile_app/src/common_widgets/responsive_center.dart';
 import 'package:knightassist_mobile_app/src/constants/breakpoints.dart';
+import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 
 class EventsListScreen extends ConsumerWidget {
   const EventsListScreen({super.key});
@@ -11,9 +13,31 @@ class EventsListScreen extends ConsumerWidget {
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
     return Scaffold(
-      //appBar: AppBar(
-      //title: const Text('Volunteer Shifts'),
-      //),
+      appBar: AppBar(
+      title: const Text('Volunteer Shifts', style: TextStyle(fontWeight: FontWeight.w600),),
+      centerTitle: true,
+      automaticallyImplyLeading: true,
+      actions: <Widget> [
+        const Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Icon(
+                                  Icons.notifications_outlined,
+                                  color: Colors.white,
+                                  semanticLabel: 'Notifications',
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(25.0),
+                                  child: const Image(
+                                                image:
+                                                    AssetImage('assets/profile pictures/icon_paintbrush.png'),
+                                                height: 20),
+                                ),
+                              )
+      ],
+      ),
       body: Container(
         height: h,
         child: Column(
@@ -57,6 +81,47 @@ class EventsListScreen extends ConsumerWidget {
           ],
         ),
       ),
+      drawer: Drawer(
+        child: ListView(
+           //padding: EdgeInsets.zero,
+           children: [
+            //const DrawerHeader(
+              //decoration: BoxDecoration(image: DecorationImage(image: AssetImage("assets/KnightAssistCoA3.png"),),),
+              //child: Text('KnightAssist')),
+              ListTile(
+               title: const Text('Home'),
+        onTap: () {
+          context.pushNamed(AppRoute.home.name);
+        },
+            ),
+            ListTile(
+               title: const Text('Organizations'),
+        onTap: () {
+          context.pushNamed(AppRoute.organizations.name);
+        },
+            ),
+            ListTile(
+               title: const Text('Events'),
+        onTap: () {
+          context.pushNamed(AppRoute.events.name);
+        },
+            ),
+            ListTile(
+               title: const Text('Settings'),
+        onTap: () {
+          context.pushNamed(AppRoute.account.name);
+        },
+            ),
+            ListTile(
+               title: const Text('Sign Out'),
+        onTap: () {
+          context.pushNamed(AppRoute.emailConfirmed.name);
+          Navigator.pop(context);
+        },
+            ),
+           ],
+         ),
+      ),
     );
   }
 }
@@ -69,16 +134,39 @@ _topSection() {
         children: [
           Column(
             children: [
-              SafeArea(
-                          child: Text(
-                            'Volunteer Shift Events',
-                            style: TextStyle(
-                                fontSize: 40,
-                                fontWeight: FontWeight.w800,
-                                color: Colors.white),
-                            textAlign: TextAlign.center,
+              /*SafeArea(
+                          child: OverflowBar(
+                            alignment: MainAxisAlignment.end,
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Icon(
+                                  Icons.notifications_outlined,
+                                  color: Colors.white,
+                                  semanticLabel: 'Notifications',
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(25.0),
+                                  child: const Image(
+                                                image:
+                                                    AssetImage('assets/profile pictures/icon_paintbrush.png'),
+                                                height: 20),
+                                ),
+                              )
+                            ],
                           ),
                         ),
+                        const Text(
+                'Volunteer Shift Events',
+                style: TextStyle(
+                    fontSize: 35,
+                    fontWeight: FontWeight.w800,
+                    color: Colors.white),
+                textAlign: TextAlign.center,
+              ),*/
                         Padding(
                       padding: EdgeInsets.all(8.0),
                       child: SearchBar(
@@ -126,24 +214,24 @@ class EventCard extends StatelessWidget {
                             child: const Image(
                                 image: AssetImage('assets/example.png'),
                                 height: 100)),
-                        const Padding(
+                        Padding(
                           padding: EdgeInsets.all(15.0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              Text(
+                              const Text(
                                 'Event Title',
                                 style: TextStyle(
                                     fontWeight: FontWeight.w600, fontSize: 18),
                                 textAlign: TextAlign.justify,
                               ),
-                              Text(
+                              const Text(
                                 'Time/Date',
                                 style: TextStyle(fontWeight: FontWeight.w400),
                                 textAlign: TextAlign.justify,
                               ),
-                              Text(
+                              const Text(
                                 'Location',
                                 style: TextStyle(fontWeight: FontWeight.w400),
                                 textAlign: TextAlign.justify,
@@ -151,11 +239,12 @@ class EventCard extends StatelessWidget {
                               OverflowBar(
                                 children: [
                                   ClipRRect(
-                                      child: Image(
+                                    borderRadius: BorderRadius.circular(25.0),
+                                      child: const Image(
                                           image:
                                               AssetImage('assets/example.png'),
                                           height: 20)),
-                                  Padding(
+                                  const Padding(
                                     padding: EdgeInsets.all(8.0),
                                     child: Text(
                                       'Hosting Organization',
