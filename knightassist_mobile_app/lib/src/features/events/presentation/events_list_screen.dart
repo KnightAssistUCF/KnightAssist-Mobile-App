@@ -14,35 +14,38 @@ class EventsListScreen extends ConsumerWidget {
     double w = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-      title: const Text('Volunteer Shifts', style: TextStyle(fontWeight: FontWeight.w600),),
-      centerTitle: true,
-      automaticallyImplyLeading: true,
-      actions: <Widget> [
-        const Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Icon(
-                                  Icons.notifications_outlined,
-                                  color: Colors.white,
-                                  semanticLabel: 'Notifications',
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(25.0),
-                                  child: const Image(
-                                                image:
-                                                    AssetImage('assets/profile pictures/icon_paintbrush.png'),
-                                                height: 20),
-                                ),
-                              )
-      ],
+        title: const Text(
+          'Volunteer Shifts',
+          style: TextStyle(fontWeight: FontWeight.w600),
+        ),
+        centerTitle: true,
+        automaticallyImplyLeading: true,
+        actions: <Widget>[
+          const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Icon(
+              Icons.notifications_outlined,
+              color: Colors.white,
+              semanticLabel: 'Notifications',
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(25.0),
+              child: const Image(
+                  image:
+                      AssetImage('assets/profile pictures/icon_paintbrush.png'),
+                  height: 20),
+            ),
+          )
+        ],
       ),
       body: Container(
         height: h,
         child: Column(
           children: [
-            _topSection(),
+            _topSection(w),
             /*Stack(
               children: [
                 _topSection(),
@@ -83,52 +86,53 @@ class EventsListScreen extends ConsumerWidget {
       ),
       drawer: Drawer(
         child: ListView(
-           //padding: EdgeInsets.zero,
-           children: [
+          //padding: EdgeInsets.zero,
+          children: [
             //const DrawerHeader(
-              //decoration: BoxDecoration(image: DecorationImage(image: AssetImage("assets/KnightAssistCoA3.png"),),),
-              //child: Text('KnightAssist')),
-              ListTile(
-               title: const Text('Home'),
-        onTap: () {
-          context.pushNamed(AppRoute.homescreen.name);
-        },
+            //decoration: BoxDecoration(image: DecorationImage(image: AssetImage("assets/KnightAssistCoA3.png"),),),
+            //child: Text('KnightAssist')),
+            ListTile(
+              title: const Text('Home'),
+              onTap: () {
+                context.pushNamed(AppRoute.homescreen.name);
+              },
             ),
             ListTile(
-               title: const Text('Organizations'),
-        onTap: () {
-          context.pushNamed(AppRoute.organizations.name);
-        },
+              title: const Text('Organizations'),
+              onTap: () {
+                context.pushNamed(AppRoute.organizations.name);
+              },
             ),
             ListTile(
-               title: const Text('Events'),
-        onTap: () {
-          context.pushNamed(AppRoute.events.name);
-        },
+              title: const Text('Events'),
+              onTap: () {
+                context.pushNamed(AppRoute.events.name);
+              },
             ),
             ListTile(
-               title: const Text('Settings'),
-        onTap: () {
-          context.pushNamed(AppRoute.account.name);
-        },
+              title: const Text('Settings'),
+              onTap: () {
+                context.pushNamed(AppRoute.account.name);
+              },
             ),
             ListTile(
-               title: const Text('Sign Out'),
-        onTap: () {
-          context.pushNamed(AppRoute.emailConfirmed.name);
-          Navigator.pop(context);
-        },
+              title: const Text('Sign Out'),
+              onTap: () {
+                context.pushNamed(AppRoute.emailConfirmed.name);
+                Navigator.pop(context);
+              },
             ),
-           ],
-         ),
+          ],
+        ),
       ),
     );
   }
 }
 
-_topSection() {
+_topSection(double width) {
   return Container(
       //height: 200,
+      width: width,
       color: const Color.fromARGB(255, 0, 108, 81),
       child: const Stack(
         children: [
@@ -167,13 +171,15 @@ _topSection() {
                     color: Colors.white),
                 textAlign: TextAlign.center,
               ),*/
-                        Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: SearchBar(
-                        hintText: 'Search Events',
-                      ),
-                    ),],
-            
+              Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Center(
+                  child: SearchBar(
+                    hintText: 'Search Events',
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ));
@@ -239,7 +245,7 @@ class EventCard extends StatelessWidget {
                               OverflowBar(
                                 children: [
                                   ClipRRect(
-                                    borderRadius: BorderRadius.circular(25.0),
+                                      borderRadius: BorderRadius.circular(25.0),
                                       child: const Image(
                                           image:
                                               AssetImage('assets/example.png'),
