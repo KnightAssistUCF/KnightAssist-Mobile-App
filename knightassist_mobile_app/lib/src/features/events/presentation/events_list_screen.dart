@@ -91,7 +91,7 @@ class EventsListScreen extends ConsumerWidget {
               ListTile(
                title: const Text('Home'),
         onTap: () {
-          context.pushNamed(AppRoute.home.name);
+          context.pushNamed(AppRoute.homescreen.name);
         },
             ),
             ListTile(

@@ -27,7 +27,8 @@ enum AppRoute {
   signIn,
   registerStudent,
   registerOrg, 
-  emailConfirmed
+  emailConfirmed, 
+  homescreen
 }
 
 @Riverpod(keepAlive: true)
@@ -44,9 +45,9 @@ GoRouter goRouter(GoRouterRef ref) {
             return '/';
           }
         } else {
-          if (path == '/account') {
-            return '/';
-          }
+          //if (path == '/account') {
+            //return '/';
+          //}
         }
         return null;
       },
@@ -115,6 +116,11 @@ GoRouter goRouter(GoRouterRef ref) {
                   name: AppRoute.emailConfirmed.name,
                   pageBuilder: (context, state) => const MaterialPage(
                       fullscreenDialog: true, child: ConfirmScreen())),
+                      GoRoute(
+                  path: 'homescreen',
+                  name: AppRoute.homescreen.name,
+                  pageBuilder: (context, state) => const MaterialPage(
+                      fullscreenDialog: true, child: HomeScreen())),
             ])
       ],
       errorBuilder: (context, state) => const NotFoundScreen());
