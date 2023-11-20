@@ -49,7 +49,16 @@ class HomeScreen extends ConsumerWidget {
                   Text('Announcements'),
                   AnnouncementCard(),
                   AnnouncementCard(),
-                  Text('View all >'),
+                  Row(
+                    children: [
+                      Text('View All'),
+                      Icon(
+                        Icons.arrow_forward_ios,
+                        color: Colors.grey,
+                        size: 15,
+                      )
+                    ],
+                  ),
                   Row(
                     children: [
                       Text('Semester Goal'),
@@ -117,8 +126,14 @@ _topSection(double width) {
                 child: Center(
                   child: Column(
                     children: [
-                      Text('Welcome, Student User'),
-                      Text('Fall 2023'),
+                      Text(
+                        'Welcome, Student User',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      Text(
+                        'Fall 2023',
+                        style: TextStyle(color: Colors.white),
+                      ),
                       ResponsiveScrollableCard(
                         child: Column(
                           children: [
@@ -127,7 +142,20 @@ _topSection(double width) {
                           ],
                         ),
                       ),
-                      Text('View all >'),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text(
+                            'View All',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          Icon(
+                            Icons.arrow_forward_ios,
+                            color: Colors.grey,
+                            size: 15,
+                          )
+                        ],
+                      ),
                     ],
                   ),
                 ),
@@ -169,23 +197,30 @@ class AnnouncementCard extends StatelessWidget {
                     children: [
                       Padding(
                         padding: EdgeInsets.all(15.0),
-                        child: Column(
+                        child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
+                            Icon(
+                              Icons.close,
+                              color: Colors.grey,
+                              size: 15,
+                            ),
+                            SizedBox(width: 10),
                             Text(
-                              'Announcement Date',
-                              style: TextStyle(),
+                              'Date',
+                              style: TextStyle(fontSize: 16),
                               textAlign: TextAlign.justify,
                             ),
                             Text(
                               'Announcement Title',
-                              style: TextStyle(),
+                              style: TextStyle(fontSize: 16),
                               textAlign: TextAlign.justify,
                             ),
+                            SizedBox(width: 20),
                             Text(
-                              'announcement text start...',
-                              style: TextStyle(),
+                              '"announcement text start..."',
+                              style: TextStyle(fontStyle: FontStyle.italic),
                               textAlign: TextAlign.justify,
                             ),
                           ],
