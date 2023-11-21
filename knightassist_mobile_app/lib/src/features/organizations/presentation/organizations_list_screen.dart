@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -122,11 +124,14 @@ _topSection(double width) {
       ));
 }
 
-class OrganizationCard extends StatelessWidget {
+class OrganizationCard extends StatefulWidget {
   const OrganizationCard({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  _OrganizationCardState createState() => _OrganizationCardState();
+
+  //@override
+  /*Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
     const style = TextStyle(fontSize: 20, fontWeight: FontWeight.normal);
@@ -195,6 +200,58 @@ class OrganizationCard extends StatelessWidget {
                 ),
               ),
             )),
+      ),
+    );
+  }*/
+}
+
+Icon _affectedByStateChange = const Icon(
+  Icons.thumb_up,
+  color: Colors.grey,
+);
+
+class _OrganizationCardState extends State<OrganizationCard> {
+  bool _isFavoriteOrg = true;
+
+  _thisWillAffectTheState() {
+    _affectedByStateChange =
+        new Icon(Icons.favorite_outline, color: Colors.blue);
+  }
+
+  _thisWillAlsoAffectTheState() {
+    _affectedByStateChange = new Icon(Icons.favorite, color: Colors.red);
+  }
+
+  _changeFavorite() {
+    //setState(() {
+    if (_isFavoriteOrg) {
+      _isFavoriteOrg == false;
+    } else {
+      _isFavoriteOrg == true;
+    }
+    //});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: IconButton(
+        onPressed: () {
+          _changeFavorite();
+
+          setState(() {});
+
+          stderr.writeln(_isFavoriteOrg);
+        },
+        icon: Icon(
+            (_isFavoriteOrg == false) ? Icons.favorite_outline : Icons.favorite,
+            color: Colors.pink),
+        //isFavoriteOrg
+        //? const Icon(Icons.favorite)
+        //: const Icon(Icons.favorite_outline)
+        //Icon(
+        //(isFavoriteOrg == false) ? Icons.favorite_outline : Icons.favorite,
+        //color: Colors.cyan,
       ),
     );
   }
