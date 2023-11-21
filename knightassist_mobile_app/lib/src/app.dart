@@ -18,13 +18,13 @@ class MyApp extends ConsumerWidget {
           primarySwatch: Colors.grey,
           fontFamily: 'League Spartan',
           appBarTheme: const AppBarTheme(
-              backgroundColor: Color.fromARGB(255, 101, 184, 145),
+              backgroundColor: Color.fromARGB(255, 0, 108, 81),
               foregroundColor: Colors.white,
               elevation: 0),
           elevatedButtonTheme: ElevatedButtonThemeData(
               style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.black,
-                  foregroundColor: Colors.white))),
+                  backgroundColor: const Color.fromARGB(255, 91, 78, 119),
+                  foregroundColor: Colors.white)),),
     );
   }
 }

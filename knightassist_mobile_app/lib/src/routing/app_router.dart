@@ -26,7 +26,9 @@ enum AppRoute {
   account,
   signIn,
   registerStudent,
-  registerOrg
+  registerOrg, 
+  emailConfirmed, 
+  homescreen
 }
 
 @Riverpod(keepAlive: true)
@@ -43,9 +45,9 @@ GoRouter goRouter(GoRouterRef ref) {
             return '/';
           }
         } else {
-          if (path == '/account') {
-            return '/';
-          }
+          //if (path == '/account') {
+            //return '/';
+          //}
         }
         return null;
       },
@@ -56,7 +58,7 @@ GoRouter goRouter(GoRouterRef ref) {
             path: '/',
             name: AppRoute.home.name,
             builder: (context, state) =>
-                const ConfirmScreen(), // TEMP, change this to whatever screen you want to test (will need to rerun)
+                const EventsListScreen(), // TEMP, change this to whatever screen you want to test (will need to rerun)
             routes: [
               GoRoute(
                   path: 'events',
@@ -109,6 +111,16 @@ GoRouter goRouter(GoRouterRef ref) {
                   pageBuilder: (context, state) => const MaterialPage(
                       fullscreenDialog: true,
                       child: RegisterOrganizationScreen())),
+                      GoRoute(
+                  path: 'emailConfirmed',
+                  name: AppRoute.emailConfirmed.name,
+                  pageBuilder: (context, state) => const MaterialPage(
+                      fullscreenDialog: true, child: ConfirmScreen())),
+                      GoRoute(
+                  path: 'homescreen',
+                  name: AppRoute.homescreen.name,
+                  pageBuilder: (context, state) => const MaterialPage(
+                      fullscreenDialog: true, child: HomeScreen())),
             ])
       ],
       errorBuilder: (context, state) => const NotFoundScreen());

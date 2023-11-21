@@ -23,6 +23,7 @@ dependencies:
   http: ^1.1.0
 
 dev_dependencies:
+  flutter_launcher_icons: "^0.13.1"
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.0
@@ -37,7 +38,26 @@ flutter:
     - assets/KnightAssistCoATransparent.png
     - assets/KnightAssistCoA2.png
     - assets/KnightAssistCoA3.png
+    - assets/example.png
+    - assets/profile pictures/icon_apple.png
+    - assets/profile pictures/icon_cat.png
+    - assets/profile pictures/icon_cookie.png
+    - assets/profile pictures/icon_controller.png
+    - assets/profile pictures/icon_heart.png
+    - assets/profile pictures/icon_leaf.png
+    - assets/profile pictures/icon_musicnote.png
+    - assets/profile pictures/icon_paintbrush.png
+    - assets/profile pictures/icon_planet.png
+    - assets/profile pictures/icon_soccer.png
+    - assets/profile pictures/icon_weight.png
+    - assets/icon/icon.png
+    - assets/icon/icontransparent.png
   fonts:
     - family: League Spartan
       fonts:
        - asset: fonts/LeagueSpartan-VariableFont_wght.ttf
+
+flutter_icons:
+  ios: "AppIcon"
+  image_path_ios: "assets/icon/icon.png"
+  image_path: "assets/icon/icon.png"
