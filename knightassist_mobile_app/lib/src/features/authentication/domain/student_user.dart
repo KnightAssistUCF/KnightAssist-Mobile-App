@@ -2,99 +2,84 @@ import 'package:knightassist_mobile_app/src/features/authentication/domain/app_u
 import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
 
 class StudentUser extends AppUser {
-  String? firstName;
-  String? lastName;
-  String? profilePicture;
-  String? createdAt;
-  String? updatedAt;
-  String? confirmToken;
-  List<Event>? eventsHistory;
-  List<String>? eventsRSVP;
-  List<String>? favoritedOrganizations;
-  int? semesterVolunteerHourGoal;
-  int? totalVolunteerHours;
-  List<Semester>? userStudentSemesters;
-  bool? valid;
-  String? emailToken;
-  bool? emailValidated;
-
-  StudentUser(
+  const StudentUser(
       {required super.id,
-      required super.recoveryToken,
-      this.firstName,
-      this.lastName,
+      super.type = "student",
+      required this.firstName,
+      required this.lastName,
       required super.email,
-      this.profilePicture,
-      this.createdAt,
-      this.updatedAt,
-      this.confirmToken,
-      this.eventsHistory,
-      this.eventsRSVP,
-      this.favoritedOrganizations,
-      this.semesterVolunteerHourGoal,
-      this.totalVolunteerHours,
-      this.userStudentSemesters,
-      this.valid,
-      this.emailToken,
-      this.emailValidated});
+      required this.profilePicture,
+      required this.favoritedOrganizations,
+      required this.eventsRSVP,
+      required this.eventsHistory,
+      required this.totalVolunteerHours,
+      required this.semesterVolunteerHourGoal,
+      required this.userStudentSemesters,
+      required this.recoveryToken,
+      required this.confirmToken,
+      required this.emailToken,
+      required this.emailValidated,
+      required this.createdAt,
+      required this.updatedAt});
 
-  StudentUser.fromJson(Map<String, dynamic> json) : super.fromJson(json) {
-    recoveryToken = json['recoveryToken'];
-    firstName = json['firstName'];
-    lastName = json['lastName'];
-    profilePicture = json['profilePicture'];
-    createdAt = json['createdAt'];
-    updatedAt = json['updatedAt'];
-    confirmToken = json['confirmToken'];
-    if (json['eventsHistory'] != null) {
-      eventsHistory = <Event>[];
-      json['eventsHistory'].forEach((v) {
-        eventsHistory!.add(Event.fromJson(v));
-      });
-    }
-    eventsRSVP = json['eventsRSVP'].cast<String>();
-    favoritedOrganizations = json['favoritedOrganizations'].cast<String>();
-    semesterVolunteerHourGoal = json['semesterVolunteerHourGoal'];
-    totalVolunteerHours = json['totalVolunteerHours'];
+  final String firstName;
+  final String lastName;
+  final String? profilePicture;
+  final List<String> favoritedOrganizations;
+  final List<EventID> eventsRSVP;
+  final List<EventID> eventsHistory;
+  final int totalVolunteerHours;
+  final int semesterVolunteerHourGoal;
+  final List<String> userStudentSemesters;
+  final String? recoveryToken;
+  final String confirmToken;
+  final String emailToken;
+  final bool emailValidated;
+  final DateTime createdAt;
+  final DateTime updatedAt;
 
-    if (json['userStudentSemesters'] != null) {
-      userStudentSemesters = <Semester>[];
-      json['userStudentSemesters'].forEach((v) {
-        userStudentSemesters!.add(Semester.fromJson(v));
-      });
-    }
-    valid = json['valid'];
-    emailToken = json['EmailToken'];
-    emailValidated = json['EmailValidated'];
+  factory StudentUser.fromMap(Map<String, dynamic> map) {
+    return StudentUser(
+        id: map['_id'],
+        firstName: map['firstName'],
+        lastName: map['lastName'],
+        email: map['email'],
+        profilePicture: map['profilePicture'] as String?,
+        favoritedOrganizations:
+            List<String>.from(map['favoritedOrganizations']),
+        eventsRSVP: List<String>.from(map['eventsRSVP']),
+        eventsHistory: List<String>.from(map['eventsHistory']),
+        totalVolunteerHours: map['totalVolunteerHours'].toInt() ?? 0,
+        semesterVolunteerHourGoal:
+            map['semesterVolunteerHourGoal'].toInt() ?? 0,
+        userStudentSemesters: List<String>.from(map['userStudentSemesters']),
+        recoveryToken: map['recoveryToken'],
+        confirmToken: map['confirmToken'],
+        emailToken: map['emailToken'],
+        emailValidated: map['emailValidated'],
+        createdAt: DateTime.parse(map['createdAt']),
+        updatedAt: DateTime.parse(map['updatedAt']));
   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['recoveryToken'] = recoveryToken;
-    data['_id'] = id;
-    data['firstName'] = firstName;
-    data['lastName'] = lastName;
-    data['email'] = email;
-    data['profilePicture'] = profilePicture;
-    data['createdAt'] = createdAt;
-    data['updatedAt'] = updatedAt;
-    data['confirmToken'] = confirmToken;
-    if (eventsHistory != null) {
-      data['eventsHistory'] = eventsHistory!.map((v) => v.toJson()).toList();
-    }
-    data['eventsRSVP'] = eventsRSVP;
-    data['favoritedOrganizations'] = favoritedOrganizations;
-    data['semesterVolunteerHourGoal'] = semesterVolunteerHourGoal;
-    data['totalVolunteerHours'] = totalVolunteerHours;
-    if (userStudentSemesters != null) {
-      data['userStudentSemesters'] =
-          userStudentSemesters!.map((v) => v.toJson()).toList();
-    }
-    data['valid'] = valid;
-    data['EmailToken'] = emailToken;
-    data['EmailValidated'] = emailValidated;
-    return data;
-  }
+  Map<String, dynamic> toMap() => {
+        '_id': id,
+        'firstName': firstName,
+        'lastName': lastName,
+        'email': email,
+        'profilePicture': profilePicture,
+        'favoritedOrganizations': favoritedOrganizations,
+        'eventsRSVP': eventsRSVP,
+        'eventsHistory': eventsHistory,
+        'totalVolunteerHours': totalVolunteerHours,
+        'semesterVolunteerHourGoal': semesterVolunteerHourGoal,
+        'userStudentSemesters': userStudentSemesters,
+        'recoveryToken': recoveryToken,
+        'confirmToken': confirmToken,
+        'emailToken': emailToken,
+        'emailValidated': emailValidated,
+        'createdAt': createdAt.toIso8601String(),
+        'updatedAt': updatedAt.toIso8601String(),
+      };
 }
 
 class Semester {
@@ -110,7 +95,7 @@ class Semester {
     if (json['events'] != null) {
       events = <Event>[];
       json['events'].forEach((v) {
-        events!.add(Event.fromJson(v));
+        events!.add(Event.fromMap(v));
       });
     }
     startDate = json['startDate'];
@@ -121,7 +106,7 @@ class Semester {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['semester'] = semester;
     if (events != null) {
-      data['events'] = events!.map((v) => v.toJson()).toList();
+      data['events'] = events!.map((v) => v.toMap()).toList();
     }
     data['startDate'] = startDate;
     data['endDate'] = endDate;

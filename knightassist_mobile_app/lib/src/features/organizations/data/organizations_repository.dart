@@ -13,7 +13,7 @@ class OrganizationsRepository {
       case 200:
         // Successful
         var json = jsonDecode(response.body);
-        return Organization.fromJson(json);
+        return Organization.fromMap(json);
       case 404:
         // Organization not found
         throw Exception();
