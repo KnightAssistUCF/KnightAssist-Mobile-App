@@ -45,25 +45,45 @@ class HomeScreen extends ConsumerWidget {
             Flexible(
               child: ListView(
                 scrollDirection: Axis.vertical,
-                children: const <Widget>[
-                  Text('Announcements'),
-                  AnnouncementCard(),
-                  AnnouncementCard(),
+                children: <Widget>[
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text('Announcements', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),),
+                  ),
+                  const AnnouncementCard(),
+                  const AnnouncementCard(),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text('View All'),
-                      Icon(
-                        Icons.arrow_forward_ios,
-                        color: Colors.grey,
-                        size: 15,
-                      )
+                    Directionality(
+                            textDirection:TextDirection.rtl,
+                            child: TextButton.icon(
+                              onPressed: () {},
+                              icon: const Icon(
+                                Icons.arrow_back_ios,
+                                color: Colors.grey,
+                                size: 15,
+                              ),
+                              label: const Text('View All'),
+                            ),
+                          ),
                     ],
                   ),
-                  Row(
+                  const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('Semester Goal'),
-                      Text('Cumulative Hours'),
-                      Text('Total Points'),
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text('Semester Goal'),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text('Cumulative Hours'),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text('Total Points'),
+                      ),
                     ],
                   ),
                 ],
@@ -114,56 +134,61 @@ class HomeScreen extends ConsumerWidget {
 }
 
 _topSection(double width) {
-  return Container(
-      color: const Color.fromARGB(255, 0, 108, 81),
-      width: width,
-      child: const Stack(
-        children: [
-          Column(
-            children: [
-              Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Center(
-                  child: Column(
-                    children: [
-                      Text(
-                        'Welcome, Student User',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      Text(
-                        'Fall 2023',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      ResponsiveScrollableCard(
-                        child: Column(
+  return Stack(
+    children: [ Container(
+        color: const Color.fromARGB(255, 0, 108, 81),
+        width: width,
+        child: Stack(
+          children: [
+            Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Center(
+                    child: Column(
+                      children: [
+                        const Text(
+                          'Welcome, Student User',
+                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+                        ),
+                        const Text(
+                          'Fall 2023',
+                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+                        ),
+                        const ResponsiveScrollableCard(
+                          child: Column(
+                            children: [
+                              Text('Next Event'),
+                              Divider(height: 15),
+                            ],
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Text('Next Event'),
-                            Divider(height: 15),
+                            Directionality(
+                              textDirection:TextDirection.rtl,
+                              child: TextButton.icon(
+                                onPressed: () {},
+                                icon: const Icon(
+                                  Icons.arrow_back_ios,
+                                  color: Colors.grey,
+                                  size: 15,
+                                ),
+                                label: const Text('View All', style: TextStyle(color: Colors.white)),
+                              ),
+                            ),
                           ],
                         ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Text(
-                            'View All',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          Icon(
-                            Icons.arrow_forward_ios,
-                            color: Colors.grey,
-                            size: 15,
-                          )
-                        ],
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-        ],
-      ));
+              ],
+            ),
+          ],
+        )),]
+  );
 }
 
 class AnnouncementCard extends StatelessWidget {
@@ -178,7 +203,7 @@ class AnnouncementCard extends StatelessWidget {
     return ResponsiveCenter(
       maxContentWidth: Breakpoint.tablet,
       child: Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(10.0),
           child: Card(
             shape: RoundedRectangleBorder(
               side: const BorderSide(
@@ -190,57 +215,42 @@ class AnnouncementCard extends StatelessWidget {
             color: Colors.white,
             elevation: 5,
             child: const Padding(
-              padding: EdgeInsets.all(20.0),
-              child: Row(
+              padding: EdgeInsets.all(15.0),
+              child: Wrap(
                 children: [
-                  OverflowBar(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.all(15.0),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Icon(
-                              Icons.close,
-                              color: Colors.grey,
-                              size: 15,
-                            ),
-                            SizedBox(width: 10),
-                            Text(
-                              'Date',
-                              style: TextStyle(fontSize: 16),
-                              textAlign: TextAlign.justify,
-                            ),
-                            Text(
-                              'Announcement Title',
-                              style: TextStyle(fontSize: 16),
-                              textAlign: TextAlign.justify,
-                            ),
-                            SizedBox(width: 20),
-                            Text(
-                              '"announcement text start..."',
-                              style: TextStyle(fontStyle: FontStyle.italic),
-                              textAlign: TextAlign.justify,
-                            ),
-                          ],
-                        ),
-                      ),
-                      OverflowBar(
-                        spacing: 8,
-                        overflowAlignment: OverflowBarAlignment.end,
-                        children: [
-                          Align(
-                              alignment: Alignment(1, 0.6),
-                              child: Icon(
-                                Icons.arrow_forward_ios,
-                                color: Colors.grey,
-                                size: 15,
-                              ))
-                        ],
-                      )
-                    ],
+                  Icon(
+                    Icons.close,
+                    color: Colors.grey,
+                    size: 15,
                   ),
+                  SizedBox(width: 10),
+                  Text(
+                    'Date',
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.justify,
+                  ),
+                  SizedBox(width: 5),
+                  Text(
+                    'Announcement Title',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                    textAlign: TextAlign.justify,
+                  ),
+                  SizedBox(width: 20),
+                  Text(
+                    '"text start..."',
+                    style: TextStyle(fontStyle: FontStyle.italic),
+                    textAlign: TextAlign.justify,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Icon(
+                        Icons.arrow_forward_ios,
+                        color: Colors.grey,
+                        size: 15,
+                      ),
+                    ],
+                  )
                 ],
               ),
             ),

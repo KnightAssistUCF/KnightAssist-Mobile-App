@@ -194,15 +194,15 @@ class _OrganizationCardState extends State<OrganizationCard> {
                             Align(
                                 alignment: const Alignment(1, 0.6),
                                 child: IconButton( iconSize: 30.0,
-        padding: const EdgeInsets.only(left:4,right:4,top:0),
-        icon: _isFavoriteOrg ==true ? 
-        const Icon(Icons.favorite):const Icon(Icons.favorite_outline), color: Colors.pink,
-              onPressed: () {
-                setState(() {
-                  _isFavoriteOrg = !_isFavoriteOrg;
-                });
-              }
-    ))
+                                padding: const EdgeInsets.only(left:4,right:4,top:0),
+                                icon: _isFavoriteOrg ==true ? 
+                                const Icon(Icons.favorite):const Icon(Icons.favorite_outline), color: Colors.pink,
+                                onPressed: () {
+                                  setState(() {
+                                    _isFavoriteOrg = !_isFavoriteOrg;
+                                  });
+                                }
+                            ))
                           ],
                         )
                       ],
