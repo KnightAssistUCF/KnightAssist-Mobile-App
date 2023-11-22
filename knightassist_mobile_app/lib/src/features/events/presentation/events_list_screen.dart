@@ -46,31 +46,6 @@ class EventsListScreen extends ConsumerWidget {
         child: Column(
           children: [
             _topSection(w),
-            /*Stack(
-              children: [
-                _topSection(),
-                const Column(
-                  children: [
-                    SafeArea(
-                      child: Text(
-                        'Volunteer Shift Events',
-                        style: TextStyle(
-                            fontSize: 40,
-                            fontWeight: FontWeight.w800,
-                            color: Colors.white),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: SearchBar(
-                        hintText: 'Search Events',
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),*/
             Flexible(
               child: ListView(
                 scrollDirection: Axis.vertical,
@@ -138,39 +113,6 @@ _topSection(double width) {
         children: [
           Column(
             children: [
-              /*SafeArea(
-                          child: OverflowBar(
-                            alignment: MainAxisAlignment.end,
-                            children: [
-                              const Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Icon(
-                                  Icons.notifications_outlined,
-                                  color: Colors.white,
-                                  semanticLabel: 'Notifications',
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(25.0),
-                                  child: const Image(
-                                                image:
-                                                    AssetImage('assets/profile pictures/icon_paintbrush.png'),
-                                                height: 20),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                        const Text(
-                'Volunteer Shift Events',
-                style: TextStyle(
-                    fontSize: 35,
-                    fontWeight: FontWeight.w800,
-                    color: Colors.white),
-                textAlign: TextAlign.center,
-              ),*/
               Padding(
                 padding: EdgeInsets.all(8.0),
                 child: Center(
@@ -213,7 +155,7 @@ class EventCard extends StatelessWidget {
                 padding: const EdgeInsets.all(20.0),
                 child: Column(
                   children: [
-                    OverflowBar(
+                    Wrap(
                       children: [
                         ClipRRect(
                             borderRadius: BorderRadius.circular(12.0),

@@ -58,7 +58,7 @@ GoRouter goRouter(GoRouterRef ref) {
             path: '/',
             name: AppRoute.home.name,
             builder: (context, state) =>
-                const EventsListScreen(), // TEMP, change this to whatever screen you want to test (will need to rerun)
+                const HomeScreen(), // TEMP, change this to whatever screen you want to test (will need to rerun)
             routes: [
               GoRoute(
                   path: 'events',

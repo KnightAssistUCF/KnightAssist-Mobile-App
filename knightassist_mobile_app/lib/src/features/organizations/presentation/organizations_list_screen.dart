@@ -160,7 +160,7 @@ class _OrganizationCardState extends State<OrganizationCard> {
                 padding: const EdgeInsets.all(20.0),
                 child: Column(
                   children: [
-                    OverflowBar(
+                    Wrap(
                       children: [
                         ClipRRect(
                             borderRadius: BorderRadius.circular(12.0),
