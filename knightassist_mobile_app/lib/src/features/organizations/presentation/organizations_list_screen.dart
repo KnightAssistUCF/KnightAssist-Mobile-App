@@ -212,6 +212,7 @@ Icon _affectedByStateChange = const Icon(
 
 class _OrganizationCardState extends State<OrganizationCard> {
   bool _isFavoriteOrg = true;
+  bool pressed= true;
 
   _thisWillAffectTheState() {
     _affectedByStateChange =
@@ -235,7 +236,7 @@ class _OrganizationCardState extends State<OrganizationCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: IconButton(
+      child: /*IconButton(
         onPressed: () {
           _changeFavorite();
 
@@ -252,7 +253,17 @@ class _OrganizationCardState extends State<OrganizationCard> {
         //Icon(
         //(isFavoriteOrg == false) ? Icons.favorite_outline : Icons.favorite,
         //color: Colors.cyan,
-      ),
-    );
+      ),*/
+
+      IconButton( iconSize: 30.0,
+        padding: EdgeInsets.only(left:4,right:4,top:0),
+        icon: _isFavoriteOrg ==true ? 
+        const Icon(Icons.favorite):const Icon(Icons.favorite_outline), color: Colors.pink,
+              onPressed: () {
+                setState(() {
+                  _isFavoriteOrg = !_isFavoriteOrg;
+                });
+              }
+    ));
   }
 }
