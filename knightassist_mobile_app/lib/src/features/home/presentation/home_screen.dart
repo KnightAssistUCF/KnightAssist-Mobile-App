@@ -6,6 +6,7 @@ import 'package:knightassist_mobile_app/src/common_widgets/responsive_scrollable
 import 'package:knightassist_mobile_app/src/constants/breakpoints.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/events_list_screen.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -70,32 +71,38 @@ class HomeScreen extends ConsumerWidget {
                           ),
                     ],
                   ),
-                  const Row(
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Padding(
-                        padding: EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(8.0),
                         child: Column(
                           children: [
-                            Text('Semester Goal'),
-                            Text('Semester Goal'),
+                            CircularPercentIndicator(
+                              radius: 40.0,
+                              lineWidth: 5.0,
+                              percent: 0.95,
+                              center: const Text("19/20", style: TextStyle(fontSize: 15),),
+                              progressColor: const Color.fromARGB(255, 91, 78, 119),
+                          ),
+                            const Text('Semester Goal'),
                           ],
                         ),
                       ),
-                      Padding(
+                      const Padding(
                         padding: EdgeInsets.all(8.0),
                         child: Column(
                           children: [
-                            Text('255', style: TextStyle(fontSize: 30),),
+                            Text('255', style: TextStyle(fontSize: 40),),
                             Text('Cumulative Hours'),
                           ],
                         ),
                       ),
-                      Padding(
+                      const Padding(
                         padding: EdgeInsets.all(8.0),
                         child: Column(
                           children: [
-                            Text('144', style: TextStyle(fontSize: 30),),
+                            Text('144', style: TextStyle(fontSize: 40),),
                             Text('Total Points'),
                           ],
                         ),
