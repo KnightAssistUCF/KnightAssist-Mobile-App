@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:knightassist_mobile_app/src/common_widgets/responsive_center.dart';
 import 'package:knightassist_mobile_app/src/common_widgets/responsive_scrollable_card.dart';
 import 'package:knightassist_mobile_app/src/constants/breakpoints.dart';
+import 'package:knightassist_mobile_app/src/features/events/presentation/events_list_screen.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 
 class HomeScreen extends ConsumerWidget {
@@ -64,7 +65,7 @@ class HomeScreen extends ConsumerWidget {
                                 color: Colors.grey,
                                 size: 15,
                               ),
-                              label: const Text('View All'),
+                              label: const Text('View All', style: TextStyle(fontSize: 10),),
                             ),
                           ),
                     ],
@@ -74,15 +75,30 @@ class HomeScreen extends ConsumerWidget {
                     children: [
                       Padding(
                         padding: EdgeInsets.all(8.0),
-                        child: Text('Semester Goal'),
+                        child: Column(
+                          children: [
+                            Text('Semester Goal'),
+                            Text('Semester Goal'),
+                          ],
+                        ),
                       ),
                       Padding(
                         padding: EdgeInsets.all(8.0),
-                        child: Text('Cumulative Hours'),
+                        child: Column(
+                          children: [
+                            Text('255', style: TextStyle(fontSize: 30),),
+                            Text('Cumulative Hours'),
+                          ],
+                        ),
                       ),
                       Padding(
                         padding: EdgeInsets.all(8.0),
-                        child: Text('Total Points'),
+                        child: Column(
+                          children: [
+                            Text('144', style: TextStyle(fontSize: 30),),
+                            Text('Total Points'),
+                          ],
+                        ),
                       ),
                     ],
                   ),
@@ -134,60 +150,71 @@ class HomeScreen extends ConsumerWidget {
 }
 
 _topSection(double width) {
-  return Stack(
-    children: [ Container(
-        color: const Color.fromARGB(255, 0, 108, 81),
-        width: width,
-        child: Stack(
-          children: [
-            Column(
+  return Builder(
+    builder: (context) {
+      return Stack(
+        children: [ Container(
+            color: const Color.fromARGB(255, 0, 108, 81),
+            width: width,
+            child: const Stack(
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Center(
-                    child: Column(
-                      children: [
-                        const Text(
-                          'Welcome, Student User',
-                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
-                        ),
-                        const Text(
-                          'Fall 2023',
-                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
-                        ),
-                        const ResponsiveScrollableCard(
-                          child: Column(
-                            children: [
-                              Text('Next Event'),
-                              Divider(height: 15),
-                            ],
-                          ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
+                Column(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Center(
+                        child: Column(
                           children: [
-                            Directionality(
-                              textDirection:TextDirection.rtl,
-                              child: TextButton.icon(
-                                onPressed: () {},
-                                icon: const Icon(
-                                  Icons.arrow_back_ios,
-                                  color: Colors.grey,
-                                  size: 15,
-                                ),
-                                label: const Text('View All', style: TextStyle(color: Colors.white)),
-                              ),
+                            Text(
+                              'Welcome, Student User',
+                              style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 25),
                             ),
+                            Text(
+                              'Fall 2023',
+                              style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 20),
+                            ),
+                            SizedBox(height: 50,)
                           ],
                         ),
-                      ],
+                      ),
                     ),
-                  ),
+                  ],
                 ),
               ],
+            )),
+            Column(
+              children: [
+                const SizedBox(height: 60,),
+                SizedBox(
+                  height: 175,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: const [ EventCard(),
+                                    EventCard(),
+                              ]),
+                ),
+                              Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Directionality(
+                                  textDirection:TextDirection.rtl,
+                                  child: TextButton.icon(
+                                    onPressed: () {context.pushNamed(AppRoute.events.name);},
+                                    icon: const Icon(
+                                      Icons.arrow_back_ios,
+                                      color: Colors.grey,
+                                      size: 15,
+                                    ),
+                                    label: const Text('View All', style: TextStyle(fontSize: 10)),
+                                  ),
+                                ),
+                              ],
+                            ),
+              ],
             ),
-          ],
-        )),]
+                            ]
+      );
+    }
   );
 }
 
@@ -255,6 +282,67 @@ class AnnouncementCard extends StatelessWidget {
               ),
             ),
           )),
+    );
+  }
+}
+
+class EventCard extends StatelessWidget {
+  const EventCard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Card(
+        child: SizedBox(
+           height: 150,
+           width: 300,
+           child: Column(
+              children: [
+                const Text('Next Event'),
+                const Divider(height: 15),
+                Wrap(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(12.0),
+                      child: const Image(
+                        image: AssetImage('assets/example.png'),
+                        height: 100)),
+                     const Padding(
+                       padding: EdgeInsets.all(8.0),
+                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Event Title',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600, fontSize: 18),
+                              textAlign: TextAlign.start,
+                          ), 
+                          Text(
+                            'Time/Date',
+                            style: TextStyle(fontWeight: FontWeight.w400),
+                            textAlign: TextAlign.start,
+                          ),
+                          Text(
+                            'Location',
+                            style: TextStyle(fontWeight: FontWeight.w400),
+                            textAlign: TextAlign.start,
+                          ),
+                          Text(
+                            'Organization',
+                            style: TextStyle(fontWeight: FontWeight.w400),
+                            textAlign: TextAlign.start,
+                          ),
+                        ],
+                      ),
+                     ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
     );
   }
 }
