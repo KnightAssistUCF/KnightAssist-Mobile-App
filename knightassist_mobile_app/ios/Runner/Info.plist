@@ -57,5 +57,12 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSAppTransportSecurity</key>
+<dict>
+	<key>NSAllowsArbitraryLoads</key>
+	<true/>
+</dict>
+<key>NSPhotoLibraryUsageDescription</key>
+<string>Put here your permission description.</string>
 </dict>
 </plist>

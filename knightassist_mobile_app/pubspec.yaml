@@ -22,6 +22,7 @@ dependencies:
   url_strategy: ^0.2.0
   http: ^1.1.0
   percent_indicator: "^4.0.1"
+  editable_image: ^2.0.0
 
 dev_dependencies:
   flutter_launcher_icons: "^0.13.1"
