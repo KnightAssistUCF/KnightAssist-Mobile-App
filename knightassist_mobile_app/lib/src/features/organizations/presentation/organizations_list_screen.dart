@@ -23,22 +23,24 @@ class OrganizationsListScreen extends ConsumerWidget {
         centerTitle: true,
         automaticallyImplyLeading: true,
         actions: <Widget>[
-          const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Icon(
-              Icons.notifications_outlined,
-              color: Colors.white,
-              semanticLabel: 'Notifications',
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: IconButton(
+              onPressed: () { }, tooltip: 'View notifications', icon: const Icon(Icons.notifications_outlined,
+              color: Colors.white, semanticLabel: 'Notifications',),
             ),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(25.0),
-              child: const Image(
-                  image:
-                      AssetImage('assets/profile pictures/icon_paintbrush.png'),
-                  height: 20),
+            child: GestureDetector(
+              onTap: () { context.pushNamed(AppRoute.profileScreen.name); },
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(25.0),
+                child: const Image(
+                    image:
+                        AssetImage('assets/profile pictures/icon_paintbrush.png'),
+                    height: 20),
+              ),
             ),
           )
         ],
@@ -67,7 +69,7 @@ class OrganizationsListScreen extends ConsumerWidget {
             ListTile(
               title: const Text('Home'),
               onTap: () {
-                context.pushNamed(AppRoute.homescreen.name);
+                context.pushNamed(AppRoute.homeScreen.name);
               },
             ),
             ListTile(
