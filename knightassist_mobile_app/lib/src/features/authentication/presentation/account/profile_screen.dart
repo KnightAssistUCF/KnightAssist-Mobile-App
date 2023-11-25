@@ -21,12 +21,12 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen>{
 File? _profilePicFile;
 
- @override
+  @override
   void initState() {
     super.initState();
   }
 
-Future<void> _directUpdateImage(File? file) async {
+  Future<void> _directUpdateImage(File? file) async {
     if (file == null) return;
 
     setState(() {
@@ -70,65 +70,31 @@ Future<void> _directUpdateImage(File? file) async {
           )
         ],
       ),
-      body: SizedBox(
-        height: h,
-        child: ListView(
-          children: [
-            /*Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(25.0),
-                child: const Image(
-                        image:
-                            AssetImage('assets/profile pictures/icon_paintbrush.png'),
-                        height: 100),
+      body: ListView(
+        children: [
+          EditableImage(
+              onChange: _directUpdateImage,
+              image: _profilePicFile != null
+                  ? Image.file(_profilePicFile!, fit: BoxFit.cover)
+                  : const Image(image: AssetImage('assets/profile pictures/icon_paintbrush.png')),
+              size: 150,
+              imagePickerTheme: ThemeData(
+                primaryColor: Colors.yellow,
+                shadowColor: Colors.deepOrange,
+                colorScheme:
+                    const ColorScheme.light(background: Colors.indigo),
+                iconTheme: const IconThemeData(color: Colors.red),
+                fontFamily: 'Papyrus',
               ),
+              imageBorder: Border.all(color: Colors.lime, width: 2),
+              editIconBorder: Border.all(color: Colors.purple, width: 2),
             ),
-            const ResponsiveScrollableCard(child: Text('Name')),*/
-            EditableImage(
-                // Define the method that will run on
-                // the change process of the image.
-                onChange: _directUpdateImage,
-
-                // Define the source of the image.
-                image: _profilePicFile != null
-                    ? Image.file(_profilePicFile!, fit: BoxFit.cover)
-                    : const Image(image: AssetImage('assets/profile pictures/icon_paintbrush.png')),
-
-                // Define the size of EditableImage.
-                size: 150,
-
-                // Define the Theme of image picker.
-                imagePickerTheme: ThemeData(
-                  // Define the default brightness and colors.
-                  primaryColor: Colors.yellow,
-                  shadowColor: Colors.deepOrange,
-                  colorScheme:
-                      const ColorScheme.light(background: Colors.indigo),
-                  iconTheme: const IconThemeData(color: Colors.red),
-
-                  // Define the default font family.
-                  fontFamily: 'Papyrus',
-                ),
-
-                // Define the border of the image if needed.
-                imageBorder: Border.all(color: Colors.lime, width: 2),
-
-                // Define the border of the icon if needed.
-                editIconBorder: Border.all(color: Colors.purple, width: 2),
-              ),
-               const Spacer(flex: 2),
-              _buildTextField(labelText: 'Username'),
-              const Spacer(),
-              _buildTextField(labelText: 'Full Name'),
-              const Spacer(),
-              _buildTextField(labelText: 'Email'),
-              const Spacer(),
-              _buildTextField(labelText: 'Password', obscureText: true),
-              const Spacer(flex: 2),
-              _buildTextButton(),
-          ],
-        )
+            _buildTextField(labelText: 'Username'),
+            _buildTextField(labelText: 'Full Name'),
+            _buildTextField(labelText: 'Email'),
+            _buildTextField(labelText: 'Password', obscureText: true),
+            _buildTextButton(),
+        ],
       ),
       drawer: Drawer(
         child: ListView(
