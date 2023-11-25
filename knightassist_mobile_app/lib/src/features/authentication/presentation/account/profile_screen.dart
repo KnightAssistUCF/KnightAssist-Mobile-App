@@ -101,21 +101,21 @@ Future<void> _directUpdateImage(File? file) async {
                 // Define the Theme of image picker.
                 imagePickerTheme: ThemeData(
                   // Define the default brightness and colors.
-                  primaryColor: Colors.white,
-                  shadowColor: Colors.transparent,
+                  primaryColor: Colors.yellow,
+                  shadowColor: Colors.deepOrange,
                   colorScheme:
-                      const ColorScheme.light(background: Colors.white70),
-                  iconTheme: const IconThemeData(color: Colors.black87),
+                      const ColorScheme.light(background: Colors.indigo),
+                  iconTheme: const IconThemeData(color: Colors.red),
 
                   // Define the default font family.
-                  fontFamily: 'Georgia',
+                  fontFamily: 'Papyrus',
                 ),
 
                 // Define the border of the image if needed.
-                imageBorder: Border.all(color: Colors.black87, width: 2),
+                imageBorder: Border.all(color: Colors.lime, width: 2),
 
                 // Define the border of the icon if needed.
-                editIconBorder: Border.all(color: Colors.black87, width: 2),
+                editIconBorder: Border.all(color: Colors.purple, width: 2),
               ),
                const Spacer(flex: 2),
               _buildTextField(labelText: 'Username'),
