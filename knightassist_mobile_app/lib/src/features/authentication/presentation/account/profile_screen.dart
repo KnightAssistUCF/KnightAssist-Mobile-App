@@ -59,12 +59,16 @@ File? _profilePicFile;
               onTap:  () {
                 context.pushNamed(AppRoute.profileScreen.name);
               },
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(25.0),
-                child: const Image(
-                    image:
-                        AssetImage('assets/profile pictures/icon_paintbrush.png'),
-                    height: 20),
+              child: Tooltip(
+                message: 'Go to your profile',
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(25.0),
+                  child: const Image(
+                    semanticLabel: 'Profile picture',
+                      image:
+                          AssetImage('assets/profile pictures/icon_paintbrush.png'),
+                      height: 20),
+                ),
               ),
             ),
           )
