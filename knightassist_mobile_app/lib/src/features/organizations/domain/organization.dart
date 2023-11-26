@@ -27,7 +27,7 @@ class Organization extends AppUser {
 
   final String name;
   final String description;
-  final String? logoUrl;
+  final String logoUrl;
   final List<String> category;
   final List<String> followers;
   final List<String> favorites;
@@ -51,7 +51,7 @@ class Organization extends AppUser {
         name: map['name'],
         email: map['email'],
         description: map['description'],
-        logoUrl: map['logoUrl'] as String?,
+        logoUrl: map['logoUrl'] as String,
         category: List<String>.from(map['category']),
         followers: List<String>.from(map['followers']),
         favorites: List<String>.from(map['favorites']),

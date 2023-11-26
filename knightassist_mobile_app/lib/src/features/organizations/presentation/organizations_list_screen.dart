@@ -5,7 +5,18 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:knightassist_mobile_app/src/common_widgets/responsive_center.dart';
 import 'package:knightassist_mobile_app/src/constants/breakpoints.dart';
+import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
+import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
+
+import '../domain/organization.dart';
+
+List<Organization> organizations = [
+    Organization(id: '', name: 'Test Org', email: '', description: 'qwgejnqg qwgepoijqrglpk qgroiqrglpiqgr qgoqrglp qrgipoqrgpijgq', logoUrl: 'assets/example.png', category: [], followers: [], favorites: [], updates: [], calendarLink: '', isActive: false, eventHappeningNow: false, backgroundUrl: '', events: [], semesters: [], recoveryToken: '', confirmToken: '', emailToken: '', emailValidated: false, createdAt: DateTime.fromMillisecondsSinceEpoch(1701030257000), updatedAt: DateTime.now()),
+    Organization(id: '', name: 'Random Organization X', email: '', description: 'environment', logoUrl: 'assets/profile pictures/icon_leaf.png', category: [], followers: [], favorites: [], updates: [], calendarLink: '', isActive: false, eventHappeningNow: false, backgroundUrl: '', events: [], semesters: [], recoveryToken: '', confirmToken: '', emailToken: '', emailValidated: false, createdAt: DateTime.fromMillisecondsSinceEpoch(1701030257000), updatedAt: DateTime.now()),
+    Organization(id: '', name: 'Test test test test test', email: '', description: 'vidya gaming', logoUrl: 'assets/profile pictures/icon_controller.png', category: [], followers: [], favorites: [], updates: [], calendarLink: '', isActive: false, eventHappeningNow: false, backgroundUrl: '', events: [], semesters: [], recoveryToken: '', confirmToken: '', emailToken: '', emailValidated: false, createdAt: DateTime.fromMillisecondsSinceEpoch(1701030257000), updatedAt: DateTime.now()),
+    Organization(id: '', name: 'Example test', email: '', description: 'weightlifting jim', logoUrl: 'assets/profile pictures/icon_weight.png', category: [], followers: [], favorites: [], updates: [], calendarLink: '', isActive: false, eventHappeningNow: false, backgroundUrl: '', events: [], semesters: [], recoveryToken: '', confirmToken: '', emailToken: '', emailValidated: false, createdAt: DateTime.fromMillisecondsSinceEpoch(1701030257000), updatedAt: DateTime.now())
+];
 
 class OrganizationsListScreen extends ConsumerWidget {
   const OrganizationsListScreen({super.key});
@@ -55,13 +66,11 @@ class OrganizationsListScreen extends ConsumerWidget {
           children: [
             _topSection(w),
             Flexible(
-              child: ListView(
+              child: ListView.builder(
                 scrollDirection: Axis.vertical,
-                children: const <Widget>[
-                  OrganizationCard(),
-                  OrganizationCard(),
-                  OrganizationCard(),
-                ],
+                shrinkWrap: true,
+                itemCount: organizations.length,
+                itemBuilder: (context, index) => OrganizationCard(organization: organizations.elementAt(index)),
               ),
             )
           ],
@@ -131,15 +140,20 @@ _topSection(double width) {
 }
 
 class OrganizationCard extends StatefulWidget {
-  const OrganizationCard({super.key});
+final Organization organization;
+
+  const OrganizationCard({super.key, required this.organization});
 
   @override
-  _OrganizationCardState createState() => _OrganizationCardState();
+  _OrganizationCardState createState() => _OrganizationCardState(organization: organization);
 
 }
 
 class _OrganizationCardState extends State<OrganizationCard> {
   bool _isFavoriteOrg = false;
+  final Organization organization;
+  
+  _OrganizationCardState({required this.organization});
 
   @override
   Widget build(BuildContext context) {
@@ -147,6 +161,7 @@ class _OrganizationCardState extends State<OrganizationCard> {
 
     const style = TextStyle(fontSize: 20, fontWeight: FontWeight.normal);
 
+    final Organization organization = this.organization;
     return SingleChildScrollView(
       child: ResponsiveCenter(
         maxContentWidth: Breakpoint.tablet,
@@ -170,24 +185,24 @@ class _OrganizationCardState extends State<OrganizationCard> {
                       children: [
                         ClipRRect(
                             borderRadius: BorderRadius.circular(12.0),
-                            child: const Image(
-                                image: AssetImage('assets/example.png'),
+                            child: Image(
+                                image: AssetImage(organization.logoUrl),
                                 height: 100)),
-                        const Padding(
-                          padding: EdgeInsets.all(15.0),
+                        Padding(
+                          padding: const EdgeInsets.all(15.0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Text(
-                                'Organization Name',
-                                style: TextStyle(
+                                organization.name,
+                                style: const TextStyle(
                                     fontWeight: FontWeight.w600, fontSize: 18),
                                 textAlign: TextAlign.justify,
                               ),
                               Text(
-                                'Description',
-                                style: TextStyle(fontWeight: FontWeight.w400),
+                                organization.description,
+                                style: const TextStyle(fontWeight: FontWeight.w400),
                                 textAlign: TextAlign.justify,
                               ),
                             ],
