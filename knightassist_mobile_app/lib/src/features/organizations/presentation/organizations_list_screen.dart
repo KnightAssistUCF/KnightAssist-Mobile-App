@@ -12,10 +12,95 @@ import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 import '../domain/organization.dart';
 
 List<Organization> organizations = [
-    Organization(id: '', name: 'Test Org', email: '', description: 'qwgejnqg qwgepoijqrglpk qgroiqrglpiqgr qgoqrglp qrgipoqrgpijgq', logoUrl: 'assets/example.png', category: [], followers: [], favorites: [], updates: [], calendarLink: '', isActive: false, eventHappeningNow: false, backgroundUrl: '', events: [], semesters: [], recoveryToken: '', confirmToken: '', emailToken: '', emailValidated: false, createdAt: DateTime.fromMillisecondsSinceEpoch(1701030257000), updatedAt: DateTime.now()),
-    Organization(id: '', name: 'Random Organization X', email: '', description: 'environment', logoUrl: 'assets/profile pictures/icon_leaf.png', category: [], followers: [], favorites: [], updates: [], calendarLink: '', isActive: false, eventHappeningNow: false, backgroundUrl: '', events: [], semesters: [], recoveryToken: '', confirmToken: '', emailToken: '', emailValidated: false, createdAt: DateTime.fromMillisecondsSinceEpoch(1701030257000), updatedAt: DateTime.now()),
-    Organization(id: '', name: 'Test test test test test', email: '', description: 'vidya gaming', logoUrl: 'assets/profile pictures/icon_controller.png', category: [], followers: [], favorites: [], updates: [], calendarLink: '', isActive: false, eventHappeningNow: false, backgroundUrl: '', events: [], semesters: [], recoveryToken: '', confirmToken: '', emailToken: '', emailValidated: false, createdAt: DateTime.fromMillisecondsSinceEpoch(1701030257000), updatedAt: DateTime.now()),
-    Organization(id: '', name: 'Example test', email: '', description: 'weightlifting jim', logoUrl: 'assets/profile pictures/icon_weight.png', category: [], followers: [], favorites: [], updates: [], calendarLink: '', isActive: false, eventHappeningNow: false, backgroundUrl: '', events: [], semesters: [], recoveryToken: '', confirmToken: '', emailToken: '', emailValidated: false, createdAt: DateTime.fromMillisecondsSinceEpoch(1701030257000), updatedAt: DateTime.now())
+  Organization(
+      id: '',
+      name: 'Test Org',
+      email: '',
+      description:
+          'qwgejnqg qwgepoijqrglpk qgroiqrglpiqgr qgoqrglp qrgipoqrgpijgq',
+      logoUrl: 'assets/example.png',
+      category: [],
+      followers: [],
+      favorites: [],
+      updates: [],
+      calendarLink: '',
+      isActive: false,
+      eventHappeningNow: false,
+      backgroundUrl: '',
+      events: [],
+      semesters: [],
+      recoveryToken: '',
+      confirmToken: '',
+      emailToken: '',
+      emailValidated: false,
+      createdAt: DateTime.fromMillisecondsSinceEpoch(1701030257000),
+      updatedAt: DateTime.now()),
+  Organization(
+      id: '',
+      name: 'Random Organization X',
+      email: '',
+      description: 'environment',
+      logoUrl: 'assets/profile pictures/icon_leaf.png',
+      category: [],
+      followers: [],
+      favorites: [],
+      updates: [],
+      calendarLink: '',
+      isActive: false,
+      eventHappeningNow: false,
+      backgroundUrl: '',
+      events: [],
+      semesters: [],
+      recoveryToken: '',
+      confirmToken: '',
+      emailToken: '',
+      emailValidated: false,
+      createdAt: DateTime.fromMillisecondsSinceEpoch(1701030257000),
+      updatedAt: DateTime.now()),
+  Organization(
+      id: '',
+      name: 'Test test test test test',
+      email: '',
+      description: 'vidya gaming',
+      logoUrl: 'assets/profile pictures/icon_controller.png',
+      category: [],
+      followers: [],
+      favorites: [],
+      updates: [],
+      calendarLink: '',
+      isActive: false,
+      eventHappeningNow: false,
+      backgroundUrl: '',
+      events: [],
+      semesters: [],
+      recoveryToken: '',
+      confirmToken: '',
+      emailToken: '',
+      emailValidated: false,
+      createdAt: DateTime.fromMillisecondsSinceEpoch(1701030257000),
+      updatedAt: DateTime.now()),
+  Organization(
+      id: '',
+      name: 'Example test',
+      email: '',
+      description: 'weightlifting jim',
+      logoUrl: 'assets/profile pictures/icon_weight.png',
+      category: [],
+      followers: [],
+      favorites: [],
+      updates: [],
+      calendarLink: '',
+      isActive: false,
+      eventHappeningNow: false,
+      backgroundUrl: '',
+      events: [],
+      semesters: [],
+      recoveryToken: '',
+      confirmToken: '',
+      emailToken: '',
+      emailValidated: false,
+      createdAt: DateTime.fromMillisecondsSinceEpoch(1701030257000),
+      updatedAt: DateTime.now())
 ];
 
 class OrganizationsListScreen extends ConsumerWidget {
@@ -37,22 +122,29 @@ class OrganizationsListScreen extends ConsumerWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: IconButton(
-              onPressed: () { }, tooltip: 'View notifications', icon: const Icon(Icons.notifications_outlined,
-              color: Colors.white, semanticLabel: 'Notifications',),
+              onPressed: () {},
+              tooltip: 'View notifications',
+              icon: const Icon(
+                Icons.notifications_outlined,
+                color: Colors.white,
+                semanticLabel: 'Notifications',
+              ),
             ),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: GestureDetector(
-              onTap: () { context.pushNamed(AppRoute.profileScreen.name); },
+              onTap: () {
+                context.pushNamed(AppRoute.profileScreen.name);
+              },
               child: Tooltip(
                 message: 'Go to your profile',
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(25.0),
                   child: const Image(
-                    semanticLabel: 'Profile picture',
-                      image:
-                          AssetImage('assets/profile pictures/icon_paintbrush.png'),
+                      semanticLabel: 'Profile picture',
+                      image: AssetImage(
+                          'assets/profile pictures/icon_paintbrush.png'),
                       height: 20),
                 ),
               ),
@@ -70,7 +162,8 @@ class OrganizationsListScreen extends ConsumerWidget {
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
                 itemCount: organizations.length,
-                itemBuilder: (context, index) => OrganizationCard(organization: organizations.elementAt(index)),
+                itemBuilder: (context, index) => OrganizationCard(
+                    organization: organizations.elementAt(index)),
               ),
             )
           ],
@@ -140,20 +233,25 @@ _topSection(double width) {
 }
 
 class OrganizationCard extends StatefulWidget {
-final Organization organization;
+  final Organization organization;
 
   const OrganizationCard({super.key, required this.organization});
 
   @override
-  _OrganizationCardState createState() => _OrganizationCardState(organization: organization);
-
+  _OrganizationCardState createState() => _OrganizationCardState();
 }
 
 class _OrganizationCardState extends State<OrganizationCard> {
   bool _isFavoriteOrg = false;
-  final Organization organization;
-  
-  _OrganizationCardState({required this.organization});
+  late final Organization organization;
+
+  _OrganizationCardState();
+
+  @override
+  void initState() {
+    super.initState();
+    organization = widget.organization;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -202,7 +300,8 @@ class _OrganizationCardState extends State<OrganizationCard> {
                               ),
                               Text(
                                 organization.description,
-                                style: const TextStyle(fontWeight: FontWeight.w400),
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w400),
                                 textAlign: TextAlign.justify,
                               ),
                             ],
@@ -214,16 +313,19 @@ class _OrganizationCardState extends State<OrganizationCard> {
                           children: [
                             Align(
                                 alignment: const Alignment(1, 0.6),
-                                child: IconButton( iconSize: 30.0,
-                                padding: const EdgeInsets.only(left:4,right:4,top:0),
-                                icon: _isFavoriteOrg ==true ? 
-                                const Icon(Icons.favorite):const Icon(Icons.favorite_outline), color: Colors.pink,
-                                onPressed: () {
-                                  setState(() {
-                                    _isFavoriteOrg = !_isFavoriteOrg;
-                                  });
-                                }
-                            ))
+                                child: IconButton(
+                                    iconSize: 30.0,
+                                    padding: const EdgeInsets.only(
+                                        left: 4, right: 4, top: 0),
+                                    icon: _isFavoriteOrg == true
+                                        ? const Icon(Icons.favorite)
+                                        : const Icon(Icons.favorite_outline),
+                                    color: Colors.pink,
+                                    onPressed: () {
+                                      setState(() {
+                                        _isFavoriteOrg = !_isFavoriteOrg;
+                                      });
+                                    }))
                           ],
                         )
                       ],
@@ -235,5 +337,4 @@ class _OrganizationCardState extends State<OrganizationCard> {
       ),
     );
   }
-
 }
