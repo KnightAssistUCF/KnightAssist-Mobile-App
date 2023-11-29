@@ -152,6 +152,7 @@ class OrganizationScreen extends ConsumerWidget {
 }
 
 _topSection(double width, Organization organization) {
+  bool isFavoriteOrg = false;
   return Container(
       color: const Color.fromARGB(255, 0, 108, 81),
       width: width,
@@ -182,6 +183,17 @@ _topSection(double width, Organization organization) {
                                   color: Colors.white,
                                   fontSize: 25),
                             ),
+                            IconButton(
+                                iconSize: 30.0,
+                                padding: const EdgeInsets.only(
+                                    left: 4, right: 4, top: 0),
+                                icon: isFavoriteOrg == true
+                                    ? const Icon(Icons.favorite)
+                                    : const Icon(Icons.favorite_outline),
+                                color: Colors.pink,
+                                onPressed: () {
+                                  isFavoriteOrg = !isFavoriteOrg;
+                                })
                           ],
                         ),
                       )
