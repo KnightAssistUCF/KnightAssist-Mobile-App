@@ -60,7 +60,7 @@ List<Organization> organizations = [
   Organization(
       id: '3',
       name: 'Test test test test test',
-      email: '',
+      email: 'testorg@example.com',
       description: 'vidya gaming',
       logoUrl: 'assets/profile pictures/icon_controller.png',
       category: [],

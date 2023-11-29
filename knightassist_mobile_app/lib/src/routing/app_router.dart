@@ -60,32 +60,8 @@ GoRouter goRouter(GoRouterRef ref) {
         GoRoute(
             path: '/',
             name: AppRoute.home.name,
-            builder: (context, state) => OrganizationScreen(
-                orgID: '1',
-                organization: Organization(
-                    id: '3',
-                    name: 'Test test test test test',
-                    email: '',
-                    description: 'vidya gaming',
-                    logoUrl: 'assets/profile pictures/icon_controller.png',
-                    category: [],
-                    followers: [],
-                    favorites: [],
-                    updates: [],
-                    calendarLink: '',
-                    isActive: false,
-                    eventHappeningNow: false,
-                    backgroundUrl: '',
-                    events: [],
-                    semesters: [],
-                    recoveryToken: '',
-                    confirmToken: '',
-                    emailToken: '',
-                    emailValidated: false,
-                    createdAt:
-                        DateTime.fromMillisecondsSinceEpoch(1701030257000),
-                    updatedAt: DateTime
-                        .now())), // TEMP, change this to whatever screen you want to test (will need to rerun)
+            builder: (context, state) =>
+                HomeScreen(), // TEMP, change this to whatever screen you want to test (will need to rerun)
             routes: [
               GoRoute(
                   path: 'events',
@@ -119,8 +95,9 @@ GoRouter goRouter(GoRouterRef ref) {
                               organization: Organization(
                                   id: '3',
                                   name: 'Test test test test test',
-                                  email: '',
-                                  description: 'vidya gaming',
+                                  email: 'testorg@example.com',
+                                  description:
+                                      'Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem',
                                   logoUrl:
                                       'assets/profile pictures/icon_controller.png',
                                   category: [],
