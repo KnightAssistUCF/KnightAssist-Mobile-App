@@ -13,7 +13,7 @@ import '../domain/organization.dart';
 
 List<Organization> organizations = [
   Organization(
-      id: '',
+      id: '1',
       name: 'Test Org',
       email: '',
       description:
@@ -36,7 +36,7 @@ List<Organization> organizations = [
       createdAt: DateTime.fromMillisecondsSinceEpoch(1701030257000),
       updatedAt: DateTime.now()),
   Organization(
-      id: '',
+      id: '2',
       name: 'Random Organization X',
       email: '',
       description: 'environment',
@@ -58,7 +58,7 @@ List<Organization> organizations = [
       createdAt: DateTime.fromMillisecondsSinceEpoch(1701030257000),
       updatedAt: DateTime.now()),
   Organization(
-      id: '',
+      id: '3',
       name: 'Test test test test test',
       email: '',
       description: 'vidya gaming',
@@ -80,7 +80,7 @@ List<Organization> organizations = [
       createdAt: DateTime.fromMillisecondsSinceEpoch(1701030257000),
       updatedAt: DateTime.now()),
   Organization(
-      id: '',
+      id: '4',
       name: 'Example test',
       email: '',
       description: 'weightlifting jim',

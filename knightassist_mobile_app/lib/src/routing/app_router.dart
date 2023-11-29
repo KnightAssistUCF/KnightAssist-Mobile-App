@@ -8,6 +8,7 @@ import 'package:knightassist_mobile_app/src/features/authentication/presentation
 import 'package:knightassist_mobile_app/src/features/events/presentation/event_screen.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/events_list_screen.dart';
 import 'package:knightassist_mobile_app/src/features/home/presentation/home_screen.dart';
+import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/presentation/organization_screen.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/presentation/organizations_list_screen.dart';
 import 'package:knightassist_mobile_app/src/routing/go_router_refresh_stream.dart';
@@ -27,8 +28,8 @@ enum AppRoute {
   account,
   signIn,
   registerStudent,
-  registerOrg, 
-  emailConfirmed, 
+  registerOrg,
+  emailConfirmed,
   homeScreen,
   profileScreen
 }
@@ -48,7 +49,7 @@ GoRouter goRouter(GoRouterRef ref) {
           }
         } else {
           //if (path == '/account') {
-            //return '/';
+          //return '/';
           //}
         }
         return null;
@@ -59,8 +60,32 @@ GoRouter goRouter(GoRouterRef ref) {
         GoRoute(
             path: '/',
             name: AppRoute.home.name,
-            builder: (context, state) =>
-                const HomeScreen(), // TEMP, change this to whatever screen you want to test (will need to rerun)
+            builder: (context, state) => OrganizationScreen(
+                orgID: '1',
+                organization: Organization(
+                    id: '3',
+                    name: 'Test test test test test',
+                    email: '',
+                    description: 'vidya gaming',
+                    logoUrl: 'assets/profile pictures/icon_controller.png',
+                    category: [],
+                    followers: [],
+                    favorites: [],
+                    updates: [],
+                    calendarLink: '',
+                    isActive: false,
+                    eventHappeningNow: false,
+                    backgroundUrl: '',
+                    events: [],
+                    semesters: [],
+                    recoveryToken: '',
+                    confirmToken: '',
+                    emailToken: '',
+                    emailValidated: false,
+                    createdAt:
+                        DateTime.fromMillisecondsSinceEpoch(1701030257000),
+                    updatedAt: DateTime
+                        .now())), // TEMP, change this to whatever screen you want to test (will need to rerun)
             routes: [
               GoRoute(
                   path: 'events',
@@ -89,7 +114,33 @@ GoRouter goRouter(GoRouterRef ref) {
                         name: AppRoute.organization.name,
                         builder: (context, state) {
                           final orgID = state.pathParameters['id']!;
-                          return OrganizationScreen(orgID: orgID);
+                          return OrganizationScreen(
+                              orgID: orgID,
+                              organization: Organization(
+                                  id: '3',
+                                  name: 'Test test test test test',
+                                  email: '',
+                                  description: 'vidya gaming',
+                                  logoUrl:
+                                      'assets/profile pictures/icon_controller.png',
+                                  category: [],
+                                  followers: [],
+                                  favorites: [],
+                                  updates: [],
+                                  calendarLink: '',
+                                  isActive: false,
+                                  eventHappeningNow: false,
+                                  backgroundUrl: '',
+                                  events: [],
+                                  semesters: [],
+                                  recoveryToken: '',
+                                  confirmToken: '',
+                                  emailToken: '',
+                                  emailValidated: false,
+                                  createdAt:
+                                      DateTime.fromMillisecondsSinceEpoch(
+                                          1701030257000),
+                                  updatedAt: DateTime.now()));
                         })
                   ]),
               GoRoute(
@@ -113,17 +164,17 @@ GoRouter goRouter(GoRouterRef ref) {
                   pageBuilder: (context, state) => const MaterialPage(
                       fullscreenDialog: true,
                       child: RegisterOrganizationScreen())),
-                      GoRoute(
+              GoRoute(
                   path: 'emailConfirmed',
                   name: AppRoute.emailConfirmed.name,
                   pageBuilder: (context, state) => const MaterialPage(
                       fullscreenDialog: true, child: ConfirmScreen())),
-                      GoRoute(
+              GoRoute(
                   path: 'homeScreen',
                   name: AppRoute.homeScreen.name,
                   pageBuilder: (context, state) => const MaterialPage(
                       fullscreenDialog: true, child: HomeScreen())),
-                      GoRoute(
+              GoRoute(
                   path: 'profileScreen',
                   name: AppRoute.profileScreen.name,
                   pageBuilder: (context, state) => const MaterialPage(
