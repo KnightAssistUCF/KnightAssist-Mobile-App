@@ -238,15 +238,20 @@ class OrganizationCard extends StatefulWidget {
   const OrganizationCard({super.key, required this.organization});
 
   @override
-  _OrganizationCardState createState() =>
-      _OrganizationCardState(organization: organization);
+  _OrganizationCardState createState() => _OrganizationCardState();
 }
 
 class _OrganizationCardState extends State<OrganizationCard> {
   bool _isFavoriteOrg = false;
-  final Organization organization;
+  late final Organization organization;
 
-  _OrganizationCardState({required this.organization});
+  _OrganizationCardState();
+
+  @override
+  void initState() {
+    super.initState();
+    organization = widget.organization;
+  }
 
   @override
   Widget build(BuildContext context) {
