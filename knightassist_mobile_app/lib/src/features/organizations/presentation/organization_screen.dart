@@ -81,11 +81,13 @@ class OrganizationScreen extends ConsumerWidget {
                   ),
                   Center(
                     child: SizedBox(
-                      width: 280,
+                      width: 300,
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            context.pushNamed(AppRoute.events.name);
+                          },
                           style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all(
                                   const Color.fromARGB(255, 91, 78, 119))),
