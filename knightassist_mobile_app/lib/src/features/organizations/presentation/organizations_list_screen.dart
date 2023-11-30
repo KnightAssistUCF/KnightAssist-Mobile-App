@@ -276,8 +276,8 @@ class _OrganizationCardState extends State<OrganizationCard> {
               color: Colors.white,
               elevation: 5,
               child: InkWell(
-                onTap: () => context.pushNamed("organization",
-                    pathParameters: {'id': organization.id}),
+                onTap: () =>
+                    context.pushNamed("organization", extra: organization),
                 child: Padding(
                   padding: const EdgeInsets.all(20.0),
                   child: Column(

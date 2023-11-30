@@ -61,7 +61,7 @@ GoRouter goRouter(GoRouterRef ref) {
             path: '/',
             name: AppRoute.home.name,
             builder: (context, state) =>
-                HomeScreen(), // TEMP, change this to whatever screen you want to test (will need to rerun)
+                const HomeScreen(), // TEMP, change this to whatever screen you want to test (will need to rerun)
             routes: [
               GoRoute(
                   path: 'events',
@@ -86,38 +86,12 @@ GoRouter goRouter(GoRouterRef ref) {
                   },
                   routes: [
                     GoRoute(
-                        path: 'organization/:id',
-                        name: AppRoute.organization.name,
+                        path: 'organization',
+                        name: 'organization',
                         builder: (context, state) {
-                          final orgID = state.pathParameters['id']!;
-                          return OrganizationScreen(
-                              orgID: orgID,
-                              organization: Organization(
-                                  id: '3',
-                                  name: 'Test test test test test',
-                                  email: 'testorg@example.com',
-                                  description:
-                                      'Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem',
-                                  logoUrl:
-                                      'assets/profile pictures/icon_controller.png',
-                                  category: [],
-                                  followers: [],
-                                  favorites: [],
-                                  updates: [],
-                                  calendarLink: '',
-                                  isActive: false,
-                                  eventHappeningNow: false,
-                                  backgroundUrl: '',
-                                  events: [],
-                                  semesters: [],
-                                  recoveryToken: '',
-                                  confirmToken: '',
-                                  emailToken: '',
-                                  emailValidated: false,
-                                  createdAt:
-                                      DateTime.fromMillisecondsSinceEpoch(
-                                          1701030257000),
-                                  updatedAt: DateTime.now()));
+                          Organization org = state.extra as Organization;
+                          //final orgID = state.pathParameters['id']!;
+                          return OrganizationScreen(organization: org);
                         })
                   ]),
               GoRoute(

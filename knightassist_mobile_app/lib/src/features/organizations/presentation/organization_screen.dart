@@ -5,9 +5,8 @@ import 'package:knightassist_mobile_app/src/features/organizations/domain/organi
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 
 class OrganizationScreen extends ConsumerWidget {
-  const OrganizationScreen(
-      {super.key, required this.orgID, required this.organization});
-  final String orgID;
+  const OrganizationScreen({super.key, required this.organization});
+  //final String orgID;
   final Organization organization;
 
   @override
