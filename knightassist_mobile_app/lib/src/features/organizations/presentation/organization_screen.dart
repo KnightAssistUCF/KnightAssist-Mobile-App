@@ -54,7 +54,7 @@ class OrganizationScreen extends ConsumerWidget {
           height: h,
           child: Column(
             children: [
-              _topSection(w, organization),
+              OrganizationTop(width: w, organization: organization),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -152,58 +152,89 @@ class OrganizationScreen extends ConsumerWidget {
   }
 }
 
-_topSection(double width, Organization organization) {
-  bool isFavoriteOrg = false;
-  return Container(
-      color: const Color.fromARGB(255, 0, 108, 81),
-      width: width,
-      child: Stack(
-        children: [
-          Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Center(
-                  child: Column(
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(50.0),
-                        child: Image(
-                            semanticLabel: 'Organization profile picture',
-                            image: AssetImage(organization.logoUrl),
-                            height: 100),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Wrap(
-                          children: [
-                            Text(
-                              organization.name,
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.white,
-                                  fontSize: 25),
-                            ),
-                            IconButton(
-                                iconSize: 30.0,
-                                padding: const EdgeInsets.only(
-                                    left: 4, right: 4, top: 0),
-                                icon: isFavoriteOrg == true
-                                    ? const Icon(Icons.favorite)
-                                    : const Icon(Icons.favorite_outline),
-                                color: Colors.pink,
-                                onPressed: () {
-                                  isFavoriteOrg = !isFavoriteOrg;
-                                })
-                          ],
+class OrganizationTop extends StatefulWidget {
+  final Organization organization;
+  final double width;
+
+  const OrganizationTop(
+      {super.key, required this.organization, required this.width});
+
+  @override
+  _OrganizationTopState createState() => _OrganizationTopState();
+}
+
+class _OrganizationTopState extends State<OrganizationTop> {
+  bool _isFavoriteOrg = false;
+  late final Organization organization;
+  late final double width;
+
+  _OrganizationTopState();
+
+  @override
+  void initState() {
+    super.initState();
+    organization = widget.organization;
+    width = widget.width;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final Organization organization = this.organization;
+    final double width = this.width;
+
+    return Container(
+        color: const Color.fromARGB(255, 0, 108, 81),
+        width: width,
+        child: Stack(
+          children: [
+            Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Center(
+                    child: Column(
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(50.0),
+                          child: Image(
+                              semanticLabel: 'Organization profile picture',
+                              image: AssetImage(organization.logoUrl),
+                              height: 100),
                         ),
-                      )
-                    ],
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Wrap(
+                            children: [
+                              Text(
+                                organization.name,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.white,
+                                    fontSize: 25),
+                              ),
+                              IconButton(
+                                  iconSize: 30.0,
+                                  padding: const EdgeInsets.only(
+                                      left: 4, right: 4, top: 0),
+                                  icon: _isFavoriteOrg == true
+                                      ? const Icon(Icons.favorite)
+                                      : const Icon(Icons.favorite_outline),
+                                  color: Colors.pink,
+                                  onPressed: () {
+                                    setState(() {
+                                      _isFavoriteOrg = !_isFavoriteOrg;
+                                    });
+                                  })
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-        ],
-      ));
+              ],
+            ),
+          ],
+        ));
+  }
 }
