@@ -81,9 +81,9 @@ class OrganizationScreen extends ConsumerWidget {
                   ),
                   Center(
                     child: SizedBox(
-                      width: 250,
-                      child: Align(
-                        alignment: const Alignment(1, 0.6),
+                      width: 280,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
                         child: ElevatedButton(
                           onPressed: () {},
                           style: ButtonStyle(

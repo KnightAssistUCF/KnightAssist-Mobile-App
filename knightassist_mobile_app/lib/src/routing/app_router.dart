@@ -67,7 +67,7 @@ GoRouter goRouter(GoRouterRef ref) {
                   path: 'events',
                   name: AppRoute.events.name,
                   builder: (context, state) {
-                    return EventsListScreen();
+                    return const EventsListScreen();
                   },
                   routes: [
                     GoRoute(
@@ -82,7 +82,7 @@ GoRouter goRouter(GoRouterRef ref) {
                   path: 'organizations',
                   name: AppRoute.organizations.name,
                   builder: (context, state) {
-                    return OrganizationsListScreen();
+                    return const OrganizationsListScreen();
                   },
                   routes: [
                     GoRoute(
