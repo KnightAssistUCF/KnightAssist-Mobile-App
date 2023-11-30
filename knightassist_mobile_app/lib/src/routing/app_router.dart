@@ -5,6 +5,7 @@ import 'package:knightassist_mobile_app/src/features/authentication/presentation
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/register/register_organization_screen.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/register/register_student_screen.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/sign_in/sign_in_screen.dart';
+import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/event_screen.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/events_list_screen.dart';
 import 'package:knightassist_mobile_app/src/features/home/presentation/home_screen.dart';
@@ -71,11 +72,12 @@ GoRouter goRouter(GoRouterRef ref) {
                   },
                   routes: [
                     GoRoute(
-                        path: 'event/:id',
-                        name: AppRoute.event.name,
+                        path: 'event',
+                        name: 'event',
                         builder: (context, state) {
-                          final eventID = state.pathParameters['id']!;
-                          return EventScreen(eventID: eventID);
+                          Event ev = state.extra as Event;
+                          //final eventID = state.pathParameters['id']!;
+                          return EventScreen(event: ev);
                         })
                   ]),
               GoRoute(
