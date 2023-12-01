@@ -50,70 +50,73 @@ class OrganizationScreen extends ConsumerWidget {
           )
         ],
       ),
-      body: Container(
-          height: h,
-          child: Column(
-            children: [
-              OrganizationTop(width: w, organization: organization),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      'Description: ${organization.description}',
-                      style: const TextStyle(fontSize: 20),
+      body: ListView(
+          scrollDirection: Axis.vertical,
+          //height: h,
+          children: <Widget>[
+            Column(
+              children: [
+                OrganizationTop(width: w, organization: organization),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        'Description: ${organization.description}',
+                        style: const TextStyle(fontSize: 20),
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      'Email: ${organization.email}',
-                      style: const TextStyle(fontSize: 20),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        'Email: ${organization.email}',
+                        style: const TextStyle(fontSize: 20),
+                      ),
                     ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text(
-                      'Phone Number',
-                      style: TextStyle(fontSize: 20),
+                    const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        'Phone Number',
+                        style: TextStyle(fontSize: 20),
+                      ),
                     ),
-                  ),
-                  Center(
-                    child: SizedBox(
-                      width: 300,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: ElevatedButton(
-                          onPressed: () {
-                            context.pushNamed(AppRoute.events.name);
-                          },
-                          style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all(
-                                  const Color.fromARGB(255, 91, 78, 119))),
-                          child: const Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Wrap(
-                              children: [
-                                Text(
-                                  'View upcoming events',
-                                  style: TextStyle(fontSize: 20),
-                                ),
-                                Icon(
-                                  Icons.arrow_forward_ios,
-                                  color: Colors.white,
-                                )
-                              ],
+                    Center(
+                      child: SizedBox(
+                        width: 300,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              context.pushNamed(AppRoute.events.name);
+                            },
+                            style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all(
+                                    const Color.fromARGB(255, 91, 78, 119))),
+                            child: const Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Wrap(
+                                children: [
+                                  Text(
+                                    'View upcoming events',
+                                    style: TextStyle(fontSize: 20),
+                                  ),
+                                  Icon(
+                                    Icons.arrow_forward_ios,
+                                    color: Colors.white,
+                                  )
+                                ],
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                  )
-                ],
-              ),
-            ],
-          )),
+                    )
+                  ],
+                ),
+              ],
+            )
+          ]),
       /*drawer: Drawer(
         child: ListView(
           children: [
@@ -187,7 +190,7 @@ class _OrganizationTopState extends State<OrganizationTop> {
 
     return Container(
         color: const Color.fromARGB(255, 0, 108, 81),
-        width: width,
+        //width: width,
         child: Stack(
           children: [
             Column(

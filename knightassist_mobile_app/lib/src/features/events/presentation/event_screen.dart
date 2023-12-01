@@ -56,95 +56,99 @@ class EventScreen extends ConsumerWidget {
           )
         ],
       ),
-      body: Container(
-        height: h,
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Padding(padding: const EdgeInsets.all(0.0), child: _title(w, event)),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Wrap(
-              children: [
-                ClipRRect(
-                    borderRadius: BorderRadius.circular(25.0),
-                    child: const Image(
-                        image: AssetImage('assets/example.png'), height: 50)),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    event.sponsoringOrganization,
-                    style: const TextStyle(
-                        fontWeight: FontWeight.w400, fontSize: 25),
-                    textAlign: TextAlign.justify,
-                  ),
-                ),
-                const OrganizationFav(),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              "Description: ${event.description}",
-              style: const TextStyle(fontSize: 20),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              "Location: ${event.location}",
-              style: const TextStyle(fontSize: 20),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              "Date: ${DateFormat.yMMMMEEEEd().format(event.date)}",
-              style: const TextStyle(fontSize: 20),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              "Time: ${DateFormat.jmv().format(event.startTime)}",
-              style: const TextStyle(fontSize: 20),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              "Capacity: ${event.maxAttendees}",
-              style: const TextStyle(fontSize: 15, color: Colors.grey),
-            ),
-          ),
-          Center(
-            child: SizedBox(
-              width: 300,
-              child: Padding(
+      body: ListView(
+          scrollDirection: Axis.vertical,
+          //height: h,
+          children: <Widget>[
+            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Padding(
+                  padding: const EdgeInsets.all(0.0), child: _title(w, event)),
+              Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: ElevatedButton(
-                  onPressed: () {
-                    //context.pushNamed(AppRoute.events.name);
-                  },
-                  style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(
-                          const Color.fromARGB(255, 91, 78, 119))),
-                  child: const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Wrap(
-                      children: [
-                        Text(
-                          'RSVP',
-                          style: TextStyle(fontSize: 20),
+                child: Wrap(
+                  children: [
+                    ClipRRect(
+                        borderRadius: BorderRadius.circular(25.0),
+                        child: const Image(
+                            image: AssetImage('assets/example.png'),
+                            height: 50)),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        event.sponsoringOrganization,
+                        style: const TextStyle(
+                            fontWeight: FontWeight.w400, fontSize: 25),
+                        textAlign: TextAlign.justify,
+                      ),
+                    ),
+                    const OrganizationFav(),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "Description: ${event.description}",
+                  style: const TextStyle(fontSize: 20),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "Location: ${event.location}",
+                  style: const TextStyle(fontSize: 20),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "Date: ${DateFormat.yMMMMEEEEd().format(event.date)}",
+                  style: const TextStyle(fontSize: 20),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "Time: ${DateFormat.jmv().format(event.startTime)}",
+                  style: const TextStyle(fontSize: 20),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "Capacity: ${event.maxAttendees}",
+                  style: const TextStyle(fontSize: 15, color: Colors.grey),
+                ),
+              ),
+              Center(
+                child: SizedBox(
+                  width: 300,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        //context.pushNamed(AppRoute.events.name);
+                      },
+                      style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(
+                              const Color.fromARGB(255, 91, 78, 119))),
+                      child: const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Wrap(
+                          children: [
+                            Text(
+                              'RSVP',
+                              style: TextStyle(fontSize: 20),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ),
-          )
-        ]),
-      ),
+              )
+            ]),
+          ]),
     );
   }
 }
