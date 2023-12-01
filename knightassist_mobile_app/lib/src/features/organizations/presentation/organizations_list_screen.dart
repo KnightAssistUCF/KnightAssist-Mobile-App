@@ -300,13 +300,13 @@ class _OrganizationCardState extends State<OrganizationCard> {
                                   style: const TextStyle(
                                       fontWeight: FontWeight.w600,
                                       fontSize: 18),
-                                  textAlign: TextAlign.justify,
+                                  textAlign: TextAlign.start,
                                 ),
                                 Text(
                                   organization.description,
                                   style: const TextStyle(
                                       fontWeight: FontWeight.w400),
-                                  textAlign: TextAlign.justify,
+                                  textAlign: TextAlign.start,
                                 ),
                               ],
                             ),

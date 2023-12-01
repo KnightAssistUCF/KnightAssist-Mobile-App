@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
@@ -16,7 +17,10 @@ class EventScreen extends ConsumerWidget {
     double w = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        title: Text(event.name),
+        title: const Text(
+          'Event',
+          //style: TextStyle(fontSize: 30),
+        ),
         automaticallyImplyLeading: true,
         actions: <Widget>[
           Padding(
@@ -54,7 +58,8 @@ class EventScreen extends ConsumerWidget {
       ),
       body: Container(
         height: h,
-        child: Column(children: [
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Padding(padding: const EdgeInsets.all(0.0), child: _title(w, event)),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Wrap(
@@ -68,18 +73,99 @@ class EventScreen extends ConsumerWidget {
                   child: Text(
                     event.sponsoringOrganization,
                     style: const TextStyle(
-                        fontWeight: FontWeight.w400, fontSize: 20),
+                        fontWeight: FontWeight.w400, fontSize: 25),
                     textAlign: TextAlign.justify,
                   ),
                 ),
                 const OrganizationFav(),
               ],
             ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "Description: ${event.description}",
+              style: const TextStyle(fontSize: 20),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "Location: ${event.location}",
+              style: const TextStyle(fontSize: 20),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "Date: ${DateFormat.yMMMMEEEEd().format(event.date)}",
+              style: const TextStyle(fontSize: 20),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "Time: ${DateFormat.jmv().format(event.startTime)}",
+              style: const TextStyle(fontSize: 20),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "Capacity: ${event.maxAttendees}",
+              style: const TextStyle(fontSize: 15, color: Colors.grey),
+            ),
+          ),
+          Center(
+            child: SizedBox(
+              width: 300,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ElevatedButton(
+                  onPressed: () {
+                    //context.pushNamed(AppRoute.events.name);
+                  },
+                  style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(
+                          const Color.fromARGB(255, 91, 78, 119))),
+                  child: const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Wrap(
+                      children: [
+                        Text(
+                          'RSVP',
+                          style: TextStyle(fontSize: 20),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
           )
         ]),
       ),
     );
   }
+}
+
+_title(double width, Event e) {
+  return Builder(builder: (context) {
+    return Stack(children: [
+      Container(
+          color: const Color.fromARGB(255, 0, 108, 81),
+          width: width,
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                e.name,
+                style: const TextStyle(fontSize: 30, color: Colors.white),
+              ),
+            ),
+          )),
+    ]);
+  });
 }
 
 class OrganizationFav extends StatefulWidget {

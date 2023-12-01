@@ -242,20 +242,20 @@ class EventCard extends StatelessWidget {
                                   style: const TextStyle(
                                       fontWeight: FontWeight.w600,
                                       fontSize: 18),
-                                  textAlign: TextAlign.justify,
+                                  textAlign: TextAlign.start,
                                 ),
                                 Text(
                                   DateFormat('yyyy-MM-dd – kk:mm')
                                       .format(event.date),
                                   style: const TextStyle(
                                       fontWeight: FontWeight.w400),
-                                  textAlign: TextAlign.justify,
+                                  textAlign: TextAlign.start,
                                 ),
                                 Text(
                                   event.location,
                                   style: const TextStyle(
                                       fontWeight: FontWeight.w400),
-                                  textAlign: TextAlign.justify,
+                                  textAlign: TextAlign.start,
                                 ),
                                 OverflowBar(
                                   children: [
@@ -272,7 +272,7 @@ class EventCard extends StatelessWidget {
                                         event.sponsoringOrganization,
                                         style: const TextStyle(
                                             fontWeight: FontWeight.w400),
-                                        textAlign: TextAlign.justify,
+                                        textAlign: TextAlign.start,
                                       ),
                                     ),
                                   ],

@@ -91,17 +91,20 @@ class OrganizationScreen extends ConsumerWidget {
                           style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all(
                                   const Color.fromARGB(255, 91, 78, 119))),
-                          child: const Wrap(
-                            children: [
-                              Text(
-                                'View upcoming events',
-                                style: TextStyle(fontSize: 20),
-                              ),
-                              Icon(
-                                Icons.arrow_forward_ios,
-                                color: Colors.white,
-                              )
-                            ],
+                          child: const Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Wrap(
+                              children: [
+                                Text(
+                                  'View upcoming events',
+                                  style: TextStyle(fontSize: 20),
+                                ),
+                                Icon(
+                                  Icons.arrow_forward_ios,
+                                  color: Colors.white,
+                                )
+                              ],
+                            ),
                           ),
                         ),
                       ),
