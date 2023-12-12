@@ -46,9 +46,9 @@ class ConfirmScreen extends ConsumerWidget {
                 child: Column(
                   children: [
                     _buildTextField(labelText: 'Verification code'),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: _buildTextButton(),
+                    const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: BuildTextButton(),
                     )
                   ],
                 ),
@@ -96,9 +96,25 @@ TextField _buildTextField({String labelText = '', bool obscureText = false}) {
   }
 
 
-  TextButton _buildTextButton() {
-    return TextButton(
-      onPressed: () => {},
+  class BuildTextButton extends StatelessWidget {
+    const BuildTextButton({super.key});
+
+    @override
+    Widget build(BuildContext context) {
+      return TextButton(
+      onPressed: () => showDialog(context: context, builder: (BuildContext context) => AlertDialog(
+        title: const Text('Email confirmed'),
+        actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.pop(context, 'Cancel'),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(context, 'OK'),
+              child: const Text('OK'),
+            ),
+          ],
+      )),
       style: ButtonStyle(
         //padding: MaterialStateProperty.all(
           //const EdgeInsets.symmetric(vertical: 20),
@@ -115,4 +131,5 @@ TextField _buildTextField({String labelText = '', bool obscureText = false}) {
         ),
       ),
     );
+  }
   }
