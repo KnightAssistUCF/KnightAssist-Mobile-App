@@ -27,7 +27,7 @@ class ConfirmScreen extends ConsumerWidget {
                 alignment: Alignment.center,
               ),
               const Text(
-                'Thanks for confirming your email! Please proceed to sign in.',
+                'Thanks for signing up! Please enter a confirmation code from your email to verify your account.',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
                 textAlign: TextAlign.center,
               ),
@@ -43,11 +43,14 @@ class ConfirmScreen extends ConsumerWidget {
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: PrimaryButton(
-                  text: 'Sign In',
-                  onPressed: () => {
-                    context.pushNamed(AppRoute.signIn.name),
-                  },
+                child: Column(
+                  children: [
+                    _buildTextField(labelText: 'Verification code'),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: _buildTextButton(),
+                    )
+                  ],
                 ),
               ),
             ],
@@ -57,3 +60,59 @@ class ConfirmScreen extends ConsumerWidget {
     );
   }
 }
+
+TextField _buildTextField({String labelText = '', bool obscureText = false}) {
+    return TextField(
+      cursorColor: Colors.black54,
+      cursorWidth: 1,
+      obscureText: obscureText,
+      obscuringCharacter: '●',
+      decoration: InputDecoration(
+        labelText: labelText,
+        labelStyle: const TextStyle(
+          color: Colors.black54,
+          fontSize: 18,
+        ),
+        fillColor: Colors.red,
+        border: const OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.black54,
+          ),
+          borderRadius: BorderRadius.all(
+            Radius.circular(40),
+          ),
+        ),
+        focusedBorder: const OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.black54,
+            width: 1.5,
+          ),
+          borderRadius: BorderRadius.all(
+            Radius.circular(40),
+          ),
+        ),
+      ),
+    );
+  }
+
+
+  TextButton _buildTextButton() {
+    return TextButton(
+      onPressed: () => {},
+      style: ButtonStyle(
+        //padding: MaterialStateProperty.all(
+          //const EdgeInsets.symmetric(vertical: 20),
+        //),
+        side:
+            MaterialStateProperty.all(const BorderSide(color: Colors.black54)),
+        backgroundColor: MaterialStateProperty.all(const Color.fromARGB(255, 91, 78, 119)),
+      ),
+      child: const Text(
+        'Enter code',
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 18,
+        ),
+      ),
+    );
+  }
