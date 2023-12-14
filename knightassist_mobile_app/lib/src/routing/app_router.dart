@@ -5,9 +5,11 @@ import 'package:knightassist_mobile_app/src/features/authentication/presentation
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/register/register_organization_screen.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/register/register_student_screen.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/sign_in/sign_in_screen.dart';
+import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/event_screen.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/events_list_screen.dart';
 import 'package:knightassist_mobile_app/src/features/home/presentation/home_screen.dart';
+import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/presentation/organization_screen.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/presentation/organizations_list_screen.dart';
 import 'package:knightassist_mobile_app/src/routing/go_router_refresh_stream.dart';
@@ -27,8 +29,8 @@ enum AppRoute {
   account,
   signIn,
   registerStudent,
-  registerOrg, 
-  emailConfirmed, 
+  registerOrg,
+  emailConfirmed,
   homeScreen,
   profileScreen
 }
@@ -48,7 +50,7 @@ GoRouter goRouter(GoRouterRef ref) {
           }
         } else {
           //if (path == '/account') {
-            //return '/';
+          //return '/';
           //}
         }
         return null;
@@ -66,30 +68,32 @@ GoRouter goRouter(GoRouterRef ref) {
                   path: 'events',
                   name: AppRoute.events.name,
                   builder: (context, state) {
-                    return EventsListScreen();
+                    return const EventsListScreen();
                   },
                   routes: [
                     GoRoute(
-                        path: 'event/:id',
-                        name: AppRoute.event.name,
+                        path: 'event',
+                        name: 'event',
                         builder: (context, state) {
-                          final eventID = state.pathParameters['id']!;
-                          return EventScreen(eventID: eventID);
+                          Event ev = state.extra as Event;
+                          //final eventID = state.pathParameters['id']!;
+                          return EventScreen(event: ev);
                         })
                   ]),
               GoRoute(
                   path: 'organizations',
                   name: AppRoute.organizations.name,
                   builder: (context, state) {
-                    return OrganizationsListScreen();
+                    return const OrganizationsListScreen();
                   },
                   routes: [
                     GoRoute(
-                        path: 'organization/:id',
-                        name: AppRoute.organization.name,
+                        path: 'organization',
+                        name: 'organization',
                         builder: (context, state) {
-                          final orgID = state.pathParameters['id']!;
-                          return OrganizationScreen(orgID: orgID);
+                          Organization org = state.extra as Organization;
+                          //final orgID = state.pathParameters['id']!;
+                          return OrganizationScreen(organization: org);
                         })
                   ]),
               GoRoute(
@@ -113,17 +117,17 @@ GoRouter goRouter(GoRouterRef ref) {
                   pageBuilder: (context, state) => const MaterialPage(
                       fullscreenDialog: true,
                       child: RegisterOrganizationScreen())),
-                      GoRoute(
+              GoRoute(
                   path: 'emailConfirmed',
                   name: AppRoute.emailConfirmed.name,
                   pageBuilder: (context, state) => const MaterialPage(
                       fullscreenDialog: true, child: ConfirmScreen())),
-                      GoRoute(
+              GoRoute(
                   path: 'homeScreen',
                   name: AppRoute.homeScreen.name,
                   pageBuilder: (context, state) => const MaterialPage(
                       fullscreenDialog: true, child: HomeScreen())),
-                      GoRoute(
+              GoRoute(
                   path: 'profileScreen',
                   name: AppRoute.profileScreen.name,
                   pageBuilder: (context, state) => const MaterialPage(

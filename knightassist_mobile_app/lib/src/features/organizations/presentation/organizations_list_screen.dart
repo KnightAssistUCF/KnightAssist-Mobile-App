@@ -13,7 +13,7 @@ import '../domain/organization.dart';
 
 List<Organization> organizations = [
   Organization(
-      id: '',
+      id: '1',
       name: 'Test Org',
       email: '',
       description:
@@ -36,7 +36,7 @@ List<Organization> organizations = [
       createdAt: DateTime.fromMillisecondsSinceEpoch(1701030257000),
       updatedAt: DateTime.now()),
   Organization(
-      id: '',
+      id: '2',
       name: 'Random Organization X',
       email: '',
       description: 'environment',
@@ -58,9 +58,9 @@ List<Organization> organizations = [
       createdAt: DateTime.fromMillisecondsSinceEpoch(1701030257000),
       updatedAt: DateTime.now()),
   Organization(
-      id: '',
+      id: '3',
       name: 'Test test test test test',
-      email: '',
+      email: 'testorg@example.com',
       description: 'vidya gaming',
       logoUrl: 'assets/profile pictures/icon_controller.png',
       category: [],
@@ -80,7 +80,7 @@ List<Organization> organizations = [
       createdAt: DateTime.fromMillisecondsSinceEpoch(1701030257000),
       updatedAt: DateTime.now()),
   Organization(
-      id: '',
+      id: '4',
       name: 'Example test',
       email: '',
       description: 'weightlifting jim',
@@ -275,62 +275,67 @@ class _OrganizationCardState extends State<OrganizationCard> {
               ),
               color: Colors.white,
               elevation: 5,
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Column(
-                  children: [
-                    Wrap(
-                      children: [
-                        ClipRRect(
-                            borderRadius: BorderRadius.circular(12.0),
-                            child: Image(
-                                image: AssetImage(organization.logoUrl),
-                                height: 100)),
-                        Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text(
-                                organization.name,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w600, fontSize: 18),
-                                textAlign: TextAlign.justify,
-                              ),
-                              Text(
-                                organization.description,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w400),
-                                textAlign: TextAlign.justify,
-                              ),
-                            ],
+              child: InkWell(
+                onTap: () =>
+                    context.pushNamed("organization", extra: organization),
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Column(
+                    children: [
+                      Wrap(
+                        children: [
+                          ClipRRect(
+                              borderRadius: BorderRadius.circular(12.0),
+                              child: Image(
+                                  image: AssetImage(organization.logoUrl),
+                                  height: 100)),
+                          Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  organization.name,
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 18),
+                                  textAlign: TextAlign.start,
+                                ),
+                                Text(
+                                  organization.description,
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w400),
+                                  textAlign: TextAlign.start,
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                        OverflowBar(
-                          spacing: 8,
-                          overflowAlignment: OverflowBarAlignment.end,
-                          children: [
-                            Align(
-                                alignment: const Alignment(1, 0.6),
-                                child: IconButton(
-                                    iconSize: 30.0,
-                                    padding: const EdgeInsets.only(
-                                        left: 4, right: 4, top: 0),
-                                    icon: _isFavoriteOrg == true
-                                        ? const Icon(Icons.favorite)
-                                        : const Icon(Icons.favorite_outline),
-                                    color: Colors.pink,
-                                    onPressed: () {
-                                      setState(() {
-                                        _isFavoriteOrg = !_isFavoriteOrg;
-                                      });
-                                    }))
-                          ],
-                        )
-                      ],
-                    ),
-                  ],
+                          OverflowBar(
+                            spacing: 8,
+                            overflowAlignment: OverflowBarAlignment.end,
+                            children: [
+                              Align(
+                                  alignment: const Alignment(1, 0.6),
+                                  child: IconButton(
+                                      iconSize: 30.0,
+                                      padding: const EdgeInsets.only(
+                                          left: 4, right: 4, top: 0),
+                                      icon: _isFavoriteOrg == true
+                                          ? const Icon(Icons.favorite)
+                                          : const Icon(Icons.favorite_outline),
+                                      color: Colors.pink,
+                                      onPressed: () {
+                                        setState(() {
+                                          _isFavoriteOrg = !_isFavoriteOrg;
+                                        });
+                                      }))
+                            ],
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             )),
