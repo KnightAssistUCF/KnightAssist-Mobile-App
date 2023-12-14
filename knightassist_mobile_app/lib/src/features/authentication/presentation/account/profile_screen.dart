@@ -130,7 +130,7 @@ File? _profilePicFile;
             ListTile(
               title: const Text('Sign Out'),
               onTap: () {
-                context.pushNamed(AppRoute.emailConfirmed.name);
+                context.pushNamed(AppRoute.emailConfirm.name);
                 Navigator.pop(context);
               },
             ),

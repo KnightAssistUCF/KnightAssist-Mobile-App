@@ -13,7 +13,7 @@ class ConfirmScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Email Confirmed'),
+        title: const Text('Email Confirmation'),
       ),
       body: ResponsiveScrollableCard(
         child: SizedBox(

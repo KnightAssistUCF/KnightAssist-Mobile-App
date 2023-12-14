@@ -1,7 +1,7 @@
 import 'package:knightassist_mobile_app/src/features/authentication/data/auth_repository.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/account/account_screen.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/account/profile_screen.dart';
-import 'package:knightassist_mobile_app/src/features/authentication/presentation/register/register_emailconfirmed_screen.dart';
+import 'package:knightassist_mobile_app/src/features/authentication/presentation/register/register_emailconfirm_screen.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/register/register_organization_screen.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/register/register_student_screen.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/sign_in/sign_in_screen.dart';
@@ -30,7 +30,7 @@ enum AppRoute {
   signIn,
   registerStudent,
   registerOrg,
-  emailConfirmed,
+  emailConfirm,
   homeScreen,
   profileScreen
 }
@@ -118,8 +118,8 @@ GoRouter goRouter(GoRouterRef ref) {
                       fullscreenDialog: true,
                       child: RegisterOrganizationScreen())),
               GoRoute(
-                  path: 'emailConfirmed',
-                  name: AppRoute.emailConfirmed.name,
+                  path: 'emailConfirm',
+                  name: AppRoute.emailConfirm.name,
                   pageBuilder: (context, state) => const MaterialPage(
                       fullscreenDialog: true, child: ConfirmScreen())),
               GoRoute(
