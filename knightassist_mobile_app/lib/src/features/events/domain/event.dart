@@ -1,83 +1,74 @@
-import 'package:knightassist_mobile_app/src/features/authentication/domain/student_user.dart';
+typedef EventID = String;
 
 class Event {
-  String? id;
-  String? name;
-  String? description;
-  String? location;
-  String? date;
-  String? sponsoringOrganizationID;
-  List<String>? attendees;
-  List<StudentUser>? registeredVolunteers;
-  String? startTime;
-  String? endTime;
-  List<String>? eventTags;
-  String? semester;
-  String? createdAt;
-  String? updatedAt;
-  int? maxAttendees;
+  const Event({
+    required this.id,
+    required this.name,
+    required this.description,
+    required this.location,
+    required this.date,
+    required this.sponsoringOrganization,
+    required this.attendees,
+    required this.registeredVolunteers,
+    required this.startTime,
+    required this.endTime,
+    required this.eventTags,
+    required this.semester,
+    required this.maxAttendees,
+    required this.createdAt,
+    required this.updatedAt,
+  });
 
-  Event(
-      {this.id,
-      this.name,
-      this.description,
-      this.location,
-      this.date,
-      this.sponsoringOrganizationID,
-      this.attendees,
-      this.registeredVolunteers,
-      this.startTime,
-      this.endTime,
-      this.eventTags,
-      this.semester,
-      this.createdAt,
-      this.updatedAt,
-      this.maxAttendees});
+  final EventID id;
+  final String name;
+  final String description;
+  final String location;
+  final DateTime date;
+  final String sponsoringOrganization;
+  final List<String> attendees;
+  final List<String> registeredVolunteers;
+  final DateTime startTime;
+  final DateTime endTime;
+  final List<String> eventTags;
+  final String semester;
+  final int maxAttendees;
+  final DateTime createdAt;
+  final DateTime updatedAt;
 
-  Event.fromJson(Map<String, dynamic> json) {
-    id = json['_id'];
-    name = json['name'];
-    description = json['description'];
-    location = json['location'];
-    date = json['date'];
-    sponsoringOrganizationID = json['sponsoringOrganization'];
-    attendees = json['attendees'].cast<String>();
-
-    if (json['registeredVolunteers'] != null) {
-      registeredVolunteers = <StudentUser>[];
-      json['registeredVolunteers'].forEach((v) {
-        registeredVolunteers!.add(StudentUser.fromJson(v));
-      });
-    }
-    startTime = json['startTime'];
-    endTime = json['endTime'];
-    eventTags = json['eventTags'].cast<String>();
-    semester = json['semester'];
-    createdAt = json['createdAt'];
-    updatedAt = json['updatedAt'];
-    maxAttendees = json['maxAttendees'];
+  factory Event.fromMap(Map<String, dynamic> map) {
+    return Event(
+        id: map['id'] as String,
+        name: map['name'],
+        description: map['description'] ?? '',
+        location: map['location'] ?? '',
+        date: DateTime.parse(map['date']),
+        sponsoringOrganization: map['sponsoringOrganization'],
+        attendees: List<String>.from(map['attendees']),
+        registeredVolunteers: List<String>.from(map['registeredVolunteers']),
+        startTime: DateTime.parse(map['startTime']),
+        endTime: DateTime.parse(map['endTime']),
+        eventTags: List<String>.from(map['eventTags']),
+        semester: map['semester'],
+        maxAttendees: map['maxAttendees']?.toInt() ?? -1,
+        createdAt: DateTime.parse(map['createdAt']),
+        updatedAt: DateTime.parse(map['updatedAt']));
   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['_id'] = id;
-    data['name'] = name;
-    data['description'] = description;
-    data['location'] = location;
-    data['date'] = date;
-    data['sponsoringOrganization'] = sponsoringOrganizationID;
-    data['attendees'] = attendees;
-    if (registeredVolunteers != null) {
-      data['registeredVolunteers'] =
-          registeredVolunteers!.map((v) => v.toJson()).toList();
-    }
-    data['startTime'] = startTime;
-    data['endTime'] = endTime;
-    data['eventTags'] = eventTags;
-    data['semester'] = semester;
-    data['createdAt'] = createdAt;
-    data['updatedAt'] = updatedAt;
-    data['maxAttendees'] = maxAttendees;
-    return data;
-  }
+  Map<String, dynamic> toMap() => {
+        'id': id,
+        'name': name,
+        'description': description,
+        'location': location,
+        'date': date.toIso8601String(),
+        'sponsoringOrganization': sponsoringOrganization,
+        'attendees': attendees,
+        'registeredVolunteers': registeredVolunteers,
+        'startTime': startTime.toIso8601String(),
+        'endTime': endTime.toIso8601String(),
+        'eventTags': eventTags,
+        'semester': semester,
+        'maxAttendees': maxAttendees,
+        'createdAt': createdAt.toIso8601String(),
+        'updatedAt': updatedAt.toIso8601String(),
+      };
 }

@@ -57,5 +57,12 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSAppTransportSecurity</key>
+<dict>
+	<key>NSAllowsArbitraryLoads</key>
+	<true/>
+</dict>
+<key>NSPhotoLibraryUsageDescription</key>
+<string>KnightAssist needs to access your photo library so you can select an image from the library for your profile picture.</string>
 </dict>
 </plist>

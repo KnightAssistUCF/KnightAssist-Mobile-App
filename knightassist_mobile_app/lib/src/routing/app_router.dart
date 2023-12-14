@@ -1,5 +1,6 @@
 import 'package:knightassist_mobile_app/src/features/authentication/data/auth_repository.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/account/account_screen.dart';
+import 'package:knightassist_mobile_app/src/features/authentication/presentation/account/profile_screen.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/register/register_emailconfirmed_screen.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/register/register_organization_screen.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/register/register_student_screen.dart';
@@ -28,7 +29,8 @@ enum AppRoute {
   registerStudent,
   registerOrg, 
   emailConfirmed, 
-  homescreen
+  homeScreen,
+  profileScreen
 }
 
 @Riverpod(keepAlive: true)
@@ -58,7 +60,7 @@ GoRouter goRouter(GoRouterRef ref) {
             path: '/',
             name: AppRoute.home.name,
             builder: (context, state) =>
-                const EventsListScreen(), // TEMP, change this to whatever screen you want to test (will need to rerun)
+                const HomeScreen(), // TEMP, change this to whatever screen you want to test (will need to rerun)
             routes: [
               GoRoute(
                   path: 'events',
@@ -117,10 +119,15 @@ GoRouter goRouter(GoRouterRef ref) {
                   pageBuilder: (context, state) => const MaterialPage(
                       fullscreenDialog: true, child: ConfirmScreen())),
                       GoRoute(
-                  path: 'homescreen',
-                  name: AppRoute.homescreen.name,
+                  path: 'homeScreen',
+                  name: AppRoute.homeScreen.name,
                   pageBuilder: (context, state) => const MaterialPage(
                       fullscreenDialog: true, child: HomeScreen())),
+                      GoRoute(
+                  path: 'profileScreen',
+                  name: AppRoute.profileScreen.name,
+                  pageBuilder: (context, state) => const MaterialPage(
+                      fullscreenDialog: true, child: ProfileScreen())),
             ])
       ],
       errorBuilder: (context, state) => const NotFoundScreen());

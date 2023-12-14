@@ -1,12 +1,7 @@
 class AppUser {
-  AppUser({this.id, this.recoveryToken, this.email});
-  String? id;
-  String? recoveryToken;
-  String? email;
+  const AppUser({required this.id, required this.email, required this.type});
 
-  AppUser.fromJson(Map<String, dynamic> json) {
-    id = json['_id'];
-    recoveryToken = json['recoveryToken'];
-    email = json['email'];
-  }
+  final String id;
+  final String email;
+  final String type;
 }

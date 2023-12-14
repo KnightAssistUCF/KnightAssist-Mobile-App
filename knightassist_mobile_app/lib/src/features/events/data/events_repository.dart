@@ -21,7 +21,7 @@ class EventsRepository {
         var json = jsonDecode(response.body);
         if (json['events'] != null) {
           json['events'].forEach((v) {
-            events.add(Event.fromJson(v));
+            events.add(Event.fromMap(v));
           });
         }
         return events;

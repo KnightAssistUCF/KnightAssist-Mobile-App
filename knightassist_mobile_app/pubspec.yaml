@@ -21,6 +21,9 @@ dependencies:
   go_router: ^11.1.4
   url_strategy: ^0.2.0
   http: ^1.1.0
+  percent_indicator: "^4.0.1"
+  editable_image: ^2.0.0
+  intl: ^0.18.1
 
 dev_dependencies:
   flutter_launcher_icons: "^0.13.1"

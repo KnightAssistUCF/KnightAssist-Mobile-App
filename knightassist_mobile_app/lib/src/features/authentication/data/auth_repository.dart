@@ -30,6 +30,14 @@ class AuthRepository {
       case 200:
         // Successful Login
         // Check if user or org
+        String responseText = response.toString();
+        if (responseText.contains("Organization logged in successfully ->")) {
+          Organization u = Organization.fromMap(jsonDecode(response.body));
+          _authState.value = u;
+        } else {
+          StudentUser u = StudentUser.fromMap(jsonDecode(response.body));
+          _authState.value = u;
+        }
         break;
       case 400:
         // Send InvalidPassword exception
