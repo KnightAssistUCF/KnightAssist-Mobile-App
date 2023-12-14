@@ -55,6 +55,22 @@ List<Event> events = [
       semester: 'Fall 2023',
       maxAttendees: 400,
       createdAt: DateTime.fromMillisecondsSinceEpoch(1700968029),
+      updatedAt: DateTime.now()),
+      Event(
+      id: '4',
+      name: 'movie night but its date isn\'t previous',
+      description: 'need someone to collect tickets',
+      location: 'pegasus ballroom',
+      date: DateTime.fromMillisecondsSinceEpoch(1734218796000),
+      sponsoringOrganization: 'Organization Z',
+      attendees: [],
+      registeredVolunteers: [],
+      startTime: DateTime.fromMillisecondsSinceEpoch(1734218796000),
+      endTime: DateTime.fromMillisecondsSinceEpoch(1734219036000),
+      eventTags: ['movie', 'education', 'food'],
+      semester: 'Fall 2023',
+      maxAttendees: 400,
+      createdAt: DateTime.fromMillisecondsSinceEpoch(1702596396),
       updatedAt: DateTime.now())
 ];
 
@@ -147,6 +163,12 @@ class EventsListScreen extends ConsumerWidget {
               title: const Text('Events'),
               onTap: () {
                 context.pushNamed(AppRoute.events.name);
+              },
+            ),
+            ListTile(
+              title: const Text('History'),
+              onTap: () {
+                context.pushNamed(AppRoute.eventHistory.name);
               },
             ),
             ListTile(

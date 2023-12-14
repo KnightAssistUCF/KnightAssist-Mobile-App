@@ -1,110 +1,81 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:knightassist_mobile_app/src/common_widgets/responsive_center.dart';
 import 'package:knightassist_mobile_app/src/constants/breakpoints.dart';
-import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
-import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
+import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
+import 'package:intl/intl.dart';
 
-import '../domain/organization.dart';
-
-List<Organization> organizations = [
-  Organization(
+List<Event> events = [
+  Event(
       id: '1',
-      name: 'Test Org',
-      email: '',
-      description:
-          'qwgejnqg qwgepoijqrglpk qgroiqrglpiqgr qgoqrglp qrgipoqrgpijgq',
-      logoUrl: 'assets/example.png',
-      category: [],
-      followers: [],
-      favorites: [],
-      updates: [],
-      calendarLink: '',
-      isActive: false,
-      eventHappeningNow: false,
-      backgroundUrl: '',
-      events: [],
-      semesters: [],
-      recoveryToken: '',
-      confirmToken: '',
-      emailToken: '',
-      emailValidated: false,
-      createdAt: DateTime.fromMillisecondsSinceEpoch(1701030257000),
+      name: 'concert',
+      description: 'really cool music, need someone to serve food',
+      location: 'addition financial arena',
+      date: DateTime.fromMillisecondsSinceEpoch(1699875173000),
+      sponsoringOrganization: 'Organization X',
+      attendees: [],
+      registeredVolunteers: [],
+      startTime: DateTime.fromMillisecondsSinceEpoch(1699875173000),
+      endTime: DateTime.fromMillisecondsSinceEpoch(1699875173099),
+      eventTags: ['music', 'food'],
+      semester: 'Fall 2023',
+      maxAttendees: 1000,
+      createdAt: DateTime.fromMillisecondsSinceEpoch(1700968029),
       updatedAt: DateTime.now()),
-  Organization(
+  Event(
       id: '2',
-      name: 'Random Organization X',
-      email: '',
-      description: 'environment',
-      logoUrl: 'assets/profile pictures/icon_leaf.png',
-      category: [],
-      followers: [],
-      favorites: [],
-      updates: [],
-      calendarLink: '',
-      isActive: false,
-      eventHappeningNow: false,
-      backgroundUrl: '',
-      events: [],
-      semesters: [],
-      recoveryToken: '',
-      confirmToken: '',
-      emailToken: '',
-      emailValidated: false,
-      createdAt: DateTime.fromMillisecondsSinceEpoch(1701030257000),
+      name: 'study session',
+      description: 'cs1, need someone to bring water',
+      location: 'ucf library',
+      date: DateTime.fromMillisecondsSinceEpoch(1698433137000),
+      sponsoringOrganization: 'Organization Y',
+      attendees: [],
+      registeredVolunteers: [],
+      startTime: DateTime.fromMillisecondsSinceEpoch(1698433137000),
+      endTime: DateTime.fromMillisecondsSinceEpoch(1698433137099),
+      eventTags: ['education', 'technology'],
+      semester: 'Fall 2023',
+      maxAttendees: 30,
+      createdAt: DateTime.fromMillisecondsSinceEpoch(1700968029),
       updatedAt: DateTime.now()),
-  Organization(
+  Event(
       id: '3',
-      name: 'Test test test test test',
-      email: 'testorg@example.com',
-      description: 'vidya gaming',
-      logoUrl: 'assets/profile pictures/icon_controller.png',
-      category: [],
-      followers: [],
-      favorites: [],
-      updates: [],
-      calendarLink: '',
-      isActive: false,
-      eventHappeningNow: false,
-      backgroundUrl: '',
-      events: [],
-      semesters: [],
-      recoveryToken: '',
-      confirmToken: '',
-      emailToken: '',
-      emailValidated: false,
-      createdAt: DateTime.fromMillisecondsSinceEpoch(1701030257000),
+      name: 'movie night',
+      description: 'need someone to collect tickets',
+      location: 'pegasus ballroom',
+      date: DateTime.fromMillisecondsSinceEpoch(1695774773000),
+      sponsoringOrganization: 'Organization Z',
+      attendees: [],
+      registeredVolunteers: [],
+      startTime: DateTime.fromMillisecondsSinceEpoch(1695774773000),
+      endTime: DateTime.fromMillisecondsSinceEpoch(1695774773099),
+      eventTags: ['movie', 'education', 'food'],
+      semester: 'Fall 2023',
+      maxAttendees: 400,
+      createdAt: DateTime.fromMillisecondsSinceEpoch(1700968029),
       updatedAt: DateTime.now()),
-  Organization(
+    Event(
       id: '4',
-      name: 'Example test',
-      email: '',
-      description: 'weightlifting jim',
-      logoUrl: 'assets/profile pictures/icon_weight.png',
-      category: [],
-      followers: [],
-      favorites: [],
-      updates: [],
-      calendarLink: '',
-      isActive: false,
-      eventHappeningNow: false,
-      backgroundUrl: '',
-      events: [],
-      semesters: [],
-      recoveryToken: '',
-      confirmToken: '',
-      emailToken: '',
-      emailValidated: false,
-      createdAt: DateTime.fromMillisecondsSinceEpoch(1701030257000),
+      name: 'movie night but its date isn\'t previous',
+      description: 'need someone to collect tickets',
+      location: 'pegasus ballroom',
+      date: DateTime.fromMillisecondsSinceEpoch(1734218796000),
+      sponsoringOrganization: 'Organization Z',
+      attendees: [],
+      registeredVolunteers: [],
+      startTime: DateTime.fromMillisecondsSinceEpoch(1734218796000),
+      endTime: DateTime.fromMillisecondsSinceEpoch(1734219036000),
+      eventTags: ['movie', 'education', 'food'],
+      semester: 'Fall 2023',
+      maxAttendees: 400,
+      createdAt: DateTime.fromMillisecondsSinceEpoch(1702596396),
       updatedAt: DateTime.now())
 ];
 
-class OrganizationsListScreen extends ConsumerWidget {
-  const OrganizationsListScreen({super.key});
+class EventHistoryScreen extends ConsumerWidget {
+  const EventHistoryScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -113,7 +84,7 @@ class OrganizationsListScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Organizations List',
+          'Event History',
           style: TextStyle(fontWeight: FontWeight.w600),
         ),
         centerTitle: true,
@@ -161,17 +132,21 @@ class OrganizationsListScreen extends ConsumerWidget {
               child: ListView.builder(
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
-                itemCount: organizations.length,
-                itemBuilder: (context, index) => OrganizationCard(
-                    organization: organizations.elementAt(index)),
-              ),
+                itemCount: events.length,
+                itemBuilder: (context, index) => 
+                    (events.elementAt(index).date.isBefore(DateTime.now()) ? EventCard(event: events.elementAt(index)) : null),
+              ), // only show an event in the history page if its date has passed
             )
           ],
         ),
       ),
       drawer: Drawer(
         child: ListView(
+          //padding: EdgeInsets.zero,
           children: [
+            //const DrawerHeader(
+            //decoration: BoxDecoration(image: DecorationImage(image: AssetImage("assets/KnightAssistCoA3.png"),),),
+            //child: Text('KnightAssist')),
             ListTile(
               title: const Text('Home'),
               onTap: () {
@@ -218,8 +193,9 @@ class OrganizationsListScreen extends ConsumerWidget {
 
 _topSection(double width) {
   return Container(
-      color: const Color.fromARGB(255, 0, 108, 81),
+      //height: 200,
       width: width,
+      color: const Color.fromARGB(255, 0, 108, 81),
       child: const Stack(
         children: [
           Column(
@@ -228,7 +204,7 @@ _topSection(double width) {
                 padding: EdgeInsets.all(8.0),
                 child: Center(
                   child: SearchBar(
-                    hintText: 'Search Organizations',
+                    hintText: 'Search Events',
                   ),
                 ),
               ),
@@ -238,26 +214,10 @@ _topSection(double width) {
       ));
 }
 
-class OrganizationCard extends StatefulWidget {
-  final Organization organization;
+class EventCard extends StatelessWidget {
+  final Event event;
 
-  const OrganizationCard({super.key, required this.organization});
-
-  @override
-  _OrganizationCardState createState() => _OrganizationCardState();
-}
-
-class _OrganizationCardState extends State<OrganizationCard> {
-  bool _isFavoriteOrg = false;
-  late final Organization organization;
-
-  _OrganizationCardState();
-
-  @override
-  void initState() {
-    super.initState();
-    organization = widget.organization;
-  }
+  const EventCard({super.key, required this.event});
 
   @override
   Widget build(BuildContext context) {
@@ -265,7 +225,6 @@ class _OrganizationCardState extends State<OrganizationCard> {
 
     const style = TextStyle(fontSize: 20, fontWeight: FontWeight.normal);
 
-    final Organization organization = this.organization;
     return SingleChildScrollView(
       child: ResponsiveCenter(
         maxContentWidth: Breakpoint.tablet,
@@ -282,8 +241,7 @@ class _OrganizationCardState extends State<OrganizationCard> {
               color: Colors.white,
               elevation: 5,
               child: InkWell(
-                onTap: () =>
-                    context.pushNamed("organization", extra: organization),
+                onTap: () => context.pushNamed("event", extra: event),
                 child: Padding(
                   padding: const EdgeInsets.all(20.0),
                   child: Column(
@@ -292,8 +250,8 @@ class _OrganizationCardState extends State<OrganizationCard> {
                         children: [
                           ClipRRect(
                               borderRadius: BorderRadius.circular(12.0),
-                              child: Image(
-                                  image: AssetImage(organization.logoUrl),
+                              child: const Image(
+                                  image: AssetImage('assets/example.png'),
                                   height: 100)),
                           Padding(
                             padding: const EdgeInsets.all(15.0),
@@ -302,17 +260,44 @@ class _OrganizationCardState extends State<OrganizationCard> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Text(
-                                  organization.name,
+                                  event.name,
                                   style: const TextStyle(
                                       fontWeight: FontWeight.w600,
                                       fontSize: 18),
                                   textAlign: TextAlign.start,
                                 ),
                                 Text(
-                                  organization.description,
+                                  DateFormat('yyyy-MM-dd – kk:mm')
+                                      .format(event.date),
                                   style: const TextStyle(
                                       fontWeight: FontWeight.w400),
                                   textAlign: TextAlign.start,
+                                ),
+                                Text(
+                                  event.location,
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w400),
+                                  textAlign: TextAlign.start,
+                                ),
+                                OverflowBar(
+                                  children: [
+                                    ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(25.0),
+                                        child: const Image(
+                                            image: AssetImage(
+                                                'assets/example.png'),
+                                            height: 20)),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        event.sponsoringOrganization,
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.w400),
+                                        textAlign: TextAlign.start,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
@@ -322,20 +307,17 @@ class _OrganizationCardState extends State<OrganizationCard> {
                             overflowAlignment: OverflowBarAlignment.end,
                             children: [
                               Align(
-                                  alignment: const Alignment(1, 0.6),
-                                  child: IconButton(
-                                      iconSize: 30.0,
-                                      padding: const EdgeInsets.only(
-                                          left: 4, right: 4, top: 0),
-                                      icon: _isFavoriteOrg == true
-                                          ? const Icon(Icons.favorite)
-                                          : const Icon(Icons.favorite_outline),
-                                      color: Colors.pink,
-                                      onPressed: () {
-                                        setState(() {
-                                          _isFavoriteOrg = !_isFavoriteOrg;
-                                        });
-                                      }))
+                                alignment: const Alignment(1, 0.6),
+                                child: FilledButton(
+                                  onPressed: () {},
+                                  style: ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all(
+                                              const Color.fromARGB(
+                                                  255, 91, 78, 119))),
+                                  child: const Text('RSVP'),
+                                ),
+                              )
                             ],
                           )
                         ],

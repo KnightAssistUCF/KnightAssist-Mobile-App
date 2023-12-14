@@ -132,4 +132,4 @@ TextField _buildTextField({String labelText = '', bool obscureText = false}) {
       ),
     );
   }
-  }
+}

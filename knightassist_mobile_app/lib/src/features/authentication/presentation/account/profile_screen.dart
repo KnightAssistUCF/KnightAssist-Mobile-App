@@ -128,6 +128,12 @@ File? _profilePicFile;
               },
             ),
             ListTile(
+              title: const Text('History'),
+              onTap: () {
+                context.pushNamed(AppRoute.eventHistory.name);
+              },
+            ),
+            ListTile(
               title: const Text('Sign Out'),
               onTap: () {
                 context.pushNamed(AppRoute.emailConfirm.name);
