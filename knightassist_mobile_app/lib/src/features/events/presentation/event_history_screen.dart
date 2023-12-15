@@ -56,7 +56,7 @@ List<Event> events = [
       maxAttendees: 400,
       createdAt: DateTime.fromMillisecondsSinceEpoch(1700968029),
       updatedAt: DateTime.now()),
-    Event(
+    /*Event(
       id: '4',
       name: 'movie night but its date isn\'t previous',
       description: 'need someone to collect tickets',
@@ -71,7 +71,23 @@ List<Event> events = [
       semester: 'Fall 2023',
       maxAttendees: 400,
       createdAt: DateTime.fromMillisecondsSinceEpoch(1702596396),
-      updatedAt: DateTime.now())
+      updatedAt: DateTime.now()),*/
+    Event(
+      id: '5',
+      name: 'movie night but it\'s very long',
+      description: 'need someone to collect tickets',
+      location: 'pegasus ballroom',
+      date: DateTime.fromMillisecondsSinceEpoch(1695774773000),
+      sponsoringOrganization: 'Organization Z',
+      attendees: [],
+      registeredVolunteers: [],
+      startTime: DateTime.fromMillisecondsSinceEpoch(1695774773000),
+      endTime: DateTime.fromMillisecondsSinceEpoch(1702543765000),
+      eventTags: ['movie', 'education', 'food'],
+      semester: 'Fall 2023',
+      maxAttendees: 400,
+      createdAt: DateTime.fromMillisecondsSinceEpoch(1702680565000),
+      updatedAt: DateTime.now()),
 ];
 
 class EventHistoryScreen extends ConsumerWidget {
@@ -225,6 +241,8 @@ class EventCard extends StatelessWidget {
 
     const style = TextStyle(fontSize: 20, fontWeight: FontWeight.normal);
 
+    final difference = event.endTime.difference(event.startTime).inHours;
+
     return SingleChildScrollView(
       child: ResponsiveCenter(
         maxContentWidth: Breakpoint.tablet,
@@ -245,6 +263,7 @@ class EventCard extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Wrap(
                         children: [
@@ -252,7 +271,7 @@ class EventCard extends StatelessWidget {
                               borderRadius: BorderRadius.circular(12.0),
                               child: const Image(
                                   image: AssetImage('assets/example.png'),
-                                  height: 50)),
+                                  height: 75)),
                           Padding(
                             padding: const EdgeInsets.all(15.0),
                             child: Column(
@@ -273,14 +292,7 @@ class EventCard extends StatelessWidget {
                                   textAlign: TextAlign.start,
                                 ),
                                 Text(
-                                  DateFormat('yyyy-MM-dd – kk:mm')
-                                      .format(event.date),
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.w400),
-                                  textAlign: TextAlign.start,
-                                ),
-                                Text(
-                                  event.location,
+                                  "${difference.toString()} hours",
                                   style: const TextStyle(
                                       fontWeight: FontWeight.w400),
                                   textAlign: TextAlign.start,
@@ -288,6 +300,13 @@ class EventCard extends StatelessWidget {
                               ],
                             ),
                           ),
+                          Text(
+                                  DateFormat('yyyy-MM-dd')
+                                      .format(event.date),
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w400),
+                                  textAlign: TextAlign.start,
+                                ),
                         ],
                       ),
                     ],
