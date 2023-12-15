@@ -229,7 +229,7 @@ class EventCard extends StatelessWidget {
       child: ResponsiveCenter(
         maxContentWidth: Breakpoint.tablet,
         child: Padding(
-            padding: const EdgeInsets.all(20.0),
+            padding: const EdgeInsets.all(8.0),
             child: Card(
               shape: RoundedRectangleBorder(
                 side: const BorderSide(
@@ -243,7 +243,7 @@ class EventCard extends StatelessWidget {
               child: InkWell(
                 onTap: () => context.pushNamed("event", extra: event),
                 child: Padding(
-                  padding: const EdgeInsets.all(20.0),
+                  padding: const EdgeInsets.all(8.0),
                   child: Column(
                     children: [
                       Wrap(
@@ -252,7 +252,7 @@ class EventCard extends StatelessWidget {
                               borderRadius: BorderRadius.circular(12.0),
                               child: const Image(
                                   image: AssetImage('assets/example.png'),
-                                  height: 100)),
+                                  height: 50)),
                           Padding(
                             padding: const EdgeInsets.all(15.0),
                             child: Column(
@@ -264,6 +264,12 @@ class EventCard extends StatelessWidget {
                                   style: const TextStyle(
                                       fontWeight: FontWeight.w600,
                                       fontSize: 18),
+                                  textAlign: TextAlign.start,
+                                ),
+                                Text(
+                                  event.sponsoringOrganization,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w400),
                                   textAlign: TextAlign.start,
                                 ),
                                 Text(
@@ -279,47 +285,9 @@ class EventCard extends StatelessWidget {
                                       fontWeight: FontWeight.w400),
                                   textAlign: TextAlign.start,
                                 ),
-                                OverflowBar(
-                                  children: [
-                                    ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(25.0),
-                                        child: const Image(
-                                            image: AssetImage(
-                                                'assets/example.png'),
-                                            height: 20)),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        event.sponsoringOrganization,
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.w400),
-                                        textAlign: TextAlign.start,
-                                      ),
-                                    ),
-                                  ],
-                                ),
                               ],
                             ),
                           ),
-                          OverflowBar(
-                            spacing: 8,
-                            overflowAlignment: OverflowBarAlignment.end,
-                            children: [
-                              Align(
-                                alignment: const Alignment(1, 0.6),
-                                child: FilledButton(
-                                  onPressed: () {},
-                                  style: ButtonStyle(
-                                      backgroundColor:
-                                          MaterialStateProperty.all(
-                                              const Color.fromARGB(
-                                                  255, 91, 78, 119))),
-                                  child: const Text('RSVP'),
-                                ),
-                              )
-                            ],
-                          )
                         ],
                       ),
                     ],
