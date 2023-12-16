@@ -162,9 +162,20 @@ _title(double width, Event e) {
           child: Center(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Text(
-                e.name,
-                style: const TextStyle(fontSize: 30, color: Colors.white),
+              child: Column(
+                children: [
+                  FittedBox(
+              fit: BoxFit.fill,
+              child: Image(
+                  image: AssetImage(e.picLink),
+                  width: width,
+                  height:200),
+            ),
+                  Text(
+                    e.name,
+                    style: const TextStyle(fontSize: 30, color: Colors.white),
+                  ),
+                ],
               ),
             ),
           )),

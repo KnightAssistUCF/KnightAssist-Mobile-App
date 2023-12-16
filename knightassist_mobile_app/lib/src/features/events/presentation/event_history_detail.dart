@@ -17,7 +17,7 @@ class HistoryDetailScreen extends ConsumerWidget {
 
     final difference = event.endTime.difference(event.startTime).inHours;
 
-    
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -156,18 +156,23 @@ class HistoryDetailScreen extends ConsumerWidget {
 _title(double width, Event e) {
   return Builder(builder: (context) {
     return Stack(children: [
-      Container(
-          color: const Color.fromARGB(255, 0, 108, 81),
-          width: width,
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                e.name,
-                style: const TextStyle(fontSize: 30, color: Colors.white),
-              ),
+      Center(
+        child: Column(
+          children: [
+            FittedBox(
+              fit: BoxFit.fill,
+              child: Image(
+                  image: AssetImage(e.picLink),
+                  width: width,
+                  height:200),
             ),
-          )),
+            Text(
+              e.name,
+              style: const TextStyle(fontSize: 30, color: Colors.white),
+            ),
+          ],
+        ),
+      ),
     ]);
   });
 }
