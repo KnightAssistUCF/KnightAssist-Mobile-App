@@ -14,6 +14,10 @@ class HistoryDetailScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
+
+    final difference = event.endTime.difference(event.startTime).inHours;
+
+    
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -98,14 +102,14 @@ class HistoryDetailScreen extends ConsumerWidget {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  "Date: ${DateFormat.yMMMMEEEEd().format(event.date)}",
+                  "Event Date: ${DateFormat.yMMMMEEEEd().format(event.date)}",
                   style: const TextStyle(fontSize: 20),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  "Duration: ${DateFormat.jmv().format(event.startTime)}",
+                  "Duration: ${difference.toString()} hours",
                   style: const TextStyle(fontSize: 20),
                 ),
               ),
@@ -113,7 +117,7 @@ class HistoryDetailScreen extends ConsumerWidget {
                 padding: EdgeInsets.all(8.0),
                 child: Text(
                   "Points received: x",
-                  style: TextStyle(fontSize: 15, color: Colors.grey),
+                  style: TextStyle(fontSize: 20),
                 ),
               ),
               Center(
@@ -123,7 +127,7 @@ class HistoryDetailScreen extends ConsumerWidget {
                     padding: const EdgeInsets.all(8.0),
                     child: ElevatedButton(
                       onPressed: () {
-                        context.pushNamed(AppRoute.event.name);
+                        context.pushNamed("event", extra: event);
                       },
                       style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all(
@@ -133,7 +137,7 @@ class HistoryDetailScreen extends ConsumerWidget {
                         child: Wrap(
                           children: [
                             Text(
-                              'View event Page',
+                              'View Event Page',
                               style: TextStyle(fontSize: 20),
                             ),
                           ],
