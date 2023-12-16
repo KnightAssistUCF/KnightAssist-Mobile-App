@@ -159,16 +159,19 @@ _title(double width, Event e) {
       Center(
         child: Column(
           children: [
-            FittedBox(
-              fit: BoxFit.fill,
-              child: Image(
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: 200,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  fit: BoxFit.fill,
                   image: AssetImage(e.picLink),
-                  width: width,
-                  height:200),
+                ),
+              ),
             ),
             Text(
               e.name,
-              style: const TextStyle(fontSize: 30, color: Colors.white),
+              style: const TextStyle(fontSize: 30, color: Colors.black),
             ),
           ],
         ),

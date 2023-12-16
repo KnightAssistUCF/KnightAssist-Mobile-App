@@ -156,29 +156,25 @@ class EventScreen extends ConsumerWidget {
 _title(double width, Event e) {
   return Builder(builder: (context) {
     return Stack(children: [
-      Container(
-          color: const Color.fromARGB(255, 0, 108, 81),
-          width: width,
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  FittedBox(
-              fit: BoxFit.fill,
-              child: Image(
-                  image: AssetImage(e.picLink),
-                  width: width,
-                  height:200),
-            ),
-                  Text(
-                    e.name,
-                    style: const TextStyle(fontSize: 30, color: Colors.white),
-                  ),
-                ],
+      Column(
+        children: [
+          Container(
+            width: MediaQuery.of(context).size.width,
+            height: 200,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                fit: BoxFit.fill,
+                image: AssetImage(e.picLink),
               ),
             ),
-          )),
+          ),
+          Text(
+            e.name,
+            style: const TextStyle(fontSize: 40, color: Colors.black, fontWeight: FontWeight.bold),
+            textAlign: TextAlign.start,
+          ),
+        ],
+      ),
     ]);
   });
 }
