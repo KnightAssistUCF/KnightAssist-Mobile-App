@@ -17,7 +17,7 @@ List<Event> events = [
       sponsoringOrganization: 'Organization X',
       attendees: [],
       registeredVolunteers: [],
-      picLink: 'assets/profile pictures/icon_leaf.png',
+      picLink: 'assets/profile pictures/icon_musicnote.png',
       startTime: DateTime.fromMillisecondsSinceEpoch(1699875173000),
       endTime: DateTime.fromMillisecondsSinceEpoch(1699875173099),
       eventTags: ['music', 'food'],
@@ -34,7 +34,7 @@ List<Event> events = [
       sponsoringOrganization: 'Organization Y',
       attendees: [],
       registeredVolunteers: [],
-      picLink: 'assets/profile pictures/icon_leaf.png',
+      picLink: 'assets/profile pictures/icon_apple.png',
       startTime: DateTime.fromMillisecondsSinceEpoch(1698433137000),
       endTime: DateTime.fromMillisecondsSinceEpoch(1698433137099),
       eventTags: ['education', 'technology'],
@@ -51,7 +51,7 @@ List<Event> events = [
       sponsoringOrganization: 'Organization Z',
       attendees: [],
       registeredVolunteers: [],
-      picLink: 'assets/profile pictures/icon_leaf.png',
+      picLink: 'assets/profile pictures/icon_controller.png',
       startTime: DateTime.fromMillisecondsSinceEpoch(1695774773000),
       endTime: DateTime.fromMillisecondsSinceEpoch(1695774773099),
       eventTags: ['movie', 'education', 'food'],
@@ -84,7 +84,7 @@ List<Event> events = [
       sponsoringOrganization: 'Organization Z',
       attendees: [],
       registeredVolunteers: [],
-      picLink: 'assets/profile pictures/icon_leaf.png',
+      picLink: 'assets/profile pictures/icon_cat.png',
       startTime: DateTime.fromMillisecondsSinceEpoch(1695774773000),
       endTime: DateTime.fromMillisecondsSinceEpoch(1702543765000),
       eventTags: ['movie', 'education', 'food'],
@@ -224,7 +224,7 @@ _topSection(double width) {
                 padding: EdgeInsets.all(8.0),
                 child: Center(
                   child: SearchBar(
-                    hintText: 'Search Events',
+                    hintText: 'Search Event History',
                   ),
                 ),
               ),
@@ -263,7 +263,7 @@ class EventCard extends StatelessWidget {
               color: Colors.white,
               elevation: 5,
               child: InkWell(
-                onTap: () => context.pushNamed("event", extra: event),
+                onTap: () => context.pushNamed("historydetail", extra: event),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
