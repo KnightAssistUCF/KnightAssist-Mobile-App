@@ -56,7 +56,68 @@ class EventScreen extends ConsumerWidget {
           )
         ],
       ),
-      body: ListView(
+      body: SizedBox(
+        height: h,
+        child: 
+          ListView(
+            scrollDirection: Axis.vertical,
+            children: [
+              _title(w, event),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Wrap(
+                    children: [
+                      ClipRRect(
+                          borderRadius: BorderRadius.circular(25.0),
+                          child: const Image(
+                              image: AssetImage('assets/example.png'),
+                              height: 50)),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          event.sponsoringOrganization,
+                          style: const TextStyle(
+                              fontWeight: FontWeight.w400, fontSize: 25),
+                          textAlign: TextAlign.justify,
+                        ),
+                      ),
+                      const OrganizationFav(),
+                    ],
+                  ),
+              ),
+              SizedBox(height:h/2, child: TabBarEvent(event: event)),
+              Center(
+                child: SizedBox(
+                  width: 300,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        //context.pushNamed(AppRoute.events.name);
+                      },
+                      style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(
+                              const Color.fromARGB(255, 91, 78, 119))),
+                      child: const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Wrap(
+                          children: [
+                            Text(
+                              'RSVP',
+                              style: TextStyle(fontSize: 20),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+        
+      ),
+      /*ListView(
           scrollDirection: Axis.vertical,
           //height: h,
           children: <Widget>[
@@ -85,7 +146,7 @@ class EventScreen extends ConsumerWidget {
                   ],
                 ),
               ),
-              const TabBarEvent(),
+              
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
@@ -149,7 +210,7 @@ class EventScreen extends ConsumerWidget {
                 ),
               )
             ]),
-          ]),
+          ]),*/
     );
   }
 }
@@ -225,7 +286,9 @@ class _OrganizationFavState extends State<OrganizationFav> {
 }
 
 class TabBarEvent extends StatefulWidget {
-  const TabBarEvent({super.key});
+  final Event event;
+
+  const TabBarEvent({super.key, required this.event});
 
   @override
   State<TabBarEvent> createState() => _TabBarEventState();
@@ -234,11 +297,13 @@ class TabBarEvent extends StatefulWidget {
 class _TabBarEventState extends State<TabBarEvent>
     with TickerProviderStateMixin {
   late final TabController _tabController;
+  late final Event event;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    event = widget.event;
   }
 
   @override
@@ -246,17 +311,68 @@ class _TabBarEventState extends State<TabBarEvent>
     _tabController.dispose();
     super.dispose();
   }
-
-  @override
+@override
   Widget build(BuildContext context) {
-
-    return TabBar(
-                controller: _tabController,
-                tabs: const [
-                  Tab(child: Text("Details"),),
-                  Tab(child: Text("Description"),)
-                ]
-    );
+    return DefaultTabController(
+  length: 2,
+  child: Scaffold(
+    body: Column(
+      children: [
+        const TabBar( // <-- Your TabBar
+          tabs: [
+            Tab(icon: Text("Details")),
+            Tab(icon: Text("Description")),
+          ],
+        ),
+        Expanded(
+          child: TabBarView( // <-- Your TabBarView
+            children: [
+            Column(children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "Location: ${event.location}",
+                  style: const TextStyle(fontSize: 20),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "Date: ${DateFormat.yMMMMEEEEd().format(event.date)}",
+                  style: const TextStyle(fontSize: 20),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "Time: ${DateFormat.jmv().format(event.startTime)}",
+                  style: const TextStyle(fontSize: 20),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "Capacity: ${event.maxAttendees}",
+                  style: const TextStyle(fontSize: 15, color: Colors.grey),
+                ),
+              ),
+            ],),
+            Column(children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "Description: ${event.description}",
+                  style: const TextStyle(fontSize: 20),
+                ),
+              ),
+            ],)
+            ],
+          ),
+        ),
+      ],
+    ),
+  ),
+);
   }
 
 } 
