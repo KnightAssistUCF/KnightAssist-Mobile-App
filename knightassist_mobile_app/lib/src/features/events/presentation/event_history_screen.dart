@@ -273,8 +273,8 @@ class EventCard extends StatelessWidget {
                         children: [
                           ClipRRect(
                               borderRadius: BorderRadius.circular(12.0),
-                              child: const Image(
-                                  image: AssetImage('assets/example.png'),
+                              child: Image(
+                                  image: AssetImage(event.picLink),
                                   height: 75)),
                           Padding(
                             padding: const EdgeInsets.all(15.0),
