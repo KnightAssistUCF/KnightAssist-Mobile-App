@@ -18,7 +18,7 @@ class EventScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Event',
+          'Events',
           //style: TextStyle(fontSize: 30),
         ),
         automaticallyImplyLeading: true,
@@ -85,6 +85,7 @@ class EventScreen extends ConsumerWidget {
                   ],
                 ),
               ),
+              const TabBarEvent(),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
@@ -157,6 +158,7 @@ _title(double width, Event e) {
   return Builder(builder: (context) {
     return Stack(children: [
       Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
             width: MediaQuery.of(context).size.width,
@@ -168,10 +170,13 @@ _title(double width, Event e) {
               ),
             ),
           ),
-          Text(
-            e.name,
-            style: const TextStyle(fontSize: 40, color: Colors.black, fontWeight: FontWeight.bold),
-            textAlign: TextAlign.start,
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              e.name,
+              style: const TextStyle(fontSize: 40, color: Colors.black, fontWeight: FontWeight.w900),
+              textAlign: TextAlign.start,
+            ),
           ),
         ],
       ),
@@ -218,3 +223,40 @@ class _OrganizationFavState extends State<OrganizationFav> {
         });
   }
 }
+
+class TabBarEvent extends StatefulWidget {
+  const TabBarEvent({super.key});
+
+  @override
+  State<TabBarEvent> createState() => _TabBarEventState();
+}
+
+class _TabBarEventState extends State<TabBarEvent>
+    with TickerProviderStateMixin {
+  late final TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
+    return TabBar(
+                controller: _tabController,
+                tabs: const [
+                  Tab(child: Text("Details"),),
+                  Tab(child: Text("Description"),)
+                ]
+    );
+  }
+
+} 
