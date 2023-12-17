@@ -110,7 +110,7 @@ TextField _buildTextField({String labelText = '', bool obscureText = false}) {
               child: const Text('Cancel'),
             ),
             TextButton(
-              onPressed: () => Navigator.pop(context, 'OK'),
+              onPressed: () => context.pushNamed("signIn"),
               child: const Text('OK'),
             ),
           ],
