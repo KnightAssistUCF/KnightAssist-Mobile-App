@@ -15,6 +15,7 @@ class EventScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -216,8 +217,11 @@ class _TabBarEventState extends State<TabBarEvent>
     _tabController.dispose();
     super.dispose();
   }
+
 @override
   Widget build(BuildContext context) {
+    final difference = event.endTime.difference(event.startTime).inHours;
+
     return DefaultTabController(
   length: 2,
   child: Scaffold(
@@ -259,11 +263,14 @@ class _TabBarEventState extends State<TabBarEvent>
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text(
+                child: difference >= 24 ? Text( //show event end date if the event is longer than a day
+                    " ${DateFormat.jmv().format(event.startTime)} - ${DateFormat.jmv().format(event.endTime)} on ${DateFormat.yMMMMEEEEd().format(event.endTime)}",
+                    style: const TextStyle(fontSize: 15),
+                  ) : Text( 
                     " ${DateFormat.jmv().format(event.startTime)} - ${DateFormat.jmv().format(event.endTime)}",
                     style: const TextStyle(fontSize: 15),
                   ),
-              ),
+                ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Wrap(
