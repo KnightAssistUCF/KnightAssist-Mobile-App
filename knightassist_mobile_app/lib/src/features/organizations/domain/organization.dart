@@ -1,4 +1,5 @@
 import 'package:knightassist_mobile_app/src/features/authentication/domain/app_user.dart';
+import 'package:knightassist_mobile_app/src/features/organizations/domain/update.dart';
 
 class Organization extends AppUser {
   const Organization(
@@ -31,7 +32,7 @@ class Organization extends AppUser {
   final List<String> category;
   final List<String> followers;
   final List<String> favorites;
-  final List<String> updates;
+  final List<Update> updates;
   final String? calendarLink;
   final bool isActive;
   final bool eventHappeningNow;
@@ -55,7 +56,7 @@ class Organization extends AppUser {
         category: List<String>.from(map['category']),
         followers: List<String>.from(map['followers']),
         favorites: List<String>.from(map['favorites']),
-        updates: List<String>.from(map['updates']),
+        updates: List<Update>.from(map['updates']),
         calendarLink: map['calendarLink'] as String?,
         isActive: map['isActive'],
         eventHappeningNow: map['eventHappeningNow'],
