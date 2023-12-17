@@ -235,30 +235,45 @@ class _TabBarEventState extends State<TabBarEvent>
             ListView(children: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "Location: ${event.location}",
-                  style: const TextStyle(fontSize: 20),
+                child: Wrap(
+                  children: [
+                    const Icon(Icons.location_on),
+                    Text(
+                    event.location,
+                    style: const TextStyle(fontSize: 20),
+                  ),
+                  ]
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Wrap(
+                  children: [
+                    const Icon(Icons.calendar_month),
+                    Text(
+                    DateFormat.yMMMMEEEEd().format(event.date),
+                    style: const TextStyle(fontSize: 20),
+                  ),
+                  ]
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  "Date: ${DateFormat.yMMMMEEEEd().format(event.date)}",
-                  style: const TextStyle(fontSize: 20),
-                ),
+                    " ${DateFormat.jmv().format(event.startTime)} - ${DateFormat.jmv().format(event.endTime)}",
+                    style: const TextStyle(fontSize: 15),
+                  ),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "Time: ${DateFormat.jmv().format(event.startTime)}",
-                  style: const TextStyle(fontSize: 20),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "Capacity: ${event.maxAttendees}",
-                  style: const TextStyle(fontSize: 15, color: Colors.grey),
+                child: Wrap(
+                  children: [
+                    const Icon(Icons.person),
+                    Text(
+                    "x / ${event.maxAttendees} spots reserved",
+                    style: const TextStyle(fontSize: 20),
+                  ),
+                  ]
                 ),
               ),
             ],),
