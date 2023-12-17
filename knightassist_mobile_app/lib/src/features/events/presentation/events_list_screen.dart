@@ -59,7 +59,7 @@ List<Event> events = [
       maxAttendees: 400,
       createdAt: DateTime.fromMillisecondsSinceEpoch(1700968029),
       updatedAt: DateTime.now()),
-      Event(
+    Event(
       id: '4',
       name: 'movie night but its date isn\'t previous',
       description: 'need someone to collect tickets',
@@ -75,7 +75,24 @@ List<Event> events = [
       semester: 'Fall 2023',
       maxAttendees: 400,
       createdAt: DateTime.fromMillisecondsSinceEpoch(1702596396),
-      updatedAt: DateTime.now())
+      updatedAt: DateTime.now()),
+    Event(
+      id: '5',
+      name: 'movie night with long desc',
+      description: 'Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum ',
+      location: 'pegasus ballroom',
+      date: DateTime.fromMillisecondsSinceEpoch(1734218796000),
+      sponsoringOrganization: 'Organization Z',
+      attendees: [],
+      registeredVolunteers: [],
+      picLink: 'assets/profile pictures/icon_cookie.png',
+      startTime: DateTime.fromMillisecondsSinceEpoch(1734218796000),
+      endTime: DateTime.fromMillisecondsSinceEpoch(1734219036000),
+      eventTags: ['movie', 'education', 'food'],
+      semester: 'Fall 2023',
+      maxAttendees: 400,
+      createdAt: DateTime.fromMillisecondsSinceEpoch(1702596396),
+      updatedAt: DateTime.now()),
 ];
 
 class EventsListScreen extends ConsumerWidget {

@@ -281,7 +281,7 @@ class _TabBarEventState extends State<TabBarEvent>
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  "Description: ${event.description}",
+                  event.description,
                   style: const TextStyle(fontSize: 20),
                 ),
               ),
