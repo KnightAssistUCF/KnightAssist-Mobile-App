@@ -385,7 +385,7 @@ class UpdateCard extends StatelessWidget {
                                       .format(update.date),
                                   style: const TextStyle(
                                       fontWeight: FontWeight.w400),
-                                  textAlign: TextAlign.start,
+                                  textAlign: TextAlign.end,
                                 ),
                               ],
                             ),

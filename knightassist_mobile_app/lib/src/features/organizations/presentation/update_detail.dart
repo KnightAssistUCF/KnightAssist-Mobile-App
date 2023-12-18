@@ -64,7 +64,7 @@ class UpdateDetailScreen extends ConsumerWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
                   update.title,
-                  style: const TextStyle(fontSize: 25),
+                  style: const TextStyle(fontSize: 25, fontWeight: FontWeight.w600),
                 ),
               ),
               Padding(
