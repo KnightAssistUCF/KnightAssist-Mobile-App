@@ -12,8 +12,10 @@ import 'package:knightassist_mobile_app/src/features/events/presentation/event_s
 import 'package:knightassist_mobile_app/src/features/events/presentation/events_list_screen.dart';
 import 'package:knightassist_mobile_app/src/features/home/presentation/home_screen.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
+import 'package:knightassist_mobile_app/src/features/organizations/domain/update.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/presentation/organization_screen.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/presentation/organizations_list_screen.dart';
+import 'package:knightassist_mobile_app/src/features/organizations/presentation/update_screen.dart';
 import 'package:knightassist_mobile_app/src/routing/go_router_refresh_stream.dart';
 import 'package:knightassist_mobile_app/src/routing/not_found_screen.dart';
 import 'package:flutter/material.dart';
@@ -37,6 +39,7 @@ enum AppRoute {
   profileScreen,
   eventHistory,
   historyDetail,
+  updates
 }
 
 @Riverpod(keepAlive: true)
@@ -150,6 +153,22 @@ GoRouter goRouter(GoRouterRef ref) {
                           Event ev = state.extra as Event;
                           //final eventID = state.pathParameters['id']!;
                           return HistoryDetailScreen(event: ev);
+                        })
+                  ]),
+                  GoRoute(
+                  path: 'updates',
+                  name: AppRoute.updates.name,
+                  builder: (context, state) {
+                    return const UpdateScreen();
+                  },
+                  routes: [
+                    GoRoute(
+                        path: 'updatedetail',
+                        name: 'updatedetail',
+                        builder: (context, state) {
+                          Update update = state.extra as Update;
+                          //final updateID = state.pathParameters['id']!;
+                          return UpdateDetailScreen(update: update);
                         })
                   ]),
               
