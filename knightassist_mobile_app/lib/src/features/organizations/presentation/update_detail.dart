@@ -98,7 +98,7 @@ class UpdateDetailScreen extends ConsumerWidget {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  DateFormat.Hm().format(update.date),
+                  DateFormat.jmv().format(update.date),
                   style: const TextStyle(fontSize: 15),
                 ),
               ),
@@ -106,7 +106,7 @@ class UpdateDetailScreen extends ConsumerWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
                   update.content,
-                  style: const TextStyle(fontSize: 15),
+                  style: const TextStyle(fontSize: 20),
                 ),
               ),
             ]),

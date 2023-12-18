@@ -113,7 +113,7 @@ List<Organization> organizations = [
       category: [],
       followers: [],
       favorites: [],
-      updates: [Update(id: '3', title: 'test', content: '', date: DateTime.fromMillisecondsSinceEpoch(1702941527000), sponsor: Organization(
+      updates: [Update(id: '3', title: 'test', content: 'testing announcements', date: DateTime.fromMillisecondsSinceEpoch(1702941527000), sponsor: Organization(
       id: '1',
       name: 'Organization XYZ',
       email: '',
@@ -230,12 +230,13 @@ class UpdateScreen extends ConsumerWidget {
               child: ListView.builder(
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
+                itemCount: organizations.length,
                 itemBuilder: (context, index) {
                   if (organizations.elementAt(index).updates.isEmpty) {
                       return const SizedBox(height: 0,);
                   } else {
                       for (Update u in organizations.elementAt(index).updates) {
-                        return UpdateCard(update: u, sponsor: organizations.elementAt(index));
+                        return UpdateCard(update: u, sponsor: u.sponsor);
                       }
                   }
                 }
