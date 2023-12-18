@@ -8,9 +8,8 @@ import 'package:knightassist_mobile_app/src/features/organizations/domain/update
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 
 class UpdateDetailScreen extends ConsumerWidget {
-  const UpdateDetailScreen({super.key, required this.update, required this.sponsor});
+  const UpdateDetailScreen({super.key, required this.update});
   final Update update;
-  final Organization sponsor;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -74,15 +73,15 @@ class UpdateDetailScreen extends ConsumerWidget {
                   children: [
                     ClipRRect(
                         borderRadius: BorderRadius.circular(25.0),
-                        child: const Image(
-                            image: AssetImage('assets/example.png'),
+                        child: Image(
+                            image: AssetImage(update.sponsor.logoUrl),
                             height: 50)),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        sponsor.name,
+                        update.sponsor.name,
                         style: const TextStyle(
-                            fontWeight: FontWeight.w400, fontSize: 25),
+                            fontWeight: FontWeight.w400, fontSize: 20),
                         textAlign: TextAlign.start,
                       ),
                     ),
@@ -93,21 +92,21 @@ class UpdateDetailScreen extends ConsumerWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
                   DateFormat('yyyy-MM-dd').format(update.date),
-                  style: const TextStyle(fontSize: 20),
+                  style: const TextStyle(fontSize: 15),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
                   DateFormat.Hm().format(update.date),
-                  style: const TextStyle(fontSize: 20),
+                  style: const TextStyle(fontSize: 15),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
                   update.content,
-                  style: const TextStyle(fontSize: 20),
+                  style: const TextStyle(fontSize: 15),
                 ),
               ),
             ]),

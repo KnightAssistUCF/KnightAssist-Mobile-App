@@ -1,3 +1,5 @@
+import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
+
 typedef UpdateID = String;
 
 class Update {
@@ -6,6 +8,7 @@ class Update {
     required this.title,
     required this.content,
     required this.date,
+    required this.sponsor,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -14,6 +17,7 @@ class Update {
   final String title;
   final String content;
   final DateTime date;
+  final Organization sponsor;
   final DateTime createdAt;
   final DateTime updatedAt;
 
@@ -23,6 +27,7 @@ class Update {
         title: map['title'],
         content: map['content'] ?? '',
         date: DateTime.parse(map['date']),
+        sponsor: map['organization'] as Organization,
         createdAt: DateTime.parse(map['createdAt']),
         updatedAt: DateTime.parse(map['updatedAt']));
   }
@@ -32,6 +37,7 @@ class Update {
         'title': title,
         'content': content,
         'date': date.toIso8601String(),
+        'sponsor': sponsor,
         'createdAt': createdAt.toIso8601String(),
         'updatedAt': updatedAt.toIso8601String(),
       };

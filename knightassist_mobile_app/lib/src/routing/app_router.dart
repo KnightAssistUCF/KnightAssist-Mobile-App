@@ -15,6 +15,7 @@ import 'package:knightassist_mobile_app/src/features/organizations/domain/organi
 import 'package:knightassist_mobile_app/src/features/organizations/domain/update.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/presentation/organization_screen.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/presentation/organizations_list_screen.dart';
+import 'package:knightassist_mobile_app/src/features/organizations/presentation/update_detail.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/presentation/update_screen.dart';
 import 'package:knightassist_mobile_app/src/routing/go_router_refresh_stream.dart';
 import 'package:knightassist_mobile_app/src/routing/not_found_screen.dart';
@@ -166,9 +167,9 @@ GoRouter goRouter(GoRouterRef ref) {
                         path: 'updatedetail',
                         name: 'updatedetail',
                         builder: (context, state) {
-                          Update update = state.extra as Update;
+                         Update u = state.extra as Update;
                           //final updateID = state.pathParameters['id']!;
-                          return UpdateDetailScreen(update: update);
+                          return UpdateDetailScreen(update: u);
                         })
                   ]),
               

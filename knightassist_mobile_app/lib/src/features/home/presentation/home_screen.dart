@@ -167,6 +167,12 @@ class HomeScreen extends ConsumerWidget {
               },
             ),
             ListTile(
+              title: const Text('Announcements'),
+              onTap: () {
+                context.pushNamed(AppRoute.updates.name);
+              },
+            ),
+            ListTile(
               title: const Text('History'),
               onTap: () {
                 context.pushNamed(AppRoute.eventHistory.name);

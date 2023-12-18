@@ -193,6 +193,12 @@ class EventsListScreen extends ConsumerWidget {
               },
             ),
             ListTile(
+              title: const Text('Announcements'),
+              onTap: () {
+                context.pushNamed(AppRoute.updates.name);
+              },
+            ),
+            ListTile(
               title: const Text('Settings'),
               onTap: () {
                 context.pushNamed(AppRoute.account.name);

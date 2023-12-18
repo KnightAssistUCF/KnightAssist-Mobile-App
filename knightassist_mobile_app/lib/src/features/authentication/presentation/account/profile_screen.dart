@@ -122,15 +122,21 @@ File? _profilePicFile;
               },
             ),
             ListTile(
-              title: const Text('Settings'),
+              title: const Text('Announcements'),
               onTap: () {
-                context.pushNamed(AppRoute.account.name);
+                context.pushNamed(AppRoute.updates.name);
               },
             ),
             ListTile(
               title: const Text('History'),
               onTap: () {
                 context.pushNamed(AppRoute.eventHistory.name);
+              },
+            ),
+            ListTile(
+              title: const Text('Settings'),
+              onTap: () {
+                context.pushNamed(AppRoute.account.name);
               },
             ),
             ListTile(
