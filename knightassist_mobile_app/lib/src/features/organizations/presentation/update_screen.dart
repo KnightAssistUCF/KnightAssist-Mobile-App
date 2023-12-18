@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -359,44 +357,40 @@ class UpdateCard extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(15.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text(
-                                  update.title,
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 18),
-                                  textAlign: TextAlign.start,
-                                ),
-                                Text(
-                                  sponsor.name,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.w400),
-                                  textAlign: TextAlign.start,
-                                ),
-                                Text(
-                                  DateFormat('yyyy-MM-dd')
-                                      .format(update.date),
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.w400),
-                                  textAlign: TextAlign.end,
-                                ),
-                              ],
+                      Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              update.title,
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 18),
+                              textAlign: TextAlign.start,
                             ),
-                          ),
+                            Text(
+                              sponsor.name,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w400),
+                              textAlign: TextAlign.start,
+                            ),
+                            Text(
+                              DateFormat('yyyy-MM-dd')
+                                  .format(update.date),
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.w400),
+                              textAlign: TextAlign.end,
+                            ),
                           Text(
                             update.content,
                             style: const TextStyle(
-                                fontWeight: FontWeight.w400),
-                              textAlign: TextAlign.start,
+                            fontWeight: FontWeight.w400),
+                            textAlign: TextAlign.start,
                           ),
-                        ],
+                          ],
+                        ),
                       ),
                     ],
                   ),
