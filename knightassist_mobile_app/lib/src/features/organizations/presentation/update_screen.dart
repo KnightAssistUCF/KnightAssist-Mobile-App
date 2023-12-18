@@ -359,7 +359,7 @@ class UpdateCard extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Wrap(
+                      Column(
                         children: [
                           Padding(
                             padding: const EdgeInsets.all(15.0),
