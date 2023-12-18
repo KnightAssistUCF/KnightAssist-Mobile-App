@@ -321,11 +321,11 @@ class UpdateCard extends StatelessWidget {
                             ),
                           ),
                           Text(
-                                  update.content,
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.w400),
-                                  textAlign: TextAlign.start,
-                                ),
+                            update.content,
+                            style: const TextStyle(
+                                fontWeight: FontWeight.w400),
+                              textAlign: TextAlign.start,
+                          ),
                         ],
                       ),
                     ],
