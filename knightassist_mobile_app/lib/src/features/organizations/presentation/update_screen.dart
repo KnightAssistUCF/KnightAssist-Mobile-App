@@ -1,102 +1,110 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:knightassist_mobile_app/src/common_widgets/responsive_center.dart';
 import 'package:knightassist_mobile_app/src/constants/breakpoints.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
+import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
+import 'package:knightassist_mobile_app/src/features/organizations/domain/update.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 import 'package:intl/intl.dart';
 
-List<Event> events = [
-  Event(
+List<Organization> organizations = [
+  Organization(
       id: '1',
-      name: 'concert',
-      description: 'really cool music, need someone to serve food',
-      location: 'addition financial arena',
-      date: DateTime.fromMillisecondsSinceEpoch(1699875173000),
-      sponsoringOrganization: 'Organization X',
-      attendees: [],
-      registeredVolunteers: [],
-      picLink: 'assets/profile pictures/icon_musicnote.png',
-      startTime: DateTime.fromMillisecondsSinceEpoch(1699875173000),
-      endTime: DateTime.fromMillisecondsSinceEpoch(1699875173099),
-      eventTags: ['music', 'food'],
-      semester: 'Fall 2023',
-      maxAttendees: 1000,
-      createdAt: DateTime.fromMillisecondsSinceEpoch(1700968029),
+      name: 'Test Org',
+      email: '',
+      description:
+          'qwgejnqg qwgepoijqrglpk qgroiqrglpiqgr qgoqrglp qrgipoqrgpijgq',
+      logoUrl: 'assets/example.png',
+      category: [],
+      followers: [],
+      favorites: [],
+      updates: [],
+      calendarLink: '',
+      isActive: false,
+      eventHappeningNow: false,
+      backgroundUrl: '',
+      events: [],
+      semesters: [],
+      recoveryToken: '',
+      confirmToken: '',
+      emailToken: '',
+      emailValidated: false,
+      createdAt: DateTime.fromMillisecondsSinceEpoch(1701030257000),
       updatedAt: DateTime.now()),
-  Event(
+  Organization(
       id: '2',
-      name: 'study session',
-      description: 'cs1, need someone to bring water',
-      location: 'ucf library',
-      date: DateTime.fromMillisecondsSinceEpoch(1698433137000),
-      sponsoringOrganization: 'Organization Y',
-      attendees: [],
-      registeredVolunteers: [],
-      picLink: 'assets/profile pictures/icon_apple.png',
-      startTime: DateTime.fromMillisecondsSinceEpoch(1698433137000),
-      endTime: DateTime.fromMillisecondsSinceEpoch(1698433137099),
-      eventTags: ['education', 'technology'],
-      semester: 'Fall 2023',
-      maxAttendees: 30,
-      createdAt: DateTime.fromMillisecondsSinceEpoch(1700968029),
+      name: 'Random Organization X',
+      email: '',
+      description: 'environment',
+      logoUrl: 'assets/profile pictures/icon_leaf.png',
+      category: [],
+      followers: [],
+      favorites: [],
+      updates: [],
+      calendarLink: '',
+      isActive: false,
+      eventHappeningNow: false,
+      backgroundUrl: '',
+      events: [],
+      semesters: [],
+      recoveryToken: '',
+      confirmToken: '',
+      emailToken: '',
+      emailValidated: false,
+      createdAt: DateTime.fromMillisecondsSinceEpoch(1701030257000),
       updatedAt: DateTime.now()),
-  Event(
+  Organization(
       id: '3',
-      name: 'movie night',
-      description: 'need someone to collect tickets',
-      location: 'pegasus ballroom',
-      date: DateTime.fromMillisecondsSinceEpoch(1695774773000),
-      sponsoringOrganization: 'Organization Z',
-      attendees: [],
-      registeredVolunteers: [],
-      picLink: 'assets/profile pictures/icon_controller.png',
-      startTime: DateTime.fromMillisecondsSinceEpoch(1695774773000),
-      endTime: DateTime.fromMillisecondsSinceEpoch(1695774773099),
-      eventTags: ['movie', 'education', 'food'],
-      semester: 'Fall 2023',
-      maxAttendees: 400,
-      createdAt: DateTime.fromMillisecondsSinceEpoch(1700968029),
+      name: 'Test test test test test',
+      email: 'testorg@example.com',
+      description: 'vidya gaming',
+      logoUrl: 'assets/profile pictures/icon_controller.png',
+      category: [],
+      followers: [],
+      favorites: [],
+      updates: [],
+      calendarLink: '',
+      isActive: false,
+      eventHappeningNow: false,
+      backgroundUrl: '',
+      events: [],
+      semesters: [],
+      recoveryToken: '',
+      confirmToken: '',
+      emailToken: '',
+      emailValidated: false,
+      createdAt: DateTime.fromMillisecondsSinceEpoch(1701030257000),
       updatedAt: DateTime.now()),
-    Event(
+  Organization(
       id: '4',
-      name: 'movie night but its date isn\'t previous',
-      description: 'need someone to collect tickets',
-      location: 'pegasus ballroom',
-      date: DateTime.fromMillisecondsSinceEpoch(1734218796000),
-      sponsoringOrganization: 'Organization Z',
-      attendees: [],
-      registeredVolunteers: [],
-      picLink: 'assets/profile pictures/icon_cat.png',
-      startTime: DateTime.fromMillisecondsSinceEpoch(1734218796000),
-      endTime: DateTime.fromMillisecondsSinceEpoch(1734219036000),
-      eventTags: ['movie', 'education', 'food'],
-      semester: 'Fall 2023',
-      maxAttendees: 400,
-      createdAt: DateTime.fromMillisecondsSinceEpoch(1702596396),
-      updatedAt: DateTime.now()),
-    Event(
-      id: '5',
-      name: 'movie night but it\'s very long',
-      description: 'need someone to collect tickets',
-      location: 'pegasus ballroom',
-      date: DateTime.fromMillisecondsSinceEpoch(1695774773000),
-      sponsoringOrganization: 'Organization Z',
-      attendees: [],
-      registeredVolunteers: [],
-      picLink: 'assets/profile pictures/icon_cat.png',
-      startTime: DateTime.fromMillisecondsSinceEpoch(1695774773000),
-      endTime: DateTime.fromMillisecondsSinceEpoch(1702543765000),
-      eventTags: ['movie', 'education', 'food'],
-      semester: 'Fall 2023',
-      maxAttendees: 400,
-      createdAt: DateTime.fromMillisecondsSinceEpoch(1702680565000),
-      updatedAt: DateTime.now()),
+      name: 'Example test',
+      email: '',
+      description: 'weightlifting jim',
+      logoUrl: 'assets/profile pictures/icon_weight.png',
+      category: [],
+      followers: [],
+      favorites: [],
+      updates: [],
+      calendarLink: '',
+      isActive: false,
+      eventHappeningNow: false,
+      backgroundUrl: '',
+      events: [],
+      semesters: [],
+      recoveryToken: '',
+      confirmToken: '',
+      emailToken: '',
+      emailValidated: false,
+      createdAt: DateTime.fromMillisecondsSinceEpoch(1701030257000),
+      updatedAt: DateTime.now())
 ];
 
-class EventHistoryScreen extends ConsumerWidget {
-  const EventHistoryScreen({super.key});
+class UpdateScreen extends ConsumerWidget {
+  const UpdateScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -105,7 +113,7 @@ class EventHistoryScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Event History',
+          'Announcements',
           style: TextStyle(fontWeight: FontWeight.w600),
         ),
         centerTitle: true,
@@ -153,10 +161,16 @@ class EventHistoryScreen extends ConsumerWidget {
               child: ListView.builder(
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
-                itemCount: events.length,
-                itemBuilder: (context, index) => 
-                    (events.elementAt(index).date.isBefore(DateTime.now()) ? EventCard(event: events.elementAt(index)) : const SizedBox(height: 0,)),
-              ), // only show an event in the history page if its date has passed
+                itemBuilder: (context, index) {
+                  if (organizations.elementAt(index).updates.isEmpty) {
+                      return const SizedBox(height: 0,);
+                  } else {
+                      for (Update u in organizations.elementAt(index).updates) {
+                        return UpdateCard(update: u, sponsor: organizations.elementAt(index));
+                      }
+                  }
+                }
+              ),
             )
           ],
         ),
@@ -235,18 +249,17 @@ _topSection(double width) {
       ));
 }
 
-class EventCard extends StatelessWidget {
-  final Event event;
+class UpdateCard extends StatelessWidget {
+  final Update update;
+  final Organization sponsor;
 
-  const EventCard({super.key, required this.event});
+  const UpdateCard({super.key, required this.update, required this.sponsor});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
     const style = TextStyle(fontSize: 20, fontWeight: FontWeight.normal);
-
-    final difference = event.endTime.difference(event.startTime).inHours;
 
     return SingleChildScrollView(
       child: ResponsiveCenter(
@@ -264,7 +277,7 @@ class EventCard extends StatelessWidget {
               color: Colors.white,
               elevation: 5,
               child: InkWell(
-                onTap: () => context.pushNamed("historydetail", extra: event),
+                onTap: () => context.pushNamed("updatedetail", extra: update),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
@@ -272,11 +285,6 @@ class EventCard extends StatelessWidget {
                     children: [
                       Wrap(
                         children: [
-                          ClipRRect(
-                              borderRadius: BorderRadius.circular(12.0),
-                              child: Image(
-                                  image: AssetImage(event.picLink),
-                                  height: 75)),
                           Padding(
                             padding: const EdgeInsets.all(15.0),
                             child: Column(
@@ -284,20 +292,21 @@ class EventCard extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Text(
-                                  event.name,
+                                  update.title,
                                   style: const TextStyle(
                                       fontWeight: FontWeight.w600,
                                       fontSize: 18),
                                   textAlign: TextAlign.start,
                                 ),
                                 Text(
-                                  event.sponsoringOrganization,
+                                  sponsor.name,
                                   style: const TextStyle(
                                     fontWeight: FontWeight.w400),
                                   textAlign: TextAlign.start,
                                 ),
                                 Text(
-                                  "${difference.toString()} hours",
+                                  DateFormat('yyyy-MM-dd')
+                                      .format(update.date),
                                   style: const TextStyle(
                                       fontWeight: FontWeight.w400),
                                   textAlign: TextAlign.start,
@@ -306,8 +315,7 @@ class EventCard extends StatelessWidget {
                             ),
                           ),
                           Text(
-                                  DateFormat('yyyy-MM-dd')
-                                      .format(event.date),
+                                  update.content,
                                   style: const TextStyle(
                                       fontWeight: FontWeight.w400),
                                   textAlign: TextAlign.start,
