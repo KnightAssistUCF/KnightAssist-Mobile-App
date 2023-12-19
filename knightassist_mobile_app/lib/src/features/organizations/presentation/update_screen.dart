@@ -230,12 +230,17 @@ class UpdateScreen extends ConsumerWidget {
                 shrinkWrap: true,
                 itemCount: organizations.length,
                 itemBuilder: (context, index) {
+                  int i = index;
                   if (organizations.elementAt(index).updates.isEmpty) {
                       return const SizedBox(height: 0,);
                   } else {
-                      for (Update u in organizations.elementAt(index).updates) {
-                        return UpdateCard(update: u, sponsor: u.sponsor);
-                      }
+                      return ListView.builder(
+                        shrinkWrap: true,
+                        physics: const ClampingScrollPhysics(),
+                        itemCount: organizations[i].updates.length,
+                        itemBuilder: (context, index) {
+                        return UpdateCard(update: organizations[i].updates.elementAt(index), sponsor: organizations[i].updates.elementAt(index).sponsor);
+                      });
                   }
                 }
               ),
