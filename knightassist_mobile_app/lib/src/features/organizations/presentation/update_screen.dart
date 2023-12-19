@@ -363,30 +363,35 @@ class UpdateCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.all(15.0),
+                        padding: const EdgeInsets.all(0.05),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Text(
-                              update.title,
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 18),
-                              textAlign: TextAlign.start,
-                            ),
-                            Text(
+                            ListTile(
+                              contentPadding: EdgeInsets.zero,
+                              dense: true,
+                              visualDensity: VisualDensity.standard,
+                              title: Text(
+                                update.title,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 18),
+                                textAlign: TextAlign.start,
+                              ),
+                              subtitle: Text(
                               sponsor.name,
                               style: const TextStyle(
                                 fontWeight: FontWeight.w400),
                               textAlign: TextAlign.start,
                             ),
-                            Text(
+                            trailing: Text(
                               DateFormat('yyyy-MM-dd')
                                   .format(update.date),
                               style: const TextStyle(
                                   fontWeight: FontWeight.w400),
-                              textAlign: TextAlign.end,
+                              textAlign: TextAlign.start,
+                            ),
                             ),
                           Text(
                             update.content,
