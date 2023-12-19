@@ -273,54 +273,44 @@ class EventCard extends StatelessWidget {
                 onTap: () => context.pushNamed("historydetail", extra: event),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Wrap(
+                  child: ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading:  ClipRRect(
+                      borderRadius: BorderRadius.circular(12.0),
+                      child: Image(
+                          image: AssetImage(event.picLink),
+                          height: 75)),
+                    title: Text(
+                        event.name,
+                        style: const TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 18),
+                        textAlign: TextAlign.start,
+                      ),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          ClipRRect(
-                              borderRadius: BorderRadius.circular(12.0),
-                              child: Image(
-                                  image: AssetImage(event.picLink),
-                                  height: 75)),
-                          Padding(
-                            padding: const EdgeInsets.all(15.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text(
-                                  event.name,
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 18),
-                                  textAlign: TextAlign.start,
-                                ),
-                                Text(
-                                  event.sponsoringOrganization,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.w400),
-                                  textAlign: TextAlign.start,
-                                ),
-                                Text(
-                                  "${difference.toString()} hours",
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.w400),
-                                  textAlign: TextAlign.start,
-                                ),
-                              ],
-                            ),
+                          Text(
+                            event.sponsoringOrganization,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w400),
+                            textAlign: TextAlign.start,
                           ),
                           Text(
-                                  DateFormat('yyyy-MM-dd')
-                                      .format(event.date),
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.w400),
-                                  textAlign: TextAlign.start,
-                                ),
+                            "${difference.toString()} hours",
+                            style: const TextStyle(
+                                fontWeight: FontWeight.w400),
+                            textAlign: TextAlign.start,
+                          ),
                         ],
+                      ), 
+                      trailing: Text(
+                        DateFormat('yyyy-MM-dd')
+                            .format(event.date),
+                        style: const TextStyle(
+                            fontWeight: FontWeight.w400),
+                        textAlign: TextAlign.start,
                       ),
-                    ],
                   ),
                 ),
               ),
