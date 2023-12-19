@@ -77,7 +77,9 @@ class HomeScreen extends ConsumerWidget {
                       Directionality(
                         textDirection: TextDirection.rtl,
                         child: TextButton.icon(
-                          onPressed: () {},
+                          onPressed: () {
+                            context.pushNamed(AppRoute.updates.name);
+                          },
                           icon: const Icon(
                             Icons.arrow_back_ios,
                             color: Colors.grey,
