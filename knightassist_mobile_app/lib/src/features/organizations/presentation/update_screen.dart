@@ -318,7 +318,7 @@ _topSection(double width) {
                 padding: EdgeInsets.all(8.0),
                 child: Center(
                   child: SearchBar(
-                    hintText: 'Search Event History',
+                    hintText: 'Search Announcements',
                   ),
                 ),
               ),
