@@ -70,7 +70,7 @@ List<Organization> organizations = [
       calendarLink: '',
       isActive: false,
       eventHappeningNow: false,
-      backgroundUrl: '',
+      backgroundUrl: 'assets/profile pictures/icon_controller.png',
       events: [],
       semesters: [],
       recoveryToken: '',

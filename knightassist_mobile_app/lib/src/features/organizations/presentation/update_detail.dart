@@ -69,23 +69,27 @@ class UpdateDetailScreen extends ConsumerWidget {
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Wrap(
-                  children: [
-                    ClipRRect(
-                        borderRadius: BorderRadius.circular(25.0),
-                        child: Image(
-                            image: AssetImage(update.sponsor.logoUrl),
-                            height: 50)),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        update.sponsor.name,
-                        style: const TextStyle(
-                            fontWeight: FontWeight.w400, fontSize: 20),
-                        textAlign: TextAlign.start,
+                child: TextButton(
+                  onPressed: () => context.pushNamed(AppRoute.organization.name, extra: update.sponsor),
+                  child: Wrap(
+                    children: [
+                      ClipRRect(
+                          borderRadius: BorderRadius.circular(25.0),
+                          child: Image(
+                              image: AssetImage(update.sponsor.logoUrl),
+                              height: 50)),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          update.sponsor.name,
+                          style: const TextStyle(
+                              fontWeight: FontWeight.w400, fontSize: 20),
+                          textAlign: TextAlign.start,
+                        ),
                       ),
-                    ),
-                  ],
+                      const Icon(Icons.arrow_forward_ios, size: 15,)
+                    ],
+                  ),
                 ),
               ),
               Padding(

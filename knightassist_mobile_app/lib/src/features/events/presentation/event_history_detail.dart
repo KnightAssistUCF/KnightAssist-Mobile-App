@@ -66,23 +66,27 @@ class HistoryDetailScreen extends ConsumerWidget {
                   padding: const EdgeInsets.all(0.0), child: _title(w, event)),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Wrap(
-                  children: [
-                    ClipRRect(
-                        borderRadius: BorderRadius.circular(25.0),
-                        child: const Image(
-                            image: AssetImage('assets/example.png'),
-                            height: 50)),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        event.sponsoringOrganization,
-                        style: const TextStyle(
-                            fontWeight: FontWeight.w400, fontSize: 25),
-                        textAlign: TextAlign.justify,
+                child: TextButton(
+                  onPressed: () => context.pushNamed(AppRoute.organization.name, extra: event.sponsoringOrganization),
+                  child: Wrap(
+                    children: [
+                      ClipRRect(
+                          borderRadius: BorderRadius.circular(25.0),
+                          child: const Image(
+                              image: AssetImage('assets/example.png'),
+                              height: 50)),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          event.sponsoringOrganization,
+                          style: const TextStyle(
+                              fontWeight: FontWeight.w400, fontSize: 25),
+                          textAlign: TextAlign.justify,
+                        ),
                       ),
-                    ),
-                  ],
+                    const Icon(Icons.arrow_forward_ios, size: 15,),
+                    ],
+                  ),
                 ),
               ),
               Padding(

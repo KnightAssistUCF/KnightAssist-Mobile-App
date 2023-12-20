@@ -66,25 +66,29 @@ class EventScreen extends ConsumerWidget {
               _title(w, event),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Wrap(
-                    children: [
-                      ClipRRect(
-                          borderRadius: BorderRadius.circular(25.0),
-                          child: const Image(
-                              image: AssetImage('assets/example.png'),
-                              height: 50)),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          event.sponsoringOrganization,
-                          style: const TextStyle(
-                              fontWeight: FontWeight.w400, fontSize: 25),
-                          textAlign: TextAlign.justify,
+                child: TextButton(
+                  onPressed: () => context.pushNamed(AppRoute.organization.name, extra: event.sponsoringOrganization),
+                  child: Wrap(
+                      children: [
+                        ClipRRect(
+                            borderRadius: BorderRadius.circular(25.0),
+                            child: const Image(
+                                image: AssetImage('assets/example.png'),
+                                height: 50)),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            event.sponsoringOrganization,
+                            style: const TextStyle(
+                                fontWeight: FontWeight.w400, fontSize: 25),
+                            textAlign: TextAlign.justify,
+                          ),
                         ),
-                      ),
-                      const OrganizationFav(),
-                    ],
-                  ),
+                        const OrganizationFav(),
+                        const Icon(Icons.arrow_forward_ios, size: 15,)
+                      ],
+                    ),
+                ),
               ),
               SizedBox(height:250, child: TabBarEvent(event: event)),
               Center(
