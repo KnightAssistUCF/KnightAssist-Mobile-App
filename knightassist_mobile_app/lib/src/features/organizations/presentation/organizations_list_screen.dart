@@ -17,7 +17,7 @@ List<Organization> organizations = [
       name: 'Test Org',
       email: '',
       description:
-          'qwgejnqg qwgepoijqrglpk qgroiqrglpiqgr qgoqrglp qrgipoqrgpijgq',
+          'qwgejnqg qwgepoijqrglpk qgroiqrglpiqgr qgoqrglp qrgipoqrgpijgq qwegihqweifgopqwei joaJOFab;n joaJOFab;n joaJOFab;n',
       logoUrl: 'assets/example.png',
       category: [],
       followers: [],
@@ -48,7 +48,7 @@ List<Organization> organizations = [
       calendarLink: '',
       isActive: false,
       eventHappeningNow: false,
-      backgroundUrl: '',
+      backgroundUrl: 'assets/profile pictures/icon_cookie.png',
       events: [],
       semesters: [],
       recoveryToken: '',
@@ -276,7 +276,7 @@ class _OrganizationCardState extends State<OrganizationCard> {
       child: ResponsiveCenter(
         maxContentWidth: Breakpoint.tablet,
         child: Padding(
-            padding: const EdgeInsets.all(20.0),
+            padding: const EdgeInsets.all(10.0),
             child: Card(
               shape: RoundedRectangleBorder(
                 side: const BorderSide(
@@ -291,59 +291,83 @@ class _OrganizationCardState extends State<OrganizationCard> {
                 onTap: () =>
                     context.pushNamed("organization", extra: organization),
                 child: Padding(
-                  padding: const EdgeInsets.all(20.0),
+                  padding: const EdgeInsets.all(0.0),
                   child: Column(
                     children: [
-                      Wrap(
+                      Column(
                         children: [
-                          ClipRRect(
-                              borderRadius: BorderRadius.circular(12.0),
-                              child: Image(
-                                  image: AssetImage(organization.logoUrl),
-                                  height: 100)),
-                          Padding(
-                            padding: const EdgeInsets.all(15.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text(
+                          Stack(
+                            children: [ Container(
+                                width: MediaQuery.of(context).size.width,
+                                height: 100,
+                                child: ClipRRect(
+                                  borderRadius: const BorderRadius.horizontal(left: Radius.circular(20.0), right: Radius.circular(20.0)),
+                                  child: Image(
+                                    fit: BoxFit.fill,
+                                    image: AssetImage(organization.backgroundUrl),
+                                  ),
+                                ),
+                              ), 
+                                Positioned(
+                                  top: 25,
+                                  child: Container(
+                                    height: 75,
+                                    width: 75,
+                                    decoration: BoxDecoration(border: Border.all(width: 5, color: Colors.white), borderRadius: BorderRadius.circular(16.0),   
+                                    boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.5),
+                                      spreadRadius: 2,
+                                      blurRadius: 5,
+                                      offset: const Offset(0, 3), // changes position of shadow
+                                    ),
+                                   ],),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(12.0),
+                                      child: Image(
+                                          image: AssetImage(organization.logoUrl),),
+                                    ),
+                                  ),
+                                ),
+                                ]
+                          ),
+                          ListTile(
+                            /*leading: ClipRRect(
+                                borderRadius: BorderRadius.circular(12.0),
+                                child: Image(
+                                    image: AssetImage(organization.logoUrl),
+                                    height: 300)),*/
+                              title: Text(
                                   organization.name,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 3,
                                   style: const TextStyle(
                                       fontWeight: FontWeight.w600,
                                       fontSize: 18),
                                   textAlign: TextAlign.start,
                                 ),
-                                Text(
+                                subtitle: Text(
                                   organization.description,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 3,
                                   style: const TextStyle(
                                       fontWeight: FontWeight.w400),
                                   textAlign: TextAlign.start,
                                 ),
-                              ],
-                            ),
+                                trailing: IconButton(
+                                    iconSize: 30.0,
+                                    padding: const EdgeInsets.only(
+                                        left: 4, right: 4, top: 0),
+                                    icon: _isFavoriteOrg == true
+                                        ? const Icon(Icons.favorite)
+                                        : const Icon(Icons.favorite_outline),
+                                    color: Colors.pink,
+                                    onPressed: () {
+                                      setState(() {
+                                        _isFavoriteOrg = !_isFavoriteOrg;
+                                      });
+                                    }),
                           ),
-                          OverflowBar(
-                            spacing: 8,
-                            overflowAlignment: OverflowBarAlignment.end,
-                            children: [
-                              Align(
-                                  alignment: const Alignment(1, 0.6),
-                                  child: IconButton(
-                                      iconSize: 30.0,
-                                      padding: const EdgeInsets.only(
-                                          left: 4, right: 4, top: 0),
-                                      icon: _isFavoriteOrg == true
-                                          ? const Icon(Icons.favorite)
-                                          : const Icon(Icons.favorite_outline),
-                                      color: Colors.pink,
-                                      onPressed: () {
-                                        setState(() {
-                                          _isFavoriteOrg = !_isFavoriteOrg;
-                                        });
-                                      }))
-                            ],
-                          )
                         ],
                       ),
                     ],

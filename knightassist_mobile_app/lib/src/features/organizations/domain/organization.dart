@@ -36,7 +36,7 @@ class Organization extends AppUser {
   final String? calendarLink;
   final bool isActive;
   final bool eventHappeningNow;
-  final String? backgroundUrl;
+  final String backgroundUrl;
   final List<String> events;
   final List<String> semesters;
   final String? recoveryToken;
@@ -60,7 +60,7 @@ class Organization extends AppUser {
         calendarLink: map['calendarLink'] as String?,
         isActive: map['isActive'],
         eventHappeningNow: map['eventHappeningNow'],
-        backgroundUrl: map['backgroundUrl'] as String?,
+        backgroundUrl: map['backgroundUrl'] as String,
         events: List<String>.from(map['events']),
         semesters: List<String>.from(map['semesters']),
         recoveryToken: map['recoveryToken'],
