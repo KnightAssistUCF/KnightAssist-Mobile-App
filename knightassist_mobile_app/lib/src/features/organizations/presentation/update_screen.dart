@@ -374,6 +374,8 @@ class UpdateCard extends StatelessWidget {
                               visualDensity: VisualDensity.standard,
                               title: Text(
                                 update.title,
+                                maxLines: 3,
+                                overflow: TextOverflow.ellipsis,
                                 style: const TextStyle(
                                     fontWeight: FontWeight.w600,
                                     fontSize: 18),
@@ -381,6 +383,8 @@ class UpdateCard extends StatelessWidget {
                               ),
                               subtitle: Text(
                               sponsor.name,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 3,
                               style: const TextStyle(
                                 fontWeight: FontWeight.w400),
                               textAlign: TextAlign.start,
@@ -395,6 +399,8 @@ class UpdateCard extends StatelessWidget {
                             ),
                           Text(
                             update.content,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 3,
                             style: const TextStyle(
                             fontWeight: FontWeight.w400),
                             textAlign: TextAlign.start,
