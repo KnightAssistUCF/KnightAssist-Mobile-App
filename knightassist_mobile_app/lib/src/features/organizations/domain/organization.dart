@@ -1,4 +1,5 @@
 import 'package:knightassist_mobile_app/src/features/authentication/domain/app_user.dart';
+import 'package:knightassist_mobile_app/src/features/organizations/domain/contact.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/update.dart';
 
 class Organization extends AppUser {
@@ -29,6 +30,7 @@ class Organization extends AppUser {
 
   final String name;
   final String description;
+  final Contact contact;
   final String logoUrl;
   final List<String> category;
   final List<String> followers;
@@ -53,6 +55,7 @@ class Organization extends AppUser {
         name: map['name'],
         email: map['email'],
         description: map['description'],
+        contact: map['contact'] as Contact,
         logoUrl: map['logoUrl'] as String,
         category: List<String>.from(map['category']),
         followers: List<String>.from(map['followers']),
@@ -77,6 +80,7 @@ class Organization extends AppUser {
         'name': name,
         'email': email,
         'description': description,
+        'contact': contact,
         'logoUrl': logoUrl,
         'category': category,
         'followers': followers,
