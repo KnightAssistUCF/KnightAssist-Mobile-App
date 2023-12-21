@@ -20,7 +20,7 @@ List<Organization> organizations = [
       email: '',
       description:
           'qwgejnqg qwgepoijqrglpk qgroiqrglpiqgr qgoqrglp qrgipoqrgpijgq qwegihqweifgopqwei joaJOFab;n joaJOFab;n joaJOFab;n',
-      contact: const Contact(email: '', phone: '', website: '', socialMedia: SocialMedia(facebook: '', twitter: '', instagram: '', linkedIn: '')),
+      contact: const Contact(email: 'organization@email.com', phone: '(904) 555-5555', website: 'org.com', socialMedia: SocialMedia(facebook: '', twitter: '', instagram: '', linkedIn: '')),
       logoUrl: 'assets/example.png',
       category: [],
       followers: [],
@@ -31,7 +31,7 @@ List<Organization> organizations = [
       eventHappeningNow: false,
       backgroundUrl: '',
       events: [],
-      location: '',
+      location: '4000 Central Florida Blvd Orlando, FL',
       semesters: [],
       recoveryToken: '',
       confirmToken: '',

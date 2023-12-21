@@ -315,6 +315,19 @@ class _TabBarOrgState extends State<TabBarOrg>
                   ]
                 ),
                 ),
+                organization.contact.website == '' ? const SizedBox(height:0) : 
+                Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Wrap(
+                  children: [
+                    const Icon(Icons.computer),
+                    Text(
+                    organization.contact.website,
+                    style: const TextStyle(fontSize: 20),
+                  ),
+                  ]
+                ),
+                ),
             ],),
             ],
           ),
