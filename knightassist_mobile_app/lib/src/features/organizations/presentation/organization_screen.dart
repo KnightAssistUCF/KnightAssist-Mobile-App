@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class OrganizationScreen extends ConsumerWidget {
   const OrganizationScreen({super.key, required this.organization});
@@ -259,6 +261,32 @@ class _TabBarOrgState extends State<TabBarOrg>
               ),
             ],),
             ListView(children: [
+              Wrap(alignment: WrapAlignment.center, children: [
+              IconButton(onPressed: () async {
+   final Uri url = Uri.parse('https://flutter.dev');
+   if (!await launchUrl(url)) {
+        throw Exception('Could not launch $url');
+    }
+}, icon: const FaIcon(FontAwesomeIcons.instagram)),
+              IconButton(onPressed: () async {
+   final Uri url = Uri.parse('https://flutter.dev');
+   if (!await launchUrl(url)) {
+        throw Exception('Could not launch $url');
+    }
+}, icon: const FaIcon(FontAwesomeIcons.facebook)),
+              IconButton(onPressed: () async {
+   final Uri url = Uri.parse('https://flutter.dev');
+   if (!await launchUrl(url)) {
+        throw Exception('Could not launch $url');
+    }
+}, icon: const FaIcon(FontAwesomeIcons.xTwitter)),
+              IconButton(onPressed: () async {
+   final Uri url = Uri.parse('https://flutter.dev');
+   if (!await launchUrl(url)) {
+        throw Exception('Could not launch $url');
+    }
+}, icon: const FaIcon(FontAwesomeIcons.linkedin))
+              ],),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Wrap(
