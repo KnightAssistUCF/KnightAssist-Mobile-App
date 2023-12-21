@@ -94,7 +94,7 @@ class OrganizationScreen extends ConsumerWidget {
                         ),
                       ),
                     ),
-                    SizedBox(height:250, child: TabBarOrg(organization: organization)),
+                    SizedBox(height:350, child: TabBarOrg(organization: organization)),
                   ],
                 ),
               ],
@@ -182,7 +182,7 @@ class _OrganizationTopState extends State<OrganizationTop> {
         Positioned(
               top: 150.0,
               child: Container(
-                padding: EdgeInsets.all(5),
+                padding: const EdgeInsets.all(5),
                 decoration: BoxDecoration(color: Colors.white, shape: BoxShape.circle,   
                                     boxShadow: [
                                     BoxShadow(
@@ -297,26 +297,42 @@ class _TabBarOrgState extends State<TabBarOrg>
               ],),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Wrap(
-                  children: [
-                    const Icon(Icons.email_outlined),
-                    Text(
-                    organization.contact.email,
-                    style: const TextStyle(fontSize: 20),
+                child: TextButton(
+                  onPressed: () async {
+                    final Uri url = Uri.parse('mailto:${organization.contact.email}?subject=Hello from KnightAssist&body=I am interested in volunteering with your organization!	');
+                    if (!await launchUrl(url)) {
+                          throw Exception('Could not launch $url');
+                      }
+                  },
+                  child: Wrap(
+                    children: [
+                      const Icon(Icons.email_outlined),
+                      Text(
+                      organization.contact.email,
+                      style: const TextStyle(fontSize: 20),
+                    ),
+                    ]
                   ),
-                  ]
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Wrap(
-                  children: [
-                    const Icon(Icons.phone_rounded),
-                    Text(
-                    organization.contact.phone,
-                    style: const TextStyle(fontSize: 20),
+                child: TextButton(
+                  onPressed: () async {
+                  final Uri url = Uri.parse('tel:${organization.contact.phone}');
+                    if (!await launchUrl(url)) {
+                          throw Exception('Could not launch $url');
+                      }
+                  },
+                  child: Wrap(
+                    children: [
+                      const Icon(Icons.phone_rounded),
+                      Text(
+                      organization.contact.phone,
+                      style: const TextStyle(fontSize: 20),
+                    ),
+                    ]
                   ),
-                  ]
                 ),
               ),
               Padding(
@@ -334,14 +350,22 @@ class _TabBarOrgState extends State<TabBarOrg>
                 organization.contact.website == '' ? const SizedBox(height:0) : 
                 Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Wrap(
-                  children: [
-                    const Icon(Icons.computer),
-                    Text(
-                    organization.contact.website,
-                    style: const TextStyle(fontSize: 20),
+                child: TextButton(
+                  onPressed: () async {
+                  final Uri url = Uri.parse(organization.contact.website);
+                  if (!await launchUrl(url)) {
+                        throw Exception('Could not launch $url');
+                    }
+                  },
+                  child: Wrap(
+                    children: [
+                      const Icon(Icons.computer),
+                      Text(
+                      organization.contact.website,
+                      style: const TextStyle(fontSize: 20),
+                    ),
+                    ]
                   ),
-                  ]
                 ),
                 ),
             ],),

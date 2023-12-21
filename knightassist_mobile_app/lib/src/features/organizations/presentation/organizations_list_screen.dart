@@ -20,7 +20,7 @@ List<Organization> organizations = [
       email: '',
       description:
           'qwgejnqg qwgepoijqrglpk qgroiqrglpiqgr qgoqrglp qrgipoqrgpijgq qwegihqweifgopqwei joaJOFab;n joaJOFab;n joaJOFab;n',
-      contact: const Contact(email: 'organization@email.com', phone: '(904) 555-5555', website: 'org.com', socialMedia: SocialMedia(facebook: 'facebook.com', twitter: 'x.com', instagram: 'instagram.com', linkedIn: 'linkedin.com')),
+      contact: const Contact(email: 'organization@email.com', phone: '(904) 555-5555', website: 'https://org.com', socialMedia: SocialMedia(facebook: 'https://facebook.com', twitter: 'https://x.com', instagram: 'https://instagram.com', linkedIn: 'https://linkedin.com')),
       logoUrl: 'assets/example.png',
       category: [],
       followers: [],
