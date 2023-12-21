@@ -293,7 +293,7 @@ class EventCard extends StatelessWidget {
                               textAlign: TextAlign.start,
                             ),
                             Text(
-                              DateFormat('yyyy-MM-dd – kk:mm')
+                              DateFormat('yyyy-MM-dd – hh:mm a')
                                   .format(event.date),
                               style: const TextStyle(
                                   fontWeight: FontWeight.w400),
