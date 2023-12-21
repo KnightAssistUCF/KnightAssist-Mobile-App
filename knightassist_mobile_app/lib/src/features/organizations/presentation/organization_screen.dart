@@ -224,3 +224,116 @@ class _OrganizationTopState extends State<OrganizationTop> {
     );
   }
 }
+
+class TabBarOrg extends StatefulWidget {
+  final Organization organization;
+
+  const TabBarOrg({super.key, required this.organization});
+
+  @override
+  State<TabBarOrg> createState() => _TabBarOrgState();
+}
+
+class _TabBarOrgState extends State<TabBarOrg>
+    with TickerProviderStateMixin {
+  late final TabController _tabController;
+  late final Organization organization;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+    organization = widget.organization;
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+@override
+  Widget build(BuildContext context) {
+
+    return DefaultTabController(
+  length: 2,
+  child: Scaffold(
+    body: Column(
+      children: [
+        const TabBar(
+          tabs: [
+            Tab(icon: Text("About")),
+            Tab(icon: Text("Contact")),
+          ],
+        ),
+        Expanded(
+          child: TabBarView(
+            children: [
+              ListView(children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  organization.description,
+                  style: const TextStyle(fontSize: 20),
+                ),
+              ),
+            ],),
+            ListView(children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Wrap(
+                  children: [
+                    const Icon(Icons.email_outlined),
+                    Text(
+                    organization.email,
+                    style: const TextStyle(fontSize: 20),
+                  ),
+                  ]
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Wrap(
+                  children: [
+                    const Icon(Icons.phone_rounded),
+                    Text(
+                    organization.,
+                    style: const TextStyle(fontSize: 20),
+                  ),
+                  ]
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: difference >= 24 ? Text( //show event end date if the event is longer than a day
+                    " ${DateFormat.jmv().format(event.startTime)} - ${DateFormat.jmv().format(event.endTime)} on ${DateFormat.yMMMMEEEEd().format(event.endTime)}",
+                    style: const TextStyle(fontSize: 15),
+                  ) : Text( 
+                    " ${DateFormat.jmv().format(event.startTime)} - ${DateFormat.jmv().format(event.endTime)}",
+                    style: const TextStyle(fontSize: 15),
+                  ),
+                ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Wrap(
+                  children: [
+                    const Icon(Icons.person),
+                    Text(
+                    "x / ${event.maxAttendees} spots reserved",
+                    style: const TextStyle(fontSize: 20),
+                  ),
+                  ]
+                ),
+              ),
+            ],),
+            ],
+          ),
+        ),
+      ],
+    ),
+  ),
+);
+  }
+
+} 
+

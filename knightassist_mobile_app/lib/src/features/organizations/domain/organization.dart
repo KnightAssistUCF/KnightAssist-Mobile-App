@@ -8,6 +8,7 @@ class Organization extends AppUser {
       required this.name,
       required super.email,
       required this.description,
+      required this.contact,
       required this.logoUrl,
       required this.category,
       required this.followers,
