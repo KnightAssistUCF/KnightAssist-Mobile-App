@@ -64,30 +64,33 @@ class EventScreen extends ConsumerWidget {
             scrollDirection: Axis.vertical,
             children: [
               _title(w, event),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextButton(
-                  onPressed: () => context.pushNamed(AppRoute.organization.name, extra: event.sponsoringOrganization),
-                  child: Wrap(
-                      children: [
-                        ClipRRect(
-                            borderRadius: BorderRadius.circular(25.0),
-                            child: const Image(
-                                image: AssetImage('assets/example.png'),
-                                height: 50)),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            event.sponsoringOrganization,
-                            style: const TextStyle(
-                                fontWeight: FontWeight.w400, fontSize: 25),
-                            textAlign: TextAlign.justify,
+              Container(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextButton(
+                    onPressed: () => context.pushNamed(AppRoute.organization.name, extra: event.sponsoringOrganization),
+                    child: Wrap(
+                        children: [
+                          ClipRRect(
+                              borderRadius: BorderRadius.circular(25.0),
+                              child: const Image(
+                                  image: AssetImage('assets/example.png'),
+                                  height: 50)),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              event.sponsoringOrganization,
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.w400, fontSize: 25),
+                              textAlign: TextAlign.start,
+                            ),
                           ),
-                        ),
-                        const OrganizationFav(),
-                        const Icon(Icons.arrow_forward_ios, size: 15,)
-                      ],
-                    ),
+                          const OrganizationFav(),
+                          const Icon(Icons.arrow_forward_ios, size: 15,)
+                        ],
+                      ),
+                  ),
                 ),
               ),
               SizedBox(height:250, child: TabBarEvent(event: event)),

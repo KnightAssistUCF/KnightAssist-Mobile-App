@@ -14,7 +14,7 @@ List<Event> events = [
       description: 'really cool music, need someone to serve food',
       location: 'addition financial arena',
       date: DateTime.fromMillisecondsSinceEpoch(1699875173000),
-      sponsoringOrganization: 'Organization X',
+      sponsoringOrganization: 'Organization X is really long !!!!! !!!!! !!!!! !!!!!',
       attendees: [],
       registeredVolunteers: [],
       picLink: 'assets/profile pictures/icon_leaf.png',
