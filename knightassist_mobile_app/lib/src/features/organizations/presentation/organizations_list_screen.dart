@@ -20,7 +20,7 @@ List<Organization> organizations = [
       email: '',
       description:
           'qwgejnqg qwgepoijqrglpk qgroiqrglpiqgr qgoqrglp qrgipoqrgpijgq qwegihqweifgopqwei joaJOFab;n joaJOFab;n joaJOFab;n',
-      contact: const Contact(email: 'organization@email.com', phone: '(904) 555-5555', website: 'org.com', socialMedia: SocialMedia(facebook: '', twitter: '', instagram: '', linkedIn: '')),
+      contact: const Contact(email: 'organization@email.com', phone: '(904) 555-5555', website: 'org.com', socialMedia: SocialMedia(facebook: 'facebook.com', twitter: 'x.com', instagram: 'instagram.com', linkedIn: 'linkedin.com')),
       logoUrl: 'assets/example.png',
       category: [],
       followers: [],
@@ -44,7 +44,7 @@ List<Organization> organizations = [
       name: 'Random Organization X',
       email: '',
       description: 'environment',
-      contact: const Contact(email: '', phone: '', website: '', socialMedia: SocialMedia(facebook: '', twitter: '', instagram: '', linkedIn: '')),
+      contact: const Contact(email: '', phone: '', website: '', socialMedia: SocialMedia(facebook: '', twitter: '', instagram: '', linkedIn: 'linkedin.com')),
       logoUrl: 'assets/profile pictures/icon_leaf.png',
       category: [],
       followers: [],

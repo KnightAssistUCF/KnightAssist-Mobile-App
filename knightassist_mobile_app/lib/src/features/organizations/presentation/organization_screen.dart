@@ -262,30 +262,38 @@ class _TabBarOrgState extends State<TabBarOrg>
             ],),
             ListView(children: [
               Wrap(alignment: WrapAlignment.center, children: [
+
+              organization.contact.socialMedia.instagram == '' ? const SizedBox(height: 0,) : 
               IconButton(onPressed: () async {
-   final Uri url = Uri.parse('https://flutter.dev');
-   if (!await launchUrl(url)) {
-        throw Exception('Could not launch $url');
-    }
-}, icon: const FaIcon(FontAwesomeIcons.instagram)),
-              IconButton(onPressed: () async {
-   final Uri url = Uri.parse('https://flutter.dev');
-   if (!await launchUrl(url)) {
-        throw Exception('Could not launch $url');
-    }
-}, icon: const FaIcon(FontAwesomeIcons.facebook)),
-              IconButton(onPressed: () async {
-   final Uri url = Uri.parse('https://flutter.dev');
-   if (!await launchUrl(url)) {
-        throw Exception('Could not launch $url');
-    }
-}, icon: const FaIcon(FontAwesomeIcons.xTwitter)),
-              IconButton(onPressed: () async {
-   final Uri url = Uri.parse('https://flutter.dev');
-   if (!await launchUrl(url)) {
-        throw Exception('Could not launch $url');
-    }
-}, icon: const FaIcon(FontAwesomeIcons.linkedin))
+                final Uri url = Uri.parse(organization.contact.socialMedia.instagram);
+                if (!await launchUrl(url)) {
+                      throw Exception('Could not launch $url');
+                  }
+                }, icon: const FaIcon(FontAwesomeIcons.instagram)),
+
+              organization.contact.socialMedia.facebook == '' ? const SizedBox(height: 0,) : 
+                IconButton(onPressed: () async {
+                  final Uri url = Uri.parse(organization.contact.socialMedia.facebook);
+                  if (!await launchUrl(url)) {
+                        throw Exception('Could not launch $url');
+                  }
+                }, icon: const FaIcon(FontAwesomeIcons.facebook)),
+
+              organization.contact.socialMedia.twitter == '' ? const SizedBox(height: 0,) : 
+                IconButton(onPressed: () async {
+                  final Uri url = Uri.parse(organization.contact.socialMedia.twitter);
+                  if (!await launchUrl(url)) {
+                        throw Exception('Could not launch $url');
+                  }
+                }, icon: const FaIcon(FontAwesomeIcons.xTwitter)),
+
+                 organization.contact.socialMedia.linkedIn == '' ? const SizedBox(height: 0,) : 
+                    IconButton(onPressed: () async {
+                      final Uri url = Uri.parse(organization.contact.socialMedia.linkedIn);
+                      if (!await launchUrl(url)) {
+                        throw Exception('Could not launch $url');
+                      }
+                  }, icon: const FaIcon(FontAwesomeIcons.linkedin))
               ],),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -343,8 +351,6 @@ class _TabBarOrgState extends State<TabBarOrg>
       ],
     ),
   ),
-);
-  }
-
+);}
 } 
 
