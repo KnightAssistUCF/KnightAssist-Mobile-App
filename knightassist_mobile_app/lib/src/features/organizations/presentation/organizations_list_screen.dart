@@ -16,7 +16,7 @@ import '../domain/organization.dart';
 List<Organization> organizations = [
   Organization(
       id: '1',
-      name: 'Test Org',
+      name: 'Test Org long name long name long name long name long name long name long name long name long name long name long name long name',
       email: '',
       description:
           'qwgejnqg qwgepoijqrglpk qgroiqrglpiqgr qgoqrglp qrgipoqrgpijgq qwegihqweifgopqwei joaJOFab;n joaJOFab;n joaJOFab;n',
@@ -110,7 +110,32 @@ List<Organization> organizations = [
       emailToken: '',
       emailValidated: false,
       createdAt: DateTime.fromMillisecondsSinceEpoch(1701030257000),
-      updatedAt: DateTime.now())
+      updatedAt: DateTime.now()),
+    Organization(
+      id: '5',
+      name: 'Test Org',
+      email: '',
+      description:
+          'qwgejnqg qwgepoijqrglpk qgroiqrglpiqgr qgoqrglp qrgipoqrgpijgq qwegihqweifgopqwei joaJOFab;n joaJOFab;n joaJOFab;n',
+      contact: const Contact(email: 'organization@email.com', phone: '(904) 555-5555', website: 'https://org.com', socialMedia: SocialMedia(facebook: 'https://facebook.com', twitter: 'https://x.com', instagram: 'https://instagram.com', linkedIn: 'https://linkedin.com')),
+      logoUrl: 'assets/example.png',
+      category: [],
+      followers: [],
+      favorites: [],
+      updates: [],
+      calendarLink: '',
+      isActive: false,
+      eventHappeningNow: false,
+      backgroundUrl: '',
+      events: [],
+      location: '4000 Central Florida Blvd Orlando, FL',
+      semesters: [],
+      recoveryToken: '',
+      confirmToken: '',
+      emailToken: '',
+      emailValidated: false,
+      createdAt: DateTime.fromMillisecondsSinceEpoch(1701030257000),
+      updatedAt: DateTime.now()),
 ];
 
 class OrganizationsListScreen extends ConsumerWidget {

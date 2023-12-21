@@ -50,7 +50,7 @@ List<Organization> organizations = [
       updates: [
         Update(id: '1', title: 'This is an announcement', content: 'Announcement description will be here! Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem Announcement description will be here! Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem Announcement description will be here! Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem', date: DateTime.fromMillisecondsSinceEpoch(1702941527000), sponsor: Organization(
       id: '1',
-      name: 'Test Org',
+      name: 'Test Org long name long name long name long name long name long name long name long name long name long name long name long name long name long nameeeeeeeee',
       email: '',
       description:
           'qwgejnqg qwgepoijqrglpk qgroiqrglpiqgr qgoqrglp qrgipoqrgpijgq',

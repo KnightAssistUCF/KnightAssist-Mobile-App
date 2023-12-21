@@ -48,7 +48,7 @@ List<Event> events = [
       description: 'need someone to collect tickets',
       location: 'pegasus ballroom',
       date: DateTime.fromMillisecondsSinceEpoch(1695774773000),
-      sponsoringOrganization: 'Organization Z',
+      sponsoringOrganization: 'Organization Z long name long name long name long name long name long name long name long name long name long name long name long name',
       attendees: [],
       registeredVolunteers: [],
       picLink: 'assets/profile pictures/icon_controller.png',
@@ -282,6 +282,8 @@ class EventCard extends StatelessWidget {
                           height: 75)),
                     title: Text(
                         event.name,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 3,
                         style: const TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 18),
@@ -292,6 +294,8 @@ class EventCard extends StatelessWidget {
                         children: [
                           Text(
                             event.sponsoringOrganization,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 3,
                             style: const TextStyle(
                               fontWeight: FontWeight.w400),
                             textAlign: TextAlign.start,
