@@ -145,7 +145,7 @@ class _OrganizationTopState extends State<OrganizationTop> {
               decoration: BoxDecoration(
                 image: DecorationImage(
                   fit: BoxFit.fill,
-                  image: AssetImage(organization.backgroundUrl),
+                  image: AssetImage(organization.backgroundUrl == '' ? 'assets/orgdefaultbackground.png' : organization.backgroundUrl),
                 ),
               ),
             ),
@@ -297,74 +297,87 @@ class _TabBarOrgState extends State<TabBarOrg>
               ],),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: TextButton(
-                  onPressed: () async {
-                    final Uri url = Uri.parse('mailto:${organization.contact.email}?subject=Hello from KnightAssist&body=I am interested in volunteering with your organization!	');
-                    if (!await launchUrl(url)) {
-                          throw Exception('Could not launch $url');
-                      }
-                  },
-                  child: Wrap(
-                    children: [
-                      const Icon(Icons.email_outlined),
-                      Text(
-                      organization.contact.email,
-                      style: const TextStyle(fontSize: 20),
+                child: Container(
+                  alignment: Alignment.centerLeft,
+                  child: TextButton(
+                    onPressed: () async {
+                      final Uri url = Uri.parse('mailto:${organization.contact.email}?subject=Hello from KnightAssist&body=I am interested in volunteering with your organization!	');
+                      if (!await launchUrl(url)) {
+                            throw Exception('Could not launch $url');
+                        }
+                    },
+                    child: Wrap(
+                      children: [
+                        const Icon(Icons.email_outlined),
+                        Text(
+                        organization.contact.email,
+                        style: const TextStyle(fontSize: 20),
+                      ),
+                      ]
                     ),
-                    ]
                   ),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: TextButton(
-                  onPressed: () async {
-                  final Uri url = Uri.parse('tel:${organization.contact.phone}');
-                    if (!await launchUrl(url)) {
-                          throw Exception('Could not launch $url');
-                      }
-                  },
-                  child: Wrap(
-                    children: [
-                      const Icon(Icons.phone_rounded),
-                      Text(
-                      organization.contact.phone,
-                      style: const TextStyle(fontSize: 20),
+                child: Container(
+                  alignment: Alignment.centerLeft,
+                  child: TextButton(
+                    onPressed: () async {
+                    final Uri url = Uri.parse('tel:${organization.contact.phone}');
+                      if (!await launchUrl(url)) {
+                            throw Exception('Could not launch $url');
+                        }
+                    },
+                    child: Wrap(
+                      children: [
+                        const Icon(Icons.phone_rounded),
+                        Text(
+                        organization.contact.phone,
+                        style: const TextStyle(fontSize: 20),
+                      ),
+                      ]
                     ),
-                    ]
                   ),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Wrap(
-                  children: [
-                    const Icon(Icons.location_on),
-                    Text(
-                    organization.location,
-                    style: const TextStyle(fontSize: 20),
+                child: Container(
+                  alignment: Alignment.centerLeft,
+                  child: Wrap(
+                    children: [
+                      const SizedBox(width:5),
+                      const Icon(Icons.location_on),
+                      Text(
+                      organization.location,
+                      style: const TextStyle(fontSize: 20),
+                    ),
+                    ]
                   ),
-                  ]
                 ),
                 ),
                 organization.contact.website == '' ? const SizedBox(height:0) : 
                 Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: TextButton(
-                  onPressed: () async {
-                  final Uri url = Uri.parse(organization.contact.website);
-                  if (!await launchUrl(url)) {
-                        throw Exception('Could not launch $url');
-                    }
-                  },
-                  child: Wrap(
-                    children: [
-                      const Icon(Icons.computer),
-                      Text(
-                      organization.contact.website,
-                      style: const TextStyle(fontSize: 20),
+                child: Container(
+                  alignment: Alignment.centerLeft,
+                  child: TextButton(
+                    onPressed: () async {
+                    final Uri url = Uri.parse(organization.contact.website);
+                    if (!await launchUrl(url)) {
+                          throw Exception('Could not launch $url');
+                      }
+                    },
+                    child: Wrap(
+                      children: [
+                        const Icon(Icons.computer),
+                        Text(
+                        organization.contact.website,
+                        style: const TextStyle(fontSize: 20),
+                      ),
+                      ]
                     ),
-                    ]
                   ),
                 ),
                 ),

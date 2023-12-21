@@ -314,7 +314,7 @@ class _OrganizationCardState extends State<OrganizationCard> {
                                   borderRadius: const BorderRadius.horizontal(left: Radius.circular(20.0), right: Radius.circular(20.0)),
                                   child: Image(
                                     fit: BoxFit.fill,
-                                    image: AssetImage(organization.backgroundUrl),
+                                    image: AssetImage(organization.backgroundUrl == '' ? 'assets/orgdefaultbackground.png' : organization.backgroundUrl),
                                   ),
                                 ),
                               ), 

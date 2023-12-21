@@ -58,6 +58,7 @@ flutter:
     - assets/profile pictures/icon_weight.png
     - assets/icon/icon.png
     - assets/icon/icontransparent.png
+    - assets/orgdefaultbackground.png
   fonts:
     - family: League Spartan
       fonts:
