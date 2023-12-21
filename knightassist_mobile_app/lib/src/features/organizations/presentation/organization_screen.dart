@@ -61,27 +61,6 @@ class OrganizationScreen extends ConsumerWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        'Description: ${organization.description}',
-                        style: const TextStyle(fontSize: 20),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        'Email: ${organization.email}',
-                        style: const TextStyle(fontSize: 20),
-                      ),
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text(
-                        'Phone Number',
-                        style: TextStyle(fontSize: 20),
-                      ),
-                    ),
                     Center(
                       child: SizedBox(
                         width: 300,
@@ -99,7 +78,7 @@ class OrganizationScreen extends ConsumerWidget {
                               child: Wrap(
                                 children: [
                                   Text(
-                                    'View upcoming events',
+                                    'View All Events',
                                     style: TextStyle(fontSize: 20),
                                   ),
                                   Icon(
@@ -112,7 +91,8 @@ class OrganizationScreen extends ConsumerWidget {
                           ),
                         ),
                       ),
-                    )
+                    ),
+                    SizedBox(height:250, child: TabBarOrg(organization: organization)),
                   ],
                 ),
               ],

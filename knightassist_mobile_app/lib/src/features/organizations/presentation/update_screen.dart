@@ -54,6 +54,7 @@ List<Organization> organizations = [
       email: '',
       description:
           'qwgejnqg qwgepoijqrglpk qgroiqrglpiqgr qgoqrglp qrgipoqrgpijgq',
+      contact: const Contact(email: '', phone: '', website: '', socialMedia: SocialMedia(facebook: '', twitter: '', instagram: '', linkedIn: '')),
       logoUrl: 'assets/example.png',
       category: [],
       followers: [],
@@ -78,6 +79,7 @@ List<Organization> organizations = [
       email: '',
       description:
           'qwgejnqg qwgepoijqrglpk qgroiqrglpiqgr qgoqrglp qrgipoqrgpijgq',
+      contact: const Contact(email: '', phone: '', website: '', socialMedia: SocialMedia(facebook: '', twitter: '', instagram: '', linkedIn: '')),
       logoUrl: 'assets/example.png',
       category: [],
       followers: [],
@@ -125,6 +127,7 @@ List<Organization> organizations = [
       email: '',
       description:
           'qwgejnqg qwgepoijqrglpk qgroiqrglpiqgr qgoqrglp qrgipoqrgpijgq',
+      contact: const Contact(email: '', phone: '', website: '', socialMedia: SocialMedia(facebook: '', twitter: '', instagram: '', linkedIn: '')),
       logoUrl: 'assets/profile pictures/icon_soccer.png',
       category: [],
       followers: [],
