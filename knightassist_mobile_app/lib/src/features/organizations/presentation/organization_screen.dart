@@ -285,7 +285,7 @@ class _TabBarOrgState extends State<TabBarOrg>
                   children: [
                     const Icon(Icons.email_outlined),
                     Text(
-                    organization.email,
+                    organization.contact.email,
                     style: const TextStyle(fontSize: 20),
                   ),
                   ]
@@ -297,34 +297,24 @@ class _TabBarOrgState extends State<TabBarOrg>
                   children: [
                     const Icon(Icons.phone_rounded),
                     Text(
-                    organization.,
+                    organization.contact.phone,
                     style: const TextStyle(fontSize: 20),
                   ),
                   ]
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: difference >= 24 ? Text( //show event end date if the event is longer than a day
-                    " ${DateFormat.jmv().format(event.startTime)} - ${DateFormat.jmv().format(event.endTime)} on ${DateFormat.yMMMMEEEEd().format(event.endTime)}",
-                    style: const TextStyle(fontSize: 15),
-                  ) : Text( 
-                    " ${DateFormat.jmv().format(event.startTime)} - ${DateFormat.jmv().format(event.endTime)}",
-                    style: const TextStyle(fontSize: 15),
-                  ),
-                ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Wrap(
                   children: [
-                    const Icon(Icons.person),
+                    const Icon(Icons.location_on),
                     Text(
-                    "x / ${event.maxAttendees} spots reserved",
+                    organization.location,
                     style: const TextStyle(fontSize: 20),
                   ),
                   ]
                 ),
-              ),
+                ),
             ],),
             ],
           ),

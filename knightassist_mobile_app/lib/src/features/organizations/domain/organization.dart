@@ -20,6 +20,7 @@ class Organization extends AppUser {
       required this.eventHappeningNow,
       required this.backgroundUrl,
       required this.events,
+      required this.location,
       required this.semesters,
       required this.recoveryToken,
       required this.confirmToken,
@@ -41,6 +42,7 @@ class Organization extends AppUser {
   final bool eventHappeningNow;
   final String backgroundUrl;
   final List<String> events;
+  final String location;
   final List<String> semesters;
   final String? recoveryToken;
   final String confirmToken;
@@ -66,6 +68,7 @@ class Organization extends AppUser {
         eventHappeningNow: map['eventHappeningNow'],
         backgroundUrl: map['backgroundUrl'] as String,
         events: List<String>.from(map['events']),
+        location: map['location'],
         semesters: List<String>.from(map['semesters']),
         recoveryToken: map['recoveryToken'],
         confirmToken: map['confirmToken'],
@@ -91,6 +94,7 @@ class Organization extends AppUser {
         'eventHappeningNow': eventHappeningNow,
         'backgroundURL': backgroundUrl,
         'events': events,
+        'location': location,
         'semesters': semesters,
         'recoveryToken': recoveryToken,
         'confirmToken': confirmToken,

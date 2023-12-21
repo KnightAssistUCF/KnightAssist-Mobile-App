@@ -4,7 +4,9 @@ import 'package:go_router/go_router.dart';
 import 'package:knightassist_mobile_app/src/common_widgets/responsive_center.dart';
 import 'package:knightassist_mobile_app/src/constants/breakpoints.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
+import 'package:knightassist_mobile_app/src/features/organizations/domain/contact.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
+import 'package:knightassist_mobile_app/src/features/organizations/domain/socialMedia.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/update.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 import 'package:intl/intl.dart';
@@ -17,6 +19,7 @@ List<Organization> organizations = [
       description:
           'qwgejnqg qwgepoijqrglpk qgroiqrglpiqgr qgoqrglp qrgipoqrgpijgq',
       logoUrl: 'assets/example.png',
+      contact: const Contact(email: '', phone: '', website: '', socialMedia: SocialMedia(facebook: '', twitter: '', instagram: '', linkedIn: '')),
       category: [],
       followers: [],
       favorites: [],
@@ -26,6 +29,7 @@ List<Organization> organizations = [
       eventHappeningNow: false,
       backgroundUrl: '',
       events: [],
+      location: '',
       semesters: [],
       recoveryToken: '',
       confirmToken: '',
@@ -38,6 +42,7 @@ List<Organization> organizations = [
       name: 'Random Organization X',
       email: '',
       description: 'environment',
+      contact: const Contact(email: '', phone: '', website: '', socialMedia: SocialMedia(facebook: '', twitter: '', instagram: '', linkedIn: '')),
       logoUrl: 'assets/profile pictures/icon_leaf.png',
       category: [],
       followers: [],
@@ -59,6 +64,7 @@ List<Organization> organizations = [
       eventHappeningNow: false,
       backgroundUrl: '',
       events: [],
+      location: '',
       semesters: [],
       recoveryToken: '',
       confirmToken: '',
@@ -82,6 +88,7 @@ List<Organization> organizations = [
       eventHappeningNow: false,
       backgroundUrl: '',
       events: [],
+      location: '',
       semesters: [],
       recoveryToken: '',
       confirmToken: '',
@@ -101,12 +108,13 @@ List<Organization> organizations = [
       emailToken: '',
       emailValidated: false,
       createdAt: DateTime.fromMillisecondsSinceEpoch(1701030257000),
-      updatedAt: DateTime.now()),
+      updatedAt: DateTime.now(), location: ''),
   Organization(
       id: '3',
       name: 'Test test test test test',
       email: 'testorg@example.com',
       description: 'vidya gaming',
+      contact: const Contact(email: '', phone: '', website: '', socialMedia: SocialMedia(facebook: '', twitter: '', instagram: '', linkedIn: '')),
       logoUrl: 'assets/profile pictures/icon_controller.png',
       category: [],
       followers: [],
@@ -127,6 +135,7 @@ List<Organization> organizations = [
       eventHappeningNow: false,
       backgroundUrl: '',
       events: [],
+      location: '',
       semesters: [],
       recoveryToken: '',
       confirmToken: '',
@@ -139,6 +148,7 @@ List<Organization> organizations = [
       eventHappeningNow: false,
       backgroundUrl: '',
       events: [],
+      location: '',
       semesters: [],
       recoveryToken: '',
       confirmToken: '',
@@ -151,6 +161,7 @@ List<Organization> organizations = [
       name: 'Example test',
       email: '',
       description: 'weightlifting jim',
+      contact: const Contact(email: '', phone: '', website: '', socialMedia: SocialMedia(facebook: '', twitter: '', instagram: '', linkedIn: '')),
       logoUrl: 'assets/profile pictures/icon_weight.png',
       category: [],
       followers: [],
@@ -161,6 +172,7 @@ List<Organization> organizations = [
       eventHappeningNow: false,
       backgroundUrl: '',
       events: [],
+      location: '',
       semesters: [],
       recoveryToken: '',
       confirmToken: '',

@@ -5,8 +5,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:knightassist_mobile_app/src/common_widgets/responsive_center.dart';
 import 'package:knightassist_mobile_app/src/constants/breakpoints.dart';
+import 'package:knightassist_mobile_app/src/features/organizations/domain/contact.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
+import 'package:knightassist_mobile_app/src/features/organizations/domain/socialMedia.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 
 import '../domain/organization.dart';
@@ -18,6 +20,7 @@ List<Organization> organizations = [
       email: '',
       description:
           'qwgejnqg qwgepoijqrglpk qgroiqrglpiqgr qgoqrglp qrgipoqrgpijgq qwegihqweifgopqwei joaJOFab;n joaJOFab;n joaJOFab;n',
+      contact: const Contact(email: '', phone: '', website: '', socialMedia: SocialMedia(facebook: '', twitter: '', instagram: '', linkedIn: '')),
       logoUrl: 'assets/example.png',
       category: [],
       followers: [],
@@ -28,6 +31,7 @@ List<Organization> organizations = [
       eventHappeningNow: false,
       backgroundUrl: '',
       events: [],
+      location: '',
       semesters: [],
       recoveryToken: '',
       confirmToken: '',
@@ -40,6 +44,7 @@ List<Organization> organizations = [
       name: 'Random Organization X',
       email: '',
       description: 'environment',
+      contact: const Contact(email: '', phone: '', website: '', socialMedia: SocialMedia(facebook: '', twitter: '', instagram: '', linkedIn: '')),
       logoUrl: 'assets/profile pictures/icon_leaf.png',
       category: [],
       followers: [],
@@ -50,6 +55,7 @@ List<Organization> organizations = [
       eventHappeningNow: false,
       backgroundUrl: 'assets/profile pictures/icon_cookie.png',
       events: [],
+      location: '',
       semesters: [],
       recoveryToken: '',
       confirmToken: '',
@@ -62,6 +68,7 @@ List<Organization> organizations = [
       name: 'Test test test test test',
       email: 'testorg@example.com',
       description: 'vidya gaming',
+      contact: const Contact(email: '', phone: '', website: '', socialMedia: SocialMedia(facebook: '', twitter: '', instagram: '', linkedIn: '')),
       logoUrl: 'assets/profile pictures/icon_controller.png',
       category: [],
       followers: [],
@@ -72,6 +79,7 @@ List<Organization> organizations = [
       eventHappeningNow: false,
       backgroundUrl: 'assets/profile pictures/icon_controller.png',
       events: [],
+      location: '',
       semesters: [],
       recoveryToken: '',
       confirmToken: '',
@@ -84,6 +92,7 @@ List<Organization> organizations = [
       name: 'Example test',
       email: '',
       description: 'weightlifting jim',
+      contact: const Contact(email: '', phone: '', website: '', socialMedia: SocialMedia(facebook: '', twitter: '', instagram: '', linkedIn: '')),
       logoUrl: 'assets/profile pictures/icon_weight.png',
       category: [],
       followers: [],
@@ -94,6 +103,7 @@ List<Organization> organizations = [
       eventHappeningNow: false,
       backgroundUrl: '',
       events: [],
+      location: '',
       semesters: [],
       recoveryToken: '',
       confirmToken: '',
