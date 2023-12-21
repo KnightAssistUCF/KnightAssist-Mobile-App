@@ -16,6 +16,7 @@ class OrganizationScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: true,
+        title: const Text('Organizations'),
         actions: <Widget>[
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -117,43 +118,6 @@ class OrganizationScreen extends ConsumerWidget {
               ],
             )
           ]),
-      /*drawer: Drawer(
-        child: ListView(
-          children: [
-            ListTile(
-              title: const Text('Home'),
-              onTap: () {
-                context.pushNamed(AppRoute.homeScreen.name);
-              },
-            ),
-            ListTile(
-              title: const Text('Organizations'),
-              onTap: () {
-                context.pushNamed(AppRoute.organizations.name);
-              },
-            ),
-            ListTile(
-              title: const Text('Events'),
-              onTap: () {
-                context.pushNamed(AppRoute.events.name);
-              },
-            ),
-            ListTile(
-              title: const Text('Settings'),
-              onTap: () {
-                context.pushNamed(AppRoute.account.name);
-              },
-            ),
-            ListTile(
-              title: const Text('Sign Out'),
-              onTap: () {
-                context.pushNamed(AppRoute.emailConfirmed.name);
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        ),
-      ),*/
     );
   }
 }
@@ -188,59 +152,75 @@ class _OrganizationTopState extends State<OrganizationTop> {
     final Organization organization = this.organization;
     final double width = this.width;
 
-    return Container(
-        color: const Color.fromARGB(255, 0, 108, 81),
-        //width: width,
-        child: Stack(
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        Column(
           children: [
-            Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Center(
-                    child: Column(
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(50.0),
-                          child: Image(
-                              semanticLabel: 'Organization profile picture',
-                              image: AssetImage(organization.logoUrl),
-                              height: 100),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Wrap(
-                            children: [
-                              Text(
-                                organization.name,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.white,
-                                    fontSize: 25),
-                              ),
-                              IconButton(
-                                  iconSize: 30.0,
-                                  padding: const EdgeInsets.only(
-                                      left: 4, right: 4, top: 0),
-                                  icon: _isFavoriteOrg == true
-                                      ? const Icon(Icons.favorite)
-                                      : const Icon(Icons.favorite_outline),
-                                  color: Colors.pink,
-                                  onPressed: () {
-                                    setState(() {
-                                      _isFavoriteOrg = !_isFavoriteOrg;
-                                    });
-                                  })
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
+            Container(
+              width: MediaQuery.sizeOf(context).width,
+              height: 200,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  fit: BoxFit.fill,
+                  image: AssetImage(organization.backgroundUrl),
+                ),
+              ),
+            ),
+            const SizedBox(height: 50,),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Wrap(
+                children: [
+                  Text(
+                    organization.name,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black,
+                        fontSize: 25),
+                  ),
+                  IconButton(
+                      iconSize: 30.0,
+                      padding: const EdgeInsets.only(
+                          left: 4, right: 4, top: 0),
+                      icon: _isFavoriteOrg == true
+                          ? const Icon(Icons.favorite)
+                          : const Icon(Icons.favorite_outline),
+                      color: Colors.pink,
+                      onPressed: () {
+                        setState(() {
+                          _isFavoriteOrg = !_isFavoriteOrg;
+                        });
+                      })
+                ],
+              ),
+            )
+          ],
+        ),
+        Positioned(
+              top: 150.0,
+              child: Container(
+                padding: EdgeInsets.all(5),
+                decoration: BoxDecoration(color: Colors.white, shape: BoxShape.circle,   
+                                    boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.5),
+                                      spreadRadius: 2,
+                                      blurRadius: 5,
+                                      offset: const Offset(0, 3), // changes position of shadow
+                                    ),
+                                   ],),
+                child: ClipOval(
+                  child: SizedBox.fromSize(
+                    size: const Size.fromRadius(48),
+                    child: Image(
+                        semanticLabel: 'Organization profile picture',
+                        image: AssetImage(organization.logoUrl),
+                        fit: BoxFit.cover),
                   ),
                 ),
-              ],
-            ),
-          ],
-        ));
+              ),
+          )],
+    );
   }
 }
