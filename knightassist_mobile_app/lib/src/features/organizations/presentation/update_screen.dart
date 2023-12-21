@@ -381,14 +381,26 @@ class UpdateCard extends StatelessWidget {
                                     fontSize: 18),
                                 textAlign: TextAlign.start,
                               ),
-                              subtitle: Text(
-                              sponsor.name,
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 3,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w400),
-                              textAlign: TextAlign.start,
-                            ),
+                              subtitle: Wrap(
+                                children: [
+                                 ClipRRect(
+                                  borderRadius: BorderRadius.circular(25.0),
+                                  child: Image(
+                                    image: AssetImage(update.sponsor.logoUrl),
+                                    height: 25)),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      sponsor.name,
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 3,
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.w400),
+                                      textAlign: TextAlign.start,
+                                    ),
+                                  ),
+                                ]
+                              ),
                             trailing: Text(
                               DateFormat('yyyy-MM-dd')
                                   .format(update.date),

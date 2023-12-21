@@ -341,24 +341,6 @@ class EventCard extends StatelessWidget {
                                               255, 91, 78, 119))),
                               child: const Text('RSVP'),
                             ),
-                      /*trailing: OverflowBar(
-                        spacing: 8,
-                        overflowAlignment: OverflowBarAlignment.end,
-                        children: [
-                          Align(
-                            alignment: const Alignment(1, 0.6),
-                            child: FilledButton(
-                              onPressed: () {},
-                              style: ButtonStyle(
-                                  backgroundColor:
-                                      MaterialStateProperty.all(
-                                          const Color.fromARGB(
-                                              255, 91, 78, 119))),
-                              child: const Text('RSVP'),
-                            ),
-                          )
-                        ],
-                      )*/
                   ),
                 ),
               ),
