@@ -78,7 +78,7 @@ List<Event> events = [
       updatedAt: DateTime.now()),
     Event(
       id: '5',
-      name: 'movie night with long desc',
+      name: 'movie night with long desc and title hahahaha hahaha wegJKHgekljbdgKLJBgdkbg;JKBglkjbasdg',
       description: 'Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum ',
       location: 'pegasus ballroom',
       date: DateTime.fromMillisecondsSinceEpoch(1734218796000),
@@ -256,7 +256,7 @@ class EventCard extends StatelessWidget {
       child: ResponsiveCenter(
         maxContentWidth: Breakpoint.tablet,
         child: Padding(
-            padding: const EdgeInsets.all(20.0),
+            padding: const EdgeInsets.all(10.0),
             child: Card(
               shape: RoundedRectangleBorder(
                 side: const BorderSide(
@@ -270,86 +270,95 @@ class EventCard extends StatelessWidget {
               child: InkWell(
                 onTap: () => context.pushNamed("event", extra: event),
                 child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Column(
-                    children: [
-                      Wrap(
-                        children: [
-                          ClipRRect(
-                              borderRadius: BorderRadius.circular(12.0),
-                              child: Image(
-                                  image: AssetImage(event.picLink),
-                                  height: 100)),
-                          Padding(
-                            padding: const EdgeInsets.all(15.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
+                  padding: const EdgeInsets.all(0.0),
+                  child: ListTile(
+                      leading: ClipRRect(
+                          borderRadius: BorderRadius.circular(12.0),
+                          child: Image(
+                              image: AssetImage(event.picLink),
+                              height: 50,width:50)),
+                      subtitle: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              event.name,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 3,
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 18),
+                              textAlign: TextAlign.start,
+                            ),
+                            Text(
+                              DateFormat('yyyy-MM-dd – kk:mm')
+                                  .format(event.date),
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.w400),
+                              textAlign: TextAlign.start,
+                            ),
+                            Text(
+                              event.location,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 3,
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.w400),
+                              textAlign: TextAlign.start,
+                            ),
+                            OverflowBar(
                               children: [
-                                Text(
-                                  event.name,
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 18),
-                                  textAlign: TextAlign.start,
-                                ),
-                                Text(
-                                  DateFormat('yyyy-MM-dd – kk:mm')
-                                      .format(event.date),
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.w400),
-                                  textAlign: TextAlign.start,
-                                ),
-                                Text(
-                                  event.location,
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.w400),
-                                  textAlign: TextAlign.start,
-                                ),
-                                OverflowBar(
-                                  children: [
-                                    ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(25.0),
-                                        child: const Image(
-                                            image: AssetImage(
-                                                'assets/example.png'),
-                                            height: 20)),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        event.sponsoringOrganization,
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.w400),
-                                        textAlign: TextAlign.start,
-                                      ),
-                                    ),
-                                  ],
+                                ClipRRect(
+                                    borderRadius:
+                                        BorderRadius.circular(25.0),
+                                    child: const Image(
+                                        image: AssetImage(
+                                            'assets/example.png'),
+                                        height: 20)),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    event.sponsoringOrganization,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 3,
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.w400),
+                                    textAlign: TextAlign.start,
+                                  ),
                                 ),
                               ],
                             ),
-                          ),
-                          OverflowBar(
-                            spacing: 8,
-                            overflowAlignment: OverflowBarAlignment.end,
-                            children: [
-                              Align(
-                                alignment: const Alignment(1, 0.6),
-                                child: FilledButton(
-                                  onPressed: () {},
-                                  style: ButtonStyle(
-                                      backgroundColor:
-                                          MaterialStateProperty.all(
-                                              const Color.fromARGB(
-                                                  255, 91, 78, 119))),
-                                  child: const Text('RSVP'),
-                                ),
-                              )
-                            ],
+                          ],
+                        ),
+                      ),
+                      trailing: FilledButton(
+                              onPressed: () {},
+                              style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStateProperty.all(
+                                          const Color.fromARGB(
+                                              255, 91, 78, 119))),
+                              child: const Text('RSVP'),
+                            ),
+                      /*trailing: OverflowBar(
+                        spacing: 8,
+                        overflowAlignment: OverflowBarAlignment.end,
+                        children: [
+                          Align(
+                            alignment: const Alignment(1, 0.6),
+                            child: FilledButton(
+                              onPressed: () {},
+                              style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStateProperty.all(
+                                          const Color.fromARGB(
+                                              255, 91, 78, 119))),
+                              child: const Text('RSVP'),
+                            ),
                           )
                         ],
-                      ),
-                    ],
+                      )*/
                   ),
                 ),
               ),
