@@ -38,6 +38,6 @@ SPEC CHECKSUMS:
   url_launcher_ios: bf5ce03e0e2088bad9cc378ea97fa0ed5b49673b
   video_player_avfoundation: e9e6f9cae7d7a6d9b43519b0aab382bca60fcfd1
 
-PODFILE CHECKSUM: dd7a4596cee4c7508339dbac66bd7edde91f6500
+PODFILE CHECKSUM: eedb52b868aedfe3e3ae99435f6073bd60d4b4c0
 
 COCOAPODS: 1.14.2
