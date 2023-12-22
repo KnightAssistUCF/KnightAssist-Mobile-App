@@ -41,17 +41,15 @@ class AccountScreen extends ConsumerWidget {
           )
         ],
       ),
-      body: /*const ResponsiveCenter(
-        padding: EdgeInsets.symmetric(horizontal: Sizes.p16),
-        child: UserDataTable(),*/
+      body:
         Stack(
-      alignment: Alignment.center,
-      children: [
+              alignment: Alignment.center,
+              children: [
         Column(
           children: [
             Container(
               width: MediaQuery.sizeOf(context).width,
-              height: 200,
+              height: 150,
               decoration: const BoxDecoration(
                 color: Color.fromARGB(255, 0, 108, 81)
                 ),
@@ -65,32 +63,33 @@ class AccountScreen extends ConsumerWidget {
                 alignment: Alignment.center,
                 children: [
                   const Positioned(
-                    top: 170,
+                    top: 85,
                     child: Padding(
                       padding: EdgeInsets.all(8.0),
                       child: Card(child: Padding(
                         padding: EdgeInsets.all(8.0),
                         child: Column(children: [
+                          SizedBox(height: 20),
                           Text(
-                        "Student User Name",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black,
-                            fontSize: 25),
-                                            ),
-                                             Text(
-                        "Joined October 20th, 2023",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black,
-                            fontSize: 20),
-                                            ),
-                                            ],),
+                            "Student User Name",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              color: Colors.black,
+                              fontSize: 25),
+                          ),
+                          Text(
+                          "Joined October 20th, 2023",
+                          style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              color: Colors.black,
+                              fontSize: 20),
+                          ),
+                        ],),
                       )),
                     ),
                   ),
                   Positioned(
-                    top: 85,
+                    top: 15,
                     child: Align(
                       alignment: Alignment.center,
                       child: Container(
@@ -108,19 +107,20 @@ class AccountScreen extends ConsumerWidget {
                                     child: SizedBox.fromSize(
                                         size: const Size.fromRadius(48),
                                         child: const Image(
-                      semanticLabel: 'User profile picture',
-                      image: AssetImage('assets/profile pictures/icon_paintbrush.png'),
-                      fit: BoxFit.cover),
+                                          semanticLabel: 'User profile picture',
+                                          image: AssetImage('assets/profile pictures/icon_paintbrush.png'),
+                                          fit: BoxFit.cover),
                                     ),
                                   ),
                                 ),
                     ),
                   ),
+                  const Positioned(top: 215, child: UserDataTable()),
                 ]
-              ),
+              ), 
             ),
           ],
-      )
+        )
   );
   }
 }
@@ -132,13 +132,15 @@ class UserDataTable extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final style = Theme.of(context).textTheme.titleSmall!;
     final user = ref.watch(authStateChangesProvider).value;
-    return DataTable(columns: [
-      DataColumn(label: Text('Field', style: style)),
-      DataColumn(label: Text('Value', style: style))
-    ], rows: [
-      _makeDataRow('email', user?.email ?? '', style)
-      // Can add more rows later
-    ]);
+    return Card(
+      child: DataTable(columns: [
+        DataColumn(label: Text('Field', style: style)),
+        DataColumn(label: Text('Value', style: style))
+      ], rows: [
+        _makeDataRow('email', user?.email ?? '', style)
+        // Can add more rows later
+      ]),
+    );
   }
 
   DataRow _makeDataRow(String name, String value, TextStyle style) {
