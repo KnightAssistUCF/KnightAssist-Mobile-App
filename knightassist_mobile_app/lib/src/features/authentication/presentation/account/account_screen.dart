@@ -41,11 +41,87 @@ class AccountScreen extends ConsumerWidget {
           )
         ],
       ),
-      body: const ResponsiveCenter(
+      body: /*const ResponsiveCenter(
         padding: EdgeInsets.symmetric(horizontal: Sizes.p16),
-        child: UserDataTable(),
-      ),
-    );
+        child: UserDataTable(),*/
+        Stack(
+      alignment: Alignment.center,
+      children: [
+        Column(
+          children: [
+            Container(
+              width: MediaQuery.sizeOf(context).width,
+              height: 200,
+              decoration: const BoxDecoration(
+                color: Color.fromARGB(255, 0, 108, 81)
+                ),
+              ),
+          ]
+            ),
+            const SizedBox(height: 50,),
+            Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  const Positioned(
+                    top: 170,
+                    child: Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Card(child: Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Column(children: [
+                          Text(
+                        "Student User Name",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black,
+                            fontSize: 25),
+                                            ),
+                                             Text(
+                        "Joined October 20th, 2023",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black,
+                            fontSize: 20),
+                                            ),
+                                            ],),
+                      )),
+                    ),
+                  ),
+                  Positioned(
+                    top: 85,
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: Container(
+                                  padding: EdgeInsets.all(5),
+                                  decoration: BoxDecoration(color: Colors.white, shape: BoxShape.circle,   
+                                  boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.5),
+                                    spreadRadius: 2,
+                                    blurRadius: 5,
+                                    offset: const Offset(0, 3), // changes position of shadow
+                                  ),
+                                 ],),
+                                  child: ClipOval(
+                                    child: SizedBox.fromSize(
+                                        size: const Size.fromRadius(48),
+                                        child: const Image(
+                      semanticLabel: 'User profile picture',
+                      image: AssetImage('assets/profile pictures/icon_paintbrush.png'),
+                      fit: BoxFit.cover),
+                                    ),
+                                  ),
+                                ),
+                    ),
+                  ),
+                ]
+              ),
+            ),
+          ],
+      )
+  );
   }
 }
 
