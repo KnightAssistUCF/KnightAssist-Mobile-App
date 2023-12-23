@@ -3,7 +3,7 @@ import 'package:knightassist_mobile_app/src/features/authentication/domain/app_u
 class Organization extends AppUser {
   const Organization(
       {required super.id,
-      super.type = "organization",
+      super.role = "organization",
       required this.name,
       required super.email,
       required this.description,
