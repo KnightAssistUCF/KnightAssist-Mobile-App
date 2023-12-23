@@ -10,6 +10,7 @@ class Event {
     required this.sponsoringOrganization,
     required this.attendees,
     required this.registeredVolunteers,
+    required this.picLink,
     required this.startTime,
     required this.endTime,
     required this.eventTags,
@@ -27,6 +28,7 @@ class Event {
   final String sponsoringOrganization;
   final List<String> attendees;
   final List<String> registeredVolunteers;
+  final String picLink;
   final DateTime startTime;
   final DateTime endTime;
   final List<String> eventTags;
@@ -45,6 +47,7 @@ class Event {
         sponsoringOrganization: map['sponsoringOrganization'],
         attendees: List<String>.from(map['attendees']),
         registeredVolunteers: List<String>.from(map['registeredVolunteers']),
+        picLink: map['picLink'] as String,
         startTime: DateTime.parse(map['startTime']),
         endTime: DateTime.parse(map['endTime']),
         eventTags: List<String>.from(map['eventTags']),
@@ -63,6 +66,7 @@ class Event {
         'sponsoringOrganization': sponsoringOrganization,
         'attendees': attendees,
         'registeredVolunteers': registeredVolunteers,
+        'picLink': picLink,
         'startTime': startTime.toIso8601String(),
         'endTime': endTime.toIso8601String(),
         'eventTags': eventTags,

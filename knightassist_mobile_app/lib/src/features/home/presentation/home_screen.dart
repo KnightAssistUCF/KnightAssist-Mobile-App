@@ -77,7 +77,9 @@ class HomeScreen extends ConsumerWidget {
                       Directionality(
                         textDirection: TextDirection.rtl,
                         child: TextButton.icon(
-                          onPressed: () {},
+                          onPressed: () {
+                            context.pushNamed(AppRoute.updates.name);
+                          },
                           icon: const Icon(
                             Icons.arrow_back_ios,
                             color: Colors.grey,
@@ -164,6 +166,18 @@ class HomeScreen extends ConsumerWidget {
               title: const Text('Events'),
               onTap: () {
                 context.pushNamed(AppRoute.events.name);
+              },
+            ),
+            ListTile(
+              title: const Text('Announcements'),
+              onTap: () {
+                context.pushNamed(AppRoute.updates.name);
+              },
+            ),
+            ListTile(
+              title: const Text('History'),
+              onTap: () {
+                context.pushNamed(AppRoute.eventHistory.name);
               },
             ),
             ListTile(

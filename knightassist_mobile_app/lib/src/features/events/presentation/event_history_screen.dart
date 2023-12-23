@@ -14,10 +14,10 @@ List<Event> events = [
       description: 'really cool music, need someone to serve food',
       location: 'addition financial arena',
       date: DateTime.fromMillisecondsSinceEpoch(1699875173000),
-      sponsoringOrganization: 'Organization X is really long !!!!! !!!!! !!!!! !!!!!',
+      sponsoringOrganization: 'Organization X',
       attendees: [],
       registeredVolunteers: [],
-      picLink: 'assets/profile pictures/icon_leaf.png',
+      picLink: 'assets/profile pictures/icon_musicnote.png',
       startTime: DateTime.fromMillisecondsSinceEpoch(1699875173000),
       endTime: DateTime.fromMillisecondsSinceEpoch(1699875173099),
       eventTags: ['music', 'food'],
@@ -34,7 +34,7 @@ List<Event> events = [
       sponsoringOrganization: 'Organization Y',
       attendees: [],
       registeredVolunteers: [],
-      picLink: 'assets/example.png',
+      picLink: 'assets/profile pictures/icon_apple.png',
       startTime: DateTime.fromMillisecondsSinceEpoch(1698433137000),
       endTime: DateTime.fromMillisecondsSinceEpoch(1698433137099),
       eventTags: ['education', 'technology'],
@@ -48,10 +48,10 @@ List<Event> events = [
       description: 'need someone to collect tickets',
       location: 'pegasus ballroom',
       date: DateTime.fromMillisecondsSinceEpoch(1695774773000),
-      sponsoringOrganization: 'Organization Z',
+      sponsoringOrganization: 'Organization Z long name long name long name long name long name long name long name long name long name long name long name long name',
       attendees: [],
       registeredVolunteers: [],
-      picLink: 'assets/profile pictures/icon_planet.png',
+      picLink: 'assets/profile pictures/icon_controller.png',
       startTime: DateTime.fromMillisecondsSinceEpoch(1695774773000),
       endTime: DateTime.fromMillisecondsSinceEpoch(1695774773099),
       eventTags: ['movie', 'education', 'food'],
@@ -68,7 +68,7 @@ List<Event> events = [
       sponsoringOrganization: 'Organization Z',
       attendees: [],
       registeredVolunteers: [],
-      picLink: 'assets/profile pictures/icon_cookie.png',
+      picLink: 'assets/profile pictures/icon_cat.png',
       startTime: DateTime.fromMillisecondsSinceEpoch(1734218796000),
       endTime: DateTime.fromMillisecondsSinceEpoch(1734219036000),
       eventTags: ['movie', 'education', 'food'],
@@ -78,25 +78,25 @@ List<Event> events = [
       updatedAt: DateTime.now()),
     Event(
       id: '5',
-      name: 'movie night with long desc and title hahahaha hahaha wegJKHgekljbdgKLJBgdkbg;JKBglkjbasdg',
-      description: 'Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum ',
+      name: 'movie night but it\'s very long',
+      description: 'need someone to collect tickets',
       location: 'pegasus ballroom',
-      date: DateTime.fromMillisecondsSinceEpoch(1734218796000),
+      date: DateTime.fromMillisecondsSinceEpoch(1695774773000),
       sponsoringOrganization: 'Organization Z',
       attendees: [],
       registeredVolunteers: [],
-      picLink: 'assets/profile pictures/icon_cookie.png',
-      startTime: DateTime.fromMillisecondsSinceEpoch(1734218796000),
-      endTime: DateTime.fromMillisecondsSinceEpoch(1734219036000),
+      picLink: 'assets/profile pictures/icon_cat.png',
+      startTime: DateTime.fromMillisecondsSinceEpoch(1695774773000),
+      endTime: DateTime.fromMillisecondsSinceEpoch(1702543765000),
       eventTags: ['movie', 'education', 'food'],
       semester: 'Fall 2023',
       maxAttendees: 400,
-      createdAt: DateTime.fromMillisecondsSinceEpoch(1702596396),
+      createdAt: DateTime.fromMillisecondsSinceEpoch(1702680565000),
       updatedAt: DateTime.now()),
 ];
 
-class EventsListScreen extends ConsumerWidget {
-  const EventsListScreen({super.key});
+class EventHistoryScreen extends ConsumerWidget {
+  const EventHistoryScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -105,7 +105,7 @@ class EventsListScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Volunteer Shifts',
+          'Event History',
           style: TextStyle(fontWeight: FontWeight.w600),
         ),
         centerTitle: true,
@@ -154,9 +154,9 @@ class EventsListScreen extends ConsumerWidget {
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
                 itemCount: events.length,
-                itemBuilder: (context, index) =>
-                    EventCard(event: events.elementAt(index)),
-              ),
+                itemBuilder: (context, index) => 
+                    (events.elementAt(index).date.isBefore(DateTime.now()) ? EventCard(event: events.elementAt(index)) : const SizedBox(height: 0,)),
+              ), // only show an event in the history page if its date has passed
             )
           ],
         ),
@@ -231,7 +231,7 @@ _topSection(double width) {
                 padding: EdgeInsets.all(8.0),
                 child: Center(
                   child: SearchBar(
-                    hintText: 'Search Events',
+                    hintText: 'Search Event History',
                   ),
                 ),
               ),
@@ -252,11 +252,13 @@ class EventCard extends StatelessWidget {
 
     const style = TextStyle(fontSize: 20, fontWeight: FontWeight.normal);
 
+    final difference = event.endTime.difference(event.startTime).inHours;
+
     return SingleChildScrollView(
       child: ResponsiveCenter(
         maxContentWidth: Breakpoint.tablet,
         child: Padding(
-            padding: const EdgeInsets.all(10.0),
+            padding: const EdgeInsets.all(8.0),
             child: Card(
               shape: RoundedRectangleBorder(
                 side: const BorderSide(
@@ -268,79 +270,51 @@ class EventCard extends StatelessWidget {
               color: Colors.white,
               elevation: 5,
               child: InkWell(
-                onTap: () => context.pushNamed("event", extra: event),
+                onTap: () => context.pushNamed("historydetail", extra: event),
                 child: Padding(
-                  padding: const EdgeInsets.all(0.0),
+                  padding: const EdgeInsets.all(8.0),
                   child: ListTile(
-                      leading: ClipRRect(
-                          borderRadius: BorderRadius.circular(12.0),
-                          child: Image(
-                              image: AssetImage(event.picLink),
-                              height: 50,width:50)),
-                      subtitle: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Text(
-                              event.name,
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 3,
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 18),
-                              textAlign: TextAlign.start,
-                            ),
-                            Text(
-                              DateFormat('yyyy-MM-dd – hh:mm a')
-                                  .format(event.date),
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.w400),
-                              textAlign: TextAlign.start,
-                            ),
-                            Text(
-                              event.location,
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 3,
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.w400),
-                              textAlign: TextAlign.start,
-                            ),
-                            OverflowBar(
-                              children: [
-                                ClipRRect(
-                                    borderRadius:
-                                        BorderRadius.circular(25.0),
-                                    child: const Image(
-                                        image: AssetImage(
-                                            'assets/example.png'),
-                                        height: 20)),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                    event.sponsoringOrganization,
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 3,
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.w400),
-                                    textAlign: TextAlign.start,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
+                    contentPadding: EdgeInsets.zero,
+                    leading:  ClipRRect(
+                      borderRadius: BorderRadius.circular(12.0),
+                      child: Image(
+                          image: AssetImage(event.picLink),
+                          height: 75)),
+                    title: Text(
+                        event.name,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 3,
+                        style: const TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 18),
+                        textAlign: TextAlign.start,
                       ),
-                      trailing: FilledButton(
-                              onPressed: () {},
-                              style: ButtonStyle(
-                                  backgroundColor:
-                                      MaterialStateProperty.all(
-                                          const Color.fromARGB(
-                                              255, 91, 78, 119))),
-                              child: const Text('RSVP'),
-                            ),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            event.sponsoringOrganization,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 3,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w400),
+                            textAlign: TextAlign.start,
+                          ),
+                          Text(
+                            "${difference.toString()} hours",
+                            style: const TextStyle(
+                                fontWeight: FontWeight.w400),
+                            textAlign: TextAlign.start,
+                          ),
+                        ],
+                      ), 
+                      trailing: Text(
+                        DateFormat('yyyy-MM-dd')
+                            .format(event.date),
+                        style: const TextStyle(
+                            fontWeight: FontWeight.w400),
+                        textAlign: TextAlign.start,
+                      ),
                   ),
                 ),
               ),
