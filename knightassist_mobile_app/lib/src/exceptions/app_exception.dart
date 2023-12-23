@@ -24,3 +24,14 @@ class WrongPasswordException extends AppException {
 class UserNotFoundException extends AppException {
   UserNotFoundException() : super('user-not-found', 'User not found');
 }
+
+// Event
+class EventNotFoundException extends AppException {
+  EventNotFoundException() : super('event-not-found', 'Event not found');
+}
+
+// Organization
+class OrganizationNotFoundException extends AppException {
+  OrganizationNotFoundException()
+      : super('org-not-found', 'Organization not found');
+}
