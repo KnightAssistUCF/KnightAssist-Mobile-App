@@ -4,10 +4,11 @@ import 'package:go_router/go_router.dart';
 import 'package:knightassist_mobile_app/src/common_widgets/responsive_center.dart';
 import 'package:knightassist_mobile_app/src/constants/breakpoints.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
+import 'package:knightassist_mobile_app/src/features/events/data/events_repository.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 import 'package:intl/intl.dart';
 
-List<Event> events = [
+/*List<Event> events = [
   Event(
       id: '1',
       name: 'concert',
@@ -93,7 +94,7 @@ List<Event> events = [
       maxAttendees: 400,
       createdAt: DateTime.fromMillisecondsSinceEpoch(1702596396),
       updatedAt: DateTime.now()),
-];
+];*/
 
 class EventsListScreen extends ConsumerWidget {
   const EventsListScreen({super.key});
@@ -150,12 +151,27 @@ class EventsListScreen extends ConsumerWidget {
           children: [
             _topSection(w),
             Flexible(
-              child: ListView.builder(
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                itemCount: events.length,
-                itemBuilder: (context, index) =>
-                    EventCard(event: events.elementAt(index)),
+              child: FutureBuilder(
+                future: EventsRepository().getAllEvents(),
+                builder: (ctx, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    if (snapshot.hasError) {
+                      return Center(child: Text("${snapshot.error} occurred"),);
+                    } else if (snapshot.hasData) {
+                      final data = snapshot.data as List<Event>;
+                      return ListView.builder(
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        itemCount: data.length,
+                        itemBuilder: (context, index) =>
+                        EventCard(event: data.elementAt(index)),
+                      );
+                    }
+                  }
+
+                  return const Center(child: CircularProgressIndicator(),);
+
+                },
               ),
             )
           ],

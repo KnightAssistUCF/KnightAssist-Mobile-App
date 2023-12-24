@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:knightassist_mobile_app/src/common_widgets/action_text_button.dart';
 import 'package:knightassist_mobile_app/src/common_widgets/alert_dialogs.dart';
 import 'package:knightassist_mobile_app/src/common_widgets/responsive_center.dart';
 import 'package:knightassist_mobile_app/src/constants/app_sizes.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/data/auth_repository.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/account/account_screen_controller.dart';
+import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 import 'package:knightassist_mobile_app/src/utils/async_value_ui.dart';
+import 'package:rxdart/rxdart.dart';
+import 'package:settings_ui/settings_ui.dart';
 
 class AccountScreen extends ConsumerWidget {
   const AccountScreen({super.key});
@@ -115,7 +119,45 @@ class AccountScreen extends ConsumerWidget {
                                 ),
                     ),
                   ),
-                  const Positioned(top: 215, child: UserDataTable()),
+                  //const Positioned(top: 215, child: UserDataTable()),
+                  Positioned(
+                    top: 215,
+                    child: SizedBox(
+                      height: MediaQuery.sizeOf(context).height,
+                      width: MediaQuery.sizeOf(context).width,
+                      child: SettingsList(
+                            sections: [
+                              SettingsSection(
+                                tiles: <SettingsTile>[
+                                  SettingsTile.navigation(
+                                    leading: Icon(Icons.person),
+                                    title: Text('Profile'),
+                                    onPressed: (context) => context.pushNamed(AppRoute.profileScreen.name),
+                                  ),
+                                  SettingsTile.navigation(
+                                    leading: Icon(Icons.access_time_rounded),
+                                    title: Text('Semester Goal'),
+                                    value: Text('120'),
+                                    onPressed: (context) => context.pushNamed(AppRoute.profileScreen.name),
+                                  ),
+                                  SettingsTile.navigation(
+                                    leading: Icon(Icons.favorite_border),
+                                    title: Text('Favorite Organizations'),
+                                    value: Text('5'),
+                                    onPressed: (context) => context.pushNamed(AppRoute.organizations.name),
+                                  ),
+                                  SettingsTile.navigation(
+                                    leading: Icon(Icons.star_border_outlined),
+                                    title: Text('Interests'),
+                                    value: Text('10'),
+                                    onPressed: (context) => context.pushNamed(AppRoute.profileScreen.name),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                    ),
+                  ),
                 ]
               ), 
             ),
