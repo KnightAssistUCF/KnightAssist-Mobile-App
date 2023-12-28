@@ -137,8 +137,8 @@ class AccountScreen extends ConsumerWidget {
                                   SettingsTile.navigation(
                                     leading: Icon(Icons.access_time_rounded),
                                     title: Text('Semester Goal'),
-                                    value: Text('120'),
-                                    onPressed: (context) => context.pushNamed(AppRoute.profileScreen.name),
+                                    value: Text('120 hours'),
+                                    onPressed: (context) => context.pushNamed(AppRoute.semesterGoal.name),
                                   ),
                                   SettingsTile.navigation(
                                     leading: Icon(Icons.favorite_border),
@@ -150,7 +150,7 @@ class AccountScreen extends ConsumerWidget {
                                     leading: Icon(Icons.star_border_outlined),
                                     title: Text('Interests'),
                                     value: Text('10'),
-                                    onPressed: (context) => context.pushNamed(AppRoute.profileScreen.name),
+                                    onPressed: (context) => context.pushNamed(AppRoute.tagSelection.name),
                                   ),
                                 ],
                               ),
