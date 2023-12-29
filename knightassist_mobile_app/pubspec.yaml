@@ -30,6 +30,7 @@ dependencies:
   objectid: ^3.0.0
   settings_ui: ^2.0.2
   mobile_scanner: ^3.5.5
+  qr_code_scanner: ^1.0.1
 
 dev_dependencies:
   flutter_launcher_icons: "^0.13.1"

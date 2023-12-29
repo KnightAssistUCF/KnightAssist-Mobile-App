@@ -127,6 +127,12 @@ File? _profilePicFile;
                 context.pushNamed(AppRoute.updates.name);
               },
             ),
+              ListTile(
+              title: const Text('QR Scan'),
+              onTap: () {
+                context.pushNamed(AppRoute.qrScanner.name);
+              },
+            ),
             ListTile(
               title: const Text('History'),
               onTap: () {
