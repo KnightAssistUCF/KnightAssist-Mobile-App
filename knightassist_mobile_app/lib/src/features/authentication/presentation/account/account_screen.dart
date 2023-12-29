@@ -67,13 +67,13 @@ class AccountScreen extends ConsumerWidget {
                 alignment: Alignment.center,
                 children: [
                   const Positioned(
-                    top: 85,
+                    top: 65,
                     child: Padding(
                       padding: EdgeInsets.all(8.0),
                       child: Card(child: Padding(
                         padding: EdgeInsets.all(8.0),
                         child: Column(children: [
-                          SizedBox(height: 20),
+                          SizedBox(height: 40),
                           Text(
                             "Student User Name",
                             style: TextStyle(
