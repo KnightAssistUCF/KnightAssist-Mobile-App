@@ -12,6 +12,7 @@ import 'package:knightassist_mobile_app/src/features/events/presentation/event_h
 import 'package:knightassist_mobile_app/src/features/events/presentation/event_history_screen.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/event_screen.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/events_list_screen.dart';
+import 'package:knightassist_mobile_app/src/features/events/presentation/qr_scanner.dart';
 import 'package:knightassist_mobile_app/src/features/home/presentation/home_screen.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/update.dart';
@@ -44,7 +45,8 @@ enum AppRoute {
   historyDetail,
   updates,
   semesterGoal,
-  tagSelection
+  tagSelection,
+  qrScanner
 }
 
 @Riverpod(keepAlive: true)
@@ -186,6 +188,11 @@ GoRouter goRouter(GoRouterRef ref) {
                   name: AppRoute.tagSelection.name,
                   pageBuilder: (context, state) => const MaterialPage(
                       fullscreenDialog: true, child: TagSelection())),
+              GoRoute(
+                  path: 'qrScanner',
+                  name: AppRoute.qrScanner.name,
+                  pageBuilder: (context, state) => const MaterialPage(
+                      fullscreenDialog: true, child: QRScanner())),
               
             ])
       ],
