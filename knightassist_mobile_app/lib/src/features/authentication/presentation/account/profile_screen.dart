@@ -100,7 +100,7 @@ File? _profilePicFile;
             _buildTextButton(),
         ],
       ),
-      drawer: Drawer(
+      /*drawer: Drawer(
         child: ListView(
           children: [
             ListTile(
@@ -148,7 +148,7 @@ File? _profilePicFile;
             ),
           ],
         ),
-      ),
+      ),*/
     );
   }
 }

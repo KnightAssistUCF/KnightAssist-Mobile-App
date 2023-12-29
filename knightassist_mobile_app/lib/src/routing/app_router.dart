@@ -1,6 +1,8 @@
 import 'package:knightassist_mobile_app/src/features/authentication/data/auth_repository.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/account/account_screen.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/account/profile_screen.dart';
+import 'package:knightassist_mobile_app/src/features/authentication/presentation/account/semester_goal.dart';
+import 'package:knightassist_mobile_app/src/features/authentication/presentation/account/tag_selection.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/register/register_emailconfirm_screen.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/register/register_organization_screen.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/register/register_student_screen.dart';
@@ -40,7 +42,9 @@ enum AppRoute {
   profileScreen,
   eventHistory,
   historyDetail,
-  updates
+  updates,
+  semesterGoal,
+  tagSelection
 }
 
 @Riverpod(keepAlive: true)
@@ -156,7 +160,7 @@ GoRouter goRouter(GoRouterRef ref) {
                           return HistoryDetailScreen(event: ev);
                         })
                   ]),
-                  GoRoute(
+              GoRoute(
                   path: 'updates',
                   name: AppRoute.updates.name,
                   builder: (context, state) {
@@ -172,6 +176,16 @@ GoRouter goRouter(GoRouterRef ref) {
                           return UpdateDetailScreen(update: u);
                         })
                   ]),
+              GoRoute(
+                  path: 'semesterGoal',
+                  name: AppRoute.semesterGoal.name,
+                  pageBuilder: (context, state) => const MaterialPage(
+                      fullscreenDialog: true, child: SemesterGoal())),
+              GoRoute(
+                  path: 'tagSelection',
+                  name: AppRoute.tagSelection.name,
+                  pageBuilder: (context, state) => const MaterialPage(
+                      fullscreenDialog: true, child: TagSelection())),
               
             ])
       ],

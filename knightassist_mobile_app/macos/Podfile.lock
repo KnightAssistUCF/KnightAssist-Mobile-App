@@ -6,6 +6,8 @@ PODS:
   - photo_manager (2.0.0):
     - Flutter
     - FlutterMacOS
+  - url_launcher_macos (0.0.1):
+    - FlutterMacOS
   - video_player_avfoundation (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -14,6 +16,7 @@ DEPENDENCIES:
   - FlutterMacOS (from `Flutter/ephemeral`)
   - path_provider_foundation (from `Flutter/ephemeral/.symlinks/plugins/path_provider_foundation/darwin`)
   - photo_manager (from `Flutter/ephemeral/.symlinks/plugins/photo_manager/macos`)
+  - url_launcher_macos (from `Flutter/ephemeral/.symlinks/plugins/url_launcher_macos/macos`)
   - video_player_avfoundation (from `Flutter/ephemeral/.symlinks/plugins/video_player_avfoundation/darwin`)
 
 EXTERNAL SOURCES:
@@ -23,6 +26,8 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/path_provider_foundation/darwin
   photo_manager:
     :path: Flutter/ephemeral/.symlinks/plugins/photo_manager/macos
+  url_launcher_macos:
+    :path: Flutter/ephemeral/.symlinks/plugins/url_launcher_macos/macos
   video_player_avfoundation:
     :path: Flutter/ephemeral/.symlinks/plugins/video_player_avfoundation/darwin
 
@@ -30,6 +35,7 @@ SPEC CHECKSUMS:
   FlutterMacOS: 8f6f14fa908a6fb3fba0cd85dbd81ec4b251fb24
   path_provider_foundation: 29f094ae23ebbca9d3d0cec13889cd9060c0e943
   photo_manager: 4f6810b7dfc4feb03b461ac1a70dacf91fba7604
+  url_launcher_macos: d2691c7dd33ed713bf3544850a623080ec693d95
   video_player_avfoundation: e9e6f9cae7d7a6d9b43519b0aab382bca60fcfd1
 
 PODFILE CHECKSUM: 15f23c6848390467c6727d3ffbf74db240a60f03

@@ -6,14 +6,14 @@ import 'package:knightassist_mobile_app/src/common_widgets/responsive_scrollable
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/sign_in/sign_in_screen.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 
-class ConfirmScreen extends ConsumerWidget {
-  const ConfirmScreen({super.key});
+class SemesterGoal extends ConsumerWidget {
+  const SemesterGoal({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Email Confirmation'),
+        title: const Text('Semester Goal'),
       ),
       body: ResponsiveScrollableCard(
         child: SizedBox(
@@ -27,14 +27,9 @@ class ConfirmScreen extends ConsumerWidget {
                 alignment: Alignment.center,
               ),
               const Text(
-                'Thanks for signing up! Please enter a confirmation code from your email to verify your account.',
+                'Please enter your semester volunteer hour goal.',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
                 textAlign: TextAlign.center,
-              ),
-              const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Icon(Icons.email,
-                    color: Color.fromARGB(255, 91, 78, 119), size: 50.0),
               ),
               const Divider(
                 height: 40,
@@ -45,7 +40,7 @@ class ConfirmScreen extends ConsumerWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
                   children: [
-                    _buildTextField(labelText: 'Verification code'),
+                    _buildTextField(labelText: 'Semester Goal'),
                     const Padding(
                       padding: EdgeInsets.all(8.0),
                       child: BuildTextButton(),
@@ -63,6 +58,7 @@ class ConfirmScreen extends ConsumerWidget {
 
 TextField _buildTextField({String labelText = '', bool obscureText = false}) {
     return TextField(
+      keyboardType: TextInputType.number,
       cursorColor: Colors.black54,
       cursorWidth: 1,
       obscureText: obscureText,
@@ -103,14 +99,14 @@ TextField _buildTextField({String labelText = '', bool obscureText = false}) {
     Widget build(BuildContext context) {
       return TextButton(
       onPressed: () => showDialog(context: context, builder: (BuildContext context) => AlertDialog(
-        title: const Text('Email confirmed'),
+        title: const Text('Semester goal updated'),
         actions: <Widget>[
             TextButton(
               onPressed: () => Navigator.pop(context, 'Cancel'),
               child: const Text('Cancel'),
             ),
             TextButton(
-              onPressed: () => context.pushNamed("signIn"),
+              onPressed: () => Navigator.pop(context, 'OK'),
               child: const Text('OK'),
             ),
           ],
@@ -124,7 +120,7 @@ TextField _buildTextField({String labelText = '', bool obscureText = false}) {
         backgroundColor: MaterialStateProperty.all(const Color.fromARGB(255, 91, 78, 119)),
       ),
       child: const Text(
-        'Submit',
+        'Save',
         style: TextStyle(
           color: Colors.white,
           fontSize: 18,

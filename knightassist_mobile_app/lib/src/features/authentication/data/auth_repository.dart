@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
+import 'package:knightassist_mobile_app/src/exceptions/app_exception.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/domain/app_user.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/domain/student_user.dart';
@@ -13,9 +14,13 @@ part 'auth_repository.g.dart';
 
 class AuthRepository {
   final _authState = InMemoryStore<AppUser?>(null);
+  final _token = InMemoryStore<String?>(null);
 
   Stream<AppUser?> authStateChanges() => _authState.stream;
   AppUser? get currentUser => _authState.value;
+
+  Stream<String?> tokenChanges() => _token.stream;
+  String? get currentToken => _token.value;
 
   Future<void> signIn(String email, String password) async {
     Map<String, String> parameters = {
@@ -25,28 +30,25 @@ class AuthRepository {
     var uri =
         Uri.parse('https://knightassist-43ab3aeaada9.herokuapp.com/api/Login');
     var response = await http.post(uri, body: parameters);
-
+    var body = jsonDecode(response.body);
     switch (response.statusCode) {
       case 200:
+        var user = jsonDecode(body["user"]);
+        _token.value = body["token"];
         // Successful Login
-        // Check if user or org
-        String responseText = response.toString();
-        if (responseText.contains("Organization logged in successfully ->")) {
-          Organization u = Organization.fromMap(jsonDecode(response.body));
+        if (user["role"] == "student") {
+          StudentUser u = StudentUser.fromMap(user);
           _authState.value = u;
         } else {
-          StudentUser u = StudentUser.fromMap(jsonDecode(response.body));
+          Organization u = Organization.fromMap(user);
           _authState.value = u;
         }
         break;
       case 400:
-        // Send InvalidPassword exception
-        break;
+        throw WrongPasswordException();
       case 404:
-        // Send UserNotFound exception
-        break;
+        throw UserNotFoundException();
       default:
-        var body = jsonDecode(response.body);
         String err = body["error"];
         throw Exception(err);
     }
@@ -105,7 +107,6 @@ class AuthRepository {
   }
 
   Future<void> signOut() async {
-    // Dispose of recovery token
     _authState.value = null;
   }
 
