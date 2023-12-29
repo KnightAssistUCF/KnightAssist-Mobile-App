@@ -40,7 +40,7 @@ class SemesterGoal extends ConsumerWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
                   children: [
-                    _buildTextField(labelText: 'Verification code'),
+                    _buildTextField(labelText: 'Semester Goal'),
                     const Padding(
                       padding: EdgeInsets.all(8.0),
                       child: BuildTextButton(),
