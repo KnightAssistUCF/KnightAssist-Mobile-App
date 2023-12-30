@@ -16,7 +16,7 @@ class QRScanner extends ConsumerWidget {
       ),
       body: QRCodeScanner(),
     );
-} 
+  } 
 }
 
 class QRCodeScanner extends StatefulWidget {

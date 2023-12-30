@@ -277,6 +277,12 @@ class UpdateScreen extends ConsumerWidget {
               },
             ),
             ListTile(
+              title: const Text('Calendar'),
+              onTap: () {
+                context.pushNamed(AppRoute.calendar.name);
+              },
+            ),
+            ListTile(
               title: const Text('Organizations'),
               onTap: () {
                 context.pushNamed(AppRoute.organizations.name);
