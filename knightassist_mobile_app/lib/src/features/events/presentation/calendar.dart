@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -73,6 +74,74 @@ List<Event> events = [
       semester: 'Fall 2023',
       maxAttendees: 400,
       createdAt: DateTime.fromMillisecondsSinceEpoch(1702596396),
+      updatedAt: DateTime.now()),
+    Event(
+      id: '1',
+      name: 'concert 2',
+      description: '2 events on the same day',
+      location: 'addition financial arena',
+      date: DateTime.fromMillisecondsSinceEpoch(1699875173000),
+      sponsoringOrganization: 'Organization X is really long !!!!! !!!!! !!!!! !!!!!',
+      attendees: [],
+      registeredVolunteers: [],
+      picLink: 'assets/profile pictures/icon_musicnote.png',
+      startTime: DateTime.fromMillisecondsSinceEpoch(1699875173000),
+      endTime: DateTime.fromMillisecondsSinceEpoch(1699875173099),
+      eventTags: ['music', 'food'],
+      semester: 'Fall 2023',
+      maxAttendees: 1000,
+      createdAt: DateTime.fromMillisecondsSinceEpoch(1700968029),
+      updatedAt: DateTime.now()),
+    Event(
+      id: '1',
+      name: 'concert',
+      description: 'really cool music, need someone to serve food',
+      location: 'addition financial arena',
+      date: DateTime.fromMillisecondsSinceEpoch(1699875173000),
+      sponsoringOrganization: 'Organization X',
+      attendees: [],
+      registeredVolunteers: [],
+      picLink: 'assets/profile pictures/icon_apple.png',
+      startTime: DateTime.fromMillisecondsSinceEpoch(1699875173000),
+      endTime: DateTime.fromMillisecondsSinceEpoch(1699875173099),
+      eventTags: ['music', 'food'],
+      semester: 'Fall 2023',
+      maxAttendees: 1000,
+      createdAt: DateTime.fromMillisecondsSinceEpoch(1700968029),
+      updatedAt: DateTime.now()),
+    Event(
+      id: '1',
+      name: 'concert',
+      description: 'really cool music, need someone to serve food',
+      location: 'addition financial arena',
+      date: DateTime.fromMillisecondsSinceEpoch(1699875173000),
+      sponsoringOrganization: 'Organization X',
+      attendees: [],
+      registeredVolunteers: [],
+      picLink: 'assets/profile pictures/icon_weight.png',
+      startTime: DateTime.fromMillisecondsSinceEpoch(1699875173000),
+      endTime: DateTime.fromMillisecondsSinceEpoch(1699875173099),
+      eventTags: ['music', 'food'],
+      semester: 'Fall 2023',
+      maxAttendees: 1000,
+      createdAt: DateTime.fromMillisecondsSinceEpoch(1700968029),
+      updatedAt: DateTime.now()),
+    Event(
+      id: '1',
+      name: 'concert',
+      description: 'really cool music, need someone to serve food',
+      location: 'addition financial arena',
+      date: DateTime.fromMillisecondsSinceEpoch(1699875173000),
+      sponsoringOrganization: 'Organization X is really long !!!!! !!!!! !!!!! !!!!!',
+      attendees: [],
+      registeredVolunteers: [],
+      picLink: 'assets/profile pictures/icon_controller.png',
+      startTime: DateTime.fromMillisecondsSinceEpoch(1699875173000),
+      endTime: DateTime.fromMillisecondsSinceEpoch(1699875173099),
+      eventTags: ['music', 'food'],
+      semester: 'Fall 2023',
+      maxAttendees: 1000,
+      createdAt: DateTime.fromMillisecondsSinceEpoch(1700968029),
       updatedAt: DateTime.now()),
 ];
 
@@ -192,17 +261,16 @@ class Calendar extends StatefulWidget {
 }
 
 class _CalendarState extends State<Calendar> {
-CalendarFormat _calendarFormat = CalendarFormat.month;
-DateTime _focusedDay = DateTime.now();
-DateTime? _selectedDay;
-RangeSelectionMode _rangeSelectionMode = RangeSelectionMode.toggledOff;
-DateTime? _rangeStart;
-DateTime? _rangeEnd;
+  late final ValueNotifier<List<Event>> _selectedEvents;
+  CalendarFormat _calendarFormat = CalendarFormat.month;
+  RangeSelectionMode _rangeSelectionMode = RangeSelectionMode
+      .toggledOff;
+  DateTime _focusedDay = DateTime.now();
+  DateTime? _selectedDay;
+  DateTime? _rangeStart;
+  DateTime? _rangeEnd;
 
-
-late final ValueNotifier<List<Event>> _selectedEvents;
-
-@override
+  @override
   void initState() {
     super.initState();
 
@@ -217,9 +285,9 @@ late final ValueNotifier<List<Event>> _selectedEvents;
   }
 
   List<Event> _getEventsForDay(DateTime day) {
-    List<Event> eventsForDay = [];
+     List<Event> eventsForDay = [];
     for (Event e in events) {
-      if (e.date.isBefore(day)) {
+      if (isSameDay(e.date, day)) {
         eventsForDay.add(e);
       }
     }
@@ -234,7 +302,7 @@ late final ValueNotifier<List<Event>> _selectedEvents;
     ];
   }
 
-  List<DateTime> daysInRange(DateTime first, DateTime last) {
+   List<DateTime> daysInRange(DateTime first, DateTime last) {
   final dayCount = last.difference(first).inDays + 1;
   return List.generate(
     dayCount,
@@ -275,28 +343,30 @@ late final ValueNotifier<List<Event>> _selectedEvents;
   }
 
   @override
-
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
         children: [
-          TableCalendar<Event>(focusedDay: _focusedDay, firstDay: DateTime.fromMillisecondsSinceEpoch(1641031200000), lastDay: DateTime.fromMillisecondsSinceEpoch(1767063659000), // currently set to 1 yr before and after 12/29/23
-          calendarFormat: _calendarFormat,
-          rangeSelectionMode: _rangeSelectionMode,
-           eventLoader: _getEventsForDay,
-           selectedDayPredicate: (day) {
-              return isSameDay(_selectedDay, day);
-            },
+          TableCalendar<Event>(
+            firstDay: DateTime.fromMillisecondsSinceEpoch(1641031200000),
+            lastDay: DateTime.fromMillisecondsSinceEpoch(1767063659000),
+            focusedDay: _focusedDay,
+            selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
             rangeStartDay: _rangeStart,
             rangeEndDay: _rangeEnd,
-            onDaySelected: (selectedDay, focusedDay) {
-              if (!isSameDay(_selectedDay, selectedDay)) {
-                setState(() {
-                  _selectedDay = selectedDay;
-                  _focusedDay = focusedDay;
-                });
-              }
-            },
+            calendarFormat: _calendarFormat,
+            rangeSelectionMode: _rangeSelectionMode,
+            eventLoader: _getEventsForDay,
+            startingDayOfWeek: StartingDayOfWeek.monday,
+            calendarStyle: CalendarStyle(
+             defaultTextStyle: TextStyle(fontWeight: FontWeight.w200),
+             weekendTextStyle: TextStyle(color: Color(0xFF5A5A5A), fontWeight: FontWeight.w200),
+             outsideTextStyle:  TextStyle(color: Color(0xFFAEAEAE), fontWeight: FontWeight.w200),
+             todayDecoration: BoxDecoration(color: Color.fromARGB(255, 160, 151, 181), shape: BoxShape.circle),
+             selectedDecoration: BoxDecoration(color: Color.fromARGB(255, 91, 78, 119), shape: BoxShape.circle)
+            ),
+            onDaySelected: _onDaySelected,
+            onRangeSelected: _onRangeSelected,
             onFormatChanged: (format) {
               if (_calendarFormat != format) {
                 setState(() {
@@ -306,12 +376,14 @@ late final ValueNotifier<List<Event>> _selectedEvents;
             },
             onPageChanged: (focusedDay) {
               _focusedDay = focusedDay;
-            },),
-            Expanded(
+            },
+          ),
+          const SizedBox(height: 8.0),
+          Expanded(
             child: ValueListenableBuilder<List<Event>>(
               valueListenable: _selectedEvents,
               builder: (context, value, _) {
-                return ListView.builder(
+                return value.length == 0 ? Center(child: Text("You have no events scheduled on this day."),) : ListView.builder(
                   itemCount: value.length,
                   itemBuilder: (context, index) {
                     return Container(
@@ -324,19 +396,27 @@ late final ValueNotifier<List<Event>> _selectedEvents;
                         borderRadius: BorderRadius.circular(12.0),
                       ),
                       child: ListTile(
-                        onTap: () {print('event name: ${value[index].name}, event ID: ${value[index].id}');
-                        context.pushNamed("event", extra: value[index]); },
-                        title: Text('${value[index].name}'),
+                        onTap: () { 
+                          print('event name: ${value[index].name}, event ID: ${value[index].id}');
+                          context.pushNamed("event", extra: value.elementAt(index));
+                        },
+                        title: Text(value[index].name, overflow: TextOverflow.ellipsis, maxLines: 3,),
+                        subtitle: Text(value[index].sponsoringOrganization, overflow: TextOverflow.ellipsis, maxLines: 3,),
+                        trailing: Text("${DateFormat.jmv().format(value[index].startTime)} - ${DateFormat.jmv().format(value[index].endTime)}"),
+                        leading: ClipRRect(
+                          borderRadius: BorderRadius.circular(12.0),
+                          child: Image(
+                              image: AssetImage(value[index].picLink),
+                              height: 50,width:50)),
                       ),
                     );
                   },
                 );
               },
             ),
-          )
+          ),
         ],
       ),
     );
   }
-
 }
