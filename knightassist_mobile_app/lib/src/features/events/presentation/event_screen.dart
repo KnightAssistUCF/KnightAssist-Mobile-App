@@ -144,12 +144,14 @@ _title(double width, Event e) {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              e.name,
-              style: const TextStyle(fontSize: 40, color: Colors.black, fontWeight: FontWeight.w900),
-              textAlign: TextAlign.start,
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                e.name,
+                style: const TextStyle(fontSize: 40, color: Colors.black, fontWeight: FontWeight.w900),
+                textAlign: TextAlign.center,
+              ),
             ),
           ),
         ],

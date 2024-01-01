@@ -63,6 +63,8 @@
 	<true/>
 </dict>
 <key>NSPhotoLibraryUsageDescription</key>
-<string>KnightAssist needs to access your photo library so you can select an image from the library for your profile picture.</string>
+<string>KnightAssist needs to access your photo library so you can select an image from the library for your profile picture or get QR Code from photo library.</string>
+<key>NSCameraUsageDescription</key>
+<string>KnightAssist needs camera access to scan QR codes.</string>
 </dict>
 </plist>

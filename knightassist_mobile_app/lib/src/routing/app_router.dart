@@ -8,10 +8,12 @@ import 'package:knightassist_mobile_app/src/features/authentication/presentation
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/register/register_student_screen.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/sign_in/sign_in_screen.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
+import 'package:knightassist_mobile_app/src/features/events/presentation/calendar.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/event_history_detail.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/event_history_screen.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/event_screen.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/events_list_screen.dart';
+import 'package:knightassist_mobile_app/src/features/events/presentation/qr_scanner.dart';
 import 'package:knightassist_mobile_app/src/features/home/presentation/home_screen.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/update.dart';
@@ -44,7 +46,9 @@ enum AppRoute {
   historyDetail,
   updates,
   semesterGoal,
-  tagSelection
+  tagSelection,
+  qrScanner,
+  calendar
 }
 
 @Riverpod(keepAlive: true)
@@ -186,6 +190,16 @@ GoRouter goRouter(GoRouterRef ref) {
                   name: AppRoute.tagSelection.name,
                   pageBuilder: (context, state) => const MaterialPage(
                       fullscreenDialog: true, child: TagSelection())),
+              GoRoute(
+                  path: 'qrScanner',
+                  name: AppRoute.qrScanner.name,
+                  pageBuilder: (context, state) => const MaterialPage(
+                      fullscreenDialog: true, child: QRScanner())),
+              GoRoute(
+                  path: 'calendar',
+                  name: AppRoute.calendar.name,
+                  pageBuilder: (context, state) => const MaterialPage(
+                      fullscreenDialog: true, child: CalendarView())),
               
             ])
       ],

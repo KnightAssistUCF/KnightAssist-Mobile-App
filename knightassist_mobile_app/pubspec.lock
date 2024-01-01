@@ -520,6 +520,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.4"
+  mobile_scanner:
+    dependency: "direct main"
+    description:
+      name: mobile_scanner
+      sha256: c3e5bba1cb626b6ab4fc46610f72a136803f6854267967e19f4a4a6a31ff9b74
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.5.5"
   nested:
     dependency: transitive
     description:
@@ -688,6 +696,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.3"
+  qr_code_scanner:
+    dependency: "direct main"
+    description:
+      name: qr_code_scanner
+      sha256: f23b68d893505a424f0bd2e324ebea71ed88465d572d26bb8d2e78a4749591fd
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
   riverpod:
     dependency: transitive
     description:
@@ -760,6 +776,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.4"
+  simple_gesture_detector:
+    dependency: transitive
+    description:
+      name: simple_gesture_detector
+      sha256: "86d08f85f1f58583b7b4b941d989f48ea6ce08c1724a1d10954a277c2ec36592"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.0"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -829,6 +853,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
+  table_calendar:
+    dependency: "direct main"
+    description:
+      name: table_calendar
+      sha256: "1e3521a3e6d3fc7f645a58b135ab663d458ab12504f1ea7f9b4b81d47086c478"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.9"
   term_glyph:
     dependency: transitive
     description:
