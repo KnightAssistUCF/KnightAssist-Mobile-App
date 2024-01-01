@@ -249,6 +249,11 @@ class EventsListScreen extends ConsumerWidget {
           ],
         ),
       ),
+      bottomNavigationBar: BottomNavigationBar(items: [
+        BottomNavigationBarItem(icon: Icon(Icons.search), label: "Explore"),
+        BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: "Home"),
+        BottomNavigationBarItem(icon: Icon(Icons.camera_alt_outlined), label: "QR Scan")
+      ]),
     );
   }
 }
