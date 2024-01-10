@@ -1,3 +1,5 @@
+import 'package:knightassist_mobile_app/src/features/events/domain/feedback.dart';
+
 typedef EventID = String;
 
 class Event {
@@ -16,6 +18,7 @@ class Event {
     required this.eventTags,
     required this.semester,
     required this.maxAttendees,
+    required this.feedback,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -34,6 +37,7 @@ class Event {
   final List<String> eventTags;
   final String semester;
   final int maxAttendees;
+  final List<Feedback> feedback;
   final DateTime createdAt;
   final DateTime updatedAt;
 
@@ -53,6 +57,7 @@ class Event {
         eventTags: List<String>.from(map['eventTags']),
         semester: map['semester'],
         maxAttendees: map['maxAttendees']?.toInt() ?? -1,
+        feedback: List<Feedback>.from(map['feedback']),
         createdAt: DateTime.parse(map['createdAt']),
         updatedAt: DateTime.parse(map['updatedAt']));
   }
@@ -72,6 +77,7 @@ class Event {
         'eventTags': eventTags,
         'semester': semester,
         'maxAttendees': maxAttendees,
+        'feedback': feedback,
         'createdAt': createdAt.toIso8601String(),
         'updatedAt': updatedAt.toIso8601String(),
       };
