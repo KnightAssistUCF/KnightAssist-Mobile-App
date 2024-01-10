@@ -5,6 +5,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:knightassist_mobile_app/src/common_widgets/responsive_center.dart';
 import 'package:knightassist_mobile_app/src/constants/breakpoints.dart';
+import 'package:knightassist_mobile_app/src/features/events/presentation/events_list_screen.dart';
+import 'package:knightassist_mobile_app/src/features/events/presentation/qr_scanner.dart';
+import 'package:knightassist_mobile_app/src/features/home/presentation/home_screen.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/contact.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
@@ -16,11 +19,20 @@ import '../domain/organization.dart';
 List<Organization> organizations = [
   Organization(
       id: '1',
-      name: 'Test Org long name long name long name long name long name long name long name long name long name long name long name long name',
+      name:
+          'Test Org long name long name long name long name long name long name long name long name long name long name long name long name',
       email: '',
       description:
           'qwgejnqg qwgepoijqrglpk qgroiqrglpiqgr qgoqrglp qrgipoqrgpijgq qwegihqweifgopqwei joaJOFab;n joaJOFab;n joaJOFab;n',
-      contact: const Contact(email: 'organization@email.com', phone: '(904) 555-5555', website: 'https://org.com', socialMedia: SocialMedia(facebook: 'https://facebook.com', twitter: 'https://x.com', instagram: 'https://instagram.com', linkedIn: 'https://linkedin.com')),
+      contact: const Contact(
+          email: 'organization@email.com',
+          phone: '(904) 555-5555',
+          website: 'https://org.com',
+          socialMedia: SocialMedia(
+              facebook: 'https://facebook.com',
+              twitter: 'https://x.com',
+              instagram: 'https://instagram.com',
+              linkedIn: 'https://linkedin.com')),
       logoUrl: 'assets/example.png',
       category: [],
       followers: [],
@@ -44,7 +56,15 @@ List<Organization> organizations = [
       name: 'Random Organization X',
       email: '',
       description: 'environment',
-      contact: const Contact(email: '', phone: '', website: '', socialMedia: SocialMedia(facebook: '', twitter: '', instagram: '', linkedIn: 'linkedin.com')),
+      contact: const Contact(
+          email: '',
+          phone: '',
+          website: '',
+          socialMedia: SocialMedia(
+              facebook: '',
+              twitter: '',
+              instagram: '',
+              linkedIn: 'linkedin.com')),
       logoUrl: 'assets/profile pictures/icon_leaf.png',
       category: [],
       followers: [],
@@ -68,7 +88,12 @@ List<Organization> organizations = [
       name: 'Test test test test test',
       email: 'testorg@example.com',
       description: 'vidya gaming',
-      contact: const Contact(email: '', phone: '', website: '', socialMedia: SocialMedia(facebook: '', twitter: '', instagram: '', linkedIn: '')),
+      contact: const Contact(
+          email: '',
+          phone: '',
+          website: '',
+          socialMedia: SocialMedia(
+              facebook: '', twitter: '', instagram: '', linkedIn: '')),
       logoUrl: 'assets/profile pictures/icon_controller.png',
       category: [],
       followers: [],
@@ -92,7 +117,12 @@ List<Organization> organizations = [
       name: 'Example test',
       email: '',
       description: 'weightlifting jim',
-      contact: const Contact(email: '', phone: '', website: '', socialMedia: SocialMedia(facebook: '', twitter: '', instagram: '', linkedIn: '')),
+      contact: const Contact(
+          email: '',
+          phone: '',
+          website: '',
+          socialMedia: SocialMedia(
+              facebook: '', twitter: '', instagram: '', linkedIn: '')),
       logoUrl: 'assets/profile pictures/icon_weight.png',
       category: [],
       followers: [],
@@ -111,13 +141,21 @@ List<Organization> organizations = [
       emailValidated: false,
       createdAt: DateTime.fromMillisecondsSinceEpoch(1701030257000),
       updatedAt: DateTime.now()),
-    Organization(
+  Organization(
       id: '5',
       name: 'Test Org',
       email: '',
       description:
           'qwgejnqg qwgepoijqrglpk qgroiqrglpiqgr qgoqrglp qrgipoqrgpijgq qwegihqweifgopqwei joaJOFab;n joaJOFab;n joaJOFab;n',
-      contact: const Contact(email: 'organization@email.com', phone: '(904) 555-5555', website: 'https://org.com', socialMedia: SocialMedia(facebook: 'https://facebook.com', twitter: 'https://x.com', instagram: 'https://instagram.com', linkedIn: 'https://linkedin.com')),
+      contact: const Contact(
+          email: 'organization@email.com',
+          phone: '(904) 555-5555',
+          website: 'https://org.com',
+          socialMedia: SocialMedia(
+              facebook: 'https://facebook.com',
+              twitter: 'https://x.com',
+              instagram: 'https://instagram.com',
+              linkedIn: 'https://linkedin.com')),
       logoUrl: 'assets/example.png',
       category: [],
       followers: [],
@@ -138,15 +176,38 @@ List<Organization> organizations = [
       updatedAt: DateTime.now()),
 ];
 
-class OrganizationsListScreen extends ConsumerWidget {
+class OrganizationsListScreen extends StatefulWidget {
   const OrganizationsListScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  State<OrganizationsListScreen> createState() =>
+      _OrganizationsListScreenState();
+}
+
+class _OrganizationsListScreenState extends State<OrganizationsListScreen> {
+  int _selectedIndex = 0;
+  bool tapped = false;
+  static const TextStyle optionStyle =
+      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+  static List<Widget> _widgetOptions = <Widget>[
+    EventListScreen(),
+    HomeScreenTab(),
+    QRCodeScanner(),
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      tapped = true; // can't return to org list screen from navbar
+      _selectedIndex = index;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
     return Scaffold(
-      appBar: AppBar(
+      /*appBar: AppBar(
         title: const Text(
           'Organizations List',
           style: TextStyle(fontWeight: FontWeight.w600),
@@ -186,8 +247,11 @@ class OrganizationsListScreen extends ConsumerWidget {
             ),
           )
         ],
-      ),
-      body: Container(
+      ),*/
+      body: tapped
+          ? _widgetOptions.elementAt(_selectedIndex)
+          : OrganizationsListScreenTab(),
+      /*Container(
         height: h,
         child: Column(
           children: [
@@ -203,7 +267,7 @@ class OrganizationsListScreen extends ConsumerWidget {
             )
           ],
         ),
-      ),
+      ),*/
       drawer: Drawer(
         child: ListView(
           children: [
@@ -237,7 +301,7 @@ class OrganizationsListScreen extends ConsumerWidget {
                 context.pushNamed(AppRoute.updates.name);
               },
             ),
-              ListTile(
+            ListTile(
               title: const Text('QR Scan'),
               onTap: () {
                 context.pushNamed(AppRoute.qrScanner.name);
@@ -264,6 +328,18 @@ class OrganizationsListScreen extends ConsumerWidget {
             ),
           ],
         ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: "Explore"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.home_outlined), label: "Home"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.camera_alt_outlined), label: "QR Scan"),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: const Color.fromARGB(255, 91, 78, 119),
+        onTap: _onItemTapped,
       ),
     );
   }
@@ -343,77 +419,86 @@ class _OrganizationCardState extends State<OrganizationCard> {
                     children: [
                       Column(
                         children: [
-                          Stack(
-                            children: [ Container(
-                                width: MediaQuery.of(context).size.width,
-                                height: 100,
-                                child: ClipRRect(
-                                  borderRadius: const BorderRadius.horizontal(left: Radius.circular(20.0), right: Radius.circular(20.0)),
-                                  child: Image(
-                                    fit: BoxFit.fill,
-                                    image: AssetImage(organization.backgroundUrl == '' ? 'assets/orgdefaultbackground.png' : organization.backgroundUrl),
-                                  ),
+                          Stack(children: [
+                            Container(
+                              width: MediaQuery.of(context).size.width,
+                              height: 100,
+                              child: ClipRRect(
+                                borderRadius: const BorderRadius.horizontal(
+                                    left: Radius.circular(20.0),
+                                    right: Radius.circular(20.0)),
+                                child: Image(
+                                  fit: BoxFit.fill,
+                                  image: AssetImage(
+                                      organization.backgroundUrl == ''
+                                          ? 'assets/orgdefaultbackground.png'
+                                          : organization.backgroundUrl),
                                 ),
-                              ), 
-                                Positioned(
-                                  top: 25,
-                                  child: Container(
-                                    height: 75,
-                                    width: 75,
-                                    decoration: BoxDecoration(border: Border.all(width: 5, color: Colors.white), borderRadius: BorderRadius.circular(16.0),   
-                                    boxShadow: [
+                              ),
+                            ),
+                            Positioned(
+                              top: 25,
+                              child: Container(
+                                height: 75,
+                                width: 75,
+                                decoration: BoxDecoration(
+                                  border:
+                                      Border.all(width: 5, color: Colors.white),
+                                  borderRadius: BorderRadius.circular(16.0),
+                                  boxShadow: [
                                     BoxShadow(
                                       color: Colors.grey.withOpacity(0.5),
                                       spreadRadius: 2,
                                       blurRadius: 5,
-                                      offset: const Offset(0, 3), // changes position of shadow
+                                      offset: const Offset(
+                                          0, 3), // changes position of shadow
                                     ),
-                                   ],),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(12.0),
-                                      child: Image(
-                                          image: AssetImage(organization.logoUrl),),
-                                    ),
+                                  ],
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(12.0),
+                                  child: Image(
+                                    image: AssetImage(organization.logoUrl),
                                   ),
                                 ),
-                                ]
-                          ),
+                              ),
+                            ),
+                          ]),
                           ListTile(
                             /*leading: ClipRRect(
                                 borderRadius: BorderRadius.circular(12.0),
                                 child: Image(
                                     image: AssetImage(organization.logoUrl),
                                     height: 300)),*/
-                              title: Text(
-                                  organization.name,
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 3,
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 18),
-                                  textAlign: TextAlign.start,
-                                ),
-                                subtitle: Text(
-                                  organization.description,
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 3,
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.w400),
-                                  textAlign: TextAlign.start,
-                                ),
-                                trailing: IconButton(
-                                    iconSize: 30.0,
-                                    padding: const EdgeInsets.only(
-                                        left: 4, right: 4, top: 0),
-                                    icon: _isFavoriteOrg == true
-                                        ? const Icon(Icons.favorite)
-                                        : const Icon(Icons.favorite_outline),
-                                    color: Colors.pink,
-                                    onPressed: () {
-                                      setState(() {
-                                        _isFavoriteOrg = !_isFavoriteOrg;
-                                      });
-                                    }),
+                            title: Text(
+                              organization.name,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 3,
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.w600, fontSize: 18),
+                              textAlign: TextAlign.start,
+                            ),
+                            subtitle: Text(
+                              organization.description,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 3,
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.w400),
+                              textAlign: TextAlign.start,
+                            ),
+                            trailing: IconButton(
+                                iconSize: 30.0,
+                                padding: const EdgeInsets.only(
+                                    left: 4, right: 4, top: 0),
+                                icon: _isFavoriteOrg == true
+                                    ? const Icon(Icons.favorite)
+                                    : const Icon(Icons.favorite_outline),
+                                color: Colors.pink,
+                                onPressed: () {
+                                  setState(() {
+                                    _isFavoriteOrg = !_isFavoriteOrg;
+                                  });
+                                }),
                           ),
                         ],
                       ),
@@ -424,5 +509,74 @@ class _OrganizationCardState extends State<OrganizationCard> {
             )),
       ),
     );
+  }
+}
+
+class OrganizationsListScreenTab extends ConsumerWidget {
+  const OrganizationsListScreenTab({super.key});
+
+  Widget build(BuildContext context, WidgetRef ref) {
+    double h = MediaQuery.of(context).size.height;
+    double w = MediaQuery.of(context).size.width;
+
+    return Scaffold(
+        appBar: AppBar(
+          title: const Text(
+            'Organizations List',
+            style: TextStyle(fontWeight: FontWeight.w600),
+          ),
+          centerTitle: true,
+          automaticallyImplyLeading: true,
+          actions: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: IconButton(
+                onPressed: () {},
+                tooltip: 'View notifications',
+                icon: const Icon(
+                  Icons.notifications_outlined,
+                  color: Colors.white,
+                  semanticLabel: 'Notifications',
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: GestureDetector(
+                onTap: () {
+                  context.pushNamed(AppRoute.profileScreen.name);
+                },
+                child: Tooltip(
+                  message: 'Go to your profile',
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(25.0),
+                    child: const Image(
+                        semanticLabel: 'Profile picture',
+                        image: AssetImage(
+                            'assets/profile pictures/icon_paintbrush.png'),
+                        height: 20),
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
+        body: Container(
+          height: h,
+          child: Column(
+            children: [
+              _topSection(w),
+              Flexible(
+                child: ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  itemCount: organizations.length,
+                  itemBuilder: (context, index) => OrganizationCard(
+                      organization: organizations.elementAt(index)),
+                ),
+              )
+            ],
+          ),
+        ));
   }
 }
