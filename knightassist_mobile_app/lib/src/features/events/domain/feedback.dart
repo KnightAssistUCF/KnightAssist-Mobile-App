@@ -1,8 +1,8 @@
 typedef StudentID = String;
 typedef EventID = String;
 
-class Feedback {
-  const Feedback({
+class EventFeedback {
+  const EventFeedback({
     required this.student,
     required this.event,
     required this.studentName,
@@ -24,8 +24,8 @@ class Feedback {
   final DateTime timeSubmitted;
   final DateTime updatedAt;
 
-  factory Feedback.fromMap(Map<String, dynamic> map) {
-    return Feedback(
+  factory EventFeedback.fromMap(Map<String, dynamic> map) {
+    return EventFeedback(
         student: map['student'] as String,
         event: map['event'] as String,
         studentName: map['studentName'],

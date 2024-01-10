@@ -37,7 +37,7 @@ class Event {
   final List<String> eventTags;
   final String semester;
   final int maxAttendees;
-  final List<Feedback> feedback;
+  final List<EventFeedback> feedback;
   final DateTime createdAt;
   final DateTime updatedAt;
 
@@ -57,7 +57,7 @@ class Event {
         eventTags: List<String>.from(map['eventTags']),
         semester: map['semester'],
         maxAttendees: map['maxAttendees']?.toInt() ?? -1,
-        feedback: List<Feedback>.from(map['feedback']),
+        feedback: List<EventFeedback>.from(map['feedback']),
         createdAt: DateTime.parse(map['createdAt']),
         updatedAt: DateTime.parse(map['updatedAt']));
   }
