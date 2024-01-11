@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:knightassist_mobile_app/src/common_widgets/responsive_center.dart';
@@ -237,16 +238,24 @@ class FeedbackCard extends StatelessWidget {
                     context.pushNamed("feedbackdetail", extra: feedback),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(0.05),
-                        child: ListTile(
-                          contentPadding: EdgeInsets.zero,
-                          dense: true,
-                          visualDensity: VisualDensity.standard,
-                          title: Text(
+                  child: Padding(
+                    padding: const EdgeInsets.all(0.05),
+                    child: ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      dense: true,
+                      visualDensity: VisualDensity.standard,
+                      leading: ClipRRect(
+                          borderRadius: BorderRadius.circular(25.0),
+                          child: const Image(
+                              image: AssetImage(
+                                  'assets/profile pictures/icon_paintbrush.png'),
+                              height:
+                                  75)), // will be profile picture of student who left the feedback
+                      title: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
                             feedback.eventName,
                             maxLines: 3,
                             overflow: TextOverflow.ellipsis,
@@ -254,26 +263,48 @@ class FeedbackCard extends StatelessWidget {
                                 fontWeight: FontWeight.w600, fontSize: 18),
                             textAlign: TextAlign.start,
                           ),
-                          subtitle: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              feedback.feedbackText,
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 3,
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.w400),
-                              textAlign: TextAlign.start,
-                            ),
-                          ),
-                          trailing: Text(
-                            DateFormat('yyyy-MM-dd')
-                                .format(feedback.timeSubmitted),
-                            style: const TextStyle(fontWeight: FontWeight.w400),
+                          Text(
+                            feedback.studentName,
+                            maxLines: 3,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                                fontWeight: FontWeight.w500, fontSize: 16),
                             textAlign: TextAlign.start,
                           ),
+                          RatingBar.builder(
+                            initialRating: feedback.rating,
+                            minRating: 1,
+                            direction: Axis.horizontal,
+                            allowHalfRating: true,
+                            itemCount: 5,
+                            itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                            itemBuilder: (context, _) => Icon(
+                              Icons.star,
+                              color: Colors.amber,
+                            ),
+                            onRatingUpdate: (rating) {
+                              print(rating);
+                              feedback.rating = rating;
+                            },
+                          )
+                        ],
+                      ),
+                      subtitle: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          feedback.feedbackText,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 3,
+                          style: const TextStyle(fontWeight: FontWeight.w400),
+                          textAlign: TextAlign.start,
                         ),
                       ),
-                    ],
+                      trailing: Text(
+                        DateFormat('yyyy-MM-dd').format(feedback.timeSubmitted),
+                        style: const TextStyle(fontWeight: FontWeight.w400),
+                        textAlign: TextAlign.start,
+                      ),
+                    ),
                   ),
                 ),
               ),

@@ -2,7 +2,7 @@ typedef StudentID = String;
 typedef EventID = String;
 
 class EventFeedback {
-  const EventFeedback({
+  EventFeedback({
     required this.student,
     required this.event,
     required this.studentName,
@@ -18,7 +18,7 @@ class EventFeedback {
   final EventID event;
   final String studentName;
   final String eventName;
-  final int rating;
+  double rating;
   final String feedbackText;
   final bool wasReadByUser;
   final DateTime timeSubmitted;
@@ -30,7 +30,7 @@ class EventFeedback {
         event: map['event'] as String,
         studentName: map['studentName'],
         eventName: map['eventName'],
-        rating: map['rating'] as int,
+        rating: map['rating'] as double,
         feedbackText: map['feedbackText'],
         wasReadByUser: map['wasReadByUser'] as bool,
         timeSubmitted: DateTime.parse(map['timeSubmitted']),
