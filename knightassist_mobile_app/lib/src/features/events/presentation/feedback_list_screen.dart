@@ -275,7 +275,7 @@ class FeedbackCard extends StatelessWidget {
                             initialRating: feedback.rating,
                             minRating: 1,
                             direction: Axis.horizontal,
-                            allowHalfRating: true,
+                            allowHalfRating: false,
                             itemCount: 5,
                             itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
                             itemBuilder: (context, _) => Icon(
