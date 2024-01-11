@@ -157,6 +157,12 @@ class HomeScreen extends ConsumerWidget {
               },
             ),
             ListTile(
+              title: const Text('Calendar'),
+              onTap: () {
+                context.pushNamed(AppRoute.calendar.name);
+              },
+            ),
+            ListTile(
               title: const Text('Organizations'),
               onTap: () {
                 context.pushNamed(AppRoute.organizations.name);
@@ -172,6 +178,12 @@ class HomeScreen extends ConsumerWidget {
               title: const Text('Announcements'),
               onTap: () {
                 context.pushNamed(AppRoute.updates.name);
+              },
+            ),
+             ListTile(
+              title: const Text('QR Scan'),
+              onTap: () {
+                context.pushNamed(AppRoute.qrScanner.name);
               },
             ),
             ListTile(
