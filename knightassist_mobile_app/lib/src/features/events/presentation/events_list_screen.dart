@@ -5,6 +5,8 @@ import 'package:knightassist_mobile_app/src/common_widgets/responsive_center.dar
 import 'package:knightassist_mobile_app/src/constants/breakpoints.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
 import 'package:knightassist_mobile_app/src/features/events/data/events_repository.dart';
+import 'package:knightassist_mobile_app/src/features/events/presentation/qr_scanner.dart';
+import 'package:knightassist_mobile_app/src/features/home/presentation/home_screen.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 import 'package:intl/intl.dart';
 
@@ -15,7 +17,8 @@ List<Event> events = [
       description: 'really cool music, need someone to serve food',
       location: 'addition financial arena',
       date: DateTime.fromMillisecondsSinceEpoch(1699875173000),
-      sponsoringOrganization: 'Organization X is really long !!!!! !!!!! !!!!! !!!!!',
+      sponsoringOrganization:
+          'Organization X is really long !!!!! !!!!! !!!!! !!!!!',
       attendees: [],
       registeredVolunteers: [],
       picLink: 'assets/profile pictures/icon_leaf.png',
@@ -60,7 +63,7 @@ List<Event> events = [
       maxAttendees: 400,
       createdAt: DateTime.fromMillisecondsSinceEpoch(1700968029),
       updatedAt: DateTime.now()),
-    Event(
+  Event(
       id: '4',
       name: 'movie night but its date isn\'t previous',
       description: 'need someone to collect tickets',
@@ -77,13 +80,17 @@ List<Event> events = [
       maxAttendees: 400,
       createdAt: DateTime.fromMillisecondsSinceEpoch(1702596396),
       updatedAt: DateTime.now()),
-    Event(
+  Event(
       id: '5',
-      name: 'movie night with long desc and title hahahaha hahaha wegJKHgekljbdgKLJBgdkbg;JKBglkjbasdg eijejewqjkn',
-      description: 'Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum ',
-      location: 'pegasus ballroom pegasus ballroom pegasus ballroom pegasus ballroom pegasus ballroom pegasus ballroom pegasus ballroom pegasus ballroom pegasus ballroom pegasus ballroom pegasus ballroom pegasus ballroom pegasus ballroom pegasus ballroom',
+      name:
+          'movie night with long desc and title hahahaha hahaha wegJKHgekljbdgKLJBgdkbg;JKBglkjbasdg eijejewqjkn',
+      description:
+          'Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum ',
+      location:
+          'pegasus ballroom pegasus ballroom pegasus ballroom pegasus ballroom pegasus ballroom pegasus ballroom pegasus ballroom pegasus ballroom pegasus ballroom pegasus ballroom pegasus ballroom pegasus ballroom pegasus ballroom pegasus ballroom',
       date: DateTime.fromMillisecondsSinceEpoch(1734218796000),
-      sponsoringOrganization: 'Organization Z pegasus ballroom pegasus ballroom pegasus ballroom pegasus ballroom pegasus ballroom pegasus ballroom pegasus ballroom pegasus ballroom pegasus ballroom',
+      sponsoringOrganization:
+          'Organization Z pegasus ballroom pegasus ballroom pegasus ballroom pegasus ballroom pegasus ballroom pegasus ballroom pegasus ballroom pegasus ballroom pegasus ballroom',
       attendees: [],
       registeredVolunteers: [],
       picLink: 'assets/profile pictures/icon_cookie.png',
@@ -96,15 +103,35 @@ List<Event> events = [
       updatedAt: DateTime.now()),
 ];
 
-class EventsListScreen extends ConsumerWidget {
+class EventsListScreen extends StatefulWidget {
   const EventsListScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  State<EventsListScreen> createState() => _EventsListScreenState();
+}
+
+class _EventsListScreenState extends State<EventsListScreen> {
+  int _selectedIndex = 0;
+  static const TextStyle optionStyle =
+      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+  static List<Widget> _widgetOptions = <Widget>[
+    EventListScreen(),
+    HomeScreenTab(),
+    QRCodeScanner(),
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
     return Scaffold(
-      appBar: AppBar(
+      /*appBar: AppBar(
         title: const Text(
           'Volunteer Shifts',
           style: TextStyle(fontWeight: FontWeight.w600),
@@ -144,8 +171,9 @@ class EventsListScreen extends ConsumerWidget {
             ),
           )
         ],
-      ),
-      body: Container(
+      ),*/
+      body: _widgetOptions.elementAt(_selectedIndex),
+      /*Container(
         height: h,
         child: Column(
           children: [
@@ -173,18 +201,18 @@ class EventsListScreen extends ConsumerWidget {
 
                 },
               ),*/
-               ListView.builder(
+                  ListView.builder(
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
                 itemCount: events.length,
-                itemBuilder: (context, index) => EventCard(
-                    event: events.elementAt(index)),
+                itemBuilder: (context, index) =>
+                    EventCard(event: events.elementAt(index)),
               ),
             )
           ],
         ),
-      ),
-      drawer: Drawer(
+      ),*/
+      /*drawer: Drawer(
         child: ListView(
           //padding: EdgeInsets.zero,
           children: [
@@ -221,7 +249,7 @@ class EventsListScreen extends ConsumerWidget {
                 context.pushNamed(AppRoute.updates.name);
               },
             ),
-              ListTile(
+            ListTile(
               title: const Text('QR Scan'),
               onTap: () {
                 context.pushNamed(AppRoute.qrScanner.name);
@@ -248,12 +276,19 @@ class EventsListScreen extends ConsumerWidget {
             ),
           ],
         ),
+      ),*/
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: "Explore"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.home_outlined), label: "Home"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.camera_alt_outlined), label: "QR Scan")
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: const Color.fromARGB(255, 91, 78, 119),
+        onTap: _onItemTapped,
       ),
-      bottomNavigationBar: BottomNavigationBar(items: [
-        BottomNavigationBarItem(icon: Icon(Icons.search), label: "Explore"),
-        BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: "Home"),
-        BottomNavigationBarItem(icon: Icon(Icons.camera_alt_outlined), label: "QR Scan")
-      ]),
     );
   }
 }
@@ -293,25 +328,25 @@ class EventCard extends StatelessWidget {
     const style = TextStyle(fontSize: 20, fontWeight: FontWeight.normal);
 
     return SingleChildScrollView(
-      child: ResponsiveCenter(
-        maxContentWidth: Breakpoint.tablet,
-        child: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Card(
-              shape: RoundedRectangleBorder(
-                side: const BorderSide(
-                  color: Colors.black26,
-                  width: 1.0,
-                ),
-                borderRadius: BorderRadius.circular(20.0),
+        child: ResponsiveCenter(
+      maxContentWidth: Breakpoint.tablet,
+      child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Card(
+            shape: RoundedRectangleBorder(
+              side: const BorderSide(
+                color: Colors.black26,
+                width: 1.0,
               ),
-              color: Colors.white,
-              elevation: 5,
-              child: InkWell(
-                onTap: () => context.pushNamed("event", extra: event),
-                child: Padding(
-                  padding: const EdgeInsets.all(0.0),
-                  child: /*ListTile(
+              borderRadius: BorderRadius.circular(20.0),
+            ),
+            color: Colors.white,
+            elevation: 5,
+            child: InkWell(
+              onTap: () => context.pushNamed("event", extra: event),
+              child: Padding(
+                padding: const EdgeInsets.all(0.0),
+                child: /*ListTile(
                       leading: /*ClipRRect(
                           borderRadius: BorderRadius.circular(12.0),
                           child: Image(
@@ -386,58 +421,57 @@ class EventCard extends StatelessWidget {
                               child: const Text('RSVP'),
                             ),
                   ),*/
-                  Container(
-                    height: 210,
-                    //color: Colors.white,
-                    child: Row(
-                      children: <Widget>[
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(20.0),
-                          child: Container(
-                            decoration: BoxDecoration(image: DecorationImage(image: AssetImage(event.picLink), fit: BoxFit.fill)),
-                            width: 120,
-                            height: 210,
-                          ),
+                    Container(
+                  height: 210,
+                  //color: Colors.white,
+                  child: Row(
+                    children: <Widget>[
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(20.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  image: AssetImage(event.picLink),
+                                  fit: BoxFit.fill)),
+                          width: 120,
+                          height: 210,
                         ),
-                        SizedBox(width: 10),
-                        Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment:
-                                CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
+                      ),
+                      SizedBox(width: 10),
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
                               event.name,
                               overflow: TextOverflow.ellipsis,
                               maxLines: 2,
                               style: const TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 18),
+                                  fontWeight: FontWeight.w600, fontSize: 18),
                               textAlign: TextAlign.start,
                             ),
                             Text(
                               DateFormat('yyyy-MM-dd – hh:mm a')
                                   .format(event.date),
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.w400),
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.w400),
                               textAlign: TextAlign.start,
                             ),
                             Text(
                               event.location,
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.w400),
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.w400),
                               textAlign: TextAlign.start,
                             ),
                             OverflowBar(
                               children: [
                                 ClipRRect(
-                                    borderRadius:
-                                        BorderRadius.circular(25.0),
+                                    borderRadius: BorderRadius.circular(25.0),
                                     child: const Image(
-                                        image: AssetImage(
-                                            'assets/example.png'),
+                                        image: AssetImage('assets/example.png'),
                                         height: 20)),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
@@ -450,28 +484,183 @@ class EventCard extends StatelessWidget {
                                     textAlign: TextAlign.start,
                                   ),
                                 ),
-                                SizedBox(width: 5,)
+                                SizedBox(
+                                  width: 5,
+                                )
                               ],
                             ),
-                             FilledButton(
+                            FilledButton(
                               onPressed: () {},
                               style: ButtonStyle(
-                                  backgroundColor:
-                                      MaterialStateProperty.all(
-                                          const Color.fromARGB(
-                                              255, 91, 78, 119))),
+                                  backgroundColor: MaterialStateProperty.all(
+                                      const Color.fromARGB(255, 91, 78, 119))),
                               child: const Text('RSVP'),
                             ),
                           ],
                         ),
                       ),
-                            ],
-                          ),
-                        ),
-                    ),
-                                  ),
-            )),
-      )
-        );
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          )),
+    ));
+  }
+}
+
+class EventListScreen extends ConsumerWidget {
+  const EventListScreen({super.key});
+  Widget build(BuildContext context, WidgetRef ref) {
+    double h = MediaQuery.of(context).size.height;
+    double w = MediaQuery.of(context).size.width;
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'Volunteer Shifts',
+          style: TextStyle(fontWeight: FontWeight.w600),
+        ),
+        centerTitle: true,
+        automaticallyImplyLeading: true,
+        actions: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: IconButton(
+              onPressed: () {},
+              tooltip: 'View notifications',
+              icon: const Icon(
+                Icons.notifications_outlined,
+                color: Colors.white,
+                semanticLabel: 'Notifications',
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: GestureDetector(
+              onTap: () {
+                context.pushNamed(AppRoute.profileScreen.name);
+              },
+              child: Tooltip(
+                message: 'Go to your profile',
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(25.0),
+                  child: const Image(
+                      semanticLabel: 'Profile picture',
+                      image: AssetImage(
+                          'assets/profile pictures/icon_paintbrush.png'),
+                      height: 20),
+                ),
+              ),
+            ),
+          )
+        ],
+      ),
+      body: Container(
+        height: h,
+        child: Column(
+          children: [
+            _topSection(w),
+            Flexible(
+              child: /*FutureBuilder(
+                  future: EventsRepository().getAllEvents(),
+                  builder: (ctx, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      if (snapshot.hasError) {
+                        return Center(child: Text("${snapshot.error} occurred"),);
+                      } else if (snapshot.hasData) {
+                        final data = snapshot.data as List<Event>;
+                        return ListView.builder(
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          itemCount: data.length,
+                          itemBuilder: (context, index) =>
+                          EventCard(event: data.elementAt(index)),
+                        );
+                      }
+                    }
+      
+                    return const Center(child: CircularProgressIndicator(),);
+      
+                  },
+                ),*/
+                  ListView.builder(
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                itemCount: events.length,
+                itemBuilder: (context, index) =>
+                    EventCard(event: events.elementAt(index)),
+              ),
+            )
+          ],
+        ),
+      ),
+      drawer: Drawer(
+        child: ListView(
+          //padding: EdgeInsets.zero,
+          children: [
+            //const DrawerHeader(
+            //decoration: BoxDecoration(image: DecorationImage(image: AssetImage("assets/KnightAssistCoA3.png"),),),
+            //child: Text('KnightAssist')),
+            ListTile(
+              title: const Text('Home'),
+              onTap: () {
+                context.pushNamed(AppRoute.homeScreen.name);
+              },
+            ),
+            ListTile(
+              title: const Text('Calendar'),
+              onTap: () {
+                context.pushNamed(AppRoute.calendar.name);
+              },
+            ),
+            ListTile(
+              title: const Text('Organizations'),
+              onTap: () {
+                context.pushNamed(AppRoute.organizations.name);
+              },
+            ),
+            ListTile(
+              title: const Text('Events'),
+              onTap: () {
+                context.pushNamed(AppRoute.events.name);
+              },
+            ),
+            ListTile(
+              title: const Text('Announcements'),
+              onTap: () {
+                context.pushNamed(AppRoute.updates.name);
+              },
+            ),
+            ListTile(
+              title: const Text('QR Scan'),
+              onTap: () {
+                context.pushNamed(AppRoute.qrScanner.name);
+              },
+            ),
+            ListTile(
+              title: const Text('History'),
+              onTap: () {
+                context.pushNamed(AppRoute.eventHistory.name);
+              },
+            ),
+            ListTile(
+              title: const Text('Settings'),
+              onTap: () {
+                context.pushNamed(AppRoute.account.name);
+              },
+            ),
+            ListTile(
+              title: const Text('Sign Out'),
+              onTap: () {
+                context.pushNamed(AppRoute.emailConfirm.name);
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

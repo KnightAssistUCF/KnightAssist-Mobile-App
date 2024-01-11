@@ -3,6 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
+import 'package:knightassist_mobile_app/src/features/events/presentation/events_list_screen.dart';
+import 'package:knightassist_mobile_app/src/features/events/presentation/qr_scanner.dart';
+import 'package:knightassist_mobile_app/src/features/home/presentation/home_screen.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -13,7 +16,8 @@ List<Event> events = [
       description: 'really cool music, need someone to serve food',
       location: 'addition financial arena',
       date: DateTime.fromMillisecondsSinceEpoch(1699875173000),
-      sponsoringOrganization: 'Organization X is really long !!!!! !!!!! !!!!! !!!!!',
+      sponsoringOrganization:
+          'Organization X is really long !!!!! !!!!! !!!!! !!!!!',
       attendees: [],
       registeredVolunteers: [],
       picLink: 'assets/profile pictures/icon_leaf.png',
@@ -58,10 +62,12 @@ List<Event> events = [
       maxAttendees: 400,
       createdAt: DateTime.fromMillisecondsSinceEpoch(1700968029),
       updatedAt: DateTime.now()),
-    Event(
+  Event(
       id: '5',
-      name: 'movie night with long desc and title hahahaha hahaha wegJKHgekljbdgKLJBgdkbg;JKBglkjbasdg',
-      description: 'Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum ',
+      name:
+          'movie night with long desc and title hahahaha hahaha wegJKHgekljbdgKLJBgdkbg;JKBglkjbasdg',
+      description:
+          'Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum ',
       location: 'pegasus ballroom',
       date: DateTime.fromMillisecondsSinceEpoch(1734218796000),
       sponsoringOrganization: 'Organization Z',
@@ -75,13 +81,14 @@ List<Event> events = [
       maxAttendees: 400,
       createdAt: DateTime.fromMillisecondsSinceEpoch(1702596396),
       updatedAt: DateTime.now()),
-    Event(
+  Event(
       id: '1',
       name: 'concert 2',
       description: '2 events on the same day',
       location: 'addition financial arena',
       date: DateTime.fromMillisecondsSinceEpoch(1699875173000),
-      sponsoringOrganization: 'Organization X is really long !!!!! !!!!! !!!!! !!!!!',
+      sponsoringOrganization:
+          'Organization X is really long !!!!! !!!!! !!!!! !!!!!',
       attendees: [],
       registeredVolunteers: [],
       picLink: 'assets/profile pictures/icon_musicnote.png',
@@ -92,7 +99,7 @@ List<Event> events = [
       maxAttendees: 1000,
       createdAt: DateTime.fromMillisecondsSinceEpoch(1700968029),
       updatedAt: DateTime.now()),
-    Event(
+  Event(
       id: '1',
       name: 'concert',
       description: 'really cool music, need someone to serve food',
@@ -109,7 +116,7 @@ List<Event> events = [
       maxAttendees: 1000,
       createdAt: DateTime.fromMillisecondsSinceEpoch(1700968029),
       updatedAt: DateTime.now()),
-    Event(
+  Event(
       id: '1',
       name: 'concert',
       description: 'really cool music, need someone to serve food',
@@ -126,13 +133,14 @@ List<Event> events = [
       maxAttendees: 1000,
       createdAt: DateTime.fromMillisecondsSinceEpoch(1700968029),
       updatedAt: DateTime.now()),
-    Event(
+  Event(
       id: '1',
       name: 'concert',
       description: 'really cool music, need someone to serve food',
       location: 'addition financial arena',
       date: DateTime.fromMillisecondsSinceEpoch(1699875173000),
-      sponsoringOrganization: 'Organization X is really long !!!!! !!!!! !!!!! !!!!!',
+      sponsoringOrganization:
+          'Organization X is really long !!!!! !!!!! !!!!! !!!!!',
       attendees: [],
       registeredVolunteers: [],
       picLink: 'assets/profile pictures/icon_controller.png',
@@ -145,13 +153,35 @@ List<Event> events = [
       updatedAt: DateTime.now()),
 ];
 
-class CalendarView extends ConsumerWidget {
+class CalendarView extends StatefulWidget {
   const CalendarView({super.key});
 
-   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  @override
+  State<CalendarView> createState() => _CalendarViewState();
+}
+
+class _CalendarViewState extends State<CalendarView> {
+  int _selectedIndex = 0;
+  bool tapped = false;
+  static const TextStyle optionStyle =
+      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+  static List<Widget> _widgetOptions = <Widget>[
+    EventListScreen(),
+    HomeScreenTab(),
+    QRCodeScanner(),
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      tapped = true; // can't return to event history screen from navbar
+      _selectedIndex = index;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      /*appBar: AppBar(
         title: const Text('Calendar View', style: TextStyle(fontWeight: FontWeight.w600),),
         centerTitle: true,
         automaticallyImplyLeading: true,
@@ -188,8 +218,10 @@ class CalendarView extends ConsumerWidget {
             ),
           )
         ],
-      ),
-      body: Calendar(),
+      ),*/
+      body: tapped
+          ? _widgetOptions.elementAt(_selectedIndex)
+          : Calendar(), //Calendar(),
       drawer: Drawer(
         child: ListView(
           children: [
@@ -223,7 +255,7 @@ class CalendarView extends ConsumerWidget {
                 context.pushNamed(AppRoute.updates.name);
               },
             ),
-             ListTile(
+            ListTile(
               title: const Text('QR Scan'),
               onTap: () {
                 context.pushNamed(AppRoute.qrScanner.name);
@@ -251,8 +283,20 @@ class CalendarView extends ConsumerWidget {
           ],
         ),
       ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: "Explore"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.home_outlined), label: "Home"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.camera_alt_outlined), label: "QR Scan"),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: const Color.fromARGB(255, 91, 78, 119),
+        onTap: _onItemTapped,
+      ),
     );
-  } 
+  }
 }
 
 class Calendar extends StatefulWidget {
@@ -263,8 +307,7 @@ class Calendar extends StatefulWidget {
 class _CalendarState extends State<Calendar> {
   late final ValueNotifier<List<Event>> _selectedEvents;
   CalendarFormat _calendarFormat = CalendarFormat.month;
-  RangeSelectionMode _rangeSelectionMode = RangeSelectionMode
-      .toggledOff;
+  RangeSelectionMode _rangeSelectionMode = RangeSelectionMode.toggledOff;
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
   DateTime? _rangeStart;
@@ -285,7 +328,7 @@ class _CalendarState extends State<Calendar> {
   }
 
   List<Event> _getEventsForDay(DateTime day) {
-     List<Event> eventsForDay = [];
+    List<Event> eventsForDay = [];
     for (Event e in events) {
       if (isSameDay(e.date, day)) {
         eventsForDay.add(e);
@@ -302,13 +345,13 @@ class _CalendarState extends State<Calendar> {
     ];
   }
 
-   List<DateTime> daysInRange(DateTime first, DateTime last) {
-  final dayCount = last.difference(first).inDays + 1;
-  return List.generate(
-    dayCount,
-    (index) => DateTime.utc(first.year, first.month, first.day + index),
-  );
-}
+  List<DateTime> daysInRange(DateTime first, DateTime last) {
+    final dayCount = last.difference(first).inDays + 1;
+    return List.generate(
+      dayCount,
+      (index) => DateTime.utc(first.year, first.month, first.day + index),
+    );
+  }
 
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
     if (!isSameDay(_selectedDay, selectedDay)) {
@@ -345,6 +388,47 @@ class _CalendarState extends State<Calendar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'Calendar View',
+          style: TextStyle(fontWeight: FontWeight.w600),
+        ),
+        centerTitle: true,
+        automaticallyImplyLeading: true,
+        actions: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: IconButton(
+              onPressed: () {},
+              tooltip: 'View notifications',
+              icon: const Icon(
+                Icons.notifications_outlined,
+                color: Colors.white,
+                semanticLabel: 'Notifications',
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: GestureDetector(
+              onTap: () {
+                context.pushNamed(AppRoute.profileScreen.name);
+              },
+              child: Tooltip(
+                message: 'Go to your profile',
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(25.0),
+                  child: const Image(
+                      semanticLabel: 'Profile picture',
+                      image: AssetImage(
+                          'assets/profile pictures/icon_paintbrush.png'),
+                      height: 20),
+                ),
+              ),
+            ),
+          )
+        ],
+      ),
       body: Column(
         children: [
           TableCalendar<Event>(
@@ -359,12 +443,17 @@ class _CalendarState extends State<Calendar> {
             eventLoader: _getEventsForDay,
             startingDayOfWeek: StartingDayOfWeek.monday,
             calendarStyle: CalendarStyle(
-             defaultTextStyle: TextStyle(fontWeight: FontWeight.w200),
-             weekendTextStyle: TextStyle(color: Color(0xFF5A5A5A), fontWeight: FontWeight.w200),
-             outsideTextStyle:  TextStyle(color: Color(0xFFAEAEAE), fontWeight: FontWeight.w200),
-             todayDecoration: BoxDecoration(color: Color.fromARGB(255, 160, 151, 181), shape: BoxShape.circle),
-             selectedDecoration: BoxDecoration(color: Color.fromARGB(255, 91, 78, 119), shape: BoxShape.circle)
-            ),
+                defaultTextStyle: TextStyle(fontWeight: FontWeight.w200),
+                weekendTextStyle: TextStyle(
+                    color: Color(0xFF5A5A5A), fontWeight: FontWeight.w200),
+                outsideTextStyle: TextStyle(
+                    color: Color(0xFFAEAEAE), fontWeight: FontWeight.w200),
+                todayDecoration: BoxDecoration(
+                    color: Color.fromARGB(255, 160, 151, 181),
+                    shape: BoxShape.circle),
+                selectedDecoration: BoxDecoration(
+                    color: Color.fromARGB(255, 91, 78, 119),
+                    shape: BoxShape.circle)),
             onDaySelected: _onDaySelected,
             onRangeSelected: _onRangeSelected,
             onFormatChanged: (format) {
@@ -383,35 +472,52 @@ class _CalendarState extends State<Calendar> {
             child: ValueListenableBuilder<List<Event>>(
               valueListenable: _selectedEvents,
               builder: (context, value, _) {
-                return value.length == 0 ? Center(child: Text("You have no events scheduled on this day."),) : ListView.builder(
-                  itemCount: value.length,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      margin: const EdgeInsets.symmetric(
-                        horizontal: 12.0,
-                        vertical: 4.0,
-                      ),
-                      decoration: BoxDecoration(
-                        border: Border.all(),
-                        borderRadius: BorderRadius.circular(12.0),
-                      ),
-                      child: ListTile(
-                        onTap: () { 
-                          print('event name: ${value[index].name}, event ID: ${value[index].id}');
-                          context.pushNamed("event", extra: value.elementAt(index));
+                return value.length == 0
+                    ? Center(
+                        child:
+                            Text("You have no events scheduled on this day."),
+                      )
+                    : ListView.builder(
+                        itemCount: value.length,
+                        itemBuilder: (context, index) {
+                          return Container(
+                            margin: const EdgeInsets.symmetric(
+                              horizontal: 12.0,
+                              vertical: 4.0,
+                            ),
+                            decoration: BoxDecoration(
+                              border: Border.all(),
+                              borderRadius: BorderRadius.circular(12.0),
+                            ),
+                            child: ListTile(
+                              onTap: () {
+                                print(
+                                    'event name: ${value[index].name}, event ID: ${value[index].id}');
+                                context.pushNamed("event",
+                                    extra: value.elementAt(index));
+                              },
+                              title: Text(
+                                value[index].name,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 3,
+                              ),
+                              subtitle: Text(
+                                value[index].sponsoringOrganization,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 3,
+                              ),
+                              trailing: Text(
+                                  "${DateFormat.jmv().format(value[index].startTime)} - ${DateFormat.jmv().format(value[index].endTime)}"),
+                              leading: ClipRRect(
+                                  borderRadius: BorderRadius.circular(12.0),
+                                  child: Image(
+                                      image: AssetImage(value[index].picLink),
+                                      height: 50,
+                                      width: 50)),
+                            ),
+                          );
                         },
-                        title: Text(value[index].name, overflow: TextOverflow.ellipsis, maxLines: 3,),
-                        subtitle: Text(value[index].sponsoringOrganization, overflow: TextOverflow.ellipsis, maxLines: 3,),
-                        trailing: Text("${DateFormat.jmv().format(value[index].startTime)} - ${DateFormat.jmv().format(value[index].endTime)}"),
-                        leading: ClipRRect(
-                          borderRadius: BorderRadius.circular(12.0),
-                          child: Image(
-                              image: AssetImage(value[index].picLink),
-                              height: 50,width:50)),
-                      ),
-                    );
-                  },
-                );
+                      );
               },
             ),
           ),

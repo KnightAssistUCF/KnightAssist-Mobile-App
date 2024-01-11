@@ -4,6 +4,9 @@ import 'package:go_router/go_router.dart';
 import 'package:knightassist_mobile_app/src/common_widgets/responsive_center.dart';
 import 'package:knightassist_mobile_app/src/constants/breakpoints.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
+import 'package:knightassist_mobile_app/src/features/events/presentation/events_list_screen.dart';
+import 'package:knightassist_mobile_app/src/features/events/presentation/qr_scanner.dart';
+import 'package:knightassist_mobile_app/src/features/home/presentation/home_screen.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 import 'package:intl/intl.dart';
 
@@ -48,7 +51,8 @@ List<Event> events = [
       description: 'need someone to collect tickets',
       location: 'pegasus ballroom',
       date: DateTime.fromMillisecondsSinceEpoch(1695774773000),
-      sponsoringOrganization: 'Organization Z long name long name long name long name long name long name long name long name long name long name long name long name',
+      sponsoringOrganization:
+          'Organization Z long name long name long name long name long name long name long name long name long name long name long name long name',
       attendees: [],
       registeredVolunteers: [],
       picLink: 'assets/profile pictures/icon_controller.png',
@@ -59,7 +63,7 @@ List<Event> events = [
       maxAttendees: 400,
       createdAt: DateTime.fromMillisecondsSinceEpoch(1700968029),
       updatedAt: DateTime.now()),
-    Event(
+  Event(
       id: '4',
       name: 'movie night but its date isn\'t previous',
       description: 'need someone to collect tickets',
@@ -76,7 +80,7 @@ List<Event> events = [
       maxAttendees: 400,
       createdAt: DateTime.fromMillisecondsSinceEpoch(1702596396),
       updatedAt: DateTime.now()),
-    Event(
+  Event(
       id: '5',
       name: 'movie night but it\'s very long',
       description: 'need someone to collect tickets',
@@ -95,15 +99,37 @@ List<Event> events = [
       updatedAt: DateTime.now()),
 ];
 
-class EventHistoryScreen extends ConsumerWidget {
+class EventHistoryScreen extends StatefulWidget {
   const EventHistoryScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  State<EventHistoryScreen> createState() => _EventHistoryScreenState();
+}
+
+class _EventHistoryScreenState extends State<EventHistoryScreen> {
+  int _selectedIndex = 0;
+  bool tapped = false;
+  static const TextStyle optionStyle =
+      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+  static List<Widget> _widgetOptions = <Widget>[
+    EventListScreen(),
+    HomeScreenTab(),
+    QRCodeScanner(),
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      tapped = true; // can't return to event history screen from navbar
+      _selectedIndex = index;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
     return Scaffold(
-      appBar: AppBar(
+      /*appBar: AppBar(
         title: const Text(
           'Event History',
           style: TextStyle(fontWeight: FontWeight.w600),
@@ -143,8 +169,11 @@ class EventHistoryScreen extends ConsumerWidget {
             ),
           )
         ],
-      ),
-      body: Container(
+      ),*/
+      body: tapped
+          ? _widgetOptions.elementAt(_selectedIndex)
+          : EventHistoryScreenTab(),
+      /*Container(
         height: h,
         child: Column(
           children: [
@@ -154,13 +183,17 @@ class EventHistoryScreen extends ConsumerWidget {
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
                 itemCount: events.length,
-                itemBuilder: (context, index) => 
-                    (events.elementAt(index).date.isBefore(DateTime.now()) ? EventCard(event: events.elementAt(index)) : const SizedBox(height: 0,)),
+                itemBuilder: (context, index) =>
+                    (events.elementAt(index).date.isBefore(DateTime.now())
+                        ? EventCard(event: events.elementAt(index))
+                        : const SizedBox(
+                            height: 0,
+                          )),
               ), // only show an event in the history page if its date has passed
             )
           ],
         ),
-      ),
+      ),*/
       drawer: Drawer(
         child: ListView(
           //padding: EdgeInsets.zero,
@@ -198,7 +231,7 @@ class EventHistoryScreen extends ConsumerWidget {
                 context.pushNamed(AppRoute.updates.name);
               },
             ),
-              ListTile(
+            ListTile(
               title: const Text('QR Scan'),
               onTap: () {
                 context.pushNamed(AppRoute.qrScanner.name);
@@ -225,6 +258,18 @@ class EventHistoryScreen extends ConsumerWidget {
             ),
           ],
         ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: "Explore"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.home_outlined), label: "Home"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.camera_alt_outlined), label: "QR Scan"),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: const Color.fromARGB(255, 91, 78, 119),
+        onTap: _onItemTapped,
       ),
     );
   }
@@ -287,50 +332,118 @@ class EventCard extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: ListTile(
                     contentPadding: EdgeInsets.zero,
-                    leading:  ClipRRect(
-                      borderRadius: BorderRadius.circular(12.0),
-                      child: Image(
-                          image: AssetImage(event.picLink),
-                          height: 75)),
+                    leading: ClipRRect(
+                        borderRadius: BorderRadius.circular(12.0),
+                        child: Image(
+                            image: AssetImage(event.picLink), height: 75)),
                     title: Text(
-                        event.name,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 3,
-                        style: const TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 18),
-                        textAlign: TextAlign.start,
-                      ),
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            event.sponsoringOrganization,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 3,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w400),
-                            textAlign: TextAlign.start,
-                          ),
-                          Text(
-                            "${difference.toString()} hours",
-                            style: const TextStyle(
-                                fontWeight: FontWeight.w400),
-                            textAlign: TextAlign.start,
-                          ),
-                        ],
-                      ), 
-                      trailing: Text(
-                        DateFormat('yyyy-MM-dd')
-                            .format(event.date),
-                        style: const TextStyle(
-                            fontWeight: FontWeight.w400),
-                        textAlign: TextAlign.start,
-                      ),
+                      event.name,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 3,
+                      style: const TextStyle(
+                          fontWeight: FontWeight.w600, fontSize: 18),
+                      textAlign: TextAlign.start,
+                    ),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          event.sponsoringOrganization,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 3,
+                          style: const TextStyle(fontWeight: FontWeight.w400),
+                          textAlign: TextAlign.start,
+                        ),
+                        Text(
+                          "${difference.toString()} hours",
+                          style: const TextStyle(fontWeight: FontWeight.w400),
+                          textAlign: TextAlign.start,
+                        ),
+                      ],
+                    ),
+                    trailing: Text(
+                      DateFormat('yyyy-MM-dd').format(event.date),
+                      style: const TextStyle(fontWeight: FontWeight.w400),
+                      textAlign: TextAlign.start,
+                    ),
                   ),
                 ),
               ),
             )),
+      ),
+    );
+  }
+}
+
+class EventHistoryScreenTab extends ConsumerWidget {
+  const EventHistoryScreenTab({super.key});
+
+  Widget build(BuildContext context, WidgetRef ref) {
+    double h = MediaQuery.of(context).size.height;
+    double w = MediaQuery.of(context).size.width;
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'Event History',
+          style: TextStyle(fontWeight: FontWeight.w600),
+        ),
+        centerTitle: true,
+        automaticallyImplyLeading: true,
+        actions: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: IconButton(
+              onPressed: () {},
+              tooltip: 'View notifications',
+              icon: const Icon(
+                Icons.notifications_outlined,
+                color: Colors.white,
+                semanticLabel: 'Notifications',
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: GestureDetector(
+              onTap: () {
+                context.pushNamed(AppRoute.profileScreen.name);
+              },
+              child: Tooltip(
+                message: 'Go to your profile',
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(25.0),
+                  child: const Image(
+                      semanticLabel: 'Profile picture',
+                      image: AssetImage(
+                          'assets/profile pictures/icon_paintbrush.png'),
+                      height: 20),
+                ),
+              ),
+            ),
+          )
+        ],
+      ),
+      body: Container(
+        height: h,
+        child: Column(
+          children: [
+            _topSection(w),
+            Flexible(
+              child: ListView.builder(
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                itemCount: events.length,
+                itemBuilder: (context, index) =>
+                    (events.elementAt(index).date.isBefore(DateTime.now())
+                        ? EventCard(event: events.elementAt(index))
+                        : const SizedBox(
+                            height: 0,
+                          )),
+              ), // only show an event in the history page if its date has passed
+            )
+          ],
+        ),
       ),
     );
   }
