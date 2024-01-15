@@ -5,18 +5,39 @@ import 'package:knightassist_mobile_app/src/common_widgets/responsive_center.dar
 import 'package:knightassist_mobile_app/src/common_widgets/responsive_scrollable_card.dart';
 import 'package:knightassist_mobile_app/src/constants/breakpoints.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/events_list_screen.dart';
+import 'package:knightassist_mobile_app/src/features/events/presentation/qr_scanner.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
-class HomeScreen extends ConsumerWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  int _selectedIndex = 1;
+  static const TextStyle optionStyle =
+      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+  static List<Widget> _widgetOptions = <Widget>[
+    EventListScreen(),
+    HomeScreenTab(),
+    QRCodeScanner(),
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
     return Scaffold(
-      appBar: AppBar(
+      /*appBar: AppBar(
         automaticallyImplyLeading: true,
         actions: <Widget>[
           Padding(
@@ -51,8 +72,9 @@ class HomeScreen extends ConsumerWidget {
             ),
           )
         ],
-      ),
-      body: Container(
+      ),*/
+      body: _widgetOptions.elementAt(_selectedIndex),
+      /*Container(
         height: h,
         child: Column(
           children: [
@@ -77,7 +99,9 @@ class HomeScreen extends ConsumerWidget {
                       Directionality(
                         textDirection: TextDirection.rtl,
                         child: TextButton.icon(
-                          onPressed: () {},
+                          onPressed: () {
+                            context.pushNamed(AppRoute.updates.name);
+                          },
                           icon: const Icon(
                             Icons.arrow_back_ios,
                             color: Colors.grey,
@@ -155,6 +179,12 @@ class HomeScreen extends ConsumerWidget {
               },
             ),
             ListTile(
+              title: const Text('Calendar'),
+              onTap: () {
+                context.pushNamed(AppRoute.calendar.name);
+              },
+            ),
+            ListTile(
               title: const Text('Organizations'),
               onTap: () {
                 context.pushNamed(AppRoute.organizations.name);
@@ -164,6 +194,24 @@ class HomeScreen extends ConsumerWidget {
               title: const Text('Events'),
               onTap: () {
                 context.pushNamed(AppRoute.events.name);
+              },
+            ),
+            ListTile(
+              title: const Text('Announcements'),
+              onTap: () {
+                context.pushNamed(AppRoute.updates.name);
+              },
+            ),
+            ListTile(
+              title: const Text('QR Scan'),
+              onTap: () {
+                context.pushNamed(AppRoute.qrScanner.name);
+              },
+            ),
+            ListTile(
+              title: const Text('History'),
+              onTap: () {
+                context.pushNamed(AppRoute.eventHistory.name);
               },
             ),
             ListTile(
@@ -181,6 +229,18 @@ class HomeScreen extends ConsumerWidget {
             ),
           ],
         ),
+      ),*/
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: "Explore"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.home_outlined), label: "Home"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.camera_alt_outlined), label: "QR Scan")
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: const Color.fromARGB(255, 91, 78, 119),
+        onTap: _onItemTapped,
       ),
     );
   }
@@ -386,6 +446,209 @@ class EventCard extends StatelessWidget {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class HomeScreenTab extends ConsumerWidget {
+  const HomeScreenTab({super.key});
+
+  Widget build(BuildContext context, WidgetRef ref) {
+    double h = MediaQuery.of(context).size.height;
+    double w = MediaQuery.of(context).size.width;
+    return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: true,
+        actions: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: IconButton(
+              onPressed: () {},
+              tooltip: 'View notifications',
+              icon: const Icon(
+                Icons.notifications_outlined,
+                color: Colors.white,
+                semanticLabel: 'Notifications',
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: GestureDetector(
+              onTap: () {
+                context.pushNamed(AppRoute.profileScreen.name);
+              },
+              child: Tooltip(
+                message: 'Go to your profile',
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(25.0),
+                  child: const Image(
+                      semanticLabel: 'Profile picture',
+                      image: AssetImage(
+                          'assets/profile pictures/icon_paintbrush.png'),
+                      height: 20),
+                ),
+              ),
+            ),
+          )
+        ],
+      ),
+      body: Container(
+        height: h,
+        child: Column(
+          children: [
+            _topSection(w),
+            Flexible(
+              child: ListView(
+                scrollDirection: Axis.vertical,
+                children: <Widget>[
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text(
+                      'Announcements',
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                  const AnnouncementCard(),
+                  const AnnouncementCard(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Directionality(
+                        textDirection: TextDirection.rtl,
+                        child: TextButton.icon(
+                          onPressed: () {
+                            context.pushNamed(AppRoute.updates.name);
+                          },
+                          icon: const Icon(
+                            Icons.arrow_back_ios,
+                            color: Colors.grey,
+                            size: 15,
+                          ),
+                          label: const Text(
+                            'View All',
+                            style: TextStyle(fontSize: 10),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  OverflowBar(
+                    alignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: [
+                            CircularPercentIndicator(
+                              radius: 40.0,
+                              lineWidth: 5.0,
+                              percent: 0.95,
+                              center: const Text(
+                                "19/20",
+                                style: TextStyle(fontSize: 15),
+                              ),
+                              progressColor:
+                                  const Color.fromARGB(255, 91, 78, 119),
+                            ),
+                            const Text('Semester Goal'),
+                          ],
+                        ),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Column(
+                          children: [
+                            Text(
+                              '255',
+                              style: TextStyle(fontSize: 40),
+                            ),
+                            Text('Cumulative Hours'),
+                          ],
+                        ),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Column(
+                          children: [
+                            Text(
+                              '144',
+                              style: TextStyle(fontSize: 40),
+                            ),
+                            Text('Total Points'),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+      drawer: Drawer(
+        child: ListView(
+          children: [
+            ListTile(
+              title: const Text('Home'),
+              onTap: () {
+                context.pushNamed(AppRoute.homeScreen.name);
+              },
+            ),
+            ListTile(
+              title: const Text('Calendar'),
+              onTap: () {
+                context.pushNamed(AppRoute.calendar.name);
+              },
+            ),
+            ListTile(
+              title: const Text('Organizations'),
+              onTap: () {
+                context.pushNamed(AppRoute.organizations.name);
+              },
+            ),
+            ListTile(
+              title: const Text('Events'),
+              onTap: () {
+                context.pushNamed(AppRoute.events.name);
+              },
+            ),
+            ListTile(
+              title: const Text('Announcements'),
+              onTap: () {
+                context.pushNamed(AppRoute.updates.name);
+              },
+            ),
+            ListTile(
+              title: const Text('QR Scan'),
+              onTap: () {
+                context.pushNamed(AppRoute.qrScanner.name);
+              },
+            ),
+            ListTile(
+              title: const Text('History'),
+              onTap: () {
+                context.pushNamed(AppRoute.eventHistory.name);
+              },
+            ),
+            ListTile(
+              title: const Text('Settings'),
+              onTap: () {
+                context.pushNamed(AppRoute.account.name);
+              },
+            ),
+            ListTile(
+              title: const Text('Sign Out'),
+              onTap: () {
+                context.pushNamed(AppRoute.emailConfirm.name);
+                Navigator.pop(context);
+              },
+            ),
+          ],
         ),
       ),
     );

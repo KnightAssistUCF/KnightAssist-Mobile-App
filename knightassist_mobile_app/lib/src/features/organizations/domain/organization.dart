@@ -1,4 +1,6 @@
 import 'package:knightassist_mobile_app/src/features/authentication/domain/app_user.dart';
+import 'package:knightassist_mobile_app/src/features/organizations/domain/contact.dart';
+import 'package:knightassist_mobile_app/src/features/organizations/domain/update.dart';
 
 class Organization extends AppUser {
   const Organization(
@@ -7,6 +9,7 @@ class Organization extends AppUser {
       required this.name,
       required super.email,
       required this.description,
+      required this.contact,
       required this.logoUrl,
       required this.category,
       required this.followers,
@@ -17,6 +20,7 @@ class Organization extends AppUser {
       required this.eventHappeningNow,
       required this.backgroundUrl,
       required this.events,
+      required this.location,
       required this.semesters,
       required this.recoveryToken,
       required this.confirmToken,
@@ -27,16 +31,18 @@ class Organization extends AppUser {
 
   final String name;
   final String description;
+  final Contact contact;
   final String logoUrl;
   final List<String> category;
   final List<String> followers;
   final List<String> favorites;
-  final List<String> updates;
+  final List<Update> updates;
   final String? calendarLink;
   final bool isActive;
   final bool eventHappeningNow;
-  final String? backgroundUrl;
+  final String backgroundUrl;
   final List<String> events;
+  final String location;
   final List<String> semesters;
   final String? recoveryToken;
   final String confirmToken;
@@ -51,16 +57,18 @@ class Organization extends AppUser {
         name: map['name'],
         email: map['email'],
         description: map['description'],
+        contact: map['contact'] as Contact,
         logoUrl: map['logoUrl'] as String,
         category: List<String>.from(map['category']),
         followers: List<String>.from(map['followers']),
         favorites: List<String>.from(map['favorites']),
-        updates: List<String>.from(map['updates']),
+        updates: List<Update>.from(map['updates']),
         calendarLink: map['calendarLink'] as String?,
         isActive: map['isActive'],
         eventHappeningNow: map['eventHappeningNow'],
-        backgroundUrl: map['backgroundUrl'] as String?,
+        backgroundUrl: map['backgroundUrl'] as String,
         events: List<String>.from(map['events']),
+        location: map['location'],
         semesters: List<String>.from(map['semesters']),
         recoveryToken: map['recoveryToken'],
         confirmToken: map['confirmToken'],
@@ -75,6 +83,7 @@ class Organization extends AppUser {
         'name': name,
         'email': email,
         'description': description,
+        'contact': contact,
         'logoUrl': logoUrl,
         'category': category,
         'followers': followers,
@@ -85,6 +94,7 @@ class Organization extends AppUser {
         'eventHappeningNow': eventHappeningNow,
         'backgroundURL': backgroundUrl,
         'events': events,
+        'location': location,
         'semesters': semesters,
         'recoveryToken': recoveryToken,
         'confirmToken': confirmToken,

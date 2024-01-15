@@ -100,13 +100,19 @@ File? _profilePicFile;
             _buildTextButton(),
         ],
       ),
-      drawer: Drawer(
+      /*drawer: Drawer(
         child: ListView(
           children: [
             ListTile(
               title: const Text('Home'),
               onTap: () {
                 context.pushNamed(AppRoute.homeScreen.name);
+              },
+            ),
+            ListTile(
+              title: const Text('Calendar'),
+              onTap: () {
+                context.pushNamed(AppRoute.calendar.name);
               },
             ),
             ListTile(
@@ -119,6 +125,24 @@ File? _profilePicFile;
               title: const Text('Events'),
               onTap: () {
                 context.pushNamed(AppRoute.events.name);
+              },
+            ),
+            ListTile(
+              title: const Text('Announcements'),
+              onTap: () {
+                context.pushNamed(AppRoute.updates.name);
+              },
+            ),
+              ListTile(
+              title: const Text('QR Scan'),
+              onTap: () {
+                context.pushNamed(AppRoute.qrScanner.name);
+              },
+            ),
+            ListTile(
+              title: const Text('History'),
+              onTap: () {
+                context.pushNamed(AppRoute.eventHistory.name);
               },
             ),
             ListTile(
@@ -136,7 +160,7 @@ File? _profilePicFile;
             ),
           ],
         ),
-      ),
+      ),*/
     );
   }
 }
