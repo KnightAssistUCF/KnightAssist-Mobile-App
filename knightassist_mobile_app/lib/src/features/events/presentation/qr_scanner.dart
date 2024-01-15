@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:knightassist_mobile_app/src/features/events/presentation/events_list_screen.dart';
+import 'package:knightassist_mobile_app/src/features/events/presentation/events_list/events_list_screen.dart';
 import 'package:knightassist_mobile_app/src/features/home/presentation/home_screen.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
@@ -19,7 +19,7 @@ class _QRScannerState extends State<QRScanner> {
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static List<Widget> _widgetOptions = <Widget>[
-    EventListScreen(),
+    EventsListScreen(),
     HomeScreenTab(),
     QRCodeScanner(),
   ];

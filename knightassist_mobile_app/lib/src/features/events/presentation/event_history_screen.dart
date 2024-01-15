@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:knightassist_mobile_app/src/common_widgets/responsive_center.dart';
 import 'package:knightassist_mobile_app/src/constants/breakpoints.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
-import 'package:knightassist_mobile_app/src/features/events/presentation/events_list_screen.dart';
+import 'package:knightassist_mobile_app/src/features/events/presentation/events_list/events_list_screen.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/qr_scanner.dart';
 import 'package:knightassist_mobile_app/src/features/home/presentation/home_screen.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
@@ -16,7 +16,6 @@ List<Event> events = [
       name: 'concert',
       description: 'really cool music, need someone to serve food',
       location: 'addition financial arena',
-      date: DateTime.fromMillisecondsSinceEpoch(1699875173000),
       sponsoringOrganization: 'Organization X',
       attendees: [],
       registeredVolunteers: [],
@@ -33,7 +32,6 @@ List<Event> events = [
       name: 'study session',
       description: 'cs1, need someone to bring water',
       location: 'ucf library',
-      date: DateTime.fromMillisecondsSinceEpoch(1698433137000),
       sponsoringOrganization: 'Organization Y',
       attendees: [],
       registeredVolunteers: [],
@@ -50,7 +48,6 @@ List<Event> events = [
       name: 'movie night',
       description: 'need someone to collect tickets',
       location: 'pegasus ballroom',
-      date: DateTime.fromMillisecondsSinceEpoch(1695774773000),
       sponsoringOrganization:
           'Organization Z long name long name long name long name long name long name long name long name long name long name long name long name',
       attendees: [],
@@ -68,7 +65,6 @@ List<Event> events = [
       name: 'movie night but its date isn\'t previous',
       description: 'need someone to collect tickets',
       location: 'pegasus ballroom',
-      date: DateTime.fromMillisecondsSinceEpoch(1734218796000),
       sponsoringOrganization: 'Organization Z',
       attendees: [],
       registeredVolunteers: [],
@@ -85,7 +81,6 @@ List<Event> events = [
       name: 'movie night but it\'s very long',
       description: 'need someone to collect tickets',
       location: 'pegasus ballroom',
-      date: DateTime.fromMillisecondsSinceEpoch(1695774773000),
       sponsoringOrganization: 'Organization Z',
       attendees: [],
       registeredVolunteers: [],
@@ -112,7 +107,7 @@ class _EventHistoryScreenState extends State<EventHistoryScreen> {
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static List<Widget> _widgetOptions = <Widget>[
-    EventListScreen(),
+    EventsListScreen(),
     HomeScreenTab(),
     QRCodeScanner(),
   ];
@@ -361,11 +356,6 @@ class EventCard extends StatelessWidget {
                         ),
                       ],
                     ),
-                    trailing: Text(
-                      DateFormat('yyyy-MM-dd').format(event.date),
-                      style: const TextStyle(fontWeight: FontWeight.w400),
-                      textAlign: TextAlign.start,
-                    ),
                   ),
                 ),
               ),
@@ -435,7 +425,7 @@ class EventHistoryScreenTab extends ConsumerWidget {
                 shrinkWrap: true,
                 itemCount: events.length,
                 itemBuilder: (context, index) =>
-                    (events.elementAt(index).date.isBefore(DateTime.now())
+                    (events.elementAt(index).startTime.isBefore(DateTime.now())
                         ? EventCard(event: events.elementAt(index))
                         : const SizedBox(
                             height: 0,

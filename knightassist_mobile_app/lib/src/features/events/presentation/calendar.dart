@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
-import 'package:knightassist_mobile_app/src/features/events/presentation/events_list_screen.dart';
+import 'package:knightassist_mobile_app/src/features/events/presentation/events_list/events_list_screen.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/qr_scanner.dart';
 import 'package:knightassist_mobile_app/src/features/home/presentation/home_screen.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
@@ -15,7 +15,6 @@ List<Event> events = [
       name: 'concert',
       description: 'really cool music, need someone to serve food',
       location: 'addition financial arena',
-      date: DateTime.fromMillisecondsSinceEpoch(1699875173000),
       sponsoringOrganization:
           'Organization X is really long !!!!! !!!!! !!!!! !!!!!',
       attendees: [],
@@ -33,7 +32,6 @@ List<Event> events = [
       name: 'study session',
       description: 'cs1, need someone to bring water',
       location: 'ucf library',
-      date: DateTime.fromMillisecondsSinceEpoch(1698433137000),
       sponsoringOrganization: 'Organization Y',
       attendees: [],
       registeredVolunteers: [],
@@ -50,7 +48,6 @@ List<Event> events = [
       name: 'movie night',
       description: 'need someone to collect tickets',
       location: 'pegasus ballroom',
-      date: DateTime.fromMillisecondsSinceEpoch(1695774773000),
       sponsoringOrganization: 'Organization Z',
       attendees: [],
       registeredVolunteers: [],
@@ -69,7 +66,6 @@ List<Event> events = [
       description:
           'Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum ',
       location: 'pegasus ballroom',
-      date: DateTime.fromMillisecondsSinceEpoch(1734218796000),
       sponsoringOrganization: 'Organization Z',
       attendees: [],
       registeredVolunteers: [],
@@ -86,7 +82,6 @@ List<Event> events = [
       name: 'concert 2',
       description: '2 events on the same day',
       location: 'addition financial arena',
-      date: DateTime.fromMillisecondsSinceEpoch(1699875173000),
       sponsoringOrganization:
           'Organization X is really long !!!!! !!!!! !!!!! !!!!!',
       attendees: [],
@@ -104,7 +99,6 @@ List<Event> events = [
       name: 'concert',
       description: 'really cool music, need someone to serve food',
       location: 'addition financial arena',
-      date: DateTime.fromMillisecondsSinceEpoch(1699875173000),
       sponsoringOrganization: 'Organization X',
       attendees: [],
       registeredVolunteers: [],
@@ -121,7 +115,6 @@ List<Event> events = [
       name: 'concert',
       description: 'really cool music, need someone to serve food',
       location: 'addition financial arena',
-      date: DateTime.fromMillisecondsSinceEpoch(1699875173000),
       sponsoringOrganization: 'Organization X',
       attendees: [],
       registeredVolunteers: [],
@@ -138,7 +131,6 @@ List<Event> events = [
       name: 'concert',
       description: 'really cool music, need someone to serve food',
       location: 'addition financial arena',
-      date: DateTime.fromMillisecondsSinceEpoch(1699875173000),
       sponsoringOrganization:
           'Organization X is really long !!!!! !!!!! !!!!! !!!!!',
       attendees: [],
@@ -166,7 +158,7 @@ class _CalendarViewState extends State<CalendarView> {
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static List<Widget> _widgetOptions = <Widget>[
-    EventListScreen(),
+    EventsListScreen(),
     HomeScreenTab(),
     QRCodeScanner(),
   ];
@@ -330,7 +322,7 @@ class _CalendarState extends State<Calendar> {
   List<Event> _getEventsForDay(DateTime day) {
     List<Event> eventsForDay = [];
     for (Event e in events) {
-      if (isSameDay(e.date, day)) {
+      if (isSameDay(e.startTime, day)) {
         eventsForDay.add(e);
       }
     }

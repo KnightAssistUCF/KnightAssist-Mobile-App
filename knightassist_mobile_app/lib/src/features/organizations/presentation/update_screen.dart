@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:knightassist_mobile_app/src/common_widgets/responsive_center.dart';
 import 'package:knightassist_mobile_app/src/constants/breakpoints.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
-import 'package:knightassist_mobile_app/src/features/events/presentation/events_list_screen.dart';
+import 'package:knightassist_mobile_app/src/features/events/presentation/events_list/events_list_screen.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/qr_scanner.dart';
 import 'package:knightassist_mobile_app/src/features/home/presentation/home_screen.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/contact.dart';
@@ -271,7 +271,7 @@ class _UpdateScreenState extends State<UpdateScreen> {
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static List<Widget> _widgetOptions = <Widget>[
-    EventListScreen(),
+    EventsListScreen(),
     HomeScreenTab(),
     QRCodeScanner(),
   ];
