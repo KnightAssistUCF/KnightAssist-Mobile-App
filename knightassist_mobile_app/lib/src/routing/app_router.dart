@@ -7,7 +7,8 @@ import 'package:knightassist_mobile_app/src/features/authentication/presentation
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/sign_in/sign_in_screen.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/event_screen.dart';
-import 'package:knightassist_mobile_app/src/features/events/presentation/events_list_screen.dart';
+import 'package:knightassist_mobile_app/src/features/events/presentation/events_list/events_list_screen.dart';
+import 'package:knightassist_mobile_app/src/features/events/presentation/qr_scanner.dart';
 import 'package:knightassist_mobile_app/src/features/home/presentation/home_screen.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/presentation/organization_screen.dart';
@@ -62,7 +63,7 @@ GoRouter goRouter(GoRouterRef ref) {
             path: '/',
             name: AppRoute.home.name,
             builder: (context, state) =>
-                const HomeScreen(), // TEMP, change this to whatever screen you want to test (will need to rerun)
+                const EventsListScreen(), // TEMP, change this to whatever screen you want to test (will need to rerun)
             routes: [
               GoRoute(
                   path: 'events',
@@ -77,7 +78,7 @@ GoRouter goRouter(GoRouterRef ref) {
                         builder: (context, state) {
                           Event ev = state.extra as Event;
                           //final eventID = state.pathParameters['id']!;
-                          return EventScreen(event: ev);
+                          return EventScreen(eventID: ev.id);
                         })
                   ]),
               GoRoute(

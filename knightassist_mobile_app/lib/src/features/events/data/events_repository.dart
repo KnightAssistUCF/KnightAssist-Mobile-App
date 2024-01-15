@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:knightassist_mobile_app/src/exceptions/app_exception.dart';
@@ -5,22 +6,70 @@ import 'package:knightassist_mobile_app/src/features/authentication/domain/stude
 import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:knightassist_mobile_app/src/utils/in_memory_store.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'events_repository.g.dart';
 
 class EventsRepository {
-  Future<Event> getEvent(String id) async {
-    Map<String, String?> params = {"eventID": id};
+  final _events = InMemoryStore<List<Event>>([]);
+
+  List<Event> getEventsList() {
+    return _events.value;
+  }
+
+  Event? getEvent(String id) {
+    return _getEvent(_events.value, id);
+  }
+
+  Future<List<Event>> fetchEventsList() async {
     var uri = Uri.https('knightassist-43ab3aeaada9.herokuapp.com',
-        '/api/searchOneEvent', params);
+        '/api/loadAllEventsAcrossOrgs');
     var response = await http.get(uri);
     var body = jsonDecode(response.body);
     switch (response.statusCode) {
       case 200:
-        return Event.fromMap(body);
-      case 404:
-        throw EventNotFoundException();
+        List<Event> list = [];
+        for (Map<String, dynamic> json
+            in List<Map<String, dynamic>>.from(body)) {
+          list.add(Event.fromMap(json));
+        }
+        _events.value = list;
+        return _events.value;
       default:
         String err = body["error"];
         throw Exception(err);
+    }
+  }
+
+  Stream<List<Event>> watchEventsList() {
+    return _events.stream;
+  }
+
+  Stream<Event?> watchEvent(String id) {
+    return watchEventsList().map((events) => _getEvent(events, id));
+  }
+
+  Future<List<Event>> searchEvents(String query) async {
+    assert(
+      _events.value.length <= 100,
+      'Client-side search should only be performed if the number of events is small. '
+      'Consider doing server-side search for larger datasets.',
+    );
+
+    // TODO: Revamp event search logic
+    final eventsList = await fetchEventsList();
+    return eventsList
+        .where(
+            (event) => event.name.toLowerCase().contains(query.toLowerCase()))
+        .toList();
+  }
+
+  static Event? _getEvent(List<Event> events, String id) {
+    try {
+      return events.firstWhere((event) => event.id == id);
+    } catch (e) {
+      return null;
     }
   }
 
@@ -61,7 +110,9 @@ class EventsRepository {
     }
   }
 
-  Future<String> updateEvent(
+  // TODO: Streamline editing process so not all parameters need to be passed all the time
+  // Please don't try to use this yet!
+  Future<String> editEvent(
       String organizationID,
       String eventID,
       String name,
@@ -168,24 +219,6 @@ class EventsRepository {
     }
   }
 
-  Future<List<Event>> getAllEvents() async {
-    var uri = Uri.https('knightassist-43ab3aeaada9.herokuapp.com',
-        '/api/loadAllEventsAcrossOrgs');
-    var response = await http.get(uri);
-    var body = jsonDecode(response.body);
-    switch (response.statusCode) {
-      case 200:
-        List<Event> list = [];
-        for (String json in List<String>.from(body)) {
-          list.add(Event.fromMap(jsonDecode(json)));
-        }
-        return list;
-      default:
-        String err = body["error"];
-        throw Exception(err);
-    }
-  }
-
   Future<List<Event>> getRSVPedEvents(String studentID) async {
     Map<String, String?> params = {"studentID": studentID};
     var uri = Uri.https('knightassist-43ab3aeaada9.herokuapp.com',
@@ -227,4 +260,39 @@ class EventsRepository {
         throw Exception(err);
     }
   }
+}
+
+@riverpod
+EventsRepository eventsRepository(EventsRepositoryRef ref) {
+  return EventsRepository();
+}
+
+@riverpod
+Stream<List<Event>> eventsListStream(EventsListStreamRef ref) {
+  final eventsRepository = ref.watch(eventsRepositoryProvider);
+  return eventsRepository.watchEventsList();
+}
+
+@riverpod
+Future<List<Event>> eventsListFuture(EventsListFutureRef ref, EventID id) {
+  final eventsRepository = ref.watch(eventsRepositoryProvider);
+  return eventsRepository.fetchEventsList();
+}
+
+@riverpod
+Stream<Event?> event(EventRef ref, EventID id) {
+  final eventsRepository = ref.watch(eventsRepositoryProvider);
+  return eventsRepository.watchEvent(id);
+}
+
+@riverpod
+Future<List<Event>> eventsListSearch(
+    EventsListSearchRef ref, String query) async {
+  final link = ref.keepAlive();
+  final timer = Timer(const Duration(seconds: 60), () {
+    link.close();
+  });
+  ref.onDispose(() => timer.cancel());
+  final eventsRepository = ref.watch(eventsRepositoryProvider);
+  return eventsRepository.searchEvents(query);
 }
