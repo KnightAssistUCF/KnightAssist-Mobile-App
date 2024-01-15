@@ -1,18 +1,27 @@
 import 'package:knightassist_mobile_app/src/features/authentication/data/auth_repository.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/account/account_screen.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/account/profile_screen.dart';
+import 'package:knightassist_mobile_app/src/features/authentication/presentation/account/semester_goal.dart';
+import 'package:knightassist_mobile_app/src/features/authentication/presentation/account/tag_selection.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/register/register_emailconfirm_screen.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/register/register_organization_screen.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/register/register_student_screen.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/sign_in/sign_in_screen.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
+import 'package:knightassist_mobile_app/src/features/events/presentation/bottombar.dart';
+import 'package:knightassist_mobile_app/src/features/events/presentation/calendar.dart';
+import 'package:knightassist_mobile_app/src/features/events/presentation/event_history_detail.dart';
+import 'package:knightassist_mobile_app/src/features/events/presentation/event_history_screen.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/event_screen.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/events_list/events_list_screen.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/qr_scanner.dart';
 import 'package:knightassist_mobile_app/src/features/home/presentation/home_screen.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
+import 'package:knightassist_mobile_app/src/features/organizations/domain/update.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/presentation/organization_screen.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/presentation/organizations_list_screen.dart';
+import 'package:knightassist_mobile_app/src/features/organizations/presentation/update_detail.dart';
+import 'package:knightassist_mobile_app/src/features/organizations/presentation/update_screen.dart';
 import 'package:knightassist_mobile_app/src/routing/go_router_refresh_stream.dart';
 import 'package:knightassist_mobile_app/src/routing/not_found_screen.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +42,14 @@ enum AppRoute {
   registerOrg,
   emailConfirm,
   homeScreen,
-  profileScreen
+  profileScreen,
+  eventHistory,
+  historyDetail,
+  updates,
+  semesterGoal,
+  tagSelection,
+  qrScanner,
+  calendar
 }
 
 @Riverpod(keepAlive: true)
@@ -78,7 +94,7 @@ GoRouter goRouter(GoRouterRef ref) {
                         builder: (context, state) {
                           Event ev = state.extra as Event;
                           //final eventID = state.pathParameters['id']!;
-                          return EventScreen(eventID: ev.id);
+                          return EventScreen(event: ev);
                         })
                   ]),
               GoRoute(
@@ -133,6 +149,58 @@ GoRouter goRouter(GoRouterRef ref) {
                   name: AppRoute.profileScreen.name,
                   pageBuilder: (context, state) => const MaterialPage(
                       fullscreenDialog: true, child: ProfileScreen())),
+              GoRoute(
+                  path: 'eventHistory',
+                  name: AppRoute.eventHistory.name,
+                  builder: (context, state) {
+                    return const EventHistoryScreen();
+                  },
+                  routes: [
+                    GoRoute(
+                        path: 'historydetail',
+                        name: 'historydetail',
+                        builder: (context, state) {
+                          Event ev = state.extra as Event;
+                          //final eventID = state.pathParameters['id']!;
+                          return HistoryDetailScreen(event: ev);
+                        })
+                  ]),
+              GoRoute(
+                  path: 'updates',
+                  name: AppRoute.updates.name,
+                  builder: (context, state) {
+                    return const UpdateScreen();
+                  },
+                  routes: [
+                    GoRoute(
+                        path: 'updatedetail',
+                        name: 'updatedetail',
+                        builder: (context, state) {
+                          Update u = state.extra as Update;
+                          //final updateID = state.pathParameters['id']!;
+                          return UpdateDetailScreen(update: u);
+                        })
+                  ]),
+              GoRoute(
+                  path: 'semesterGoal',
+                  name: AppRoute.semesterGoal.name,
+                  pageBuilder: (context, state) => const MaterialPage(
+                      fullscreenDialog: true, child: SemesterGoal())),
+              GoRoute(
+                  path: 'tagSelection',
+                  name: AppRoute.tagSelection.name,
+                  pageBuilder: (context, state) => const MaterialPage(
+                      fullscreenDialog: true, child: TagSelection())),
+              GoRoute(
+                  path: 'qrScanner',
+                  name: AppRoute.qrScanner.name,
+                  pageBuilder: (context, state) => const MaterialPage(
+                      fullscreenDialog: true, child: QRScanner())),
+              GoRoute(
+                  path: 'calendar',
+                  name: AppRoute.calendar.name,
+                  pageBuilder: (context, state) => const MaterialPage(
+                      fullscreenDialog: true, child: CalendarView())),
             ])
       ],
       errorBuilder: (context, state) => const NotFoundScreen());
