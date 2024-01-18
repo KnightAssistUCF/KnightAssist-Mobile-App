@@ -13,6 +13,7 @@ import 'package:knightassist_mobile_app/src/features/events/domain/feedback.dart
 import 'package:knightassist_mobile_app/src/features/events/feedback_detail.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/bottombar.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/calendar.dart';
+import 'package:knightassist_mobile_app/src/features/events/presentation/create_event.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/event_history_detail.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/event_history_screen.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/event_screen.dart';
@@ -23,6 +24,7 @@ import 'package:knightassist_mobile_app/src/features/events/presentation/qr_scan
 import 'package:knightassist_mobile_app/src/features/home/presentation/home_screen.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/update.dart';
+import 'package:knightassist_mobile_app/src/features/organizations/presentation/create_update.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/presentation/organization_screen.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/presentation/organizations_list_screen.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/presentation/update_detail.dart';
@@ -57,7 +59,9 @@ enum AppRoute {
   calendar,
   feedbacklist,
   postVerify,
-  postScan
+  postScan,
+  createEvent,
+  createUpdate
 }
 
 @Riverpod(keepAlive: true)
@@ -86,28 +90,8 @@ GoRouter goRouter(GoRouterRef ref) {
         GoRoute(
             path: '/',
             name: AppRoute.home.name,
-            builder: (context, state) => PostScan(
-                event: Event(
-                    id: '1',
-                    name: 'concert',
-                    description:
-                        'really cool music, need someone to serve food',
-                    location: 'addition financial arena',
-                    date: DateTime.fromMillisecondsSinceEpoch(1699875173000),
-                    sponsoringOrganization:
-                        'Organization X is really long !!!!! !!!!! !!!!! !!!!!',
-                    attendees: [],
-                    registeredVolunteers: [],
-                    picLink: 'assets/profile pictures/icon_leaf.png',
-                    startTime:
-                        DateTime.fromMillisecondsSinceEpoch(1699875173000),
-                    endTime: DateTime.fromMillisecondsSinceEpoch(1699875173099),
-                    eventTags: ['music', 'food'],
-                    semester: 'Fall 2023',
-                    maxAttendees: 1000,
-                    createdAt: DateTime.fromMillisecondsSinceEpoch(1700968029),
-                    updatedAt: DateTime.now(),
-                    feedback: [])), // TEMP, change this to whatever screen you want to test (will need to rerun)
+            builder: (context, state) =>
+                const CreateEvent(), // TEMP, change this to whatever screen you want to test (will need to rerun)
             routes: [
               GoRoute(
                   path: 'events',
@@ -259,7 +243,17 @@ GoRouter goRouter(GoRouterRef ref) {
                     Event ev = state.extra as Event;
                     //final eventID = state.pathParameters['id']!;
                     return PostScan(event: ev);
-                  })
+                  }),
+              GoRoute(
+                  path: 'createevent',
+                  name: AppRoute.createEvent.name,
+                  pageBuilder: (context, state) => const MaterialPage(
+                      fullscreenDialog: true, child: CreateEvent())),
+              GoRoute(
+                  path: 'createupdate',
+                  name: AppRoute.createUpdate.name,
+                  pageBuilder: (context, state) => const MaterialPage(
+                      fullscreenDialog: true, child: CreateUpdate())),
             ])
       ],
       errorBuilder: (context, state) => const NotFoundScreen());
