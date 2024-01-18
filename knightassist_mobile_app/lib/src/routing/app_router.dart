@@ -1,5 +1,6 @@
 import 'package:knightassist_mobile_app/src/features/authentication/data/auth_repository.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/account/account_screen.dart';
+import 'package:knightassist_mobile_app/src/features/authentication/presentation/account/postverify.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/account/profile_screen.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/account/semester_goal.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/account/tag_selection.dart';
@@ -53,7 +54,8 @@ enum AppRoute {
   tagSelection,
   qrScanner,
   calendar,
-  feedbacklist
+  feedbacklist,
+  postVerify
 }
 
 @Riverpod(keepAlive: true)
@@ -83,7 +85,7 @@ GoRouter goRouter(GoRouterRef ref) {
             path: '/',
             name: AppRoute.home.name,
             builder: (context, state) =>
-                const FeedbackListScreen(), // TEMP, change this to whatever screen you want to test (will need to rerun)
+                const PostVerify(), // TEMP, change this to whatever screen you want to test (will need to rerun)
             routes: [
               GoRoute(
                   path: 'events',
@@ -223,6 +225,11 @@ GoRouter goRouter(GoRouterRef ref) {
                           );
                         })
                   ]),
+              GoRoute(
+                  path: 'postverify',
+                  name: AppRoute.postVerify.name,
+                  pageBuilder: (context, state) => const MaterialPage(
+                      fullscreenDialog: true, child: PostVerify())),
             ])
       ],
       errorBuilder: (context, state) => const NotFoundScreen());
