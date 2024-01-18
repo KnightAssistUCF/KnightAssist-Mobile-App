@@ -18,6 +18,7 @@ import 'package:knightassist_mobile_app/src/features/events/presentation/event_h
 import 'package:knightassist_mobile_app/src/features/events/presentation/event_screen.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/events_list_screen.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/feedback_list_screen.dart';
+import 'package:knightassist_mobile_app/src/features/events/presentation/postScan.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/qr_scanner.dart';
 import 'package:knightassist_mobile_app/src/features/home/presentation/home_screen.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
@@ -55,7 +56,8 @@ enum AppRoute {
   qrScanner,
   calendar,
   feedbacklist,
-  postVerify
+  postVerify,
+  postScan
 }
 
 @Riverpod(keepAlive: true)
@@ -84,8 +86,28 @@ GoRouter goRouter(GoRouterRef ref) {
         GoRoute(
             path: '/',
             name: AppRoute.home.name,
-            builder: (context, state) =>
-                const PostVerify(), // TEMP, change this to whatever screen you want to test (will need to rerun)
+            builder: (context, state) => PostScan(
+                event: Event(
+                    id: '1',
+                    name: 'concert',
+                    description:
+                        'really cool music, need someone to serve food',
+                    location: 'addition financial arena',
+                    date: DateTime.fromMillisecondsSinceEpoch(1699875173000),
+                    sponsoringOrganization:
+                        'Organization X is really long !!!!! !!!!! !!!!! !!!!!',
+                    attendees: [],
+                    registeredVolunteers: [],
+                    picLink: 'assets/profile pictures/icon_leaf.png',
+                    startTime:
+                        DateTime.fromMillisecondsSinceEpoch(1699875173000),
+                    endTime: DateTime.fromMillisecondsSinceEpoch(1699875173099),
+                    eventTags: ['music', 'food'],
+                    semester: 'Fall 2023',
+                    maxAttendees: 1000,
+                    createdAt: DateTime.fromMillisecondsSinceEpoch(1700968029),
+                    updatedAt: DateTime.now(),
+                    feedback: [])), // TEMP, change this to whatever screen you want to test (will need to rerun)
             routes: [
               GoRoute(
                   path: 'events',
@@ -230,6 +252,14 @@ GoRouter goRouter(GoRouterRef ref) {
                   name: AppRoute.postVerify.name,
                   pageBuilder: (context, state) => const MaterialPage(
                       fullscreenDialog: true, child: PostVerify())),
+              GoRoute(
+                  path: 'postscan',
+                  name: 'postscan',
+                  builder: (context, state) {
+                    Event ev = state.extra as Event;
+                    //final eventID = state.pathParameters['id']!;
+                    return PostScan(event: ev);
+                  })
             ])
       ],
       errorBuilder: (context, state) => const NotFoundScreen());
