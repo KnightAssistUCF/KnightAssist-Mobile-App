@@ -120,6 +120,14 @@ class CreateEvent extends ConsumerWidget {
               style: TextStyle(fontSize: 17),
             ),
           )),
+          Center(
+              child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "We recommend using an image that is around 2000x1400 px or a similar ratio. It will be cropped in the events list screen on the mobile app but users can view the full image by tapping on an event.",
+              style: TextStyle(fontSize: 14),
+            ),
+          )),
           EditImage(),
           Padding(
             padding: const EdgeInsets.all(8.0),
