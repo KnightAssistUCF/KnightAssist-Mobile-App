@@ -3,7 +3,7 @@ import 'package:knightassist_mobile_app/src/features/events/domain/feedback.dart
 typedef EventID = String;
 
 class Event {
-  const Event({
+  Event({
     required this.id,
     required this.name,
     required this.description,
@@ -24,22 +24,22 @@ class Event {
   });
 
   final EventID id;
-  final String name;
-  final String description;
-  final String location;
-  final DateTime date;
+  String name;
+  String description;
+  String location;
+  DateTime date;
   final String sponsoringOrganization;
-  final List<String> attendees;
-  final List<String> registeredVolunteers;
-  final String picLink;
-  final DateTime startTime;
-  final DateTime endTime;
-  final List<String> eventTags;
-  final String semester;
-  final int maxAttendees;
-  final List<EventFeedback> feedback;
+  List<String> attendees;
+  List<String> registeredVolunteers;
+  String picLink;
+  DateTime startTime;
+  DateTime endTime;
+  List<String> eventTags;
+  String semester;
+  int maxAttendees;
+  List<EventFeedback> feedback;
   final DateTime createdAt;
-  final DateTime updatedAt;
+  DateTime updatedAt;
 
   factory Event.fromMap(Map<String, dynamic> map) {
     return Event(
