@@ -25,6 +25,7 @@ import 'package:knightassist_mobile_app/src/features/home/presentation/home_scre
 import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/update.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/presentation/create_update.dart';
+import 'package:knightassist_mobile_app/src/features/organizations/presentation/edit_update.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/presentation/organization_screen.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/presentation/organizations_list_screen.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/presentation/update_detail.dart';
@@ -61,7 +62,8 @@ enum AppRoute {
   postVerify,
   postScan,
   createEvent,
-  createUpdate
+  createUpdate,
+  editUpdate
 }
 
 @Riverpod(keepAlive: true)
@@ -91,7 +93,7 @@ GoRouter goRouter(GoRouterRef ref) {
             path: '/',
             name: AppRoute.home.name,
             builder: (context, state) =>
-                const CreateEvent(), // TEMP, change this to whatever screen you want to test (will need to rerun)
+                const HomeScreen(), // TEMP, change this to whatever screen you want to test (will need to rerun)
             routes: [
               GoRoute(
                   path: 'events',
@@ -254,6 +256,14 @@ GoRouter goRouter(GoRouterRef ref) {
                   name: AppRoute.createUpdate.name,
                   pageBuilder: (context, state) => const MaterialPage(
                       fullscreenDialog: true, child: CreateUpdate())),
+              GoRoute(
+                  path: 'editupdate',
+                  name: 'editupdate',
+                  builder: (context, state) {
+                    Update u = state.extra as Update;
+                    //final updateID = state.pathParameters['id']!;
+                    return EditUpdate(update: u);
+                  }),
             ])
       ],
       errorBuilder: (context, state) => const NotFoundScreen());

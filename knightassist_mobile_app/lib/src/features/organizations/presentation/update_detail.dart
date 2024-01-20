@@ -16,6 +16,9 @@ class UpdateDetailScreen extends ConsumerWidget {
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
 
+    bool curOrg =
+        true; // true if the organization who made the update is viewing it (shows edit button)
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -56,65 +59,87 @@ class UpdateDetailScreen extends ConsumerWidget {
           )
         ],
       ),
-      body: ListView(
-          scrollDirection: Axis.vertical,
-          children: <Widget>[
-            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  update.title,
-                  style: const TextStyle(fontSize: 25, fontWeight: FontWeight.w600),
-                ),
+      body: ListView(scrollDirection: Axis.vertical, children: <Widget>[
+        Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              update.title,
+              style: const TextStyle(fontSize: 25, fontWeight: FontWeight.w600),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextButton(
+              onPressed: () => context.pushNamed(AppRoute.organization.name,
+                  extra: update.sponsor),
+              child: Wrap(
+                children: [
+                  ClipRRect(
+                      borderRadius: BorderRadius.circular(25.0),
+                      child: Image(
+                          image: AssetImage(update.sponsor.logoUrl),
+                          height: 50)),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      update.sponsor.name,
+                      style: const TextStyle(
+                          fontWeight: FontWeight.w400, fontSize: 20),
+                      textAlign: TextAlign.start,
+                    ),
+                  ),
+                  const Icon(
+                    Icons.arrow_forward_ios,
+                    size: 15,
+                  )
+                ],
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextButton(
-                  onPressed: () => context.pushNamed(AppRoute.organization.name, extra: update.sponsor),
-                  child: Wrap(
-                    children: [
-                      ClipRRect(
-                          borderRadius: BorderRadius.circular(25.0),
-                          child: Image(
-                              image: AssetImage(update.sponsor.logoUrl),
-                              height: 50)),
-                      Padding(
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              DateFormat('yyyy-MM-dd').format(update.date),
+              style: const TextStyle(fontSize: 15),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              DateFormat.jmv().format(update.date),
+              style: const TextStyle(fontSize: 15),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              update.content,
+              style: const TextStyle(fontSize: 20),
+            ),
+          ),
+          curOrg
+              ? Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Center(
+                    child: ElevatedButton(
+                      child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          update.sponsor.name,
-                          style: const TextStyle(
-                              fontWeight: FontWeight.w400, fontSize: 20),
-                          textAlign: TextAlign.start,
+                          "Edit",
+                          style: TextStyle(fontSize: 20),
                         ),
                       ),
-                      const Icon(Icons.arrow_forward_ios, size: 15,)
-                    ],
+                      onPressed: () =>
+                          context.pushNamed("editupdate", extra: update),
+                    ),
                   ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  DateFormat('yyyy-MM-dd').format(update.date),
-                  style: const TextStyle(fontSize: 15),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  DateFormat.jmv().format(update.date),
-                  style: const TextStyle(fontSize: 15),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  update.content,
-                  style: const TextStyle(fontSize: 20),
-                ),
-              ),
-            ]),
-          ]),
+                )
+              : SizedBox(
+                  height: 0,
+                )
+        ]),
+      ]),
     );
   }
 }
