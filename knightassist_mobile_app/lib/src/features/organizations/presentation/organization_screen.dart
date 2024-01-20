@@ -100,6 +100,27 @@ class OrganizationScreen extends ConsumerWidget {
                     SizedBox(
                         height: 350,
                         child: TabBarOrg(organization: organization)),
+                    curOrg
+                        ? Padding(
+                            // shows edit button for org viewing their own profile
+                            padding: const EdgeInsets.all(8.0),
+                            child: Center(
+                              child: ElevatedButton(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    "Edit",
+                                    style: TextStyle(fontSize: 20),
+                                  ),
+                                ),
+                                onPressed: () => context
+                                    .pushNamed(AppRoute.profileScreen.name),
+                              ),
+                            ),
+                          )
+                        : SizedBox(
+                            height: 0,
+                          )
                   ],
                 ),
               ],

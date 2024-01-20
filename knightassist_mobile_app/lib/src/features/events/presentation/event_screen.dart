@@ -111,7 +111,7 @@ class EventScreen extends ConsumerWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: curOrg
                       ? Padding(
-                          //shows edit button for sponsoring org
+                          // shows edit button for sponsoring org
                           padding: const EdgeInsets.all(8.0),
                           child: Center(
                             child: ElevatedButton(
