@@ -536,57 +536,59 @@ class HomeScreenTab extends ConsumerWidget {
                           ),
                   ),
                   isOrg
-                      ? Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: InkWell(
-                                onTap: () => context
-                                    .pushNamed(AppRoute.createUpdate.name),
-                                child: Card(
-                                  child: SizedBox(
-                                    width: (w / 2) - 30,
-                                    height: 100,
-                                    child: const Center(
-                                      child: Column(children: [
-                                        Icon(Icons.campaign),
-                                        Text(
-                                          "Create Announcement",
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                          ),
-                                          textAlign: TextAlign.center,
-                                        )
-                                      ]),
+                      ? Center(
+                          child: OverflowBar(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: InkWell(
+                                  onTap: () => context
+                                      .pushNamed(AppRoute.createUpdate.name),
+                                  child: Card(
+                                    child: SizedBox(
+                                      width: (w / 2) - 30,
+                                      height: 100,
+                                      child: const Center(
+                                        child: Column(children: [
+                                          Icon(Icons.campaign),
+                                          Text(
+                                            "Create Announcement",
+                                            style: TextStyle(
+                                              fontSize: 20,
+                                            ),
+                                            textAlign: TextAlign.center,
+                                          )
+                                        ]),
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: InkWell(
-                                onTap: () => context
-                                    .pushNamed(AppRoute.createEvent.name),
-                                child: Card(
-                                  child: SizedBox(
-                                    width: (w / 2) - 30,
-                                    height: 100,
-                                    child: const Center(
-                                      child: Column(children: [
-                                        Icon(Icons.event),
-                                        Text(
-                                          "Create Event",
-                                          style: TextStyle(fontSize: 20),
-                                          textAlign: TextAlign.center,
-                                        )
-                                      ]),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: InkWell(
+                                  onTap: () => context
+                                      .pushNamed(AppRoute.createEvent.name),
+                                  child: Card(
+                                    child: SizedBox(
+                                      width: (w / 2) - 30,
+                                      height: 100,
+                                      child: const Center(
+                                        child: Column(children: [
+                                          Icon(Icons.event),
+                                          Text(
+                                            "Create Event",
+                                            style: TextStyle(fontSize: 20),
+                                            textAlign: TextAlign.center,
+                                          )
+                                        ]),
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            )
-                          ],
+                              )
+                            ],
+                          ),
                         )
                       : const AnnouncementCard(),
                   isOrg

@@ -89,7 +89,11 @@ class EventScreen extends ConsumerWidget {
                           textAlign: TextAlign.start,
                         ),
                       ),
-                      const OrganizationFav(),
+                      curOrg
+                          ? SizedBox(
+                              height: 0,
+                            )
+                          : const OrganizationFav(),
                       const Icon(
                         Icons.arrow_forward_ios,
                         size: 15,
