@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:knightassist_mobile_app/src/common_widgets/responsive_center.dart';
 import 'package:knightassist_mobile_app/src/common_widgets/responsive_scrollable_card.dart';
 import 'package:knightassist_mobile_app/src/constants/breakpoints.dart';
@@ -36,6 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
+
     return Scaffold(
       /*appBar: AppBar(
         automaticallyImplyLeading: true,
@@ -78,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
         height: h,
         child: Column(
           children: [
-            _topSection(w),
+            _topSection(w, isOrg),
             Flexible(
               child: ListView(
                 scrollDirection: Axis.vertical,
@@ -246,13 +248,13 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-_topSection(double width) {
+_topSection(double width, bool isOrg) {
   return Builder(builder: (context) {
     return Stack(children: [
       Container(
           color: const Color.fromARGB(255, 0, 108, 81),
           width: width,
-          child: const Stack(
+          child: Stack(
             children: [
               Column(
                 children: [
@@ -262,14 +264,16 @@ _topSection(double width) {
                       child: Column(
                         children: [
                           Text(
-                            'Welcome, Student User',
-                            style: TextStyle(
+                            isOrg
+                                ? "Welcome, Organization"
+                                : "Welcome, Student User",
+                            style: const TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w900,
                                 fontSize: 25),
                           ),
                           Text(
-                            'Fall 2023',
+                            DateFormat.y().format(DateTime.now()),
                             style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w500,
@@ -301,20 +305,34 @@ _topSection(double width) {
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Directionality(
-                textDirection: TextDirection.rtl,
-                child: TextButton.icon(
+              //Directionality(
+              //textDirection: TextDirection.rtl,
+              /*child: TextButton.icon(
+                onPressed: () {
+                  context.pushNamed(AppRoute.events.name);
+                },
+                icon: const Icon(
+                  Icons.arrow_back_ios,
+                  color: Colors.grey,
+                  size: 15,
+                ),
+                label: const Text('View All', style: TextStyle(fontSize: 10)),
+              ),*/
+              //),
+              TextButton(
                   onPressed: () {
                     context.pushNamed(AppRoute.events.name);
                   },
-                  icon: const Icon(
-                    Icons.arrow_back_ios,
-                    color: Colors.grey,
-                    size: 15,
-                  ),
-                  label: const Text('View All', style: TextStyle(fontSize: 10)),
-                ),
-              ),
+                  child: Row(
+                    children: [
+                      const Text('View All', style: TextStyle(fontSize: 10)),
+                      const Icon(
+                        Icons.arrow_forward_ios,
+                        color: Colors.grey,
+                        size: 15,
+                      ),
+                    ],
+                  ))
             ],
           ),
         ],
@@ -458,6 +476,7 @@ class HomeScreenTab extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
+    bool isOrg = true; // true if the current account is an organization
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: true,
@@ -499,43 +518,106 @@ class HomeScreenTab extends ConsumerWidget {
         height: h,
         child: Column(
           children: [
-            _topSection(w),
+            _topSection(w, isOrg),
             Flexible(
               child: ListView(
                 scrollDirection: Axis.vertical,
                 children: <Widget>[
-                  const Padding(
+                  Padding(
                     padding: EdgeInsets.all(8.0),
-                    child: Text(
-                      'Announcements',
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-                    ),
+                    child: isOrg
+                        ? SizedBox(
+                            height: 0,
+                          )
+                        : Text(
+                            'Announcements',
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.w600),
+                          ),
                   ),
-                  const AnnouncementCard(),
-                  const AnnouncementCard(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Directionality(
-                        textDirection: TextDirection.rtl,
-                        child: TextButton.icon(
-                          onPressed: () {
-                            context.pushNamed(AppRoute.updates.name);
-                          },
-                          icon: const Icon(
-                            Icons.arrow_back_ios,
-                            color: Colors.grey,
-                            size: 15,
-                          ),
-                          label: const Text(
-                            'View All',
-                            style: TextStyle(fontSize: 10),
-                          ),
+                  isOrg
+                      ? Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: InkWell(
+                                onTap: () => context
+                                    .pushNamed(AppRoute.createUpdate.name),
+                                child: Card(
+                                  child: SizedBox(
+                                    width: (w / 2) - 30,
+                                    height: 100,
+                                    child: const Center(
+                                      child: Column(children: [
+                                        Icon(Icons.campaign),
+                                        Text(
+                                          "Create Announcement",
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        )
+                                      ]),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: InkWell(
+                                onTap: () => context
+                                    .pushNamed(AppRoute.createEvent.name),
+                                child: Card(
+                                  child: SizedBox(
+                                    width: (w / 2) - 30,
+                                    height: 100,
+                                    child: const Center(
+                                      child: Column(children: [
+                                        Icon(Icons.event),
+                                        Text(
+                                          "Create Event",
+                                          style: TextStyle(fontSize: 20),
+                                          textAlign: TextAlign.center,
+                                        )
+                                      ]),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
+                        )
+                      : const AnnouncementCard(),
+                  isOrg
+                      ? SizedBox(
+                          height: 0,
+                        )
+                      : const AnnouncementCard(),
+                  isOrg
+                      ? SizedBox(height: 0)
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            //Directionality(
+                            //textDirection: TextDirection.rtl,
+                            /*child:*/ TextButton.icon(
+                              onPressed: () {
+                                context.pushNamed(AppRoute.updates.name);
+                              },
+                              icon: const Icon(
+                                Icons.arrow_back_ios,
+                                color: Colors.grey,
+                                size: 15,
+                              ),
+                              label: const Text(
+                                'View All',
+                                style: TextStyle(fontSize: 10),
+                              ),
+                            ),
+                            //),
+                          ],
                         ),
-                      ),
-                    ],
-                  ),
                   OverflowBar(
                     alignment: MainAxisAlignment.center,
                     children: [
@@ -543,45 +625,57 @@ class HomeScreenTab extends ConsumerWidget {
                         padding: const EdgeInsets.all(8.0),
                         child: Column(
                           children: [
-                            CircularPercentIndicator(
-                              radius: 40.0,
-                              lineWidth: 5.0,
-                              percent: 0.95,
-                              center: const Text(
-                                "19/20",
-                                style: TextStyle(fontSize: 15),
+                            isOrg
+                                ? Text(
+                                    "73%",
+                                    style: TextStyle(fontSize: 40),
+                                  )
+                                : CircularPercentIndicator(
+                                    radius: 40.0,
+                                    lineWidth: 5.0,
+                                    percent: 0.95,
+                                    center: const Text(
+                                      "19/20",
+                                      style: TextStyle(fontSize: 15),
+                                    ),
+                                    progressColor:
+                                        const Color.fromARGB(255, 91, 78, 119),
+                                  ),
+                            Text(isOrg
+                                ? 'Event Attendance Rate'
+                                : 'Semester Goal'),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Column(
+                          children: [
+                            Text(
+                              isOrg ? '25' : '255',
+                              style: TextStyle(fontSize: 40),
+                            ),
+                            Text(
+                                isOrg ? 'Upcoming Shifts' : 'Cumulative Hours'),
+                          ],
+                        ),
+                      ),
+                      isOrg
+                          ? SizedBox(
+                              height: 0,
+                            )
+                          : const Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    '144',
+                                    style: TextStyle(fontSize: 40),
+                                  ),
+                                  Text('Total Points'),
+                                ],
                               ),
-                              progressColor:
-                                  const Color.fromARGB(255, 91, 78, 119),
                             ),
-                            const Text('Semester Goal'),
-                          ],
-                        ),
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Column(
-                          children: [
-                            Text(
-                              '255',
-                              style: TextStyle(fontSize: 40),
-                            ),
-                            Text('Cumulative Hours'),
-                          ],
-                        ),
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Column(
-                          children: [
-                            Text(
-                              '144',
-                              style: TextStyle(fontSize: 40),
-                            ),
-                            Text('Total Points'),
-                          ],
-                        ),
-                      ),
                     ],
                   ),
                 ],
