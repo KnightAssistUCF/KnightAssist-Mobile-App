@@ -7,9 +7,12 @@ import 'package:knightassist_mobile_app/src/features/organizations/domain/organi
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 
 class EventScreen extends ConsumerWidget {
-  const EventScreen({super.key, required this.event});
+  EventScreen({super.key, required this.event});
   //final String eventID;
   final Event event;
+
+  bool curOrg =
+      true; // true if the organization who made the event is viewing it (shows edit button)
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -59,70 +62,92 @@ class EventScreen extends ConsumerWidget {
       ),
       body: SizedBox(
         height: h,
-        child: 
-          ListView(
-            scrollDirection: Axis.vertical,
-            children: [
-              _title(w, event),
-              Container(
-                alignment: Alignment.centerLeft,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextButton(
-                    onPressed: () => context.pushNamed(AppRoute.organization.name, extra: event.sponsoringOrganization),
-                    child: Wrap(
-                        children: [
-                          ClipRRect(
-                              borderRadius: BorderRadius.circular(25.0),
-                              child: const Image(
-                                  image: AssetImage('assets/example.png'),
-                                  height: 50)),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              event.sponsoringOrganization,
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.w400, fontSize: 25),
-                              textAlign: TextAlign.start,
-                            ),
-                          ),
-                          const OrganizationFav(),
-                          const Icon(Icons.arrow_forward_ios, size: 15,)
-                        ],
+        child: ListView(
+          scrollDirection: Axis.vertical,
+          children: [
+            _title(w, event),
+            Container(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextButton(
+                  onPressed: () => context.pushNamed(AppRoute.organization.name,
+                      extra: event.sponsoringOrganization),
+                  child: Wrap(
+                    children: [
+                      ClipRRect(
+                          borderRadius: BorderRadius.circular(25.0),
+                          child: const Image(
+                              image: AssetImage('assets/example.png'),
+                              height: 50)),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          event.sponsoringOrganization,
+                          style: const TextStyle(
+                              fontWeight: FontWeight.w400, fontSize: 25),
+                          textAlign: TextAlign.start,
+                        ),
                       ),
+                      const OrganizationFav(),
+                      const Icon(
+                        Icons.arrow_forward_ios,
+                        size: 15,
+                      )
+                    ],
                   ),
                 ),
               ),
-              SizedBox(height:250, child: TabBarEvent(event: event)),
-              Center(
-                child: SizedBox(
-                  width: 300,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        //context.pushNamed(AppRoute.events.name);
-                      },
-                      style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(
-                              const Color.fromARGB(255, 91, 78, 119))),
-                      child: const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Wrap(
-                          children: [
-                            Text(
-                              'RSVP',
-                              style: TextStyle(fontSize: 20),
+            ),
+            SizedBox(height: 250, child: TabBarEvent(event: event)),
+            Center(
+              child: SizedBox(
+                width: 300,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: curOrg
+                      ? Padding(
+                          //shows edit button for sponsoring org
+                          padding: const EdgeInsets.all(8.0),
+                          child: Center(
+                            child: ElevatedButton(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  "Edit",
+                                  style: TextStyle(fontSize: 20),
+                                ),
+                              ),
+                              onPressed: () =>
+                                  context.pushNamed("editevent", extra: event),
                             ),
-                          ],
+                          ),
+                        )
+                      : ElevatedButton(
+                          // shows rsvp button for student
+                          onPressed: () {
+                            //context.pushNamed(AppRoute.events.name);
+                          },
+                          style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all(
+                                  const Color.fromARGB(255, 91, 78, 119))),
+                          child: const Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Wrap(
+                              children: [
+                                Text(
+                                  'RSVP',
+                                  style: TextStyle(fontSize: 20),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                  ),
                 ),
-              )
-            ],
-          ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -149,7 +174,10 @@ _title(double width, Event e) {
               padding: const EdgeInsets.all(8.0),
               child: Text(
                 e.name,
-                style: const TextStyle(fontSize: 40, color: Colors.black, fontWeight: FontWeight.w900),
+                style: const TextStyle(
+                    fontSize: 40,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w900),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -227,88 +255,88 @@ class _TabBarEventState extends State<TabBarEvent>
     super.dispose();
   }
 
-@override
+  @override
   Widget build(BuildContext context) {
     final difference = event.endTime.difference(event.startTime).inHours;
 
     return DefaultTabController(
-  length: 2,
-  child: Scaffold(
-    body: Column(
-      children: [
-        const TabBar(
-          tabs: [
-            Tab(icon: Text("Details")),
-            Tab(icon: Text("Description")),
+      length: 2,
+      child: Scaffold(
+        body: Column(
+          children: [
+            const TabBar(
+              tabs: [
+                Tab(icon: Text("Details")),
+                Tab(icon: Text("Description")),
+              ],
+            ),
+            Expanded(
+              child: TabBarView(
+                children: [
+                  ListView(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Wrap(children: [
+                          const Icon(Icons.location_on),
+                          Text(
+                            event.location,
+                            style: const TextStyle(fontSize: 20),
+                          ),
+                        ]),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Wrap(children: [
+                          const Icon(Icons.calendar_month),
+                          Text(
+                            DateFormat.yMMMMEEEEd().format(event.date),
+                            style: const TextStyle(fontSize: 20),
+                          ),
+                        ]),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: difference >= 24
+                            ? Text(
+                                //show event end date if the event is longer than a day
+                                " ${DateFormat.jmv().format(event.startTime)} - ${DateFormat.jmv().format(event.endTime)} on ${DateFormat.yMMMMEEEEd().format(event.endTime)}",
+                                style: const TextStyle(fontSize: 15),
+                              )
+                            : Text(
+                                " ${DateFormat.jmv().format(event.startTime)} - ${DateFormat.jmv().format(event.endTime)}",
+                                style: const TextStyle(fontSize: 15),
+                              ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Wrap(children: [
+                          const Icon(Icons.person),
+                          Text(
+                            "x / ${event.maxAttendees} spots reserved",
+                            style: const TextStyle(fontSize: 20),
+                          ),
+                        ]),
+                      ),
+                    ],
+                  ),
+                  ListView(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          event.description,
+                          style: const TextStyle(fontSize: 20),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
           ],
         ),
-        Expanded(
-          child: TabBarView(
-            children: [
-            ListView(children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Wrap(
-                  children: [
-                    const Icon(Icons.location_on),
-                    Text(
-                    event.location,
-                    style: const TextStyle(fontSize: 20),
-                  ),
-                  ]
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Wrap(
-                  children: [
-                    const Icon(Icons.calendar_month),
-                    Text(
-                    DateFormat.yMMMMEEEEd().format(event.date),
-                    style: const TextStyle(fontSize: 20),
-                  ),
-                  ]
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: difference >= 24 ? Text( //show event end date if the event is longer than a day
-                    " ${DateFormat.jmv().format(event.startTime)} - ${DateFormat.jmv().format(event.endTime)} on ${DateFormat.yMMMMEEEEd().format(event.endTime)}",
-                    style: const TextStyle(fontSize: 15),
-                  ) : Text( 
-                    " ${DateFormat.jmv().format(event.startTime)} - ${DateFormat.jmv().format(event.endTime)}",
-                    style: const TextStyle(fontSize: 15),
-                  ),
-                ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Wrap(
-                  children: [
-                    const Icon(Icons.person),
-                    Text(
-                    "x / ${event.maxAttendees} spots reserved",
-                    style: const TextStyle(fontSize: 20),
-                  ),
-                  ]
-                ),
-              ),
-            ],),
-            ListView(children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  event.description,
-                  style: const TextStyle(fontSize: 20),
-                ),
-              ),
-            ],)
-            ],
-          ),
-        ),
-      ],
-    ),
-  ),
-);
+      ),
+    );
   }
-
-} 
+}

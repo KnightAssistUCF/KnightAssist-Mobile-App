@@ -14,6 +14,7 @@ import 'package:knightassist_mobile_app/src/features/events/feedback_detail.dart
 import 'package:knightassist_mobile_app/src/features/events/presentation/bottombar.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/calendar.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/create_event.dart';
+import 'package:knightassist_mobile_app/src/features/events/presentation/edit_event.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/event_history_detail.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/event_history_screen.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/event_screen.dart';
@@ -63,6 +64,7 @@ enum AppRoute {
   postScan,
   createEvent,
   createUpdate,
+  editEvent,
   editUpdate
 }
 
@@ -256,6 +258,14 @@ GoRouter goRouter(GoRouterRef ref) {
                   name: AppRoute.createUpdate.name,
                   pageBuilder: (context, state) => const MaterialPage(
                       fullscreenDialog: true, child: CreateUpdate())),
+              GoRoute(
+                  path: 'editevent',
+                  name: 'editevent',
+                  builder: (context, state) {
+                    Event e = state.extra as Event;
+                    //final eventID = state.pathParameters['id']!;
+                    return EditEvent(event: e);
+                  }),
               GoRoute(
                   path: 'editupdate',
                   name: 'editupdate',

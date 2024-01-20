@@ -410,14 +410,6 @@ class _MultiDayEventState extends State<MultiDayEvent> {
 
   @override
   Widget build(BuildContext context) {
-    final difference = event.endTime.difference(event.startTime).inHours;
-    if (difference >= 24) {
-      // multiday event is initially selected if the event is over 24 hrs
-      isChecked = true;
-    } else {
-      isChecked = false;
-    }
-
     Color getColor(Set<MaterialState> states) {
       const Set<MaterialState> interactiveStates = <MaterialState>{
         MaterialState.pressed,
