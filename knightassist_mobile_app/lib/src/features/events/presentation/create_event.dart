@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:editable_image/editable_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -6,6 +9,11 @@ import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/update.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
+
+DateTime selectedDate = DateTime.now();
+TimeOfDay selectedStartTime = TimeOfDay.now();
+TimeOfDay selectedEndTime = TimeOfDay.now();
+File? _eventPicFile;
 
 class CreateEvent extends ConsumerWidget {
   const CreateEvent({super.key});
@@ -55,86 +63,234 @@ class CreateEvent extends ConsumerWidget {
           )
         ],
       ),
-      body: ListView(scrollDirection: Axis.vertical, children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: TextField(
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: 'Event Title',
+      body: SizedBox(
+        height: h,
+        width: w,
+        child: ListView(scrollDirection: Axis.vertical, children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Event Title',
+              ),
             ),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: SizedBox(
-              width: 240,
-              height: 120,
-              child: TextField(
-                maxLines: null,
-                expands: true,
-                keyboardType: TextInputType.multiline,
-                decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    filled: false,
-                    hintText: 'Event Description'),
-              )),
-        ),
-        SizedBox(
-          height: 20,
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: TextField(
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: 'Event Title',
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SizedBox(
+                width: 240,
+                height: 120,
+                child: TextField(
+                  maxLines: null,
+                  expands: true,
+                  keyboardType: TextInputType.multiline,
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      filled: false,
+                      hintText: 'Event Description'),
+                )),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          SelectDate(),
+          SizedBox(height: 52, width: 50, child: SelectTime()),
+          SizedBox(height: 52, width: 50, child: SelectEndTime()),
+          SizedBox(
+            height: 20,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Event Location',
+              ),
             ),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: TextField(
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: 'Event Title',
-            ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: TextField(
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: 'Event Title',
-            ),
-          ),
-        ),
-        SizedBox(
-          height: 20,
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: TextField(
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: 'Event Title',
-            ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: ElevatedButton(
-              onPressed: () {},
+          Center(
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  'Create Event',
-                  style: TextStyle(fontSize: 20),
-                ),
-              )),
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "Event Image (Optional)",
+              style: TextStyle(fontSize: 17),
+            ),
+          )),
+          EditImage(),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ElevatedButton(
+                onPressed: () {},
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'Create Event',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                )),
+          ),
+        ]),
+      ),
+    );
+  }
+}
+
+class SelectDate extends StatefulWidget {
+  const SelectDate({Key? key}) : super(key: key);
+
+  @override
+  State<SelectDate> createState() => _SelectDateState();
+}
+
+class _SelectDateState extends State<SelectDate> {
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: selectedDate,
+        firstDate: DateTime(2023, 8),
+        lastDate: DateTime(2101));
+    if (picked != null && picked != selectedDate) {
+      setState(() {
+        selectedDate = picked;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Center(child: Text(DateFormat.yMMMMEEEEd().format(selectedDate))),
+        SizedBox(
+          width: 10,
         ),
-      ]),
+        Padding(
+          padding: const EdgeInsets.all(0.0),
+          child: ElevatedButton(
+            onPressed: () => _selectDate(context),
+            child: const Text('Select Event Date'),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class SelectTime extends StatefulWidget {
+  const SelectTime({Key? key}) : super(key: key);
+
+  @override
+  State<SelectTime> createState() => _SelectTimeState();
+}
+
+class _SelectTimeState extends State<SelectTime> {
+  Future<void> _selectTime(BuildContext context) async {
+    final TimeOfDay? picked =
+        await showTimePicker(context: context, initialTime: TimeOfDay.now());
+    if (picked != null && picked != selectedStartTime) {
+      setState(() {
+        selectedStartTime = picked;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Center(child: Text(selectedStartTime.format(context))),
+        SizedBox(
+          width: 10,
+        ),
+        Padding(
+          padding: const EdgeInsets.all(0.0),
+          child: ElevatedButton(
+            onPressed: () => _selectTime(context),
+            child: const Text('Select Event Start Time'),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class SelectEndTime extends StatefulWidget {
+  const SelectEndTime({Key? key}) : super(key: key);
+
+  @override
+  State<SelectEndTime> createState() => _SelectEndTimeState();
+}
+
+class _SelectEndTimeState extends State<SelectEndTime> {
+  Future<void> _selectTime(BuildContext context) async {
+    final TimeOfDay? picked =
+        await showTimePicker(context: context, initialTime: TimeOfDay.now());
+    if (picked != null && picked != selectedEndTime) {
+      setState(() {
+        selectedEndTime = picked;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Center(child: Text(selectedEndTime.format(context))),
+        SizedBox(
+          width: 10,
+        ),
+        Padding(
+          padding: const EdgeInsets.all(0.0),
+          child: ElevatedButton(
+            onPressed: () => _selectTime(context),
+            child: const Text('Select Event End Time'),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class EditImage extends StatefulWidget {
+  const EditImage({super.key});
+
+  @override
+  State<EditImage> createState() => _EditImageState();
+}
+
+class _EditImageState extends State<EditImage> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  Future<void> _directUpdateImage(File? file) async {
+    if (file == null) return;
+
+    setState(() {
+      _eventPicFile = file;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return EditableImage(
+      onChange: _directUpdateImage,
+      image: _eventPicFile != null
+          ? Image.file(_eventPicFile!, fit: BoxFit.cover)
+          : const Image(image: AssetImage('assets/orgdefaultbackground.png')),
+      size: 150,
+      imagePickerTheme: ThemeData(
+        primaryColor: Colors.yellow,
+        shadowColor: Colors.deepOrange,
+        colorScheme: const ColorScheme.light(background: Colors.indigo),
+        iconTheme: const IconThemeData(color: Colors.red),
+        fontFamily: 'Papyrus',
+      ),
+      imageBorder: Border.all(color: Colors.lime, width: 2),
+      editIconBorder: Border.all(color: Colors.purple, width: 2),
     );
   }
 }
