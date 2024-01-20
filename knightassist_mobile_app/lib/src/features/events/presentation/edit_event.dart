@@ -100,10 +100,24 @@ class EditEvent extends ConsumerWidget {
           SizedBox(
             height: 20,
           ),
-          SelectDate(),
-          MultiDayEvent(),
-          SizedBox(height: 52, width: 50, child: SelectTime()),
-          SizedBox(height: 52, width: 50, child: SelectEndTime()),
+          SelectDate(
+            event: event,
+          ),
+          MultiDayEvent(
+            event: event,
+          ),
+          SizedBox(
+              height: 52,
+              width: 50,
+              child: SelectTime(
+                event: event,
+              )),
+          SizedBox(
+              height: 52,
+              width: 50,
+              child: SelectEndTime(
+                event: event,
+              )),
           SizedBox(
             height: 20,
           ),
@@ -125,7 +139,9 @@ class EditEvent extends ConsumerWidget {
               style: TextStyle(fontSize: 17),
             ),
           )),
-          EditImage(),
+          EditImage(
+            event: event,
+          ),
           Center(
             child: OverflowBar(children: [
               Padding(
@@ -161,22 +177,31 @@ class EditEvent extends ConsumerWidget {
 }
 
 class SelectDate extends StatefulWidget {
-  const SelectDate({Key? key}) : super(key: key);
+  Event event;
+  SelectDate({Key? key, required this.event}) : super(key: key);
 
   @override
   State<SelectDate> createState() => _SelectDateState();
 }
 
 class _SelectDateState extends State<SelectDate> {
+  late final Event event;
+
+  @override
+  void initState() {
+    super.initState();
+    event = widget.event;
+  }
+
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
         context: context,
-        initialDate: selectedDate,
+        initialDate: event.date,
         firstDate: DateTime(2023, 8),
         lastDate: DateTime(2101));
-    if (picked != null && picked != selectedDate) {
+    if (picked != null && picked != event.date) {
       setState(() {
-        selectedDate = picked;
+        event.date = picked;
       });
     }
   }
@@ -185,7 +210,7 @@ class _SelectDateState extends State<SelectDate> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Center(child: Text(DateFormat.yMMMMEEEEd().format(selectedDate))),
+        Center(child: Text(DateFormat.yMMMMEEEEd().format(event.date))),
         SizedBox(
           width: 10,
         ),
@@ -202,19 +227,33 @@ class _SelectDateState extends State<SelectDate> {
 }
 
 class SelectTime extends StatefulWidget {
-  const SelectTime({Key? key}) : super(key: key);
+  Event event;
+  SelectTime({Key? key, required this.event}) : super(key: key);
 
   @override
   State<SelectTime> createState() => _SelectTimeState();
 }
 
 class _SelectTimeState extends State<SelectTime> {
+  late final Event event;
+
+  @override
+  void initState() {
+    super.initState();
+    event = widget.event;
+  }
+
   Future<void> _selectTime(BuildContext context) async {
-    final TimeOfDay? picked =
-        await showTimePicker(context: context, initialTime: TimeOfDay.now());
-    if (picked != null && picked != selectedStartTime) {
+    final TimeOfDay? picked = await showTimePicker(
+        context: context, initialTime: TimeOfDay.fromDateTime(event.startTime));
+    if (picked != null && picked != TimeOfDay.fromDateTime(event.startTime)) {
       setState(() {
-        selectedStartTime = picked;
+        event.startTime = new DateTime(
+            event.startTime.year,
+            event.startTime.month,
+            event.startTime.day,
+            picked.hour,
+            picked.minute);
       });
     }
   }
@@ -223,7 +262,9 @@ class _SelectTimeState extends State<SelectTime> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Center(child: Text(selectedStartTime.format(context))),
+        Center(
+            child:
+                Text(TimeOfDay.fromDateTime(event.startTime).format(context))),
         SizedBox(
           width: 10,
         ),
@@ -240,19 +281,30 @@ class _SelectTimeState extends State<SelectTime> {
 }
 
 class SelectEndTime extends StatefulWidget {
-  const SelectEndTime({Key? key}) : super(key: key);
+  Event event;
+
+  SelectEndTime({Key? key, required this.event}) : super(key: key);
 
   @override
   State<SelectEndTime> createState() => _SelectEndTimeState();
 }
 
 class _SelectEndTimeState extends State<SelectEndTime> {
+  late final Event event;
+
+  @override
+  void initState() {
+    super.initState();
+    event = widget.event;
+  }
+
   Future<void> _selectTime(BuildContext context) async {
-    final TimeOfDay? picked =
-        await showTimePicker(context: context, initialTime: TimeOfDay.now());
-    if (picked != null && picked != selectedEndTime) {
+    final TimeOfDay? picked = await showTimePicker(
+        context: context, initialTime: TimeOfDay.fromDateTime(event.endTime));
+    if (picked != null && picked != TimeOfDay.fromDateTime(event.endTime)) {
       setState(() {
-        selectedEndTime = picked;
+        event.endTime = new DateTime(event.endTime.year, event.endTime.month,
+            event.endTime.day, picked.hour, picked.minute);
       });
     }
   }
@@ -261,7 +313,8 @@ class _SelectEndTimeState extends State<SelectEndTime> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Center(child: Text(selectedEndTime.format(context))),
+        Center(
+            child: Text(TimeOfDay.fromDateTime(event.endTime).format(context))),
         SizedBox(
           width: 10,
         ),
@@ -278,16 +331,20 @@ class _SelectEndTimeState extends State<SelectEndTime> {
 }
 
 class EditImage extends StatefulWidget {
-  const EditImage({super.key});
+  Event event;
+  EditImage({super.key, required this.event});
 
   @override
   State<EditImage> createState() => _EditImageState();
 }
 
 class _EditImageState extends State<EditImage> {
+  late final Event event;
+
   @override
   void initState() {
     super.initState();
+    event = widget.event;
   }
 
   Future<void> _directUpdateImage(File? file) async {
@@ -304,7 +361,7 @@ class _EditImageState extends State<EditImage> {
       onChange: _directUpdateImage,
       image: _eventPicFile != null
           ? Image.file(_eventPicFile!, fit: BoxFit.cover)
-          : const Image(image: AssetImage('assets/orgdefaultbackground.png')),
+          : Image(image: AssetImage(event.picLink)),
       size: 150,
       imagePickerTheme: ThemeData(
         primaryColor: Colors.yellow,
@@ -393,7 +450,8 @@ class _MultiDayEventState extends State<MultiDayEvent> {
           visible: isChecked,
           child: Column(
             children: [
-              Center(child: Text(DateFormat.yMMMMEEEEd().format(endDate))),
+              Center(
+                  child: Text(DateFormat.yMMMMEEEEd().format(event.endTime))),
               SizedBox(
                 width: 10,
               ),
