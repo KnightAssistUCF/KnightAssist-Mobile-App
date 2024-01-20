@@ -128,6 +128,36 @@ class PostScan extends ConsumerWidget {
                     style: const TextStyle(
                         fontSize: 25, fontWeight: FontWeight.w600),
                   ),
+                  checkIn
+                      ? SizedBox(
+                          height: 0,
+                        )
+                      : Padding(
+                          // shows leave feedback button for volunteer checking out of event
+                          padding: const EdgeInsets.all(8.0),
+                          child: Center(
+                            child: Column(
+                              children: [
+                                Text(
+                                  "Help this organization make their events better by leaving feedback (optional).",
+                                  style: TextStyle(fontSize: 25),
+                                ),
+                                ElevatedButton(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      "Leave Feedback",
+                                      style: TextStyle(fontSize: 25),
+                                    ),
+                                  ),
+                                  onPressed: () => context.pushNamed(
+                                      "createfeedback",
+                                      extra: event),
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
                 ],
               ),
             ),

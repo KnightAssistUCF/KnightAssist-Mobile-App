@@ -14,6 +14,7 @@ import 'package:knightassist_mobile_app/src/features/events/feedback_detail.dart
 import 'package:knightassist_mobile_app/src/features/events/presentation/bottombar.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/calendar.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/create_event.dart';
+import 'package:knightassist_mobile_app/src/features/events/presentation/create_feedback.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/edit_event.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/event_history_detail.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/event_history_screen.dart';
@@ -63,6 +64,7 @@ enum AppRoute {
   postVerify,
   postScan,
   createEvent,
+  createFeedback,
   createUpdate,
   editEvent,
   editUpdate
@@ -94,8 +96,31 @@ GoRouter goRouter(GoRouterRef ref) {
         GoRoute(
             path: '/',
             name: AppRoute.home.name,
-            builder: (context, state) =>
-                const HomeScreen(), // TEMP, change this to whatever screen you want to test (will need to rerun)
+            builder: (context, state) => PostScan(
+                  event: Event(
+                      id: '1',
+                      name: 'concert',
+                      description:
+                          'really cool music, need someone to serve food',
+                      location: 'addition financial arena',
+                      date: DateTime.fromMillisecondsSinceEpoch(1699875173000),
+                      sponsoringOrganization:
+                          'Organization X is really long !!!!! !!!!! !!!!! !!!!!',
+                      attendees: [],
+                      registeredVolunteers: [],
+                      picLink: 'assets/profile pictures/icon_leaf.png',
+                      startTime:
+                          DateTime.fromMillisecondsSinceEpoch(1699875173000),
+                      endTime:
+                          DateTime.fromMillisecondsSinceEpoch(1699875173099),
+                      eventTags: ['music', 'food'],
+                      semester: 'Fall 2023',
+                      maxAttendees: 1000,
+                      createdAt:
+                          DateTime.fromMillisecondsSinceEpoch(1700968029),
+                      updatedAt: DateTime.now(),
+                      feedback: []),
+                ), // TEMP, change this to whatever screen you want to test (will need to rerun)
             routes: [
               GoRoute(
                   path: 'events',
@@ -253,6 +278,14 @@ GoRouter goRouter(GoRouterRef ref) {
                   name: AppRoute.createEvent.name,
                   pageBuilder: (context, state) => const MaterialPage(
                       fullscreenDialog: true, child: CreateEvent())),
+              GoRoute(
+                  path: 'createfeedback',
+                  name: 'createfeedback',
+                  builder: (context, state) {
+                    Event e = state.extra as Event;
+                    //final eventID = state.pathParameters['id']!;
+                    return CreateFeedback(event: e);
+                  }),
               GoRoute(
                   path: 'createupdate',
                   name: AppRoute.createUpdate.name,
