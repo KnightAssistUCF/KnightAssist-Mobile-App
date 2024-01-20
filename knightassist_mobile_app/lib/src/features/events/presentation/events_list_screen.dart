@@ -529,6 +529,8 @@ class EventListScreen extends ConsumerWidget {
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
 
+    bool isOrg = true;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -647,12 +649,19 @@ class EventListScreen extends ConsumerWidget {
                 context.pushNamed(AppRoute.updates.name);
               },
             ),
-            ListTile(
-              title: const Text('QR Scan'),
-              onTap: () {
-                context.pushNamed(AppRoute.qrScanner.name);
-              },
-            ),
+            isOrg
+                ? ListTile(
+                    title: const Text('Feedback'),
+                    onTap: () {
+                      context.pushNamed(AppRoute.feedbacklist.name);
+                    },
+                  )
+                : ListTile(
+                    title: const Text('QR Scan'),
+                    onTap: () {
+                      context.pushNamed(AppRoute.qrScanner.name);
+                    },
+                  ),
             ListTile(
               title: const Text('History'),
               onTap: () {

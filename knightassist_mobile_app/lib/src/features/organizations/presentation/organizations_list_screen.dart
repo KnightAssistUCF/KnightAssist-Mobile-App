@@ -394,6 +394,8 @@ class _OrganizationCardState extends State<OrganizationCard> {
 
     const style = TextStyle(fontSize: 20, fontWeight: FontWeight.normal);
 
+    bool isOrg = true;
+
     final Organization organization = this.organization;
     return SingleChildScrollView(
       child: ResponsiveCenter(
@@ -486,19 +488,23 @@ class _OrganizationCardState extends State<OrganizationCard> {
                                   const TextStyle(fontWeight: FontWeight.w400),
                               textAlign: TextAlign.start,
                             ),
-                            trailing: IconButton(
-                                iconSize: 30.0,
-                                padding: const EdgeInsets.only(
-                                    left: 4, right: 4, top: 0),
-                                icon: _isFavoriteOrg == true
-                                    ? const Icon(Icons.favorite)
-                                    : const Icon(Icons.favorite_outline),
-                                color: Colors.pink,
-                                onPressed: () {
-                                  setState(() {
-                                    _isFavoriteOrg = !_isFavoriteOrg;
-                                  });
-                                }),
+                            trailing: isOrg
+                                ? SizedBox(
+                                    height: 0,
+                                  )
+                                : IconButton(
+                                    iconSize: 30.0,
+                                    padding: const EdgeInsets.only(
+                                        left: 4, right: 4, top: 0),
+                                    icon: _isFavoriteOrg == true
+                                        ? const Icon(Icons.favorite)
+                                        : const Icon(Icons.favorite_outline),
+                                    color: Colors.pink,
+                                    onPressed: () {
+                                      setState(() {
+                                        _isFavoriteOrg = !_isFavoriteOrg;
+                                      });
+                                    }),
                           ),
                         ],
                       ),
