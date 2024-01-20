@@ -439,7 +439,7 @@ class EventCard extends StatelessWidget {
                           decoration: BoxDecoration(
                               image: DecorationImage(
                                   image: AssetImage(event.picLink),
-                                  fit: BoxFit.fill)),
+                                  fit: BoxFit.cover)),
                           width: 120,
                           height: 210,
                         ),
