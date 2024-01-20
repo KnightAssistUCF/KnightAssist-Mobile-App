@@ -14,6 +14,8 @@ DateTime selectedDate = DateTime.now();
 TimeOfDay selectedStartTime = TimeOfDay.now();
 TimeOfDay selectedEndTime = TimeOfDay.now();
 File? _eventPicFile;
+DateTime endDate = DateTime
+    .now(); // used for events that have a different start date and end date
 
 class CreateEvent extends ConsumerWidget {
   const CreateEvent({super.key});
@@ -95,6 +97,7 @@ class CreateEvent extends ConsumerWidget {
             height: 20,
           ),
           SelectDate(),
+          MultiDayEvent(),
           SizedBox(height: 52, width: 50, child: SelectTime()),
           SizedBox(height: 52, width: 50, child: SelectEndTime()),
           SizedBox(
@@ -291,6 +294,82 @@ class _EditImageState extends State<EditImage> {
       ),
       imageBorder: Border.all(color: Colors.lime, width: 2),
       editIconBorder: Border.all(color: Colors.purple, width: 2),
+    );
+  }
+}
+
+class MultiDayEvent extends StatefulWidget {
+  const MultiDayEvent({super.key});
+
+  @override
+  State<MultiDayEvent> createState() => _MultiDayEventState();
+}
+
+class _MultiDayEventState extends State<MultiDayEvent> {
+  bool isChecked = true;
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: endDate,
+        firstDate: DateTime(2023, 8),
+        lastDate: DateTime(2101));
+    if (picked != null && picked != endDate) {
+      setState(() {
+        endDate = picked;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    Color getColor(Set<MaterialState> states) {
+      const Set<MaterialState> interactiveStates = <MaterialState>{
+        MaterialState.pressed,
+        MaterialState.hovered,
+        MaterialState.focused,
+      };
+      if (states.any(interactiveStates.contains)) {
+        return Colors.blue;
+      }
+      return Color.fromARGB(255, 91, 78, 119);
+    }
+
+    return Column(
+      children: [
+        CheckboxListTile(
+          title: Text(
+            "Multi-Day Event (end date different than start date)",
+            textAlign: TextAlign.center,
+          ),
+          checkColor: Colors.white,
+          fillColor: MaterialStateProperty.resolveWith(getColor),
+          value: isChecked,
+          onChanged: (bool? value) {
+            setState(() {
+              isChecked = value!;
+            });
+          },
+        ),
+        Visibility(
+          visible: isChecked,
+          child: Column(
+            children: [
+              Center(child: Text(DateFormat.yMMMMEEEEd().format(endDate))),
+              SizedBox(
+                width: 10,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(0.0),
+                child: ElevatedButton(
+                  onPressed: () => _selectDate(context),
+                  child: const Text('Select Event End Date'),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
