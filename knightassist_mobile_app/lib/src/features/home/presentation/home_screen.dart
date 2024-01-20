@@ -717,12 +717,19 @@ class HomeScreenTab extends ConsumerWidget {
                 context.pushNamed(AppRoute.updates.name);
               },
             ),
-            ListTile(
-              title: const Text('QR Scan'),
-              onTap: () {
-                context.pushNamed(AppRoute.qrScanner.name);
-              },
-            ),
+            isOrg
+                ? ListTile(
+                    title: const Text('Feedback'),
+                    onTap: () {
+                      context.pushNamed(AppRoute.feedbacklist.name);
+                    },
+                  )
+                : ListTile(
+                    title: const Text('QR Scan'),
+                    onTap: () {
+                      context.pushNamed(AppRoute.qrScanner.name);
+                    },
+                  ),
             ListTile(
               title: const Text('History'),
               onTap: () {
