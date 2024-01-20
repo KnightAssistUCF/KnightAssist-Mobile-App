@@ -273,6 +273,7 @@ class FeedbackCard extends StatelessWidget {
                           ),
                           RatingBar.builder(
                             initialRating: feedback.rating,
+                            ignoreGestures: true,
                             minRating: 1,
                             direction: Axis.horizontal,
                             allowHalfRating: false,

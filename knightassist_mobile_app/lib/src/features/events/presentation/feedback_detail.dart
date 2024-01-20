@@ -79,6 +79,7 @@ class FeedbackDetailScreen extends ConsumerWidget {
                 ),
                 RatingBar.builder(
                   initialRating: feedback.rating,
+                  ignoreGestures: true,
                   minRating: 1,
                   direction: Axis.horizontal,
                   allowHalfRating: false,

@@ -10,7 +10,7 @@ import 'package:knightassist_mobile_app/src/features/authentication/presentation
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/sign_in/sign_in_screen.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/feedback.dart';
-import 'package:knightassist_mobile_app/src/features/events/feedback_detail.dart';
+import 'package:knightassist_mobile_app/src/features/events/presentation/feedback_detail.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/bottombar.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/calendar.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/create_event.dart';
