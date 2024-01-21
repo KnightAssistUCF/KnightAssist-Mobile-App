@@ -1,18 +1,18 @@
-import 'package:knightassist_mobile_app/src/features/events/presentation/events_list/events_list.dart';
-import 'package:knightassist_mobile_app/src/features/events/presentation/events_list/events_search_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:knightassist_mobile_app/src/common_widgets/responsive_center.dart';
 import 'package:knightassist_mobile_app/src/constants/app_sizes.dart';
+import 'package:knightassist_mobile_app/src/features/organizations/presentation/organizations_list/organizations_list.dart';
+import 'package:knightassist_mobile_app/src/features/organizations/presentation/organizations_list/organizations_search_text_field.dart';
 
-class EventsListScreen extends StatefulWidget {
-  const EventsListScreen({super.key, this.organizationID});
-  final String? organizationID;
+class OrganizationsListScreen extends StatefulWidget {
+  const OrganizationsListScreen({super.key});
 
   @override
-  State<EventsListScreen> createState() => _EventsListScreenState();
+  State<OrganizationsListScreen> createState() =>
+      _OrganizationsListScreenState();
 }
 
-class _EventsListScreenState extends State<EventsListScreen> {
+class _OrganizationsListScreenState extends State<OrganizationsListScreen> {
   // * Use a [ScrollController] to register a listener that dismisses the
   // * on-screen keyboard when the user scrolls.
   // * This is needed because this page has a search field that the user can
@@ -46,11 +46,11 @@ class _EventsListScreenState extends State<EventsListScreen> {
         slivers: const [
           ResponsiveSliverCenter(
             padding: EdgeInsets.all(Sizes.p16),
-            child: EventsSearchTextField(),
+            child: OrganizationsSearchTextField(),
           ),
           ResponsiveSliverCenter(
             padding: EdgeInsets.all(Sizes.p16),
-            child: EventsList(),
+            child: OrganizationsList(),
           ),
         ],
       ),

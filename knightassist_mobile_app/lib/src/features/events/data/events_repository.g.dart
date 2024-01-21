@@ -314,6 +314,264 @@ class _EventProviderElement extends AutoDisposeStreamProviderElement<Event?>
   String get id => (origin as EventProvider).id;
 }
 
+String _$eventsListOrgHash() => r'ea68bf5736979432a00b74a9e71806bdb1a0c435';
+
+/// See also [eventsListOrg].
+@ProviderFor(eventsListOrg)
+const eventsListOrgProvider = EventsListOrgFamily();
+
+/// See also [eventsListOrg].
+class EventsListOrgFamily extends Family<AsyncValue<List<Event>>> {
+  /// See also [eventsListOrg].
+  const EventsListOrgFamily();
+
+  /// See also [eventsListOrg].
+  EventsListOrgProvider call(
+    String orgID,
+  ) {
+    return EventsListOrgProvider(
+      orgID,
+    );
+  }
+
+  @override
+  EventsListOrgProvider getProviderOverride(
+    covariant EventsListOrgProvider provider,
+  ) {
+    return call(
+      provider.orgID,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'eventsListOrgProvider';
+}
+
+/// See also [eventsListOrg].
+class EventsListOrgProvider extends AutoDisposeFutureProvider<List<Event>> {
+  /// See also [eventsListOrg].
+  EventsListOrgProvider(
+    String orgID,
+  ) : this._internal(
+          (ref) => eventsListOrg(
+            ref as EventsListOrgRef,
+            orgID,
+          ),
+          from: eventsListOrgProvider,
+          name: r'eventsListOrgProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$eventsListOrgHash,
+          dependencies: EventsListOrgFamily._dependencies,
+          allTransitiveDependencies:
+              EventsListOrgFamily._allTransitiveDependencies,
+          orgID: orgID,
+        );
+
+  EventsListOrgProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.orgID,
+  }) : super.internal();
+
+  final String orgID;
+
+  @override
+  Override overrideWith(
+    FutureOr<List<Event>> Function(EventsListOrgRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: EventsListOrgProvider._internal(
+        (ref) => create(ref as EventsListOrgRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        orgID: orgID,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<List<Event>> createElement() {
+    return _EventsListOrgProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is EventsListOrgProvider && other.orgID == orgID;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, orgID.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin EventsListOrgRef on AutoDisposeFutureProviderRef<List<Event>> {
+  /// The parameter `orgID` of this provider.
+  String get orgID;
+}
+
+class _EventsListOrgProviderElement
+    extends AutoDisposeFutureProviderElement<List<Event>>
+    with EventsListOrgRef {
+  _EventsListOrgProviderElement(super.provider);
+
+  @override
+  String get orgID => (origin as EventsListOrgProvider).orgID;
+}
+
+String _$eventsListStudentHash() => r'1e305e019be5efb3bb8fca5a9d4ede333e814b78';
+
+/// See also [eventsListStudent].
+@ProviderFor(eventsListStudent)
+const eventsListStudentProvider = EventsListStudentFamily();
+
+/// See also [eventsListStudent].
+class EventsListStudentFamily extends Family<AsyncValue<List<Event>>> {
+  /// See also [eventsListStudent].
+  const EventsListStudentFamily();
+
+  /// See also [eventsListStudent].
+  EventsListStudentProvider call(
+    String uid,
+  ) {
+    return EventsListStudentProvider(
+      uid,
+    );
+  }
+
+  @override
+  EventsListStudentProvider getProviderOverride(
+    covariant EventsListStudentProvider provider,
+  ) {
+    return call(
+      provider.uid,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'eventsListStudentProvider';
+}
+
+/// See also [eventsListStudent].
+class EventsListStudentProvider extends AutoDisposeFutureProvider<List<Event>> {
+  /// See also [eventsListStudent].
+  EventsListStudentProvider(
+    String uid,
+  ) : this._internal(
+          (ref) => eventsListStudent(
+            ref as EventsListStudentRef,
+            uid,
+          ),
+          from: eventsListStudentProvider,
+          name: r'eventsListStudentProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$eventsListStudentHash,
+          dependencies: EventsListStudentFamily._dependencies,
+          allTransitiveDependencies:
+              EventsListStudentFamily._allTransitiveDependencies,
+          uid: uid,
+        );
+
+  EventsListStudentProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.uid,
+  }) : super.internal();
+
+  final String uid;
+
+  @override
+  Override overrideWith(
+    FutureOr<List<Event>> Function(EventsListStudentRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: EventsListStudentProvider._internal(
+        (ref) => create(ref as EventsListStudentRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        uid: uid,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<List<Event>> createElement() {
+    return _EventsListStudentProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is EventsListStudentProvider && other.uid == uid;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, uid.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin EventsListStudentRef on AutoDisposeFutureProviderRef<List<Event>> {
+  /// The parameter `uid` of this provider.
+  String get uid;
+}
+
+class _EventsListStudentProviderElement
+    extends AutoDisposeFutureProviderElement<List<Event>>
+    with EventsListStudentRef {
+  _EventsListStudentProviderElement(super.provider);
+
+  @override
+  String get uid => (origin as EventsListStudentProvider).uid;
+}
+
 String _$eventsListSearchHash() => r'2161db5630bf34307657024316819cbb42ac494a';
 
 /// See also [eventsListSearch].

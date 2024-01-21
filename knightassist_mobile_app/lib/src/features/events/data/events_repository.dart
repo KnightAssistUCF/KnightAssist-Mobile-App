@@ -110,41 +110,34 @@ class EventsRepository {
     }
   }
 
-  // TODO: Streamline editing process so not all parameters need to be passed all the time
-  // Please don't try to use this yet!
-  Future<String> editEvent(
-      String organizationID,
-      String eventID,
-      String name,
-      String description,
-      String location,
-      DateTime date,
-      DateTime startTime,
-      DateTime endTime,
-      String picLink,
-      List<String> eventTags,
-      String semester,
-      int maxAttendees) async {
-    Map<String, dynamic> params = {
-      'eventID': eventID,
-      'organizationID': organizationID,
-      'name': name,
-      'description': description,
-      'location': location,
-      'date': date.toIso8601String(),
-      'startTime': startTime.toIso8601String(),
-      'endTime': endTime.toIso8601String(),
-      'eventTags': eventTags,
-      'semester': semester,
-      'maxAttendees': maxAttendees,
-    };
+  Future<void> editEvent(String eventID,
+      {String? name,
+      String? description,
+      String? location,
+      DateTime? startTime,
+      DateTime? endTime,
+      String? picLink,
+      List<String>? eventTags,
+      String? semester,
+      int? maxAttendees}) async {
+    Map<String, dynamic> params = {'eventID': eventID};
+    if (name != null) params['name'] = name;
+    if (description != null) params['description'] = description;
+    if (location != null) params['location'] = location;
+    if (startTime != null) params['startTime'] = startTime.toIso8601String();
+    if (endTime != null) params['endTime'] = endTime.toIso8601String();
+    if (eventTags != null) params['eventTags'] = eventTags;
+    if (semester != null) params['semester'] = semester;
+    if (maxAttendees != null) params['maxAttendees'] = maxAttendees;
+
     var uri = Uri.parse(
         "https://knightassist-43ab3aeaada9.herokuapp.com/api/editEvent");
     var response = await http.post(uri, body: params);
     var body = jsonDecode(response.body);
     switch (response.statusCode) {
       case 200:
-        return body["ID"];
+        // Successful
+        return;
       case 404:
         throw EventNotFoundException();
       default:
@@ -174,31 +167,7 @@ class EventsRepository {
     }
   }
 
-  Future<void> rsvpForEvent(
-      String eventID, String userID, String eventName, bool checked) async {
-    Map<String, dynamic> params = {
-      "eventID": eventID,
-      "userID": userID,
-      "eventName": eventName,
-      "checked": checked
-    };
-    var uri = Uri.parse(
-        "https://knightassist-43ab3aeaada9.herokuapp.com/api/RSVPForEvent");
-    var response = await http.post(uri, body: params);
-    var body = jsonDecode(response.body);
-    switch (response.statusCode) {
-      case 200:
-        // TODO: Does frontend want a success message for rsvping for an event?
-        break;
-      case 404:
-        throw EventNotFoundException();
-      default:
-        String err = body["error"];
-        throw Exception(err);
-    }
-  }
-
-  Future<List<Event>> getEventsByOrg(String organizationID) async {
+  Future<List<Event>> fetchEventsByOrg(String organizationID) async {
     Map<String, String?> params = {"organizationID": organizationID};
     var uri = Uri.https('knightassist-43ab3aeaada9.herokuapp.com',
         '/api/searchEventsForOrg', params);
@@ -219,7 +188,7 @@ class EventsRepository {
     }
   }
 
-  Future<List<Event>> getRSVPedEvents(String studentID) async {
+  Future<List<Event>> fetchEventsByStudent(String studentID) async {
     Map<String, String?> params = {"studentID": studentID};
     var uri = Uri.https('knightassist-43ab3aeaada9.herokuapp.com',
         '/api/searchUserRSVPedEvents', params);
@@ -283,6 +252,19 @@ Future<List<Event>> eventsListFuture(EventsListFutureRef ref, EventID id) {
 Stream<Event?> event(EventRef ref, EventID id) {
   final eventsRepository = ref.watch(eventsRepositoryProvider);
   return eventsRepository.watchEvent(id);
+}
+
+@riverpod
+Future<List<Event>> eventsListOrg(EventsListOrgRef ref, String orgID) async {
+  final eventsRepository = ref.watch(eventsRepositoryProvider);
+  return eventsRepository.fetchEventsByOrg(orgID);
+}
+
+@riverpod
+Future<List<Event>> eventsListStudent(
+    EventsListStudentRef ref, String uid) async {
+  final eventsRepository = ref.watch(eventsRepositoryProvider);
+  return eventsRepository.fetchEventsByStudent(uid);
 }
 
 @riverpod

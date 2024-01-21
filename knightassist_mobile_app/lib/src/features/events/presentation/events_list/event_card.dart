@@ -1,4 +1,3 @@
-import 'package:intl/intl.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
 import 'package:flutter/material.dart';
 import 'package:knightassist_mobile_app/src/constants/app_sizes.dart';
@@ -23,7 +22,7 @@ class EventCard extends ConsumerWidget {
             padding: const EdgeInsets.all(Sizes.p16),
             child: Container(
               child: Row(
-                children: <Widget>[
+                children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(20.0),
                     child: Container(
