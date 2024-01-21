@@ -3,6 +3,9 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
+import 'package:knightassist_mobile_app/src/common_widgets/responsive_center.dart';
+import 'package:knightassist_mobile_app/src/constants/breakpoints.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/feedback.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/feedback_list_screen.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
@@ -125,7 +128,7 @@ class OrganizationScreen extends ConsumerWidget {
                   children: [
                     Center(
                       child: SizedBox(
-                        width: 300,
+                        width: 340,
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: ElevatedButton(
@@ -155,7 +158,7 @@ class OrganizationScreen extends ConsumerWidget {
                       ),
                     ),
                     SizedBox(
-                        height: 350,
+                        height: 320,
                         child: TabBarOrg(organization: organization)),
                     curOrg
                         ? Padding(
@@ -559,6 +562,120 @@ class _TabBarOrgState extends State<TabBarOrg> with TickerProviderStateMixin {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class FeedbackCard extends StatelessWidget {
+  final EventFeedback feedback;
+
+  const FeedbackCard({super.key, required this.feedback});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    const style = TextStyle(fontSize: 20, fontWeight: FontWeight.normal);
+
+    return ResponsiveCenter(
+      maxContentWidth: 220,
+      child: SingleChildScrollView(
+        child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Card(
+              shape: RoundedRectangleBorder(
+                side: const BorderSide(
+                  color: Colors.black26,
+                  width: 1.0,
+                ),
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+              color: Colors.white,
+              elevation: 5,
+              child: InkWell(
+                onTap: () =>
+                    context.pushNamed("feedbackdetail", extra: feedback),
+                child: Padding(
+                  padding: const EdgeInsets.all(0.05),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children:[ 
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            feedback.eventName,
+                            maxLines: 3,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                                fontWeight: FontWeight.w600, fontSize: 18),
+                            textAlign: TextAlign.start,
+                          ),
+                        ),
+                        OverflowBar(
+                          children: [ Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: ClipRRect(
+                            borderRadius: BorderRadius.circular(25.0),
+                            child: const Image(
+                                image: AssetImage(
+                                    'assets/profile pictures/icon_paintbrush.png'),
+                                height:
+                                    50)),
+                          ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                                        feedback.studentName,
+                                                        maxLines: 3,
+                                                        overflow: TextOverflow.ellipsis,
+                                                        style: const TextStyle(
+                                fontWeight: FontWeight.w500, fontSize: 16),
+                                                        textAlign: TextAlign.start,
+                                                      ),
+                            ),
+                    ]), // will be profile picture of student who left the feedback
+                        RatingBar.builder(
+                          initialRating: feedback.rating,
+                          itemSize: 20.0,
+                          ignoreGestures: true,
+                          minRating: 1,
+                          direction: Axis.horizontal,
+                          allowHalfRating: false,
+                          itemCount: 5,
+                          itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                          itemBuilder: (context, _) => Icon(
+                            Icons.star,
+                            color: Colors.amber,
+                          ),
+                          onRatingUpdate: (rating) {
+                            print(rating);
+                            feedback.rating = rating;
+                          },
+                        ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        feedback.feedbackText,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 3,
+                        style: const TextStyle(fontWeight: FontWeight.w400),
+                        textAlign: TextAlign.start,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        DateFormat('yyyy-MM-dd').format(feedback.timeSubmitted),
+                        style: const TextStyle(fontWeight: FontWeight.w400),
+                        textAlign: TextAlign.start,
+                      ),
+                    ),
+                  ] ),
+                ),
+              ),
+            )),
       ),
     );
   }

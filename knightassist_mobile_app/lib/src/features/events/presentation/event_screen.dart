@@ -118,7 +118,7 @@ class EventScreen extends ConsumerWidget {
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text(
-                                  "Edit",
+                                  "Edit Event",
                                   style: TextStyle(fontSize: 20),
                                 ),
                               ),
