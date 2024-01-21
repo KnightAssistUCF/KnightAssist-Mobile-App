@@ -1,10 +1,67 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
+import 'package:knightassist_mobile_app/src/features/events/domain/feedback.dart';
+import 'package:knightassist_mobile_app/src/features/events/presentation/feedback_list_screen.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+List<EventFeedback> OrgFeedback = [
+  EventFeedback(
+      student: '1',
+      event: '1',
+      studentName: 'Johnson Doe',
+      eventName: 'concert',
+      rating: 1,
+      feedbackText: 'it was bad',
+      wasReadByUser: false,
+      timeSubmitted: DateTime.fromMillisecondsSinceEpoch(1704948441000),
+      updatedAt: DateTime.now()),
+  EventFeedback(
+      student: '2',
+      event: '2',
+      studentName: 'foo',
+      eventName: 'study session',
+      rating: 2,
+      feedbackText:
+          'Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum',
+      wasReadByUser: true,
+      timeSubmitted: DateTime.fromMillisecondsSinceEpoch(1704948441000),
+      updatedAt: DateTime.now()),
+  EventFeedback(
+      student: '3',
+      event: '2',
+      studentName: 'Test User',
+      eventName: 'movie night',
+      rating: 3,
+      feedbackText: 'idk',
+      wasReadByUser: true,
+      timeSubmitted: DateTime.fromMillisecondsSinceEpoch(1704948441000),
+      updatedAt: DateTime.now()),
+  EventFeedback(
+      student: '4',
+      event: '2',
+      studentName: 'Student',
+      eventName: 'concert',
+      rating: 4,
+      feedbackText: 'test',
+      wasReadByUser: false,
+      timeSubmitted: DateTime.fromMillisecondsSinceEpoch(1704948441000),
+      updatedAt: DateTime.now()),
+  EventFeedback(
+      student: '5',
+      event: '3',
+      studentName: '',
+      eventName: 'study session',
+      rating: 5,
+      feedbackText: 'epic',
+      wasReadByUser: true,
+      timeSubmitted: DateTime.fromMillisecondsSinceEpoch(1704948441000),
+      updatedAt: DateTime.now())
+];
 
 class OrganizationScreen extends ConsumerWidget {
   OrganizationScreen({super.key, required this.organization});
@@ -109,7 +166,7 @@ class OrganizationScreen extends ConsumerWidget {
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text(
-                                    "Edit",
+                                    "Edit Profile",
                                     style: TextStyle(fontSize: 20),
                                   ),
                                 ),
@@ -276,7 +333,7 @@ class _TabBarOrgState extends State<TabBarOrg> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2,
+      length: 3,
       child: Scaffold(
         body: Column(
           children: [
@@ -284,6 +341,7 @@ class _TabBarOrgState extends State<TabBarOrg> with TickerProviderStateMixin {
               tabs: [
                 Tab(icon: Text("About")),
                 Tab(icon: Text("Contact")),
+                Tab(icon: Text("Ratings")),
               ],
             ),
             Expanded(
@@ -444,6 +502,56 @@ class _TabBarOrgState extends State<TabBarOrg> with TickerProviderStateMixin {
                                 ),
                               ),
                             ),
+                    ],
+                  ),
+                  ListView(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          '4.3',
+                          style: const TextStyle(
+                              fontSize: 30, fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                      RatingBar.builder(
+                        initialRating: 4.3,
+                        ignoreGestures: true,
+                        minRating: 1,
+                        direction: Axis.horizontal,
+                        allowHalfRating:
+                            true, // displays half ratings for org averages
+                        itemCount: 5,
+                        itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                        itemBuilder: (context, _) => Icon(
+                          Icons.star,
+                          color: Colors.amber,
+                        ),
+                        onRatingUpdate: (rating) {
+                          print(rating);
+                          // feedback.rating = rating;
+                        },
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          '${OrgFeedback.length} Total Reviews',
+                          style: TextStyle(fontSize: 20),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 240,
+                        width: 100,
+                        child: ListView.builder(
+                          // TODO: use retrieveAllFeedback api here
+                          scrollDirection: Axis.horizontal,
+                          shrinkWrap: true,
+                          physics: const ClampingScrollPhysics(),
+                          itemCount: OrgFeedback.length,
+                          itemBuilder: (context, index) => FeedbackCard(
+                              feedback: OrgFeedback.elementAt(index)),
+                        ),
+                      )
                     ],
                   ),
                 ],
