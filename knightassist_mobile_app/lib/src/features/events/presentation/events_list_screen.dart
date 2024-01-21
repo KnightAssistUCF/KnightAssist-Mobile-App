@@ -28,7 +28,8 @@ List<Event> events = [
       semester: 'Fall 2023',
       maxAttendees: 1000,
       createdAt: DateTime.fromMillisecondsSinceEpoch(1700968029),
-      updatedAt: DateTime.now()),
+      updatedAt: DateTime.now(),
+      feedback: []),
   Event(
       id: '2',
       name: 'study session',
@@ -45,7 +46,8 @@ List<Event> events = [
       semester: 'Fall 2023',
       maxAttendees: 30,
       createdAt: DateTime.fromMillisecondsSinceEpoch(1700968029),
-      updatedAt: DateTime.now()),
+      updatedAt: DateTime.now(),
+      feedback: []),
   Event(
       id: '3',
       name: 'movie night',
@@ -62,7 +64,8 @@ List<Event> events = [
       semester: 'Fall 2023',
       maxAttendees: 400,
       createdAt: DateTime.fromMillisecondsSinceEpoch(1700968029),
-      updatedAt: DateTime.now()),
+      updatedAt: DateTime.now(),
+      feedback: []),
   Event(
       id: '4',
       name: 'movie night but its date isn\'t previous',
@@ -79,7 +82,8 @@ List<Event> events = [
       semester: 'Fall 2023',
       maxAttendees: 400,
       createdAt: DateTime.fromMillisecondsSinceEpoch(1702596396),
-      updatedAt: DateTime.now()),
+      updatedAt: DateTime.now(),
+      feedback: []),
   Event(
       id: '5',
       name:
@@ -100,7 +104,8 @@ List<Event> events = [
       semester: 'Fall 2023',
       maxAttendees: 400,
       createdAt: DateTime.fromMillisecondsSinceEpoch(1702596396),
-      updatedAt: DateTime.now()),
+      updatedAt: DateTime.now(),
+      feedback: []),
 ];
 
 class EventsListScreen extends StatefulWidget {
@@ -327,6 +332,8 @@ class EventCard extends StatelessWidget {
 
     const style = TextStyle(fontSize: 20, fontWeight: FontWeight.normal);
 
+    bool isOrg = true;
+
     return SingleChildScrollView(
         child: ResponsiveCenter(
       maxContentWidth: Breakpoint.tablet,
@@ -432,7 +439,7 @@ class EventCard extends StatelessWidget {
                           decoration: BoxDecoration(
                               image: DecorationImage(
                                   image: AssetImage(event.picLink),
-                                  fit: BoxFit.fill)),
+                                  fit: BoxFit.cover)),
                           width: 120,
                           height: 210,
                         ),
@@ -490,11 +497,18 @@ class EventCard extends StatelessWidget {
                               ],
                             ),
                             FilledButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                if (isOrg) {
+                                  // only if current user is sponsoring org
+                                  context.pushNamed("editevent", extra: event);
+                                } else {
+                                  // RSVP if event not full and is student, otherwise no button (other org)
+                                }
+                              },
                               style: ButtonStyle(
                                   backgroundColor: MaterialStateProperty.all(
                                       const Color.fromARGB(255, 91, 78, 119))),
-                              child: const Text('RSVP'),
+                              child: Text(isOrg ? 'Edit' : 'RSVP'),
                             ),
                           ],
                         ),
@@ -514,6 +528,8 @@ class EventListScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
+
+    bool isOrg = true;
 
     return Scaffold(
       appBar: AppBar(
@@ -633,12 +649,19 @@ class EventListScreen extends ConsumerWidget {
                 context.pushNamed(AppRoute.updates.name);
               },
             ),
-            ListTile(
-              title: const Text('QR Scan'),
-              onTap: () {
-                context.pushNamed(AppRoute.qrScanner.name);
-              },
-            ),
+            isOrg
+                ? ListTile(
+                    title: const Text('Feedback'),
+                    onTap: () {
+                      context.pushNamed(AppRoute.feedbacklist.name);
+                    },
+                  )
+                : ListTile(
+                    title: const Text('QR Scan'),
+                    onTap: () {
+                      context.pushNamed(AppRoute.qrScanner.name);
+                    },
+                  ),
             ListTile(
               title: const Text('History'),
               onTap: () {

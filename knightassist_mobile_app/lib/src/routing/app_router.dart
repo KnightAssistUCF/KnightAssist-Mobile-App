@@ -1,5 +1,6 @@
 import 'package:knightassist_mobile_app/src/features/authentication/data/auth_repository.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/account/account_screen.dart';
+import 'package:knightassist_mobile_app/src/features/authentication/presentation/account/postverify.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/account/profile_screen.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/account/semester_goal.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/account/tag_selection.dart';
@@ -8,16 +9,25 @@ import 'package:knightassist_mobile_app/src/features/authentication/presentation
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/register/register_student_screen.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/sign_in/sign_in_screen.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
+import 'package:knightassist_mobile_app/src/features/events/domain/feedback.dart';
+import 'package:knightassist_mobile_app/src/features/events/presentation/feedback_detail.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/bottombar.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/calendar.dart';
+import 'package:knightassist_mobile_app/src/features/events/presentation/create_event.dart';
+import 'package:knightassist_mobile_app/src/features/events/presentation/create_feedback.dart';
+import 'package:knightassist_mobile_app/src/features/events/presentation/edit_event.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/event_history_detail.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/event_history_screen.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/event_screen.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/events_list_screen.dart';
+import 'package:knightassist_mobile_app/src/features/events/presentation/feedback_list_screen.dart';
+import 'package:knightassist_mobile_app/src/features/events/presentation/postScan.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/qr_scanner.dart';
 import 'package:knightassist_mobile_app/src/features/home/presentation/home_screen.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/update.dart';
+import 'package:knightassist_mobile_app/src/features/organizations/presentation/create_update.dart';
+import 'package:knightassist_mobile_app/src/features/organizations/presentation/edit_update.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/presentation/organization_screen.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/presentation/organizations_list_screen.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/presentation/update_detail.dart';
@@ -49,7 +59,15 @@ enum AppRoute {
   semesterGoal,
   tagSelection,
   qrScanner,
-  calendar
+  calendar,
+  feedbacklist,
+  postVerify,
+  postScan,
+  createEvent,
+  createFeedback,
+  createUpdate,
+  editEvent,
+  editUpdate
 }
 
 @Riverpod(keepAlive: true)
@@ -78,8 +96,31 @@ GoRouter goRouter(GoRouterRef ref) {
         GoRoute(
             path: '/',
             name: AppRoute.home.name,
-            builder: (context, state) =>
-                const HomeScreen(), // TEMP, change this to whatever screen you want to test (will need to rerun)
+            builder: (context, state) => PostScan(
+                  event: Event(
+                      id: '1',
+                      name: 'concert',
+                      description:
+                          'really cool music, need someone to serve food',
+                      location: 'addition financial arena',
+                      date: DateTime.fromMillisecondsSinceEpoch(1699875173000),
+                      sponsoringOrganization:
+                          'Organization X is really long !!!!! !!!!! !!!!! !!!!!',
+                      attendees: [],
+                      registeredVolunteers: [],
+                      picLink: 'assets/profile pictures/icon_leaf.png',
+                      startTime:
+                          DateTime.fromMillisecondsSinceEpoch(1699875173000),
+                      endTime:
+                          DateTime.fromMillisecondsSinceEpoch(1699875173099),
+                      eventTags: ['music', 'food'],
+                      semester: 'Fall 2023',
+                      maxAttendees: 1000,
+                      createdAt:
+                          DateTime.fromMillisecondsSinceEpoch(1700968029),
+                      updatedAt: DateTime.now(),
+                      feedback: []),
+                ), // TEMP, change this to whatever screen you want to test (will need to rerun)
             routes: [
               GoRoute(
                   path: 'events',
@@ -201,6 +242,71 @@ GoRouter goRouter(GoRouterRef ref) {
                   name: AppRoute.calendar.name,
                   pageBuilder: (context, state) => const MaterialPage(
                       fullscreenDialog: true, child: CalendarView())),
+              GoRoute(
+                  path: 'feedbacklist',
+                  name: AppRoute.feedbacklist.name,
+                  builder: (context, state) {
+                    return const FeedbackListScreen();
+                  },
+                  routes: [
+                    GoRoute(
+                        path: 'feedbackdetail',
+                        name: 'feedbackdetail',
+                        builder: (context, state) {
+                          EventFeedback e = state.extra as EventFeedback;
+                          //final feedbackID = state.pathParameters['id']!;
+                          return FeedbackDetailScreen(
+                            feedback: e,
+                          );
+                        })
+                  ]),
+              GoRoute(
+                  path: 'postverify',
+                  name: AppRoute.postVerify.name,
+                  pageBuilder: (context, state) => const MaterialPage(
+                      fullscreenDialog: true, child: PostVerify())),
+              GoRoute(
+                  path: 'postscan',
+                  name: 'postscan',
+                  builder: (context, state) {
+                    Event ev = state.extra as Event;
+                    //final eventID = state.pathParameters['id']!;
+                    return PostScan(event: ev);
+                  }),
+              GoRoute(
+                  path: 'createevent',
+                  name: AppRoute.createEvent.name,
+                  pageBuilder: (context, state) => const MaterialPage(
+                      fullscreenDialog: true, child: CreateEvent())),
+              GoRoute(
+                  path: 'createfeedback',
+                  name: 'createfeedback',
+                  builder: (context, state) {
+                    Event e = state.extra as Event;
+                    //final eventID = state.pathParameters['id']!;
+                    return CreateFeedback(event: e);
+                  }),
+              GoRoute(
+                  path: 'createupdate',
+                  name: AppRoute.createUpdate.name,
+                  pageBuilder: (context, state) => const MaterialPage(
+                      fullscreenDialog: true, child: CreateUpdate())),
+              GoRoute(
+                  path: 'editevent',
+                  name: 'editevent',
+                  builder: (context, state) {
+                    Event e = state.extra as Event;
+                    //final eventID = state.pathParameters['id']!;
+                    return EditEvent(event: e);
+                  }),
+              GoRoute(
+                  path: 'editupdate',
+                  name: 'editupdate',
+                  builder: (context, state) {
+                    Update u = state.extra as Update;
+                    //final updateID = state.pathParameters['id']!;
+                    return EditUpdate(update: u);
+                  }),
             ])
       ],
       errorBuilder: (context, state) => const NotFoundScreen());

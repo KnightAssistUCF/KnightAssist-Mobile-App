@@ -1,7 +1,9 @@
+import 'package:knightassist_mobile_app/src/features/events/domain/feedback.dart';
+
 typedef EventID = String;
 
 class Event {
-  const Event({
+  Event({
     required this.id,
     required this.name,
     required this.description,
@@ -16,26 +18,28 @@ class Event {
     required this.eventTags,
     required this.semester,
     required this.maxAttendees,
+    required this.feedback,
     required this.createdAt,
     required this.updatedAt,
   });
 
   final EventID id;
-  final String name;
-  final String description;
-  final String location;
-  final DateTime date;
+  String name;
+  String description;
+  String location;
+  DateTime date;
   final String sponsoringOrganization;
-  final List<String> attendees;
-  final List<String> registeredVolunteers;
-  final String picLink;
-  final DateTime startTime;
-  final DateTime endTime;
-  final List<String> eventTags;
-  final String semester;
-  final int maxAttendees;
+  List<String> attendees;
+  List<String> registeredVolunteers;
+  String picLink;
+  DateTime startTime;
+  DateTime endTime;
+  List<String> eventTags;
+  String semester;
+  int maxAttendees;
+  List<EventFeedback> feedback;
   final DateTime createdAt;
-  final DateTime updatedAt;
+  DateTime updatedAt;
 
   factory Event.fromMap(Map<String, dynamic> map) {
     return Event(
@@ -53,6 +57,7 @@ class Event {
         eventTags: List<String>.from(map['eventTags']),
         semester: map['semester'],
         maxAttendees: map['maxAttendees']?.toInt() ?? -1,
+        feedback: List<EventFeedback>.from(map['feedback']),
         createdAt: DateTime.parse(map['createdAt']),
         updatedAt: DateTime.parse(map['updatedAt']));
   }
@@ -72,6 +77,7 @@ class Event {
         'eventTags': eventTags,
         'semester': semester,
         'maxAttendees': maxAttendees,
+        'feedback': feedback,
         'createdAt': createdAt.toIso8601String(),
         'updatedAt': updatedAt.toIso8601String(),
       };

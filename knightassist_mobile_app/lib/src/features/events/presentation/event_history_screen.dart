@@ -27,7 +27,7 @@ List<Event> events = [
       semester: 'Fall 2023',
       maxAttendees: 1000,
       createdAt: DateTime.fromMillisecondsSinceEpoch(1700968029),
-      updatedAt: DateTime.now()),
+      updatedAt: DateTime.now(), feedback: []),
   Event(
       id: '2',
       name: 'study session',
@@ -44,7 +44,7 @@ List<Event> events = [
       semester: 'Fall 2023',
       maxAttendees: 30,
       createdAt: DateTime.fromMillisecondsSinceEpoch(1700968029),
-      updatedAt: DateTime.now()),
+      updatedAt: DateTime.now(), feedback: []),
   Event(
       id: '3',
       name: 'movie night',
@@ -62,7 +62,7 @@ List<Event> events = [
       semester: 'Fall 2023',
       maxAttendees: 400,
       createdAt: DateTime.fromMillisecondsSinceEpoch(1700968029),
-      updatedAt: DateTime.now()),
+      updatedAt: DateTime.now(), feedback: []),
   Event(
       id: '4',
       name: 'movie night but its date isn\'t previous',
@@ -79,7 +79,7 @@ List<Event> events = [
       semester: 'Fall 2023',
       maxAttendees: 400,
       createdAt: DateTime.fromMillisecondsSinceEpoch(1702596396),
-      updatedAt: DateTime.now()),
+      updatedAt: DateTime.now(), feedback: []),
   Event(
       id: '5',
       name: 'movie night but it\'s very long',
@@ -96,7 +96,7 @@ List<Event> events = [
       semester: 'Fall 2023',
       maxAttendees: 400,
       createdAt: DateTime.fromMillisecondsSinceEpoch(1702680565000),
-      updatedAt: DateTime.now()),
+      updatedAt: DateTime.now(), feedback: []),
 ];
 
 class EventHistoryScreen extends StatefulWidget {
