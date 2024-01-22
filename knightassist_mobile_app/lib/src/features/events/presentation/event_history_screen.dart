@@ -25,8 +25,7 @@ List<Event> events = [
       eventTags: ['music', 'food'],
       semester: 'Fall 2023',
       maxAttendees: 1000,
-      createdAt: DateTime.fromMillisecondsSinceEpoch(1700968029),
-      updatedAt: DateTime.now()),
+      reviews: []),
   Event(
       id: '2',
       name: 'study session',
@@ -41,8 +40,7 @@ List<Event> events = [
       eventTags: ['education', 'technology'],
       semester: 'Fall 2023',
       maxAttendees: 30,
-      createdAt: DateTime.fromMillisecondsSinceEpoch(1700968029),
-      updatedAt: DateTime.now()),
+      reviews: []),
   Event(
       id: '3',
       name: 'movie night',
@@ -58,8 +56,7 @@ List<Event> events = [
       eventTags: ['movie', 'education', 'food'],
       semester: 'Fall 2023',
       maxAttendees: 400,
-      createdAt: DateTime.fromMillisecondsSinceEpoch(1700968029),
-      updatedAt: DateTime.now()),
+      reviews: []),
   Event(
       id: '4',
       name: 'movie night but its date isn\'t previous',
@@ -74,8 +71,7 @@ List<Event> events = [
       eventTags: ['movie', 'education', 'food'],
       semester: 'Fall 2023',
       maxAttendees: 400,
-      createdAt: DateTime.fromMillisecondsSinceEpoch(1702596396),
-      updatedAt: DateTime.now()),
+      reviews: []),
   Event(
       id: '5',
       name: 'movie night but it\'s very long',
@@ -90,8 +86,7 @@ List<Event> events = [
       eventTags: ['movie', 'education', 'food'],
       semester: 'Fall 2023',
       maxAttendees: 400,
-      createdAt: DateTime.fromMillisecondsSinceEpoch(1702680565000),
-      updatedAt: DateTime.now()),
+      reviews: []),
 ];
 
 class EventHistoryScreen extends StatefulWidget {
