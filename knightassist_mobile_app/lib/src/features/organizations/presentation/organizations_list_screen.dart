@@ -16,7 +16,7 @@ import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 
 import '../domain/organization.dart';
 
-List<Organization> organizations = [
+/*List<Organization> organizations = [
   Organization(
       id: '1',
       name:
@@ -174,7 +174,7 @@ List<Organization> organizations = [
       emailValidated: false,
       createdAt: DateTime.fromMillisecondsSinceEpoch(1701030257000),
       updatedAt: DateTime.now()),
-];
+];*/
 
 class OrganizationsListScreen extends StatefulWidget {
   const OrganizationsListScreen({super.key});
@@ -479,7 +479,7 @@ class _OrganizationCardState extends State<OrganizationCard> {
                               textAlign: TextAlign.start,
                             ),
                             subtitle: Text(
-                              organization.description,
+                              organization.description ?? '',
                               overflow: TextOverflow.ellipsis,
                               maxLines: 3,
                               style:
@@ -566,7 +566,7 @@ class OrganizationsListScreenTab extends ConsumerWidget {
           child: Column(
             children: [
               _topSection(w),
-              Flexible(
+              /*Flexible(
                 child: ListView.builder(
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
@@ -574,7 +574,7 @@ class OrganizationsListScreenTab extends ConsumerWidget {
                   itemBuilder: (context, index) => OrganizationCard(
                       organization: organizations.elementAt(index)),
                 ),
-              )
+              )*/
             ],
           ),
         ));
