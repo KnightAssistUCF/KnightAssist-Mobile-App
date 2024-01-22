@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:knightassist_mobile_app/src/features/authentication/data/auth_repository.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/account/account_screen.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/account/postverify.dart';
