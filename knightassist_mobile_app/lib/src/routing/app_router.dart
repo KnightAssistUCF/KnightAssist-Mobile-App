@@ -21,7 +21,8 @@ import 'package:knightassist_mobile_app/src/features/organizations/domain/update
     as prefix;
 import 'package:knightassist_mobile_app/src/features/organizations/presentation/organization_screen.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/presentation/organizations_list/organizations_list.dart';
-import 'package:knightassist_mobile_app/src/features/organizations/presentation/organizations_list_screen.dart';
+import 'package:knightassist_mobile_app/src/features/organizations/presentation/organizations_list/organizations_list_screen.dart';
+//import 'package:knightassist_mobile_app/src/features/organizations/presentation/organizations_list_screen.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/presentation/update_detail.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/presentation/update_screen.dart';
 import 'package:knightassist_mobile_app/src/routing/go_router_refresh_stream.dart';
@@ -81,7 +82,7 @@ GoRouter goRouter(GoRouterRef ref) {
             path: '/',
             name: AppRoute.home.name,
             builder: (context, state) =>
-                const OrganizationsList(), // TEMP, change this to whatever screen you want to test (will need to rerun)
+                const OrganizationsListScreen(), // TEMP, change this to whatever screen you want to test (will need to rerun)
             routes: [
               GoRoute(
                   path: 'events',
