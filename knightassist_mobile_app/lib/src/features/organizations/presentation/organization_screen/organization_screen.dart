@@ -67,7 +67,7 @@ class OrganizationDetails extends ConsumerWidget {
                 Text(organization.name,
                     style: Theme.of(context).textTheme.titleLarge),
                 gapH8,
-                Text(organization.description),
+                Text(organization.description ?? ''),
                 // TODO: Finish organization screen UI
               ],
             ),

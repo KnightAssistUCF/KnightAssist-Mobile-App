@@ -4,7 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
-import 'package:knightassist_mobile_app/src/features/organizations/domain/update.dart';
+import 'package:knightassist_mobile_app/src/features/organizations/domain/update.dart'
+    as prefix;
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 
 class EditUpdate extends ConsumerWidget {

@@ -40,7 +40,8 @@ class AuthRepository {
           StudentUser u = StudentUser.fromMap(user);
           _authState.value = u;
         } else {
-          Organization u = Organization.fromMap(user);
+          //Organization u = Organization.fromMap(user);
+          Organization u = Organization.fromJson(user);
           _authState.value = u;
         }
         break;

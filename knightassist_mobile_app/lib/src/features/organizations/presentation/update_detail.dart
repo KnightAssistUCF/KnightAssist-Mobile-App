@@ -4,7 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
-import 'package:knightassist_mobile_app/src/features/organizations/domain/update.dart';
+import 'package:knightassist_mobile_app/src/features/organizations/domain/update.dart'
+    as prefix;
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 
 class UpdateDetailScreen extends ConsumerWidget {
@@ -70,10 +71,10 @@ class UpdateDetailScreen extends ConsumerWidget {
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: TextButton(
-              onPressed: () => context.pushNamed(AppRoute.organization.name,
-                  extra: update.sponsor),
-              child: Wrap(
+            //child: TextButton(
+            //onPressed: () => context.pushNamed(AppRoute.organization.name,
+            //extra: update.sponsor),
+            /*child: Wrap(
                 children: [
                   ClipRRect(
                       borderRadius: BorderRadius.circular(25.0),
@@ -94,8 +95,8 @@ class UpdateDetailScreen extends ConsumerWidget {
                     size: 15,
                   )
                 ],
-              ),
-            ),
+              ),*/
+            //),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),

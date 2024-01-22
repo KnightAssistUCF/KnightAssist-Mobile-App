@@ -25,11 +25,14 @@ import 'package:knightassist_mobile_app/src/features/events/presentation/postSca
 import 'package:knightassist_mobile_app/src/features/events/presentation/qr_scanner.dart';
 import 'package:knightassist_mobile_app/src/features/home/presentation/home_screen.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
-import 'package:knightassist_mobile_app/src/features/organizations/domain/update.dart';
+import 'package:knightassist_mobile_app/src/features/organizations/domain/update.dart'
+    as prefix;
 import 'package:knightassist_mobile_app/src/features/organizations/presentation/create_update.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/presentation/edit_update.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/presentation/organization_screen.dart';
-import 'package:knightassist_mobile_app/src/features/organizations/presentation/organizations_list_screen.dart';
+import 'package:knightassist_mobile_app/src/features/organizations/presentation/organizations_list/organizations_list.dart';
+import 'package:knightassist_mobile_app/src/features/organizations/presentation/organizations_list/organizations_list_screen.dart';
+//import 'package:knightassist_mobile_app/src/features/organizations/presentation/organizations_list_screen.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/presentation/update_detail.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/presentation/update_screen.dart';
 import 'package:knightassist_mobile_app/src/routing/go_router_refresh_stream.dart';
@@ -97,7 +100,7 @@ GoRouter goRouter(GoRouterRef ref) {
             path: '/',
             name: AppRoute.home.name,
             builder: (context, state) =>
-                const EventsListScreen(), // TEMP, change this to whatever screen you want to test (will need to rerun)
+                const OrganizationsListScreen(), // TEMP, change this to whatever screen you want to test (will need to rerun)
             routes: [
               GoRoute(
                   path: 'events',
