@@ -1,28 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
+import 'package:knightassist_mobile_app/src/features/events/domain/feedback.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/update.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 
-class UpdateDetailScreen extends ConsumerWidget {
-  const UpdateDetailScreen({super.key, required this.update});
-  final Update update;
+class FeedbackDetailScreen extends ConsumerWidget {
+  const FeedbackDetailScreen({super.key, required this.feedback});
+  final EventFeedback feedback;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
 
-    bool curOrg =
-        true; // true if the organization who made the update is viewing it (shows edit button)
-
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Announcements',
+          'Feedback',
         ),
         automaticallyImplyLeading: true,
         actions: <Widget>[
@@ -63,81 +62,65 @@ class UpdateDetailScreen extends ConsumerWidget {
         Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text(
-              update.title,
-              style: const TextStyle(fontSize: 25, fontWeight: FontWeight.w600),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextButton(
-              onPressed: () => context.pushNamed(AppRoute.organization.name,
-                  extra: update.sponsor),
-              child: Wrap(
-                children: [
-                  ClipRRect(
-                      borderRadius: BorderRadius.circular(25.0),
-                      child: Image(
-                          image: AssetImage(update.sponsor.logoUrl),
-                          height: 50)),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      update.sponsor.name,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.w400, fontSize: 20),
-                      textAlign: TextAlign.start,
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Center(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(50.0),
+                      child: const Image(
+                          semanticLabel: 'Profile picture',
+                          image: AssetImage(
+                              'assets/profile pictures/icon_paintbrush.png'),
+                          height: 100),
                     ),
                   ),
-                  const Icon(
-                    Icons.arrow_forward_ios,
-                    size: 15,
-                  )
-                ],
-              ),
+                ),
+                RatingBar.builder(
+                  initialRating: feedback.rating,
+                  ignoreGestures: true,
+                  minRating: 1,
+                  direction: Axis.horizontal,
+                  allowHalfRating: false,
+                  itemCount: 5,
+                  itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                  itemBuilder: (context, _) => Icon(
+                    Icons.star,
+                    color: Colors.amber,
+                  ),
+                  onRatingUpdate: (rating) {
+                    print(rating);
+                    feedback.rating = rating;
+                  },
+                ),
+                Text(
+                  feedback.eventName,
+                  style: const TextStyle(
+                      fontSize: 25, fontWeight: FontWeight.w600),
+                ),
+                Text(
+                  feedback.studentName,
+                  style: const TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.w500),
+                ),
+              ],
             ),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              DateFormat('yyyy-MM-dd').format(update.date),
+              DateFormat('yyyy-MM-dd').format(feedback.timeSubmitted),
               style: const TextStyle(fontSize: 15),
             ),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              DateFormat.jmv().format(update.date),
-              style: const TextStyle(fontSize: 15),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              update.content,
+              feedback.feedbackText,
               style: const TextStyle(fontSize: 20),
             ),
           ),
-          curOrg
-              ? Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Center(
-                    child: ElevatedButton(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          "Edit",
-                          style: TextStyle(fontSize: 20),
-                        ),
-                      ),
-                      onPressed: () =>
-                          context.pushNamed("editupdate", extra: update),
-                    ),
-                  ),
-                )
-              : SizedBox(
-                  height: 0,
-                )
         ]),
       ]),
     );

@@ -7,9 +7,12 @@ import 'package:knightassist_mobile_app/src/features/organizations/domain/organi
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 
 class EventScreen extends ConsumerWidget {
-  const EventScreen({super.key, required this.event});
+  EventScreen({super.key, required this.event});
   //final String eventID;
   final Event event;
+
+  bool curOrg =
+      true; // true if the organization who made the event is viewing it (shows edit button)
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -86,7 +89,11 @@ class EventScreen extends ConsumerWidget {
                           textAlign: TextAlign.start,
                         ),
                       ),
-                      const OrganizationFav(),
+                      curOrg
+                          ? SizedBox(
+                              height: 0,
+                            )
+                          : const OrganizationFav(),
                       const Icon(
                         Icons.arrow_forward_ios,
                         size: 15,
@@ -102,25 +109,44 @@ class EventScreen extends ConsumerWidget {
                 width: 300,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      //context.pushNamed(AppRoute.events.name);
-                    },
-                    style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(
-                            const Color.fromARGB(255, 91, 78, 119))),
-                    child: const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Wrap(
-                        children: [
-                          Text(
-                            'RSVP',
-                            style: TextStyle(fontSize: 20),
+                  child: curOrg
+                      ? Padding(
+                          // shows edit button for sponsoring org
+                          padding: const EdgeInsets.all(8.0),
+                          child: Center(
+                            child: ElevatedButton(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  "Edit Event",
+                                  style: TextStyle(fontSize: 20),
+                                ),
+                              ),
+                              onPressed: () =>
+                                  context.pushNamed("editevent", extra: event),
+                            ),
                           ),
-                        ],
-                      ),
-                    ),
-                  ),
+                        )
+                      : ElevatedButton(
+                          // shows rsvp button for student
+                          onPressed: () {
+                            //context.pushNamed(AppRoute.events.name);
+                          },
+                          style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all(
+                                  const Color.fromARGB(255, 91, 78, 119))),
+                          child: const Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Wrap(
+                              children: [
+                                Text(
+                                  'RSVP',
+                                  style: TextStyle(fontSize: 20),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
                 ),
               ),
             )
@@ -259,6 +285,16 @@ class _TabBarEventState extends State<TabBarEvent>
                           const Icon(Icons.location_on),
                           Text(
                             event.location,
+                            style: const TextStyle(fontSize: 20),
+                          ),
+                        ]),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Wrap(children: [
+                          const Icon(Icons.calendar_month),
+                          Text(
+                            DateFormat.yMMMMEEEEd().format(event.startTime),
                             style: const TextStyle(fontSize: 20),
                           ),
                         ]),
