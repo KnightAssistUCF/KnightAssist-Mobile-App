@@ -128,7 +128,27 @@ class CreateEvent extends ConsumerWidget {
               style: TextStyle(fontSize: 14),
             ),
           )),
-          EditImage(),
+          Center(
+            child: OverflowBar(
+              children: [
+                Center(child: const EditImage()),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Center(
+                    child: ElevatedButton(
+                        onPressed: () {},
+                        child: const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text(
+                            'Delete Image (reverts to default)',
+                            style: TextStyle(fontSize: 15),
+                          ),
+                        )),
+                  ),
+                ),
+              ],
+            ),
+          ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: ElevatedButton(

@@ -501,19 +501,19 @@ class AnnouncementCard extends StatelessWidget {
                   ),
                   SizedBox(width: 10),
                   Text(
-                    'Date',
+                    '01-31-24',
                     style: TextStyle(fontSize: 16),
                     textAlign: TextAlign.justify,
                   ),
                   SizedBox(width: 5),
                   Text(
-                    'Announcement Title',
+                    'Event location changed for this event',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                     textAlign: TextAlign.justify,
                   ),
                   SizedBox(width: 20),
                   Text(
-                    '"text start..."',
+                    '"The location for..."',
                     style: TextStyle(fontStyle: FontStyle.italic),
                     textAlign: TextAlign.justify,
                   ),
@@ -563,23 +563,23 @@ class EventCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(
-                          'Event Title',
+                          'Concert',
                           style: TextStyle(
                               fontWeight: FontWeight.w600, fontSize: 18),
                           textAlign: TextAlign.start,
                         ),
                         Text(
-                          'Time/Date',
+                          'January 31 at 5:00 PM',
                           style: TextStyle(fontWeight: FontWeight.w400),
                           textAlign: TextAlign.start,
                         ),
                         Text(
-                          'Location',
+                          'Additon Financial Arena',
                           style: TextStyle(fontWeight: FontWeight.w400),
                           textAlign: TextAlign.start,
                         ),
                         Text(
-                          'Organization',
+                          'Organization Y',
                           style: TextStyle(fontWeight: FontWeight.w400),
                           textAlign: TextAlign.start,
                         ),
@@ -667,21 +667,21 @@ class HomeScreenTab extends ConsumerWidget {
                             children: [
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: InkWell(
-                                  onTap: () => context
-                                      .pushNamed(AppRoute.createUpdate.name),
-                                  child: Card(
-                                    child: SizedBox(
-                                      width: (w / 2) - 30,
-                                      height: 100,
+                                child: Card(
+                                  child: SizedBox(
+                                    width: (w / 2) - 30,
+                                    height: 100,
+                                    child: InkWell(
+                                      onTap: () => context.pushNamed(
+                                          AppRoute.createUpdate.name),
                                       child: const Center(
                                         child: Column(children: [
                                           Icon(Icons.campaign),
                                           Text(
                                             "Create Announcement",
                                             style: TextStyle(
-                                              fontSize: 20,
-                                            ),
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.w600),
                                             textAlign: TextAlign.center,
                                           )
                                         ]),
@@ -692,19 +692,21 @@ class HomeScreenTab extends ConsumerWidget {
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: InkWell(
-                                  onTap: () => context
-                                      .pushNamed(AppRoute.createEvent.name),
-                                  child: Card(
-                                    child: SizedBox(
-                                      width: (w / 2) - 30,
-                                      height: 100,
+                                child: Card(
+                                  child: SizedBox(
+                                    width: (w / 2) - 30,
+                                    height: 100,
+                                    child: InkWell(
+                                      onTap: () => context
+                                          .pushNamed(AppRoute.createEvent.name),
                                       child: const Center(
                                         child: Column(children: [
                                           Icon(Icons.event),
                                           Text(
                                             "Create Event",
-                                            style: TextStyle(fontSize: 20),
+                                            style: TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.w600),
                                             textAlign: TextAlign.center,
                                           )
                                         ]),

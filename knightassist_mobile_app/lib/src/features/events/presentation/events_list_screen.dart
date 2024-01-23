@@ -24,7 +24,7 @@ List<Event> events = [
       sponsoringOrganization:
           'Organization X is really long !!!!! !!!!! !!!!! !!!!!',
       attendees: [],
-      registeredVolunteers: [],
+      registeredVolunteers: ["Johnson Doe", "John Smith", "Test User"],
       picLink: 'assets/profile pictures/icon_leaf.png',
       startTime: DateTime.fromMillisecondsSinceEpoch(1699875173000),
       endTime: DateTime.fromMillisecondsSinceEpoch(1699875173099),

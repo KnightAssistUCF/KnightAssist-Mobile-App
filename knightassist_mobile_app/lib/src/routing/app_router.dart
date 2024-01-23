@@ -23,6 +23,7 @@ import 'package:knightassist_mobile_app/src/features/events/presentation/events_
 import 'package:knightassist_mobile_app/src/features/events/presentation/feedback_list_screen.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/postScan.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/qr_scanner.dart';
+import 'package:knightassist_mobile_app/src/features/events/presentation/viewRSVPs.dart';
 import 'package:knightassist_mobile_app/src/features/home/presentation/home_screen.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/update.dart';
@@ -67,7 +68,8 @@ enum AppRoute {
   createFeedback,
   createUpdate,
   editEvent,
-  editUpdate
+  editUpdate,
+  viewRSVPs
 }
 
 @Riverpod(keepAlive: true)
@@ -306,6 +308,14 @@ GoRouter goRouter(GoRouterRef ref) {
                     Update u = state.extra as Update;
                     //final updateID = state.pathParameters['id']!;
                     return EditUpdate(update: u);
+                  }),
+              GoRoute(
+                  path: 'viewrsvps',
+                  name: 'viewrsvps',
+                  builder: (context, state) {
+                    Event e = state.extra as Event;
+                    //final eventID = state.pathParameters['id']!;
+                    return viewRSVPsScreen(event: e);
                   }),
             ])
       ],

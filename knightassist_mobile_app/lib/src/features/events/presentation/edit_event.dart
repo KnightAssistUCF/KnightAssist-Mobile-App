@@ -147,8 +147,30 @@ class EditEvent extends ConsumerWidget {
               style: TextStyle(fontSize: 14),
             ),
           )),
-          EditImage(
-            event: event,
+          Center(
+            child: OverflowBar(
+              children: [
+                Center(
+                  child: EditImage(
+                    event: event,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Center(
+                    child: ElevatedButton(
+                        onPressed: () {},
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            'Delete Image (reverts to default)',
+                            style: TextStyle(fontSize: 15),
+                          ),
+                        )),
+                  ),
+                ),
+              ],
+            ),
           ),
           Center(
             child: OverflowBar(children: [
@@ -159,7 +181,7 @@ class EditEvent extends ConsumerWidget {
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        'Update',
+                        'Update Event',
                         style: TextStyle(fontSize: 20),
                       ),
                     )),
@@ -171,7 +193,7 @@ class EditEvent extends ConsumerWidget {
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        'Delete',
+                        'Delete Event',
                         style: TextStyle(fontSize: 20),
                       ),
                     )),
