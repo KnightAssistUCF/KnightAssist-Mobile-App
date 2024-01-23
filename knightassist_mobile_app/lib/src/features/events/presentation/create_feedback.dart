@@ -60,10 +60,13 @@ class CreateFeedback extends ConsumerWidget {
       body: ListView(scrollDirection: Axis.vertical, children: <Widget>[
         Padding(padding: const EdgeInsets.all(8.0), child: Text(event.name)),
         OverflowBar(children: [
-          ClipRRect(
-              borderRadius: BorderRadius.circular(25.0),
-              child:
-                  Image(image: AssetImage('assets/example.png'), height: 25)),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ClipRRect(
+                borderRadius: BorderRadius.circular(25.0),
+                child:
+                    Image(image: AssetImage('assets/example.png'), height: 25)),
+          ),
           Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(event.sponsoringOrganization)),
