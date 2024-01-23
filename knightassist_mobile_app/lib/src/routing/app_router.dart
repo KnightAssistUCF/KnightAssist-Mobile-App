@@ -1,5 +1,6 @@
 import 'package:knightassist_mobile_app/src/features/authentication/data/auth_repository.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/account/account_screen.dart';
+import 'package:knightassist_mobile_app/src/features/authentication/presentation/account/edit_org_profile.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/account/postverify.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/account/profile_screen.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/account/semester_goal.dart';
@@ -69,7 +70,8 @@ enum AppRoute {
   createUpdate,
   editEvent,
   editUpdate,
-  viewRSVPs
+  viewRSVPs,
+  editOrgProfile,
 }
 
 @Riverpod(keepAlive: true)
@@ -316,6 +318,14 @@ GoRouter goRouter(GoRouterRef ref) {
                     Event e = state.extra as Event;
                     //final eventID = state.pathParameters['id']!;
                     return viewRSVPsScreen(event: e);
+                  }),
+              GoRoute(
+                  path: 'editorgprofile',
+                  name: 'editorgprofile',
+                  builder: (context, state) {
+                    Organization org = state.extra as Organization;
+                    //final updateID = state.pathParameters['id']!;
+                    return EditOrganizationProfile(organization: org);
                   }),
             ])
       ],

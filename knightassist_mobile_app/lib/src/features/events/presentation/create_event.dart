@@ -69,8 +69,8 @@ class CreateEvent extends ConsumerWidget {
         height: h,
         width: w,
         child: ListView(scrollDirection: Axis.vertical, children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(8.0),
+          const Padding(
+            padding: EdgeInsets.all(8.0),
             child: TextField(
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
@@ -78,8 +78,8 @@ class CreateEvent extends ConsumerWidget {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
+          const Padding(
+            padding: EdgeInsets.all(8.0),
             child: SizedBox(
                 width: 240,
                 height: 120,
@@ -93,18 +93,18 @@ class CreateEvent extends ConsumerWidget {
                       hintText: 'Event Description'),
                 )),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
-          SelectDate(),
-          MultiDayEvent(),
-          SizedBox(height: 52, width: 50, child: SelectTime()),
-          SizedBox(height: 52, width: 50, child: SelectEndTime()),
-          SizedBox(
+          const SelectDate(),
+          const MultiDayEvent(),
+          const SizedBox(height: 52, width: 50, child: SelectTime()),
+          const SizedBox(height: 52, width: 50, child: SelectEndTime()),
+          const SizedBox(
             height: 20,
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
+          const Padding(
+            padding: EdgeInsets.all(8.0),
             child: TextField(
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
@@ -112,17 +112,17 @@ class CreateEvent extends ConsumerWidget {
               ),
             ),
           ),
-          Center(
+          const Center(
               child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: EdgeInsets.all(8.0),
             child: Text(
               "Event Image (Optional)",
               style: TextStyle(fontSize: 17),
             ),
           )),
-          Center(
+          const Center(
               child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: EdgeInsets.all(8.0),
             child: Text(
               "We recommend using an image that is around 2000x1400 px or a similar ratio. It will be cropped in the events list screen on the mobile app but users can view the full image by tapping on an event.",
               style: TextStyle(fontSize: 14),
@@ -153,8 +153,8 @@ class CreateEvent extends ConsumerWidget {
             padding: const EdgeInsets.all(8.0),
             child: ElevatedButton(
                 onPressed: () {},
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                child: const Padding(
+                  padding: EdgeInsets.all(8.0),
                   child: Text(
                     'Create Event',
                     style: TextStyle(fontSize: 20),
