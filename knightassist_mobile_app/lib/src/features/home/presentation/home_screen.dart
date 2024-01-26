@@ -731,20 +731,21 @@ class HomeScreenTab extends ConsumerWidget {
                           children: [
                             //Directionality(
                             //textDirection: TextDirection.rtl,
-                            /*child:*/ TextButton.icon(
-                              onPressed: () {
-                                context.pushNamed(AppRoute.updates.name);
-                              },
-                              icon: const Icon(
-                                Icons.arrow_back_ios,
-                                color: Colors.grey,
-                                size: 15,
-                              ),
-                              label: const Text(
-                                'View All',
-                                style: TextStyle(fontSize: 10),
-                              ),
-                            ),
+                            /*child:*/ TextButton(
+                                onPressed: () {
+                                  context.pushNamed(AppRoute.updates.name);
+                                },
+                                child: Row(
+                                  children: [
+                                    const Text('View All',
+                                        style: TextStyle(fontSize: 10)),
+                                    const Icon(
+                                      Icons.arrow_forward_ios,
+                                      color: Colors.grey,
+                                      size: 15,
+                                    ),
+                                  ],
+                                ))
                             //),
                           ],
                         ),

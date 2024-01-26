@@ -107,13 +107,13 @@ class EditEvent extends ConsumerWidget {
             event: event,
           ),
           SizedBox(
-              height: 52,
+              height: 70,
               width: 50,
               child: SelectTime(
                 event: event,
               )),
           SizedBox(
-              height: 52,
+              height: 70,
               width: 50,
               child: SelectEndTime(
                 event: event,
