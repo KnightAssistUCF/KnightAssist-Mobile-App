@@ -11,8 +11,8 @@ class Review {
     required this.comment,
   });
 
-  final ReviewID? id;
-  final EventID? eventID;
+  final String? id;
+  final String? eventID;
   final String? studentID;
   final double rating;
   final String comment;
@@ -20,7 +20,7 @@ class Review {
   factory Review.fromMap(Map<String, dynamic> map) {
     return Review(
         id: map['id'] as ReviewID,
-        eventID: map['eventID'] as EventID,
+        eventID: map['eventID'] as String,
         studentID: map['studentID'] as String,
         rating: map['rating'] as double,
         comment: map['feedbackText'] as String);

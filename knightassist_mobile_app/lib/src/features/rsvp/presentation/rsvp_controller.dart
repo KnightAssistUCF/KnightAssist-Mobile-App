@@ -11,7 +11,7 @@ class RSVPController extends _$RSVPController {
     return 1;
   }
 
-  Future<void> rsvp(EventID eventID) async {
+  Future<void> rsvp(String eventID) async {
     final rsvpService = ref.read(rsvpServiceProvider);
     state = const AsyncLoading<int>().copyWithPrevious(state);
     final value = await AsyncValue.guard(() => rsvpService.setRSVP(eventID));

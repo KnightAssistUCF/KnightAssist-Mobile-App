@@ -10,7 +10,7 @@ class RSVPService {
   RSVPService(this.ref);
   final Ref ref;
 
-  Future<List<EventID>> _fetchRSVPEvents() {
+  Future<List<String>> _fetchRSVPEvents() {
     final user = ref.read(authRepositoryProvider).currentUser;
     assert(user != null);
     if (user == null) {
@@ -19,7 +19,7 @@ class RSVPService {
     return ref.read(rsvpRepositoryProvider).fetchRSVPs(user.id);
   }
 
-  Future<void> setRSVP(EventID eventID) async {
+  Future<void> setRSVP(String eventID) async {
     final user = ref.read(authRepositoryProvider).currentUser;
     assert(user != null);
     if (user == null) {
@@ -35,7 +35,7 @@ RSVPService rsvpService(RsvpServiceRef ref) {
 }
 
 @Riverpod(keepAlive: true)
-Stream<List<EventID>> rsvps(RsvpsRef ref) {
+Stream<List<String>> rsvps(RsvpsRef ref) {
   final user = ref.watch(authStateChangesProvider).value;
   assert(user != null);
   if (user == null) {

@@ -55,6 +55,7 @@ class OrganizationsRepository {
           final dynamic orgData = jsonDecode(response.body);
           //print(orgData['name'].toString());
           //print(orgData['contact']['socialMedia']['facebook']!);
+          //print(orgData);
 
           List<String> tags = [];
           List<String> followers = [];

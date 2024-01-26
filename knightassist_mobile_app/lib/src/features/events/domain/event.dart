@@ -159,7 +159,7 @@ class Review {
   String eventId;
   String studentName;
   String eventName;
-  int rating;
+  double rating;
   String feedbackText;
   bool wasReadByUser;
   String id;

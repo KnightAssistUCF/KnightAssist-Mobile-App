@@ -40,10 +40,33 @@ class EventsRepository {
               '/api/searchOneEvent', params);
           var response = await http.get(uri);
           print(jsonDecode(response.body));
-          //print(
-          //"-------------------------------------------------------------------------------------------------");
+          print(
+              "-------------------------------------------------------------------------------------------------");
 
           final dynamic eventData = jsonDecode(response.body);
+          //print(eventData['name'].toString());
+          //print(eventData);
+
+          Event e = Event(
+              id: eventData[0]['_id'],
+              name: eventData[0]['name'],
+              description: eventData[0]['description'],
+              location: eventData[0]['location'],
+              sponsoringOrganization:
+                  eventData[0]['sponsoringOrganziation'] ?? '',
+              attendees: [],
+              registeredVolunteers: [],
+              profilePicPath: eventData[0]['profilePicPath'],
+              startTime: DateTime.parse(eventData[0]['startTime']),
+              endTime: DateTime.parse(eventData[0]['endTime']),
+              eventTags: [],
+              maxAttendees: eventData[0]['maxAttendees'],
+              checkedInStudents: [],
+              feedback: [],
+              createdAt: DateTime.parse(eventData[0]['createdAt']),
+              updatedAt: DateTime.parse(eventData[0]['updatedAt']));
+
+          list.add(e);
         }
 
         _events.value = list;

@@ -6,7 +6,7 @@ import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 
 class LeaveReviewAction extends ConsumerWidget {
   const LeaveReviewAction({super.key, required this.eventID});
-  final EventID eventID;
+  final String eventID;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

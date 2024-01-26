@@ -28,7 +28,7 @@ class EventCard extends ConsumerWidget {
                     child: Container(
                       decoration: BoxDecoration(
                           image: DecorationImage(
-                              image: AssetImage(event.picLink),
+                              image: AssetImage(event.profilePicPath),
                               fit: BoxFit.fill)),
                       width: 120,
                       height: 210,

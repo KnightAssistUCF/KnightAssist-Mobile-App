@@ -8,14 +8,15 @@ import 'package:knightassist_mobile_app/src/constants/app_sizes.dart';
 import 'package:knightassist_mobile_app/src/constants/breakpoints.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
 import 'package:knightassist_mobile_app/src/features/reviews/application/reviews_service.dart';
-import 'package:knightassist_mobile_app/src/features/reviews/domain/review.dart';
+import 'package:knightassist_mobile_app/src/features/reviews/domain/review.dart'
+    as prefix;
 import 'package:knightassist_mobile_app/src/features/reviews/presentation/event_reviews/event_rating_bar.dart';
 import 'package:knightassist_mobile_app/src/features/reviews/presentation/leave_review_screen/leave_review_controller.dart';
 import 'package:knightassist_mobile_app/src/utils/async_value_ui.dart';
 
 class LeaveReviewScreen extends StatelessWidget {
   const LeaveReviewScreen({super.key, required this.eventID});
-  final EventID eventID;
+  final String eventID;
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +39,7 @@ class LeaveReviewScreen extends StatelessWidget {
 
 class LeaveReviewForm extends ConsumerStatefulWidget {
   const LeaveReviewForm({super.key, required this.eventID, this.review});
-  final EventID eventID;
+  final String eventID;
   final Review? review;
 
   // * Keys for testing using find.byKey()
@@ -58,7 +59,7 @@ class _LeaveReviewFormState extends ConsumerState<LeaveReviewForm> {
     super.initState();
     final review = widget.review;
     if (review != null) {
-      _controller.text = review.comment;
+      _controller.text = review.feedbackText;
       _rating = review.rating;
     }
   }

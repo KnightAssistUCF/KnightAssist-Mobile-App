@@ -6,12 +6,13 @@ import 'package:knightassist_mobile_app/src/constants/app_sizes.dart';
 import 'package:knightassist_mobile_app/src/constants/breakpoints.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
 import 'package:knightassist_mobile_app/src/features/reviews/data/reviews_repository.dart';
-import 'package:knightassist_mobile_app/src/features/reviews/domain/review.dart';
+import 'package:knightassist_mobile_app/src/features/reviews/domain/review.dart'
+    as prefix;
 import 'package:knightassist_mobile_app/src/features/reviews/presentation/event_reviews/event_review_card.dart';
 
 class EventReviewsList extends ConsumerWidget {
   const EventReviewsList({super.key, required this.eventID});
-  final EventID eventID;
+  final String eventID;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -24,7 +25,7 @@ class EventReviewsList extends ConsumerWidget {
             maxContentWidth: Breakpoint.tablet,
             padding: const EdgeInsets.symmetric(
                 horizontal: Sizes.p16, vertical: Sizes.p8),
-            child: EventReviewCard(reviews[index]),
+            child: EventReviewCard(reviews[index] as prefix.Review),
           ),
           childCount: reviews.length,
         ),

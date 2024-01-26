@@ -13,7 +13,7 @@ import 'package:knightassist_mobile_app/src/features/rsvp/presentation/rsvp_widg
 
 class EventScreen extends StatelessWidget {
   const EventScreen({super.key, required this.eventID});
-  final EventID eventID;
+  final String eventID;
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +57,7 @@ class EventDetails extends ConsumerWidget {
         Card(
           child: Padding(
             padding: const EdgeInsets.all(Sizes.p16),
-            child: CustomImage(imageUrl: event.picLink),
+            child: CustomImage(imageUrl: event.profilePicPath),
           ),
         ),
         const SizedBox(height: Sizes.p16),

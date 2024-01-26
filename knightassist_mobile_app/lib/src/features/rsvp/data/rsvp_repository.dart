@@ -9,9 +9,9 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'rsvp_repository.g.dart';
 
 class RSVPRepository {
-  final _rsvps = InMemoryStore<List<EventID>>([]);
+  final _rsvps = InMemoryStore<List<String>>([]);
 
-  Future<List<EventID>> fetchRSVPs(String uid) async {
+  Future<List<String>> fetchRSVPs(String uid) async {
     Map<String, String?> params = {"studentID": uid};
     var uri = Uri.https('knightassist-43ab3aeaada9.herokuapp.com',
         '/api/searchUserRSVPedEvents', params);
@@ -19,7 +19,7 @@ class RSVPRepository {
     var body = jsonDecode(response.body);
     switch (response.statusCode) {
       case 200:
-        List<EventID> list = [];
+        List<String> list = [];
         for (String json in List<String>.from(body)) {
           list.add(json);
         }
@@ -33,11 +33,11 @@ class RSVPRepository {
     }
   }
 
-  Stream<List<EventID>> watchRSVPs(String uid) {
+  Stream<List<String>> watchRSVPs(String uid) {
     return _rsvps.stream;
   }
 
-  Future<void> setRSVP(String uid, EventID eventID) async {
+  Future<void> setRSVP(String uid, String eventID) async {
     Map<String, dynamic> params = {
       "userID": uid,
       "eventID": eventID,

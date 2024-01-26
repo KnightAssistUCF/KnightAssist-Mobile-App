@@ -25,8 +25,8 @@ class StudentUser extends AppUser {
   final String lastName;
   final String? profilePicture;
   final List<String> favoritedOrganizations;
-  final List<EventID> eventsRSVP;
-  final List<EventID> eventsHistory;
+  final List<String> eventsRSVP;
+  final List<String> eventsHistory;
   final int totalVolunteerHours;
   final int semesterVolunteerHourGoal;
   final List<String> userStudentSemesters;

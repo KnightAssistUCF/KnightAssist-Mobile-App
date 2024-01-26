@@ -1,6 +1,7 @@
 import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
 import 'package:knightassist_mobile_app/src/features/reviews/application/reviews_service.dart';
-import 'package:knightassist_mobile_app/src/features/reviews/domain/review.dart';
+import 'package:knightassist_mobile_app/src/features/reviews/domain/review.dart'
+    as prefix;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'leave_review_controller.g.dart';
@@ -16,18 +17,28 @@ class LeaveReviewController extends _$LeaveReviewController {
 
   Future<void> submitReview({
     Review? previousReview,
-    required EventID eventID,
+    required String eventID,
     required double rating,
     required String comment,
     required void Function() onSuccess,
   }) async {
     if (previousReview == null ||
         rating != previousReview.rating ||
-        comment != previousReview.comment) {
+        comment != previousReview.feedbackText) {
       final reviewsService = ref.read(reviewsServiceProvider);
       final review = Review(
         rating: rating,
-        comment: comment,
+        studentId: '',
+        eventId: eventID,
+        studentName: '',
+        eventName: '',
+        feedbackText: comment,
+        wasReadByUser: false,
+        id: '',
+        timeFeedbackSubmitted: DateTime.now(),
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
+        //comment: comment,
       );
       state = const AsyncLoading();
       final newState = await AsyncValue.guard(
