@@ -169,7 +169,8 @@ class VolunteerCard extends StatelessWidget {
                     leading: ClipRRect(
                         borderRadius: BorderRadius.circular(12.0),
                         child: Image(
-                            image: AssetImage(event.picLink), height: 75)),
+                            image: AssetImage(event.profilePicPath),
+                            height: 75)),
                     title: Text(
                       volunteer,
                       overflow: TextOverflow.ellipsis,

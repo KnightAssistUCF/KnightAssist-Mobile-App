@@ -391,7 +391,7 @@ class _EditImageState extends State<EditImage> {
       onChange: _directUpdateImage,
       image: _eventPicFile != null
           ? Image.file(_eventPicFile!, fit: BoxFit.cover)
-          : Image(image: AssetImage(event.picLink)),
+          : Image(image: AssetImage(event.profilePicPath)),
       size: 150,
       imagePickerTheme: ThemeData(
         primaryColor: Colors.yellow,

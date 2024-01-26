@@ -26,14 +26,26 @@ class EventsRepository {
     var uri = Uri.https('knightassist-43ab3aeaada9.herokuapp.com',
         '/api/loadAllEventsAcrossOrgs');
     var response = await http.get(uri);
-    var body = jsonDecode(response.body);
+    //var body = jsonDecode(response.body);
+    final List<dynamic> dataList = jsonDecode(response.body);
+    var body = json.decode(response.body);
+
     switch (response.statusCode) {
       case 200:
         List<Event> list = [];
-        for (Map<String, dynamic> json
-            in List<Map<String, dynamic>>.from(body)) {
-          list.add(Event.fromMap(json));
+
+        for (dynamic d in dataList) {
+          Map<String, String?> params = {"eventID": d['_id']};
+          var uri = Uri.https('knightassist-43ab3aeaada9.herokuapp.com',
+              '/api/searchOneEvent', params);
+          var response = await http.get(uri);
+          print(jsonDecode(response.body));
+          //print(
+          //"-------------------------------------------------------------------------------------------------");
+
+          final dynamic eventData = jsonDecode(response.body);
         }
+
         _events.value = list;
         return _events.value;
       default:
@@ -177,7 +189,7 @@ class EventsRepository {
       case 200:
         List<Event> list = [];
         for (String json in List<String>.from(body)) {
-          list.add(Event.fromMap(jsonDecode(json)));
+          //list.add(Event.fromMap(jsonDecode(json)));
         }
         return list;
       case 404:
@@ -198,7 +210,7 @@ class EventsRepository {
       case 200:
         List<Event> list = [];
         for (String json in List<String>.from(body)) {
-          list.add(Event.fromMap(jsonDecode(json)));
+          //list.add(Event.fromMap(jsonDecode(json)));
         }
         return list;
       case 404:
@@ -243,13 +255,13 @@ Stream<List<Event>> eventsListStream(EventsListStreamRef ref) {
 }
 
 @riverpod
-Future<List<Event>> eventsListFuture(EventsListFutureRef ref, EventID id) {
+Future<List<Event>> eventsListFuture(EventsListFutureRef ref, String id) {
   final eventsRepository = ref.watch(eventsRepositoryProvider);
   return eventsRepository.fetchEventsList();
 }
 
 @riverpod
-Stream<Event?> event(EventRef ref, EventID id) {
+Stream<Event?> event(EventRef ref, String id) {
   final eventsRepository = ref.watch(eventsRepositoryProvider);
   return eventsRepository.watchEvent(id);
 }
