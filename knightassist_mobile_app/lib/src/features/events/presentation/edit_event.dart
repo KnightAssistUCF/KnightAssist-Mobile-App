@@ -107,13 +107,13 @@ class EditEvent extends ConsumerWidget {
             event: event,
           ),
           SizedBox(
-              height: 52,
+              height: 70,
               width: 50,
               child: SelectTime(
                 event: event,
               )),
           SizedBox(
-              height: 52,
+              height: 70,
               width: 50,
               child: SelectEndTime(
                 event: event,
@@ -125,30 +125,52 @@ class EditEvent extends ConsumerWidget {
             padding: const EdgeInsets.all(8.0),
             child: TextFormField(
               initialValue: event.location,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Event Location',
               ),
             ),
           ),
-          Center(
+          const Center(
               child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: EdgeInsets.all(8.0),
             child: Text(
               "Event Image (Optional)",
               style: TextStyle(fontSize: 17),
             ),
           )),
-          Center(
+          const Center(
               child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: EdgeInsets.all(8.0),
             child: Text(
               "We recommend using an image that is around 2000x1400 px or a similar ratio. It will be cropped in the events list screen on the mobile app but users can view the full image by tapping on an event.",
               style: TextStyle(fontSize: 14),
             ),
           )),
-          EditImage(
-            event: event,
+          Center(
+            child: OverflowBar(
+              children: [
+                Center(
+                  child: EditImage(
+                    event: event,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Center(
+                    child: ElevatedButton(
+                        onPressed: () {},
+                        child: const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text(
+                            'Delete Image (reverts to default)',
+                            style: TextStyle(fontSize: 15),
+                          ),
+                        )),
+                  ),
+                ),
+              ],
+            ),
           ),
           Center(
             child: OverflowBar(children: [
@@ -159,7 +181,7 @@ class EditEvent extends ConsumerWidget {
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        'Update',
+                        'Update Event',
                         style: TextStyle(fontSize: 20),
                       ),
                     )),
@@ -171,7 +193,7 @@ class EditEvent extends ConsumerWidget {
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        'Delete',
+                        'Delete Event',
                         style: TextStyle(fontSize: 20),
                       ),
                     )),

@@ -81,29 +81,47 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
       body: ListView(
         children: [
-          EditableImage(
-            onChange: _directUpdateImage,
-            image: _profilePicFile != null
-                ? Image.file(_profilePicFile!, fit: BoxFit.cover)
-                : const Image(
-                    image: AssetImage(
-                        'assets/profile pictures/icon_paintbrush.png')),
-            size: 150,
-            imagePickerTheme: ThemeData(
-              primaryColor: Colors.yellow,
-              shadowColor: Colors.deepOrange,
-              colorScheme: const ColorScheme.light(background: Colors.indigo),
-              iconTheme: const IconThemeData(color: Colors.red),
-              fontFamily: 'Papyrus',
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: EditableImage(
+              onChange: _directUpdateImage,
+              image: _profilePicFile != null
+                  ? Image.file(_profilePicFile!, fit: BoxFit.cover)
+                  : const Image(
+                      image: AssetImage(
+                          'assets/profile pictures/icon_paintbrush.png')),
+              size: 150,
+              imagePickerTheme: ThemeData(
+                primaryColor: Colors.yellow,
+                shadowColor: Colors.deepOrange,
+                colorScheme: const ColorScheme.light(background: Colors.indigo),
+                iconTheme: const IconThemeData(color: Colors.red),
+                fontFamily: 'Papyrus',
+              ),
+              imageBorder: Border.all(color: Colors.lime, width: 2),
+              editIconBorder: Border.all(color: Colors.purple, width: 2),
             ),
-            imageBorder: Border.all(color: Colors.lime, width: 2),
-            editIconBorder: Border.all(color: Colors.purple, width: 2),
           ),
-          _buildTextField(labelText: 'Username'),
-          _buildTextField(labelText: 'Full Name'),
-          _buildTextField(labelText: 'Email'),
-          _buildTextField(labelText: 'Password', obscureText: true),
-          _buildTextButton(),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: _buildTextField(labelText: 'Username'),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: _buildTextField(labelText: 'Full Name'),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: _buildTextField(labelText: 'Email'),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: _buildTextField(labelText: 'Password', obscureText: true),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: _buildElevatedButton(),
+          ),
         ],
       ),
       /*drawer: Drawer(
@@ -205,21 +223,24 @@ TextField _buildTextField({String labelText = '', bool obscureText = false}) {
   );
 }
 
-TextButton _buildTextButton() {
-  return TextButton(
+ElevatedButton _buildElevatedButton() {
+  return ElevatedButton(
     onPressed: () => {},
-    style: ButtonStyle(
-      padding: MaterialStateProperty.all(
-        const EdgeInsets.symmetric(vertical: 20),
-      ),
-      side: MaterialStateProperty.all(const BorderSide(color: Colors.black54)),
-      backgroundColor: MaterialStateProperty.all(Colors.transparent),
-    ),
-    child: const Text(
-      'Save',
-      style: TextStyle(
-        color: Colors.black,
-        fontSize: 18,
+    //style: ButtonStyle(
+    //padding: MaterialStateProperty.all(
+    //const EdgeInsets.symmetric(vertical: 20),
+    //),
+    //side: MaterialStateProperty.all(const BorderSide(color: Colors.black54)),
+    //backgroundColor: MaterialStateProperty.all(Colors.transparent),
+    //),
+    child: const Padding(
+      padding: EdgeInsets.all(8.0),
+      child: Text(
+        'Save',
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 18,
+        ),
       ),
     ),
   );

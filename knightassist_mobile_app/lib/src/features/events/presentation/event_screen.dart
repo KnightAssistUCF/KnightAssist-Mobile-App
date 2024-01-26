@@ -114,16 +114,38 @@ class EventScreen extends ConsumerWidget {
                           // shows edit button for sponsoring org
                           padding: const EdgeInsets.all(8.0),
                           child: Center(
-                            child: ElevatedButton(
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  "Edit Event",
-                                  style: TextStyle(fontSize: 20),
+                            child: OverflowBar(
+                              children: [
+                                Center(
+                                  child: ElevatedButton(
+                                    child: const Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text(
+                                        "Edit Event",
+                                        style: TextStyle(fontSize: 20),
+                                      ),
+                                    ),
+                                    onPressed: () => context
+                                        .pushNamed("editevent", extra: event),
+                                  ),
                                 ),
-                              ),
-                              onPressed: () =>
-                                  context.pushNamed("editevent", extra: event),
+                                Center(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: ElevatedButton(
+                                      child: const Padding(
+                                        padding: EdgeInsets.all(8.0),
+                                        child: Text(
+                                          "View RSVPs",
+                                          style: TextStyle(fontSize: 20),
+                                        ),
+                                      ),
+                                      onPressed: () => context
+                                          .pushNamed("viewrsvps", extra: event),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         )

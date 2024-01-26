@@ -6,9 +6,13 @@ import 'package:knightassist_mobile_app/src/common_widgets/responsive_center.dar
 import 'package:knightassist_mobile_app/src/common_widgets/responsive_scrollable_card.dart';
 import 'package:knightassist_mobile_app/src/constants/breakpoints.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/events_list/events_list_screen.dart';
+import 'package:knightassist_mobile_app/src/features/events/presentation/feedback_list_screen.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/qr_scanner.dart';
+import 'package:knightassist_mobile_app/src/features/organizations/presentation/update_screen.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+
+import '../../events/presentation/events_list_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -16,15 +20,26 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
-  int _selectedIndex = 1;
+class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
+  int _selectedIndex = isOrg ? 2 : 1;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static List<Widget> _widgetOptions = <Widget>[
-    EventsListScreen(),
-    HomeScreenTab(),
-    QRCodeScanner(),
-  ];
+
+  static final List<Widget> _widgetOptions = isOrg
+      ? <Widget>[
+          const EventListScreen(),
+          const UpdateScreenTab(),
+          const HomeScreenTab(),
+          const FeedbackListScreenTab(),
+        ]
+      : <Widget>[
+          const EventListScreen(),
+          const HomeScreenTab(),
+          QRCodeScanner(),
+        ];
+
+  late AnimationController _controller;
+  bool _pressed = false;
 
   void _onItemTapped(int index) {
     setState(() {
@@ -33,11 +48,103 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   @override
+  void initState() {
+    _controller = new AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 500),
+    );
+  }
+
+  static const List<String> icons = ["Create Announcement", "Create Event"];
+
+  @override
   Widget build(BuildContext context) {
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
 
     return Scaffold(
+      floatingActionButton: isOrg
+          ? Column(
+              mainAxisSize: MainAxisSize.min,
+              children: List.generate(icons.length, (int index) {
+                Widget child = Container(
+                  height: 100.0,
+                  width: 300.0,
+                  alignment: FractionalOffset.topCenter,
+                  child: ScaleTransition(
+                    scale: CurvedAnimation(
+                      parent: _controller,
+                      curve: Interval(0.0, 1.0 - index / icons.length / 2.0,
+                          curve: Curves.easeOut),
+                    ),
+                    child: ElevatedButton(
+                      child: SizedBox(
+                        height: 70,
+                        width: 200,
+                        child: Center(
+                          child: Text(
+                            icons[index],
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 20),
+                          ),
+                        ),
+                      ),
+                      //),
+                      onPressed: () {
+                        if (index == 0) {
+                          context.pushNamed(AppRoute.createUpdate.name);
+                        } else {
+                          context.pushNamed(AppRoute.createEvent.name);
+                        }
+                      },
+                    ),
+                  ),
+                );
+                return child;
+              }).toList()
+                ..add(
+                  FloatingActionButton(
+                    onPressed: () {
+                      setState(() {
+                        _pressed = !_pressed;
+                      });
+                      if (_controller.isDismissed) {
+                        _controller.forward();
+                      } else {
+                        _controller.reverse();
+                      }
+                    },
+                    tooltip: 'Create an event or announcement',
+                    shape: const CircleBorder(side: BorderSide(width: 1.0)),
+                    elevation: 2.0,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(25),
+                        gradient: const LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment(0.8, 1),
+                          colors: <Color>[
+                            Color.fromARGB(255, 91, 78, 119),
+                            Color.fromARGB(255, 211, 195, 232)
+                          ],
+                          tileMode: TileMode.mirror,
+                        ),
+                      ),
+                      child: Icon(
+                        _pressed == true
+                            ? Icons.keyboard_arrow_up_sharp
+                            : Icons.add,
+                        color: Colors.white,
+                        size: 54,
+                      ),
+                    ),
+                  ),
+                ),
+            )
+          : null,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       /*appBar: AppBar(
         automaticallyImplyLeading: true,
         actions: <Widget>[
@@ -231,17 +338,38 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),*/
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: "Explore"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.home_outlined), label: "Home"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.camera_alt_outlined), label: "QR Scan")
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: const Color.fromARGB(255, 91, 78, 119),
-        onTap: _onItemTapped,
+      bottomNavigationBar: Container(
+        decoration: const BoxDecoration(
+            color: Colors.white,
+            border: Border(top: BorderSide(color: Colors.black, width: 2.0))),
+        child: BottomNavigationBar(
+          items: [
+            isOrg
+                ? const BottomNavigationBarItem(
+                    icon: Icon(Icons.edit_calendar_sharp), label: "Events")
+                : BottomNavigationBarItem(
+                    icon: Icon(Icons.search), label: "Explore"),
+            isOrg
+                ? const BottomNavigationBarItem(
+                    icon: Icon(Icons.campaign), label: "Announcements")
+                : const BottomNavigationBarItem(
+                    icon: Icon(Icons.home_outlined), label: "Home"),
+            isOrg
+                ? const BottomNavigationBarItem(
+                    icon: Icon(Icons.home_outlined), label: "Home")
+                : BottomNavigationBarItem(
+                    icon: Icon(Icons.camera_alt_outlined), label: "QR Scan"),
+            if (isOrg)
+              const BottomNavigationBarItem(
+                  icon: Icon(Icons.reviews), label: "Feedback"),
+          ],
+          currentIndex: _selectedIndex,
+          selectedItemColor: Color.fromARGB(255, 29, 16, 57),
+          unselectedItemColor: Colors.black,
+          selectedFontSize: 16.0,
+          unselectedFontSize: 14.0,
+          onTap: _onItemTapped,
+        ),
       ),
     );
   }
@@ -374,19 +502,19 @@ class AnnouncementCard extends StatelessWidget {
                   ),
                   SizedBox(width: 10),
                   Text(
-                    'Date',
+                    '01-31-24',
                     style: TextStyle(fontSize: 16),
                     textAlign: TextAlign.justify,
                   ),
                   SizedBox(width: 5),
                   Text(
-                    'Announcement Title',
+                    'Event location changed for this event',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                     textAlign: TextAlign.justify,
                   ),
                   SizedBox(width: 20),
                   Text(
-                    '"text start..."',
+                    '"The location for..."',
                     style: TextStyle(fontStyle: FontStyle.italic),
                     textAlign: TextAlign.justify,
                   ),
@@ -436,23 +564,23 @@ class EventCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(
-                          'Event Title',
+                          'Concert',
                           style: TextStyle(
                               fontWeight: FontWeight.w600, fontSize: 18),
                           textAlign: TextAlign.start,
                         ),
                         Text(
-                          'Time/Date',
+                          'January 31 at 5:00 PM',
                           style: TextStyle(fontWeight: FontWeight.w400),
                           textAlign: TextAlign.start,
                         ),
                         Text(
-                          'Location',
+                          'Additon Financial Arena',
                           style: TextStyle(fontWeight: FontWeight.w400),
                           textAlign: TextAlign.start,
                         ),
                         Text(
-                          'Organization',
+                          'Organization Y',
                           style: TextStyle(fontWeight: FontWeight.w400),
                           textAlign: TextAlign.start,
                         ),
@@ -540,21 +668,21 @@ class HomeScreenTab extends ConsumerWidget {
                             children: [
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: InkWell(
-                                  onTap: () => context
-                                      .pushNamed(AppRoute.createUpdate.name),
-                                  child: Card(
-                                    child: SizedBox(
-                                      width: (w / 2) - 30,
-                                      height: 100,
+                                child: Card(
+                                  child: SizedBox(
+                                    width: (w / 2) - 30,
+                                    height: 100,
+                                    child: InkWell(
+                                      onTap: () => context.pushNamed(
+                                          AppRoute.createUpdate.name),
                                       child: const Center(
                                         child: Column(children: [
                                           Icon(Icons.campaign),
                                           Text(
                                             "Create Announcement",
                                             style: TextStyle(
-                                              fontSize: 20,
-                                            ),
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.w600),
                                             textAlign: TextAlign.center,
                                           )
                                         ]),
@@ -565,19 +693,21 @@ class HomeScreenTab extends ConsumerWidget {
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: InkWell(
-                                  onTap: () => context
-                                      .pushNamed(AppRoute.createEvent.name),
-                                  child: Card(
-                                    child: SizedBox(
-                                      width: (w / 2) - 30,
-                                      height: 100,
+                                child: Card(
+                                  child: SizedBox(
+                                    width: (w / 2) - 30,
+                                    height: 100,
+                                    child: InkWell(
+                                      onTap: () => context
+                                          .pushNamed(AppRoute.createEvent.name),
                                       child: const Center(
                                         child: Column(children: [
                                           Icon(Icons.event),
                                           Text(
                                             "Create Event",
-                                            style: TextStyle(fontSize: 20),
+                                            style: TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.w600),
                                             textAlign: TextAlign.center,
                                           )
                                         ]),
@@ -602,20 +732,21 @@ class HomeScreenTab extends ConsumerWidget {
                           children: [
                             //Directionality(
                             //textDirection: TextDirection.rtl,
-                            /*child:*/ TextButton.icon(
-                              onPressed: () {
-                                context.pushNamed(AppRoute.updates.name);
-                              },
-                              icon: const Icon(
-                                Icons.arrow_back_ios,
-                                color: Colors.grey,
-                                size: 15,
-                              ),
-                              label: const Text(
-                                'View All',
-                                style: TextStyle(fontSize: 10),
-                              ),
-                            ),
+                            /*child:*/ TextButton(
+                                onPressed: () {
+                                  context.pushNamed(AppRoute.updates.name);
+                                },
+                                child: Row(
+                                  children: [
+                                    const Text('View All',
+                                        style: TextStyle(fontSize: 10)),
+                                    const Icon(
+                                      Icons.arrow_forward_ios,
+                                      color: Colors.grey,
+                                      size: 15,
+                                    ),
+                                  ],
+                                ))
                             //),
                           ],
                         ),

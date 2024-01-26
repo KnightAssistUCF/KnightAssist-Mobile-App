@@ -173,8 +173,9 @@ class OrganizationScreen extends ConsumerWidget {
                                     style: TextStyle(fontSize: 20),
                                   ),
                                 ),
-                                onPressed: () => context
-                                    .pushNamed(AppRoute.profileScreen.name),
+                                onPressed: () => context.pushNamed(
+                                    "editorgprofile",
+                                    extra: organization),
                               ),
                             ),
                           )
