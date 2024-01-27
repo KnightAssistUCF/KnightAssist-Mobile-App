@@ -24,15 +24,15 @@ class SignInScreen extends StatelessWidget {
       appBar: AppBar(title: const Text('Sign In')),
       body: Column(
         children: [
-          Image(
+          const Image(
             image: AssetImage('assets/KnightAssistCoA3.png'),
             height: 60,
           ),
-          Text('welcome to',
+          const Text('welcome to',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
-          Text('KnightAssist',
+          const Text('KnightAssist',
               style: TextStyle(fontSize: 30, fontWeight: FontWeight.w700)),
-          Padding(
+          const Padding(
             padding: EdgeInsets.all(8.0),
             child: Text('easier volunteering is just a step away!',
                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400)),
@@ -123,7 +123,7 @@ class _SignInContentsState extends ConsumerState<SignInContents>
               controller: _emailController,
               decoration: InputDecoration(
                 labelText: 'Email',
-                hintText: 'test@test.com',
+                hintText: 'user@example.com',
                 enabled: !state.isLoading,
               ),
               autovalidateMode: AutovalidateMode.onUserInteraction,

@@ -648,7 +648,7 @@ class HomeScreenTab extends ConsumerWidget {
                 message: 'Go to your profile',
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(25.0),
-                  child: Image(
+                  child: const Image(
                       semanticLabel: 'Profile picture',
                       image: NetworkImage(
                           'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y'),
@@ -669,12 +669,12 @@ class HomeScreenTab extends ConsumerWidget {
                 scrollDirection: Axis.vertical,
                 children: <Widget>[
                   Padding(
-                    padding: EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(8.0),
                     child: isOrg
-                        ? SizedBox(
+                        ? const SizedBox(
                             height: 0,
                           )
-                        : Text(
+                        : const Text(
                             'Announcements',
                             style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.w600),
@@ -739,12 +739,12 @@ class HomeScreenTab extends ConsumerWidget {
                         )
                       : const AnnouncementCard(),
                   isOrg
-                      ? SizedBox(
+                      ? const SizedBox(
                           height: 0,
                         )
                       : const AnnouncementCard(),
                   isOrg
-                      ? SizedBox(height: 0)
+                      ? const SizedBox(height: 0)
                       : Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
@@ -754,11 +754,11 @@ class HomeScreenTab extends ConsumerWidget {
                                 onPressed: () {
                                   context.pushNamed(AppRoute.updates.name);
                                 },
-                                child: Row(
+                                child: const Row(
                                   children: [
-                                    const Text('View All',
+                                    Text('View All',
                                         style: TextStyle(fontSize: 10)),
-                                    const Icon(
+                                    Icon(
                                       Icons.arrow_forward_ios,
                                       color: Colors.grey,
                                       size: 15,
@@ -776,7 +776,7 @@ class HomeScreenTab extends ConsumerWidget {
                         child: Column(
                           children: [
                             isOrg
-                                ? Text(
+                                ? const Text(
                                     "73%",
                                     style: TextStyle(fontSize: 40),
                                   )
@@ -802,7 +802,14 @@ class HomeScreenTab extends ConsumerWidget {
                         child: Column(
                           children: [
                             Text(
-                              isOrg ? '25' : '255',
+                              isOrg
+                                  ? organizationsRepository
+                                          .getOrganization(user!.id)
+                                          ?.eventsArray
+                                          .length
+                                          .toString() ??
+                                      '0'
+                                  : '255',
                               style: TextStyle(fontSize: 40),
                             ),
                             Text(
