@@ -60,10 +60,13 @@ class CreateFeedback extends ConsumerWidget {
       body: ListView(scrollDirection: Axis.vertical, children: <Widget>[
         Padding(padding: const EdgeInsets.all(8.0), child: Text(event.name)),
         OverflowBar(children: [
-          ClipRRect(
-              borderRadius: BorderRadius.circular(25.0),
-              child:
-                  Image(image: AssetImage('assets/example.png'), height: 25)),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ClipRRect(
+                borderRadius: BorderRadius.circular(25.0),
+                child:
+                    Image(image: AssetImage('assets/example.png'), height: 25)),
+          ),
           Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(event.sponsoringOrganization)),
@@ -76,18 +79,16 @@ class CreateFeedback extends ConsumerWidget {
             child: Text((DateFormat.jmv().format(event.date)))),
         Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text("You checked out on " +
-                DateFormat.yMMMMEEEEd().format(event.endTime) +
-                " at " +
-                (DateFormat.jmv().format(event.endTime)))),
+            child: Text(
+                "You checked out on ${DateFormat.yMMMMEEEEd().format(event.endTime)} at ${DateFormat.jmv().format(event.endTime)}")),
         RatingBar.builder(
           initialRating: 0.0,
           minRating: 1,
           direction: Axis.horizontal,
           allowHalfRating: false,
           itemCount: 5,
-          itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-          itemBuilder: (context, _) => Icon(
+          itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+          itemBuilder: (context, _) => const Icon(
             Icons.star,
             color: Colors.amber,
           ),
@@ -96,8 +97,8 @@ class CreateFeedback extends ConsumerWidget {
             // feedback.rating = rating;
           },
         ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
+        const Padding(
+          padding: EdgeInsets.all(8.0),
           child: SizedBox(
               width: 240,
               height: 120,
@@ -118,8 +119,8 @@ class CreateFeedback extends ConsumerWidget {
               onPressed: () {
                 context.pushNamed(AppRoute.homeScreen.name);
               },
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
+              child: const Padding(
+                padding: EdgeInsets.all(8.0),
                 child: Text(
                   'Leave Feedback',
                   style: TextStyle(fontSize: 20),

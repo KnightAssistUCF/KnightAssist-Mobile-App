@@ -123,8 +123,8 @@ class UpdateDetailScreen extends ConsumerWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: Center(
                     child: ElevatedButton(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
+                      child: const Padding(
+                        padding: EdgeInsets.all(8.0),
                         child: Text(
                           "Edit",
                           style: TextStyle(fontSize: 20),

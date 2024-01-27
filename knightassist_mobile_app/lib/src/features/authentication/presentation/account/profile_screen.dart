@@ -18,8 +18,8 @@ class ProfileScreen extends StatefulWidget {
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen>{
-File? _profilePicFile;
+class _ProfileScreenState extends State<ProfileScreen> {
+  File? _profilePicFile;
 
   @override
   void initState() {
@@ -40,7 +40,7 @@ File? _profilePicFile;
     double w = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-         title: const Text(
+        title: const Text(
           'Profile',
           style: TextStyle(fontWeight: FontWeight.w600),
         ),
@@ -49,14 +49,19 @@ File? _profilePicFile;
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: IconButton(
-              onPressed: () { }, tooltip: 'View notifications', icon: const Icon(Icons.notifications_outlined,
-              color: Colors.white, semanticLabel: 'Notifications',),
+              onPressed: () {},
+              tooltip: 'View notifications',
+              icon: const Icon(
+                Icons.notifications_outlined,
+                color: Colors.white,
+                semanticLabel: 'Notifications',
+              ),
             ),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: GestureDetector(
-              onTap:  () {
+              onTap: () {
                 context.pushNamed(AppRoute.profileScreen.name);
               },
               child: Tooltip(
@@ -64,9 +69,9 @@ File? _profilePicFile;
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(25.0),
                   child: const Image(
-                    semanticLabel: 'Profile picture',
-                      image:
-                          AssetImage('assets/profile pictures/icon_paintbrush.png'),
+                      semanticLabel: 'Profile picture',
+                      image: AssetImage(
+                          'assets/profile pictures/icon_paintbrush.png'),
                       height: 20),
                 ),
               ),
@@ -76,28 +81,47 @@ File? _profilePicFile;
       ),
       body: ListView(
         children: [
-          EditableImage(
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: EditableImage(
               onChange: _directUpdateImage,
               image: _profilePicFile != null
                   ? Image.file(_profilePicFile!, fit: BoxFit.cover)
-                  : const Image(image: AssetImage('assets/profile pictures/icon_paintbrush.png')),
+                  : const Image(
+                      image: AssetImage(
+                          'assets/profile pictures/icon_paintbrush.png')),
               size: 150,
               imagePickerTheme: ThemeData(
                 primaryColor: Colors.yellow,
                 shadowColor: Colors.deepOrange,
-                colorScheme:
-                    const ColorScheme.light(background: Colors.indigo),
+                colorScheme: const ColorScheme.light(background: Colors.indigo),
                 iconTheme: const IconThemeData(color: Colors.red),
                 fontFamily: 'Papyrus',
               ),
               imageBorder: Border.all(color: Colors.lime, width: 2),
               editIconBorder: Border.all(color: Colors.purple, width: 2),
             ),
-            _buildTextField(labelText: 'Username'),
-            _buildTextField(labelText: 'Full Name'),
-            _buildTextField(labelText: 'Email'),
-            _buildTextField(labelText: 'Password', obscureText: true),
-            _buildTextButton(),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: _buildTextField(labelText: 'Username'),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: _buildTextField(labelText: 'Full Name'),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: _buildTextField(labelText: 'Email'),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: _buildTextField(labelText: 'Password', obscureText: true),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: _buildElevatedButton(),
+          ),
         ],
       ),
       /*drawer: Drawer(
@@ -166,56 +190,58 @@ File? _profilePicFile;
 }
 
 TextField _buildTextField({String labelText = '', bool obscureText = false}) {
-    return TextField(
-      cursorColor: Colors.black54,
-      cursorWidth: 1,
-      obscureText: obscureText,
-      obscuringCharacter: '●',
-      decoration: InputDecoration(
-        labelText: labelText,
-        labelStyle: const TextStyle(
+  return TextField(
+    cursorColor: Colors.black54,
+    cursorWidth: 1,
+    obscureText: obscureText,
+    obscuringCharacter: '●',
+    decoration: InputDecoration(
+      labelText: labelText,
+      labelStyle: const TextStyle(
+        color: Colors.black54,
+        fontSize: 18,
+      ),
+      fillColor: Colors.red,
+      border: const OutlineInputBorder(
+        borderSide: BorderSide(
           color: Colors.black54,
-          fontSize: 18,
         ),
-        fillColor: Colors.red,
-        border: const OutlineInputBorder(
-          borderSide: BorderSide(
-            color: Colors.black54,
-          ),
-          borderRadius: BorderRadius.all(
-            Radius.circular(40),
-          ),
-        ),
-        focusedBorder: const OutlineInputBorder(
-          borderSide: BorderSide(
-            color: Colors.black54,
-            width: 1.5,
-          ),
-          borderRadius: BorderRadius.all(
-            Radius.circular(40),
-          ),
+        borderRadius: BorderRadius.all(
+          Radius.circular(40),
         ),
       ),
-    );
-  }
+      focusedBorder: const OutlineInputBorder(
+        borderSide: BorderSide(
+          color: Colors.black54,
+          width: 1.5,
+        ),
+        borderRadius: BorderRadius.all(
+          Radius.circular(40),
+        ),
+      ),
+    ),
+  );
+}
 
-  TextButton _buildTextButton() {
-    return TextButton(
-      onPressed: () => {},
-      style: ButtonStyle(
-        padding: MaterialStateProperty.all(
-          const EdgeInsets.symmetric(vertical: 20),
-        ),
-        side:
-            MaterialStateProperty.all(const BorderSide(color: Colors.black54)),
-        backgroundColor: MaterialStateProperty.all(Colors.transparent),
-      ),
-      child: const Text(
+ElevatedButton _buildElevatedButton() {
+  return ElevatedButton(
+    onPressed: () => {},
+    //style: ButtonStyle(
+    //padding: MaterialStateProperty.all(
+    //const EdgeInsets.symmetric(vertical: 20),
+    //),
+    //side: MaterialStateProperty.all(const BorderSide(color: Colors.black54)),
+    //backgroundColor: MaterialStateProperty.all(Colors.transparent),
+    //),
+    child: const Padding(
+      padding: EdgeInsets.all(8.0),
+      child: Text(
         'Save',
         style: TextStyle(
-          color: Colors.black,
+          color: Colors.white,
           fontSize: 18,
         ),
       ),
-    );
-  }
+    ),
+  );
+}

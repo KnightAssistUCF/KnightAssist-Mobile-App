@@ -173,8 +173,9 @@ class OrganizationScreen extends ConsumerWidget {
                                     style: TextStyle(fontSize: 20),
                                   ),
                                 ),
-                                onPressed: () => context
-                                    .pushNamed(AppRoute.profileScreen.name),
+                                onPressed: () => context.pushNamed(
+                                    "editorgprofile",
+                                    extra: organization),
                               ),
                             ),
                           )
@@ -599,9 +600,9 @@ class FeedbackCard extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(0.05),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children:[ 
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
@@ -613,29 +614,28 @@ class FeedbackCard extends StatelessWidget {
                             textAlign: TextAlign.start,
                           ),
                         ),
-                        OverflowBar(
-                          children: [ Padding(
+                        OverflowBar(children: [
+                          Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: ClipRRect(
-                            borderRadius: BorderRadius.circular(25.0),
-                            child: const Image(
-                                image: AssetImage(
-                                    'assets/profile pictures/icon_paintbrush.png'),
-                                height:
-                                    50)),
+                                borderRadius: BorderRadius.circular(25.0),
+                                child: const Image(
+                                    image: AssetImage(
+                                        'assets/profile pictures/icon_paintbrush.png'),
+                                    height: 50)),
                           ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                                        feedback.studentName,
-                                                        maxLines: 3,
-                                                        overflow: TextOverflow.ellipsis,
-                                                        style: const TextStyle(
-                                fontWeight: FontWeight.w500, fontSize: 16),
-                                                        textAlign: TextAlign.start,
-                                                      ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              feedback.studentName,
+                              maxLines: 3,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.w500, fontSize: 16),
+                              textAlign: TextAlign.start,
                             ),
-                    ]), // will be profile picture of student who left the feedback
+                          ),
+                        ]), // will be profile picture of student who left the feedback
                         RatingBar.builder(
                           initialRating: feedback.rating,
                           itemSize: 20.0,
@@ -654,25 +654,26 @@ class FeedbackCard extends StatelessWidget {
                             feedback.rating = rating;
                           },
                         ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        feedback.feedbackText,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 3,
-                        style: const TextStyle(fontWeight: FontWeight.w400),
-                        textAlign: TextAlign.start,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        DateFormat('yyyy-MM-dd').format(feedback.timeSubmitted),
-                        style: const TextStyle(fontWeight: FontWeight.w400),
-                        textAlign: TextAlign.start,
-                      ),
-                    ),
-                  ] ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            feedback.feedbackText,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 3,
+                            style: const TextStyle(fontWeight: FontWeight.w400),
+                            textAlign: TextAlign.start,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            DateFormat('yyyy-MM-dd')
+                                .format(feedback.timeSubmitted),
+                            style: const TextStyle(fontWeight: FontWeight.w400),
+                            textAlign: TextAlign.start,
+                          ),
+                        ),
+                      ]),
                 ),
               ),
             )),
