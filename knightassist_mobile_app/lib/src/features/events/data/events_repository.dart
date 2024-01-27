@@ -47,6 +47,49 @@ class EventsRepository {
           //print(eventData['name'].toString());
           //print(eventData);
 
+          List<String> attendees = [];
+          List<dynamic> registeredVolunteers = [];
+          List<String> tags = [];
+          List<CheckedInStudent> checkins = [];
+          List<Review> reviews = [];
+
+          for (dynamic s in eventData[0]['attendees']) {
+            attendees.add(s);
+          }
+          for (dynamic s in eventData[0]['registeredVolunteers']) {
+            registeredVolunteers.add(s);
+          }
+          if (eventData[0]['tags'] != null) {
+            for (dynamic s in eventData[0]['tags']) {
+              tags.add(s);
+            }
+          }
+          for (dynamic s in eventData[0]['checkedInStudents']) {
+            CheckedInStudent c = CheckedInStudent(
+                studentId: s['studentId'],
+                checkInTime: DateTime.parse(s['checkInTime']),
+                checkOutTime: DateTime.parse(s['checkInTime']),
+                id: s['_id']);
+
+            checkins.add(c);
+          }
+          for (dynamic s in eventData[0]['feedback']) {
+            Review r = Review(
+                studentId: s['studentId'],
+                eventId: s['eventId'],
+                studentName: s['studentName'],
+                eventName: s['eventName'],
+                rating: s['rating'] + 0.00,
+                feedbackText: s['feedbackText'],
+                wasReadByUser: s['wasReadByUser'],
+                id: s['_id'],
+                timeFeedbackSubmitted:
+                    DateTime.parse(s['timeFeedbackSubmitted']),
+                createdAt: DateTime.parse(s['createdAt']),
+                updatedAt: DateTime.parse(s['updatedAt']));
+            reviews.add(r);
+          }
+
           Event e = Event(
               id: eventData[0]['_id'],
               name: eventData[0]['name'],
@@ -54,15 +97,15 @@ class EventsRepository {
               location: eventData[0]['location'],
               sponsoringOrganization:
                   eventData[0]['sponsoringOrganziation'] ?? '',
-              attendees: [],
-              registeredVolunteers: [],
+              attendees: attendees,
+              registeredVolunteers: registeredVolunteers,
               profilePicPath: eventData[0]['profilePicPath'],
               startTime: DateTime.parse(eventData[0]['startTime']),
               endTime: DateTime.parse(eventData[0]['endTime']),
-              eventTags: [],
+              eventTags: tags,
               maxAttendees: eventData[0]['maxAttendees'],
-              checkedInStudents: [],
-              feedback: [],
+              checkedInStudents: checkins,
+              feedback: reviews,
               createdAt: DateTime.parse(eventData[0]['createdAt']),
               updatedAt: DateTime.parse(eventData[0]['updatedAt']));
 

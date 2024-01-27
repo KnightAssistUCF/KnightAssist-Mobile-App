@@ -75,15 +75,12 @@ class OrganizationsRepository {
             favorites.add(s);
           }
           for (dynamic s in orgData['updates']) {
-            Update u =
-                Update(title: '', content: '', date: DateTime.now(), id: ''
-                    //title: orgData[s]['title'] == null
-                    //? ''
-                    //: orgData[s]['title'] ?? '',
-                    //content: orgData[s]['content'] ?? '',
-                    //date: DateTime.parse(orgData[s]['date'] ?? ''),
-                    //id: (orgData[s]['_id'] ?? ''));
-                    );
+            Update u = Update(
+                title: s['title'] == null ? '' : s['title'] ?? '',
+                content: s['content'] ?? '',
+                date: DateTime.parse(s['date'] ?? ''),
+                id: (s['_id'] ?? ''));
+
             updates.add(u);
           }
           for (dynamic s in orgData['eventsArray']) {
