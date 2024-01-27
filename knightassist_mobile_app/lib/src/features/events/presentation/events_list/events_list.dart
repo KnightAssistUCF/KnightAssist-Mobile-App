@@ -30,10 +30,12 @@ class EventsList extends ConsumerWidget {
                 final event = events[index];
                 return EventCard(
                   event: event,
-                  onPressed: () => context.goNamed(
-                    AppRoute.event.name,
-                    pathParameters: {'id': event.id},
-                  ),
+                  onPressed: () =>
+                      //context.goNamed(
+                      //AppRoute.event.name,
+                      //pathParameters: {'id': event.id},
+                      context.pushNamed('event', extra: event),
+                  //),
                 );
               },
             ),
