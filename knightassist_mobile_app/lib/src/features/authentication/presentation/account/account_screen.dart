@@ -21,149 +21,156 @@ class AccountScreen extends ConsumerWidget {
         (_, state) => state.showAlertDialogOnError(context));
     final state = ref.watch(accountScreenControllerProvider);
     return Scaffold(
-      appBar: AppBar(
-        title: state.isLoading
-            ? const CircularProgressIndicator()
-            : const Text('Account'),
-        actions: [
-          ActionTextButton(
-            text: 'Logout',
-            onPressed: state.isLoading
-                ? null
-                : () async {
-                    final logout = await showAlertDialog(
-                        context: context,
-                        title: 'Are you sure?',
-                        cancelActionText: 'Cancel',
-                        defaultActionText: 'Logout');
-                    if (logout == true) {
-                      ref
-                          .read(accountScreenControllerProvider.notifier)
-                          .signOut();
-                    }
-                  },
-          )
-        ],
-      ),
-      body:
-        Stack(
-              alignment: Alignment.center,
-              children: [
-        Column(
+        appBar: AppBar(
+          title: state.isLoading
+              ? const CircularProgressIndicator()
+              : const Text('Account'),
+          actions: [
+            ActionTextButton(
+              text: 'Logout',
+              onPressed: state.isLoading
+                  ? null
+                  : () async {
+                      final logout = await showAlertDialog(
+                          context: context,
+                          title: 'Are you sure?',
+                          cancelActionText: 'Cancel',
+                          defaultActionText: 'Logout');
+                      if (logout == true) {
+                        ref
+                            .read(accountScreenControllerProvider.notifier)
+                            .signOut();
+                        context.pushNamed(AppRoute.signIn.name);
+                      }
+                    },
+            )
+          ],
+        ),
+        body: Stack(
+          alignment: Alignment.center,
           children: [
-            Container(
-              width: MediaQuery.sizeOf(context).width,
-              height: 150,
-              decoration: const BoxDecoration(
-                color: Color.fromARGB(255, 0, 108, 81)
-                ),
+            Column(children: [
+              Container(
+                width: MediaQuery.sizeOf(context).width,
+                height: 150,
+                decoration:
+                    const BoxDecoration(color: Color.fromARGB(255, 0, 108, 81)),
               ),
-          ]
+            ]),
+            const SizedBox(
+              height: 50,
             ),
-            const SizedBox(height: 50,),
             Padding(
               padding: EdgeInsets.all(8.0),
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  const Positioned(
-                    top: 65,
-                    child: Padding(
+              child: Stack(alignment: Alignment.center, children: [
+                const Positioned(
+                  top: 65,
+                  child: Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Card(
+                        child: Padding(
                       padding: EdgeInsets.all(8.0),
-                      child: Card(child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Column(children: [
+                      child: Column(
+                        children: [
                           SizedBox(height: 40),
                           Text(
                             "Student User Name",
                             style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              color: Colors.black,
-                              fontSize: 25),
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black,
+                                fontSize: 25),
                           ),
                           Text(
-                          "Joined October 20th, 2023",
-                          style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              color: Colors.black,
-                              fontSize: 20),
+                            "Joined October 20th, 2023",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black,
+                                fontSize: 20),
                           ),
-                        ],),
-                      )),
-                    ),
+                        ],
+                      ),
+                    )),
                   ),
-                  Positioned(
-                    top: 15,
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Container(
-                                  padding: EdgeInsets.all(5),
-                                  decoration: BoxDecoration(color: Colors.white, shape: BoxShape.circle,   
-                                  boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey.withOpacity(0.5),
-                                    spreadRadius: 2,
-                                    blurRadius: 5,
-                                    offset: const Offset(0, 3), // changes position of shadow
-                                  ),
-                                 ],),
-                                  child: ClipOval(
-                                    child: SizedBox.fromSize(
-                                        size: const Size.fromRadius(48),
-                                        child: const Image(
-                                          semanticLabel: 'User profile picture',
-                                          image: AssetImage('assets/profile pictures/icon_paintbrush.png'),
-                                          fit: BoxFit.cover),
-                                    ),
-                                  ),
-                                ),
-                    ),
-                  ),
-                  //const Positioned(top: 215, child: UserDataTable()),
-                  Positioned(
-                    top: 215,
-                    child: SizedBox(
-                      height: MediaQuery.sizeOf(context).height,
-                      width: MediaQuery.sizeOf(context).width,
-                      child: SettingsList(
-                            sections: [
-                              SettingsSection(
-                                tiles: <SettingsTile>[
-                                  SettingsTile.navigation(
-                                    leading: Icon(Icons.person),
-                                    title: Text('Profile'),
-                                    onPressed: (context) => context.pushNamed(AppRoute.profileScreen.name),
-                                  ),
-                                  SettingsTile.navigation(
-                                    leading: Icon(Icons.access_time_rounded),
-                                    title: Text('Semester Goal'),
-                                    value: Text('120 hours'),
-                                    onPressed: (context) => context.pushNamed(AppRoute.semesterGoal.name),
-                                  ),
-                                  SettingsTile.navigation(
-                                    leading: Icon(Icons.favorite_border),
-                                    title: Text('Favorite Organizations'),
-                                    value: Text('5'),
-                                    onPressed: (context) => context.pushNamed(AppRoute.organizations.name),
-                                  ),
-                                  SettingsTile.navigation(
-                                    leading: Icon(Icons.star_border_outlined),
-                                    title: Text('Interests'),
-                                    value: Text('10'),
-                                    onPressed: (context) => context.pushNamed(AppRoute.tagSelection.name),
-                                  ),
-                                ],
-                              ),
-                            ],
+                ),
+                Positioned(
+                  top: 15,
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Container(
+                      padding: EdgeInsets.all(5),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 2,
+                            blurRadius: 5,
+                            offset: const Offset(
+                                0, 3), // changes position of shadow
                           ),
+                        ],
+                      ),
+                      child: ClipOval(
+                        child: SizedBox.fromSize(
+                          size: const Size.fromRadius(48),
+                          child: const Image(
+                              semanticLabel: 'User profile picture',
+                              image: AssetImage(
+                                  'assets/profile pictures/icon_paintbrush.png'),
+                              fit: BoxFit.cover),
+                        ),
+                      ),
                     ),
                   ),
-                ]
-              ), 
+                ),
+                //const Positioned(top: 215, child: UserDataTable()),
+                Positioned(
+                  top: 215,
+                  child: SizedBox(
+                    height: MediaQuery.sizeOf(context).height,
+                    width: MediaQuery.sizeOf(context).width,
+                    child: SettingsList(
+                      sections: [
+                        SettingsSection(
+                          tiles: <SettingsTile>[
+                            SettingsTile.navigation(
+                              leading: Icon(Icons.person),
+                              title: Text('Profile'),
+                              onPressed: (context) => context
+                                  .pushNamed(AppRoute.profileScreen.name),
+                            ),
+                            SettingsTile.navigation(
+                              leading: Icon(Icons.access_time_rounded),
+                              title: Text('Semester Goal'),
+                              value: Text('120 hours'),
+                              onPressed: (context) =>
+                                  context.pushNamed(AppRoute.semesterGoal.name),
+                            ),
+                            SettingsTile.navigation(
+                              leading: Icon(Icons.favorite_border),
+                              title: Text('Favorite Organizations'),
+                              value: Text('5'),
+                              onPressed: (context) => context
+                                  .pushNamed(AppRoute.organizations.name),
+                            ),
+                            SettingsTile.navigation(
+                              leading: Icon(Icons.star_border_outlined),
+                              title: Text('Interests'),
+                              value: Text('10'),
+                              onPressed: (context) =>
+                                  context.pushNamed(AppRoute.tagSelection.name),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ]),
             ),
           ],
-        )
-  );
+        ));
   }
 }
 

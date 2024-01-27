@@ -84,6 +84,7 @@ enum AppRoute {
 @Riverpod(keepAlive: true)
 GoRouter goRouter(GoRouterRef ref) {
   final authRepository = ref.watch(authRepositoryProvider);
+  final isLoggedIn = authRepository.currentUser != null;
   return GoRouter(
       initialLocation: '/',
       debugLogDiagnostics: false,
@@ -107,8 +108,9 @@ GoRouter goRouter(GoRouterRef ref) {
         GoRoute(
             path: '/',
             name: AppRoute.home.name,
-            builder: (context, state) =>
-                const HomeScreen(), // TEMP, change this to whatever screen you want to test (will need to rerun)
+            builder: (context, state) => isLoggedIn
+                ? HomeScreen()
+                : SignInScreen(), // TEMP, change this to whatever screen you want to test (will need to rerun)
             routes: [
               GoRoute(
                   path: 'events',

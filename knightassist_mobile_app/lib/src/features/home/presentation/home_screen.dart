@@ -9,6 +9,7 @@ import 'package:knightassist_mobile_app/src/features/authentication/data/auth_re
 import 'package:knightassist_mobile_app/src/features/events/presentation/events_list/events_list_screen.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/feedback_list_screen.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/qr_scanner.dart';
+import 'package:knightassist_mobile_app/src/features/organizations/data/organizations_repository.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/presentation/update_screen.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 import 'package:percent_indicator/percent_indicator.dart';
@@ -617,6 +618,7 @@ class HomeScreenTab extends ConsumerWidget {
     double w = MediaQuery.of(context).size.width;
 
     final authRepository = ref.watch(authRepositoryProvider);
+    final organizationsRepository = ref.watch(organizationsRepositoryProvider);
     final user = authRepository.currentUser;
     bool isOrg = user?.role == "organization";
 
@@ -646,10 +648,10 @@ class HomeScreenTab extends ConsumerWidget {
                 message: 'Go to your profile',
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(25.0),
-                  child: const Image(
+                  child: Image(
                       semanticLabel: 'Profile picture',
-                      image: AssetImage(
-                          'assets/profile pictures/icon_paintbrush.png'),
+                      image: NetworkImage(
+                          'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y'),
                       height: 20),
                 ),
               ),
@@ -893,6 +895,8 @@ class HomeScreenTab extends ConsumerWidget {
             ListTile(
               title: const Text('Sign Out'),
               onTap: () {
+                final authRepository = ref.watch(authRepositoryProvider);
+                authRepository.signOut();
                 context.pushNamed(AppRoute.emailConfirm.name);
                 Navigator.pop(context);
               },
