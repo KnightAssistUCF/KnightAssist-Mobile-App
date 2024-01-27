@@ -96,7 +96,9 @@ class EventsRepository {
               description: eventData[0]['description'],
               location: eventData[0]['location'],
               sponsoringOrganization:
-                  eventData[0]['sponsoringOrganziation'] ?? '',
+                  eventData[0]['sponsoringOrganziation'] == null
+                      ? '657e15abf893392ca98665d1'
+                      : eventData[0]['sponsoringOrganziation'],
               attendees: attendees,
               registeredVolunteers: registeredVolunteers,
               profilePicPath: eventData[0]['profilePicPath'],
