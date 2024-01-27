@@ -1,8 +1,10 @@
+import 'package:go_router/go_router.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/events_list/events_list.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/events_list/events_search_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:knightassist_mobile_app/src/common_widgets/responsive_center.dart';
 import 'package:knightassist_mobile_app/src/constants/app_sizes.dart';
+import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 
 class EventsListScreen extends StatefulWidget {
   const EventsListScreen({super.key, this.organizationID});
@@ -40,7 +42,47 @@ class _EventsListScreenState extends State<EventsListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("temp")),
+      appBar: AppBar(
+        title: const Text(
+          'Volunteer Shifts',
+          style: TextStyle(fontWeight: FontWeight.w600),
+        ),
+        centerTitle: true,
+        automaticallyImplyLeading: true,
+        actions: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: IconButton(
+              onPressed: () {},
+              tooltip: 'View notifications',
+              icon: const Icon(
+                Icons.notifications_outlined,
+                color: Colors.white,
+                semanticLabel: 'Notifications',
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: GestureDetector(
+              onTap: () {
+                context.pushNamed(AppRoute.profileScreen.name);
+              },
+              child: Tooltip(
+                message: 'Go to your profile',
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(25.0),
+                  child: const Image(
+                      semanticLabel: 'Profile picture',
+                      image: AssetImage(
+                          'assets/profile pictures/icon_paintbrush.png'),
+                      height: 20),
+                ),
+              ),
+            ),
+          )
+        ],
+      ),
       body: CustomScrollView(
         controller: _scrollController,
         slivers: const [

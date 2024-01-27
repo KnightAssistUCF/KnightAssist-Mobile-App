@@ -281,7 +281,7 @@ class _TabBarOrgState extends State<TabBarOrg> with TickerProviderStateMixin {
                                   width: 300,
                                   child: TextFormField(
                                     initialValue: organization
-                                            .contact!.socialMedia?.facebook ??
+                                            .contact?.socialMedia?.facebook ??
                                         '',
                                     decoration: const InputDecoration(
                                       border: OutlineInputBorder(),
@@ -311,7 +311,7 @@ class _TabBarOrgState extends State<TabBarOrg> with TickerProviderStateMixin {
                                   width: 300,
                                   child: TextFormField(
                                     initialValue: organization
-                                            .contact!.socialMedia!.twitter ??
+                                            .contact?.socialMedia?.twitter ??
                                         '',
                                     decoration: const InputDecoration(
                                       border: OutlineInputBorder(),
@@ -327,7 +327,7 @@ class _TabBarOrgState extends State<TabBarOrg> with TickerProviderStateMixin {
                               IconButton(
                                   onPressed: () async {
                                     final Uri url = Uri.parse(organization
-                                            .contact?.socialMedia!.linkedin ??
+                                            .contact?.socialMedia?.linkedin ??
                                         '');
                                     if (!await launchUrl(url)) {
                                       throw Exception('Could not launch $url');
@@ -341,7 +341,7 @@ class _TabBarOrgState extends State<TabBarOrg> with TickerProviderStateMixin {
                                   width: 300,
                                   child: TextFormField(
                                     initialValue: organization
-                                            .contact!.socialMedia?.linkedin ??
+                                            .contact?.socialMedia?.linkedin ??
                                         '',
                                     decoration: const InputDecoration(
                                       border: OutlineInputBorder(),
@@ -430,7 +430,7 @@ class _TabBarOrgState extends State<TabBarOrg> with TickerProviderStateMixin {
                             IconButton(
                                 onPressed: () async {
                                   final Uri url = Uri.parse(
-                                      organization.contact!.website ?? '');
+                                      organization.contact?.website ?? '');
                                   if (!await launchUrl(url)) {
                                     throw Exception('Could not launch $url');
                                   }

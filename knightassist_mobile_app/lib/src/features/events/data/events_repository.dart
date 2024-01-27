@@ -39,9 +39,9 @@ class EventsRepository {
           var uri = Uri.https('knightassist-43ab3aeaada9.herokuapp.com',
               '/api/searchOneEvent', params);
           var response = await http.get(uri);
-          print(jsonDecode(response.body));
-          print(
-              "-------------------------------------------------------------------------------------------------");
+          //print(jsonDecode(response.body));
+          //print(
+          // "-------------------------------------------------------------------------------------------------");
 
           final dynamic eventData = jsonDecode(response.body);
           //print(eventData['name'].toString());
