@@ -47,8 +47,8 @@ class AuthRepository {
     switch (response.statusCode) {
       case 200:
         //var user = jsonDecode(body["user"]);
-        if (response.body.contains('admin')) {
-          throw new AdminLogInException();
+        if (response.body.contains('adminUser')) {
+          throw AdminLogInException();
           break;
         }
         var user = body["user"];
