@@ -202,8 +202,19 @@ class AuthRepository {
       "lastName": lastName
     };
     var uri = Uri.parse(
-        'https://knightassist-43ab3aeaada9.herokuapp.com/api/userStudentSignUp');
-    var response = await http.post(uri, body: parameters);
+        'https://knightassist-43ab3aeaada9.herokuapp.com/api/userSignUp');
+    var response = await http.post(
+      uri,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'email': email,
+        'password': password,
+        'firstName': 'firstName',
+        'lastName': lastName
+      }),
+    );
     debugPrint(response.body);
     switch (response.statusCode) {
       case 200:
@@ -229,7 +240,16 @@ class AuthRepository {
     };
     var uri = Uri.parse(
         'https://knightassist-43ab3aeaada9.herokuapp.com/api/organizationSignUp');
-    var response = await http.post(uri, body: parameters);
+    var response = await http.post(uri,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          'email': email,
+          'password': password,
+          'name': 'name',
+        }));
+    debugPrint(response.body);
     switch (response.statusCode) {
       case 200:
         // Organization created
