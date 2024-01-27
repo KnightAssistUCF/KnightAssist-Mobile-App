@@ -95,9 +95,9 @@ GoRouter goRouter(GoRouterRef ref) {
             return '/';
           }
         } else {
-          //if (path == '/account') {
-          //return '/';
-          //}
+          if (path == '/account') {
+            return '/';
+          }
         }
         return null;
       },

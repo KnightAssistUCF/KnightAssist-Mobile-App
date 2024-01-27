@@ -22,7 +22,7 @@ class SignInScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Sign In')),
-      body: const Column(
+      body: Column(
         children: [
           Image(
             image: AssetImage('assets/KnightAssistCoA3.png'),
@@ -37,7 +37,11 @@ class SignInScreen extends StatelessWidget {
             child: Text('easier volunteering is just a step away!',
                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400)),
           ),
-          SignInContents(),
+          SignInContents(
+            onSignedIn: () {
+              context.pushNamed(AppRoute.homeScreen.name);
+            },
+          ),
         ],
       ),
     );
