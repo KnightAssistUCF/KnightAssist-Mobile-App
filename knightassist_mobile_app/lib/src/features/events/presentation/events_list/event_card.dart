@@ -1,7 +1,10 @@
+import 'package:knightassist_mobile_app/src/features/authentication/data/auth_repository.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
 import 'package:flutter/material.dart';
 import 'package:knightassist_mobile_app/src/constants/app_sizes.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:knightassist_mobile_app/src/features/rsvp/data/rsvp_repository.dart';
+import 'package:knightassist_mobile_app/src/features/rsvp/presentation/rsvp_widget.dart';
 
 class EventCard extends ConsumerWidget {
   const EventCard({super.key, required this.event, this.onPressed});
@@ -14,6 +17,10 @@ class EventCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final rsvpRepository = ref.watch(rsvpRepositoryProvider);
+    final authRepository = ref.watch(authRepositoryProvider);
+    final user = authRepository.currentUser;
+
     return Card(
       child: InkWell(
         key: eventCardKey,
@@ -78,13 +85,22 @@ class EventCard extends ConsumerWidget {
                             )
                           ],
                         ),
-                        FilledButton(
-                          onPressed: () {},
-                          style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all(
-                                  const Color.fromARGB(255, 91, 78, 119))),
-                          child: const Text('RSVP'),
-                        ),
+                        user?.role == "student"
+                            ? RSVPWidget(event: event)
+                            : FilledButton(
+                                onPressed: () {
+                                  /*rsvpRepository.setRSVP(
+                                user!.id, event.id, event.name);
+                            showAboutDialog(context: context, children: [
+                              Text('Rsvped for event: ${event.name}')
+                            ]);*/
+                                },
+                                style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty.all(
+                                        const Color.fromARGB(
+                                            255, 91, 78, 119))),
+                                child: const Text('RSVP'),
+                              ),
                       ],
                     ),
                   ),

@@ -19,13 +19,13 @@ class RSVPService {
     return ref.read(rsvpRepositoryProvider).fetchRSVPs(user.id);
   }
 
-  Future<void> setRSVP(String eventID) async {
+  Future<void> setRSVP(String eventID, String eventName) async {
     final user = ref.read(authRepositoryProvider).currentUser;
     assert(user != null);
     if (user == null) {
       throw AssertionError('Can\'t add RSVPs if user is not signed in');
     }
-    await ref.read(rsvpRepositoryProvider).setRSVP(user.id, eventID);
+    await ref.read(rsvpRepositoryProvider).setRSVP(user.id, eventID, eventName);
   }
 }
 

@@ -24,7 +24,7 @@ String _$rsvpsHash() => r'f6197cff744342b3245e9da7784ad83430541457';
 
 /// See also [rsvps].
 @ProviderFor(rsvps)
-final rsvpsProvider = StreamProvider<List<EventID>>.internal(
+final rsvpsProvider = StreamProvider<List<String>>.internal(
   rsvps,
   name: r'rsvpsProvider',
   debugGetCreateSourceHash:
@@ -33,6 +33,6 @@ final rsvpsProvider = StreamProvider<List<EventID>>.internal(
   allTransitiveDependencies: null,
 );
 
-typedef RsvpsRef = StreamProviderRef<List<EventID>>;
+typedef RsvpsRef = StreamProviderRef<List<String>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

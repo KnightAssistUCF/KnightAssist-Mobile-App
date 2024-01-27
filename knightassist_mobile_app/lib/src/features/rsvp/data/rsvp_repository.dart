@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:knightassist_mobile_app/src/common_widgets/alert_dialogs.dart';
 import 'package:knightassist_mobile_app/src/exceptions/app_exception.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
 import 'package:knightassist_mobile_app/src/utils/in_memory_store.dart';
@@ -37,18 +38,30 @@ class RSVPRepository {
     return _rsvps.stream;
   }
 
-  Future<void> setRSVP(String uid, String eventID) async {
+  Future<void> setRSVP(String uid, String eventID, String eventName) async {
     Map<String, dynamic> params = {
       "userID": uid,
       "eventID": eventID,
+      "eventName": eventName
     };
     var uri = Uri.parse(
         "https://knightassist-43ab3aeaada9.herokuapp.com/api/RSVPForEvent");
-    var response = await http.post(uri, body: params);
+    var response = await http.post(
+      uri,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'userID': uid,
+        'eventID': eventID,
+        'eventName': eventName
+      }),
+    );
     var body = jsonDecode(response.body);
     switch (response.statusCode) {
       case 200:
         // Handle API cases
+        print(body);
         break;
       case 404:
         throw EventNotFoundException();
