@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:knightassist_mobile_app/src/common_widgets/responsive_center.dart';
 import 'package:knightassist_mobile_app/src/common_widgets/responsive_scrollable_card.dart';
 import 'package:knightassist_mobile_app/src/constants/breakpoints.dart';
+import 'package:knightassist_mobile_app/src/features/authentication/data/auth_repository.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/events_list/events_list_screen.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/feedback_list_screen.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/qr_scanner.dart';
@@ -62,90 +63,97 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
 
-    return Scaffold(
-      floatingActionButton: isOrg
-          ? Column(
-              mainAxisSize: MainAxisSize.min,
-              children: List.generate(icons.length, (int index) {
-                Widget child = Container(
-                  height: 100.0,
-                  width: 300.0,
-                  alignment: FractionalOffset.topCenter,
-                  child: ScaleTransition(
-                    scale: CurvedAnimation(
-                      parent: _controller,
-                      curve: Interval(0.0, 1.0 - index / icons.length / 2.0,
-                          curve: Curves.easeOut),
-                    ),
-                    child: ElevatedButton(
-                      child: SizedBox(
-                        height: 70,
-                        width: 200,
-                        child: Center(
-                          child: Text(
-                            icons[index],
-                            style: const TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w400,
-                                fontSize: 20),
+    return Consumer(
+      builder: (context, ref, child) {
+        final authRepository = ref.watch(authRepositoryProvider);
+        final user = authRepository.currentUser;
+        bool isOrg = user?.role == "organization";
+
+        return Scaffold(
+          floatingActionButton: isOrg
+              ? Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: List.generate(icons.length, (int index) {
+                    Widget child = Container(
+                      height: 100.0,
+                      width: 300.0,
+                      alignment: FractionalOffset.topCenter,
+                      child: ScaleTransition(
+                        scale: CurvedAnimation(
+                          parent: _controller,
+                          curve: Interval(0.0, 1.0 - index / icons.length / 2.0,
+                              curve: Curves.easeOut),
+                        ),
+                        child: ElevatedButton(
+                          child: SizedBox(
+                            height: 70,
+                            width: 200,
+                            child: Center(
+                              child: Text(
+                                icons[index],
+                                style: const TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 20),
+                              ),
+                            ),
+                          ),
+                          //),
+                          onPressed: () {
+                            if (index == 0) {
+                              context.pushNamed(AppRoute.createUpdate.name);
+                            } else {
+                              context.pushNamed(AppRoute.createEvent.name);
+                            }
+                          },
+                        ),
+                      ),
+                    );
+                    return child;
+                  }).toList()
+                    ..add(
+                      FloatingActionButton(
+                        onPressed: () {
+                          setState(() {
+                            _pressed = !_pressed;
+                          });
+                          if (_controller.isDismissed) {
+                            _controller.forward();
+                          } else {
+                            _controller.reverse();
+                          }
+                        },
+                        tooltip: 'Create an event or announcement',
+                        shape: const CircleBorder(side: BorderSide(width: 1.0)),
+                        elevation: 2.0,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(25),
+                            gradient: const LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment(0.8, 1),
+                              colors: <Color>[
+                                Color.fromARGB(255, 91, 78, 119),
+                                Color.fromARGB(255, 211, 195, 232)
+                              ],
+                              tileMode: TileMode.mirror,
+                            ),
+                          ),
+                          child: Icon(
+                            _pressed == true
+                                ? Icons.keyboard_arrow_up_sharp
+                                : Icons.add,
+                            color: Colors.white,
+                            size: 54,
                           ),
                         ),
                       ),
-                      //),
-                      onPressed: () {
-                        if (index == 0) {
-                          context.pushNamed(AppRoute.createUpdate.name);
-                        } else {
-                          context.pushNamed(AppRoute.createEvent.name);
-                        }
-                      },
                     ),
-                  ),
-                );
-                return child;
-              }).toList()
-                ..add(
-                  FloatingActionButton(
-                    onPressed: () {
-                      setState(() {
-                        _pressed = !_pressed;
-                      });
-                      if (_controller.isDismissed) {
-                        _controller.forward();
-                      } else {
-                        _controller.reverse();
-                      }
-                    },
-                    tooltip: 'Create an event or announcement',
-                    shape: const CircleBorder(side: BorderSide(width: 1.0)),
-                    elevation: 2.0,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(25),
-                        gradient: const LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment(0.8, 1),
-                          colors: <Color>[
-                            Color.fromARGB(255, 91, 78, 119),
-                            Color.fromARGB(255, 211, 195, 232)
-                          ],
-                          tileMode: TileMode.mirror,
-                        ),
-                      ),
-                      child: Icon(
-                        _pressed == true
-                            ? Icons.keyboard_arrow_up_sharp
-                            : Icons.add,
-                        color: Colors.white,
-                        size: 54,
-                      ),
-                    ),
-                  ),
-                ),
-            )
-          : null,
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      /*appBar: AppBar(
+                )
+              : null,
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked,
+          /*appBar: AppBar(
         automaticallyImplyLeading: true,
         actions: <Widget>[
           Padding(
@@ -181,8 +189,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           )
         ],
       ),*/
-      body: _widgetOptions.elementAt(_selectedIndex),
-      /*Container(
+          body: _widgetOptions.elementAt(_selectedIndex),
+          /*Container(
         height: h,
         child: Column(
           children: [
@@ -338,39 +346,43 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           ],
         ),
       ),*/
-      bottomNavigationBar: Container(
-        decoration: const BoxDecoration(
-            color: Colors.white,
-            border: Border(top: BorderSide(color: Colors.black, width: 2.0))),
-        child: BottomNavigationBar(
-          items: [
-            isOrg
-                ? const BottomNavigationBarItem(
-                    icon: Icon(Icons.edit_calendar_sharp), label: "Events")
-                : BottomNavigationBarItem(
-                    icon: Icon(Icons.search), label: "Explore"),
-            isOrg
-                ? const BottomNavigationBarItem(
-                    icon: Icon(Icons.campaign), label: "Announcements")
-                : const BottomNavigationBarItem(
-                    icon: Icon(Icons.home_outlined), label: "Home"),
-            isOrg
-                ? const BottomNavigationBarItem(
-                    icon: Icon(Icons.home_outlined), label: "Home")
-                : BottomNavigationBarItem(
-                    icon: Icon(Icons.camera_alt_outlined), label: "QR Scan"),
-            if (isOrg)
-              const BottomNavigationBarItem(
-                  icon: Icon(Icons.reviews), label: "Feedback"),
-          ],
-          currentIndex: _selectedIndex,
-          selectedItemColor: Color.fromARGB(255, 29, 16, 57),
-          unselectedItemColor: Colors.black,
-          selectedFontSize: 16.0,
-          unselectedFontSize: 14.0,
-          onTap: _onItemTapped,
-        ),
-      ),
+          bottomNavigationBar: Container(
+            decoration: const BoxDecoration(
+                color: Colors.white,
+                border:
+                    Border(top: BorderSide(color: Colors.black, width: 2.0))),
+            child: BottomNavigationBar(
+              items: [
+                isOrg
+                    ? const BottomNavigationBarItem(
+                        icon: Icon(Icons.edit_calendar_sharp), label: "Events")
+                    : BottomNavigationBarItem(
+                        icon: Icon(Icons.search), label: "Explore"),
+                isOrg
+                    ? const BottomNavigationBarItem(
+                        icon: Icon(Icons.campaign), label: "Announcements")
+                    : const BottomNavigationBarItem(
+                        icon: Icon(Icons.home_outlined), label: "Home"),
+                isOrg
+                    ? const BottomNavigationBarItem(
+                        icon: Icon(Icons.home_outlined), label: "Home")
+                    : BottomNavigationBarItem(
+                        icon: Icon(Icons.camera_alt_outlined),
+                        label: "QR Scan"),
+                if (isOrg)
+                  const BottomNavigationBarItem(
+                      icon: Icon(Icons.reviews), label: "Feedback"),
+              ],
+              currentIndex: _selectedIndex,
+              selectedItemColor: Color.fromARGB(255, 29, 16, 57),
+              unselectedItemColor: Colors.black,
+              selectedFontSize: 16.0,
+              unselectedFontSize: 14.0,
+              onTap: _onItemTapped,
+            ),
+          ),
+        );
+      },
     );
   }
 }
@@ -603,7 +615,11 @@ class HomeScreenTab extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
-    bool isOrg = true; // true if the current account is an organization
+
+    final authRepository = ref.watch(authRepositoryProvider);
+    final user = authRepository.currentUser;
+    bool isOrg = user?.role == "organization";
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: true,

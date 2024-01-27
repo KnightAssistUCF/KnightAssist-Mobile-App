@@ -47,6 +47,10 @@ class AuthRepository {
     switch (response.statusCode) {
       case 200:
         //var user = jsonDecode(body["user"]);
+        if (response.body.contains('admin')) {
+          throw new AdminLogInException();
+          break;
+        }
         var user = body["user"];
         print(user);
         _token.value = body["token"];
