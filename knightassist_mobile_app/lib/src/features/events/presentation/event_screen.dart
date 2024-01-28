@@ -6,6 +6,7 @@ import 'package:knightassist_mobile_app/src/features/authentication/data/auth_re
 import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/data/organizations_repository.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
+import 'package:knightassist_mobile_app/src/features/rsvp/presentation/rsvp_widget.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 
 class EventScreen extends ConsumerWidget {
@@ -26,6 +27,8 @@ class EventScreen extends ConsumerWidget {
 
     bool curOrg = (user?.id == event.sponsoringOrganization);
     // true if the organization who made the event is viewing it (shows edit button)
+
+    bool isOrg = (user?.role == 'organization');
 
     return Scaffold(
       appBar: AppBar(
@@ -91,14 +94,14 @@ class EventScreen extends ConsumerWidget {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          org!.name,
+                          org?.name ?? '',
                           style: const TextStyle(
                               fontWeight: FontWeight.w400, fontSize: 25),
                           textAlign: TextAlign.start,
                         ),
                       ),
-                      curOrg
-                          ? SizedBox(
+                      isOrg
+                          ? const SizedBox(
                               height: 0,
                             )
                           : const OrganizationFav(),
@@ -157,26 +160,11 @@ class EventScreen extends ConsumerWidget {
                             ),
                           ),
                         )
-                      : ElevatedButton(
-                          // shows rsvp button for student
-                          onPressed: () {
-                            //context.pushNamed(AppRoute.events.name);
-                          },
-                          style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all(
-                                  const Color.fromARGB(255, 91, 78, 119))),
-                          child: const Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Wrap(
-                              children: [
-                                Text(
-                                  'RSVP',
-                                  style: TextStyle(fontSize: 20),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
+                      : isOrg
+                          ? const SizedBox(
+                              height: 0,
+                            )
+                          : RSVPWidget(event: event),
                 ),
               ),
             )

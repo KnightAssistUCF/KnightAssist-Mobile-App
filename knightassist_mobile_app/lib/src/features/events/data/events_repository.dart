@@ -245,16 +245,88 @@ class EventsRepository {
   }
 
   Future<List<Event>> fetchEventsByOrg(String organizationID) async {
-    Map<String, String?> params = {"organizationID": organizationID};
-    var uri = Uri.https('knightassist-43ab3aeaada9.herokuapp.com',
-        '/api/searchEventsForOrg', params);
+    Map<String, dynamic>? params = {"organizationID": organizationID};
+
+    var uri = Uri.https(
+        'knightassist-43ab3aeaada9.herokuapp.com', '/api/searchEvent', params);
+    //print(uri);
     var response = await http.get(uri);
     var body = jsonDecode(response.body);
+    //print(body);
+    final List<dynamic> dataList = jsonDecode(response.body);
     switch (response.statusCode) {
       case 200:
         List<Event> list = [];
-        for (String json in List<String>.from(body)) {
-          //list.add(Event.fromMap(jsonDecode(json)));
+        for (dynamic d in dataList) {
+          Map<String, String?> params = {"eventID": d['_id']};
+          var uri = Uri.https('knightassist-43ab3aeaada9.herokuapp.com',
+              '/api/searchOneEvent', params);
+          var response = await http.get(uri);
+
+          final dynamic eventData = jsonDecode(response.body);
+
+          List<String> attendees = [];
+          List<dynamic> registeredVolunteers = [];
+          List<String> tags = [];
+          List<CheckedInStudent> checkins = [];
+          List<Review> reviews = [];
+
+          for (dynamic s in eventData[0]['attendees']) {
+            attendees.add(s);
+          }
+          for (dynamic s in eventData[0]['registeredVolunteers']) {
+            registeredVolunteers.add(s);
+          }
+          if (eventData[0]['tags'] != null) {
+            for (dynamic s in eventData[0]['tags']) {
+              tags.add(s);
+            }
+          }
+          for (dynamic s in eventData[0]['checkedInStudents']) {
+            CheckedInStudent c = CheckedInStudent(
+                studentId: s['studentId'],
+                checkInTime: DateTime.parse(s['checkInTime']),
+                checkOutTime: DateTime.parse(s['checkInTime']),
+                id: s['_id']);
+
+            checkins.add(c);
+          }
+          for (dynamic s in eventData[0]['feedback']) {
+            Review r = Review(
+                studentId: s['studentId'],
+                eventId: s['eventId'],
+                studentName: s['studentName'],
+                eventName: s['eventName'],
+                rating: s['rating'] + 0.00,
+                feedbackText: s['feedbackText'],
+                wasReadByUser: s['wasReadByUser'],
+                id: s['_id'],
+                timeFeedbackSubmitted:
+                    DateTime.parse(s['timeFeedbackSubmitted']),
+                createdAt: DateTime.parse(s['createdAt']),
+                updatedAt: DateTime.parse(s['updatedAt']));
+            reviews.add(r);
+          }
+
+          Event e = Event(
+              id: eventData[0]['_id'],
+              name: eventData[0]['name'],
+              description: eventData[0]['description'],
+              location: eventData[0]['location'],
+              sponsoringOrganization: eventData[0]['sponsoringOrganization'],
+              attendees: attendees,
+              registeredVolunteers: registeredVolunteers,
+              profilePicPath: eventData[0]['profilePicPath'],
+              startTime: DateTime.parse(eventData[0]['startTime']),
+              endTime: DateTime.parse(eventData[0]['endTime']),
+              eventTags: tags,
+              maxAttendees: eventData[0]['maxAttendees'],
+              checkedInStudents: checkins,
+              feedback: reviews,
+              createdAt: DateTime.parse(eventData[0]['createdAt']),
+              updatedAt: DateTime.parse(eventData[0]['updatedAt']));
+
+          list.add(e);
         }
         return list;
       case 404:
@@ -266,16 +338,85 @@ class EventsRepository {
   }
 
   Future<List<Event>> fetchEventsByStudent(String studentID) async {
-    Map<String, String?> params = {"studentID": studentID};
+    Map<String, dynamic>? params = {"studentID": studentID};
     var uri = Uri.https('knightassist-43ab3aeaada9.herokuapp.com',
         '/api/searchUserRSVPedEvents', params);
     var response = await http.get(uri);
     var body = jsonDecode(response.body);
+    final List<dynamic> dataList = jsonDecode(response.body);
     switch (response.statusCode) {
       case 200:
         List<Event> list = [];
-        for (String json in List<String>.from(body)) {
-          //list.add(Event.fromMap(jsonDecode(json)));
+        for (dynamic d in dataList) {
+          Map<String, String?> params = {"eventID": d['_id']};
+          var uri = Uri.https('knightassist-43ab3aeaada9.herokuapp.com',
+              '/api/searchOneEvent', params);
+          var response = await http.get(uri);
+
+          final dynamic eventData = jsonDecode(response.body);
+
+          List<String> attendees = [];
+          List<dynamic> registeredVolunteers = [];
+          List<String> tags = [];
+          List<CheckedInStudent> checkins = [];
+          List<Review> reviews = [];
+
+          for (dynamic s in eventData[0]['attendees']) {
+            attendees.add(s);
+          }
+          for (dynamic s in eventData[0]['registeredVolunteers']) {
+            registeredVolunteers.add(s);
+          }
+          if (eventData[0]['tags'] != null) {
+            for (dynamic s in eventData[0]['tags']) {
+              tags.add(s);
+            }
+          }
+          for (dynamic s in eventData[0]['checkedInStudents']) {
+            CheckedInStudent c = CheckedInStudent(
+                studentId: s['studentId'],
+                checkInTime: DateTime.parse(s['checkInTime']),
+                checkOutTime: DateTime.parse(s['checkInTime']),
+                id: s['_id']);
+
+            checkins.add(c);
+          }
+          for (dynamic s in eventData[0]['feedback']) {
+            Review r = Review(
+                studentId: s['studentId'],
+                eventId: s['eventId'],
+                studentName: s['studentName'],
+                eventName: s['eventName'],
+                rating: s['rating'] + 0.00,
+                feedbackText: s['feedbackText'],
+                wasReadByUser: s['wasReadByUser'],
+                id: s['_id'],
+                timeFeedbackSubmitted:
+                    DateTime.parse(s['timeFeedbackSubmitted']),
+                createdAt: DateTime.parse(s['createdAt']),
+                updatedAt: DateTime.parse(s['updatedAt']));
+            reviews.add(r);
+          }
+
+          Event e = Event(
+              id: eventData[0]['_id'],
+              name: eventData[0]['name'],
+              description: eventData[0]['description'],
+              location: eventData[0]['location'],
+              sponsoringOrganization: eventData[0]['sponsoringOrganization'],
+              attendees: attendees,
+              registeredVolunteers: registeredVolunteers,
+              profilePicPath: eventData[0]['profilePicPath'],
+              startTime: DateTime.parse(eventData[0]['startTime']),
+              endTime: DateTime.parse(eventData[0]['endTime']),
+              eventTags: tags,
+              maxAttendees: eventData[0]['maxAttendees'],
+              checkedInStudents: checkins,
+              feedback: reviews,
+              createdAt: DateTime.parse(eventData[0]['createdAt']),
+              updatedAt: DateTime.parse(eventData[0]['updatedAt']));
+
+          list.add(e);
         }
         return list;
       case 404:

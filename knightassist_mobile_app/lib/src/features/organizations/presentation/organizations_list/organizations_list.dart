@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:knightassist_mobile_app/src/common_widgets/async_value_widget.dart';
+import 'package:knightassist_mobile_app/src/features/authentication/data/auth_repository.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/presentation/organizations_list/organizations_card.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/presentation/organizations_list/organizations_search_state_provider.dart';
@@ -14,6 +15,8 @@ class OrganizationsList extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final organizationsListValue =
         ref.watch(organizationsSearchResultsProvider);
+    final authRepository = ref.watch(authRepositoryProvider);
+    bool isOrg = authRepository.currentUser?.role == 'organization';
     return AsyncValueWidget<List<Organization>>(
       value: organizationsListValue,
       data: (organizations) => organizations.isEmpty
@@ -33,6 +36,7 @@ class OrganizationsList extends ConsumerWidget {
                   organization: organization,
                   onPressed: () => context.goNamed(AppRoute.organization.name,
                       pathParameters: {'id': organization.id}),
+                  isOrg: isOrg,
                 );
               },
             ),

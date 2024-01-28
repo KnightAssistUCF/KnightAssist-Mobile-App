@@ -9,6 +9,7 @@ import 'package:knightassist_mobile_app/src/common_widgets/custom_image.dart';
 import 'package:knightassist_mobile_app/src/common_widgets/empty_placeholder_widget.dart';
 import 'package:knightassist_mobile_app/src/common_widgets/responsive_center.dart';
 import 'package:knightassist_mobile_app/src/constants/app_sizes.dart';
+import 'package:knightassist_mobile_app/src/features/authentication/data/auth_repository.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/data/organizations_repository.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
@@ -91,7 +92,9 @@ class OrganizationDetails extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    bool isOrg = true;
+    final authRepository = ref.watch(authRepositoryProvider);
+    bool isOrg = authRepository.currentUser?.role == 'organization';
+    bool current = authRepository.currentUser?.id == organization.id;
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -115,18 +118,20 @@ class OrganizationDetails extends ConsumerWidget {
               //gapH8,
               //Text(organization.description ?? ''),
               OrganizationTop(
-                  organization: organization,
-                  width: MediaQuery.sizeOf(context).width),
+                organization: organization,
+                width: MediaQuery.sizeOf(context).width,
+                isOrg: isOrg,
+              ),
               SizedBox(
                   height: 320, child: TabBarOrg(organization: organization)),
-              isOrg
+              current
                   ? Padding(
                       // shows edit button for org viewing their own profile
                       padding: const EdgeInsets.all(8.0),
                       child: Center(
                         child: ElevatedButton(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
+                          child: const Padding(
+                            padding: EdgeInsets.all(8.0),
                             child: Text(
                               "Edit Profile",
                               style: TextStyle(fontSize: 20),
@@ -137,7 +142,7 @@ class OrganizationDetails extends ConsumerWidget {
                         ),
                       ),
                     )
-                  : SizedBox(
+                  : const SizedBox(
                       height: 0,
                     )
             ],
@@ -152,9 +157,13 @@ class OrganizationDetails extends ConsumerWidget {
 class OrganizationTop extends StatefulWidget {
   final Organization organization;
   final double width;
+  final bool isOrg;
 
   const OrganizationTop(
-      {super.key, required this.organization, required this.width});
+      {super.key,
+      required this.organization,
+      required this.width,
+      required this.isOrg});
 
   @override
   _OrganizationTopState createState() => _OrganizationTopState();
@@ -164,6 +173,7 @@ class _OrganizationTopState extends State<OrganizationTop> {
   bool _isFavoriteOrg = false;
   late final Organization organization;
   late final double width;
+  late final bool isOrg;
 
   _OrganizationTopState();
 
@@ -172,14 +182,15 @@ class _OrganizationTopState extends State<OrganizationTop> {
     super.initState();
     organization = widget.organization;
     width = widget.width;
+    isOrg = widget.isOrg;
   }
 
   @override
   Widget build(BuildContext context) {
     final Organization organization = this.organization;
     final double width = this.width;
-    bool isOrg =
-        true; // true if an organization is viewing the page (removes favorite icon)
+    final bool isOrg = this
+        .isOrg; // true if an organization is viewing the page (removes favorite icon)
 
     return Stack(
       alignment: Alignment.center,

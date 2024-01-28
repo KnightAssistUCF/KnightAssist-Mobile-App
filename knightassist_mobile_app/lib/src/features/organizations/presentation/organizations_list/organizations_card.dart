@@ -9,9 +9,13 @@ import 'package:knightassist_mobile_app/src/features/organizations/domain/organi
 class OrganizationCard extends StatefulWidget {
   final Organization organization;
   final VoidCallback? onPressed;
+  final bool isOrg;
 
   const OrganizationCard(
-      {super.key, required this.organization, required this.onPressed});
+      {super.key,
+      required this.organization,
+      required this.onPressed,
+      required this.isOrg});
 
   @override
   _OrganizationCardState createState() => _OrganizationCardState();
@@ -21,6 +25,7 @@ class _OrganizationCardState extends State<OrganizationCard> {
   bool _isFavoriteOrg = false;
   late final Organization organization;
   late final VoidCallback? onPressed;
+  late final bool isOrg;
 
   _OrganizationCardState();
 
@@ -29,6 +34,7 @@ class _OrganizationCardState extends State<OrganizationCard> {
     super.initState();
     organization = widget.organization;
     onPressed = widget.onPressed;
+    isOrg = widget.isOrg;
   }
 
   @override
@@ -41,6 +47,7 @@ class _OrganizationCardState extends State<OrganizationCard> {
     const style = TextStyle(fontSize: 20, fontWeight: FontWeight.normal);
 
     final Organization organization = this.organization;
+    final bool isOrg = this.isOrg;
     return SingleChildScrollView(
       child: ResponsiveCenter(
         maxContentWidth: Breakpoint.tablet,
@@ -113,41 +120,44 @@ class _OrganizationCardState extends State<OrganizationCard> {
                             ),
                           ]),
                           ListTile(
-                            /*leading: ClipRRect(
+                              /*leading: ClipRRect(
                                 borderRadius: BorderRadius.circular(12.0),
                                 child: Image(
                                     image: AssetImage(organization.logoUrl),
                                     height: 300)),*/
-                            title: Text(
-                              organization.name,
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 3,
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.w600, fontSize: 18),
-                              textAlign: TextAlign.start,
-                            ),
-                            subtitle: Text(
-                              organization.description ?? '',
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 3,
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.w400),
-                              textAlign: TextAlign.start,
-                            ),
-                            trailing: IconButton(
-                                iconSize: 30.0,
-                                padding: const EdgeInsets.only(
-                                    left: 4, right: 4, top: 0),
-                                icon: _isFavoriteOrg == true
-                                    ? const Icon(Icons.favorite)
-                                    : const Icon(Icons.favorite_outline),
-                                color: Colors.pink,
-                                onPressed: () {
-                                  setState(() {
-                                    _isFavoriteOrg = !_isFavoriteOrg;
-                                  });
-                                }),
-                          ),
+                              title: Text(
+                                organization.name,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 3,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w600, fontSize: 18),
+                                textAlign: TextAlign.start,
+                              ),
+                              subtitle: Text(
+                                organization.description ?? '',
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 3,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w400),
+                                textAlign: TextAlign.start,
+                              ),
+                              trailing: isOrg
+                                  ? const SizedBox(
+                                      height: 0,
+                                    )
+                                  : IconButton(
+                                      iconSize: 30.0,
+                                      padding: const EdgeInsets.only(
+                                          left: 4, right: 4, top: 0),
+                                      icon: _isFavoriteOrg == true
+                                          ? const Icon(Icons.favorite)
+                                          : const Icon(Icons.favorite_outline),
+                                      color: Colors.pink,
+                                      onPressed: () {
+                                        setState(() {
+                                          _isFavoriteOrg = !_isFavoriteOrg;
+                                        });
+                                      })),
                         ],
                       ),
                     ],

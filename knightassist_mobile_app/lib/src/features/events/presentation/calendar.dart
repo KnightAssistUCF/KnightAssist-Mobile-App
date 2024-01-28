@@ -2,175 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:knightassist_mobile_app/src/features/authentication/data/auth_repository.dart';
+import 'package:knightassist_mobile_app/src/features/events/data/events_repository.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/events_list/events_list_screen.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/events_list_screen.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/feedback_list_screen.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/qr_scanner.dart';
 import 'package:knightassist_mobile_app/src/features/home/presentation/home_screen.dart';
+import 'package:knightassist_mobile_app/src/features/organizations/data/organizations_repository.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/presentation/update_screen.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-List<Event> events = [
-  Event(
-    id: '1',
-    name: 'concert',
-    description: 'really cool music, need someone to serve food',
-    location: 'addition financial arena',
-    sponsoringOrganization:
-        'Organization X is really long !!!!! !!!!! !!!!! !!!!!',
-    attendees: [],
-    registeredVolunteers: [],
-    profilePicPath: 'assets/profile pictures/icon_leaf.png',
-    startTime: DateTime.fromMillisecondsSinceEpoch(1699875173000),
-    endTime: DateTime.fromMillisecondsSinceEpoch(1699875173099),
-    eventTags: ['music', 'food'],
-    semester: Semester.FALL_2023,
-    maxAttendees: 1000,
-    feedback: [],
-    checkedInStudents: [],
-    createdAt: DateTime.now(),
-    updatedAt: DateTime.now(),
-  ),
-  Event(
-    id: '2',
-    name: 'study session',
-    description: 'cs1, need someone to bring water',
-    location: 'ucf library',
-    sponsoringOrganization: 'Organization Y',
-    attendees: [],
-    registeredVolunteers: [],
-    profilePicPath: 'assets/example.png',
-    startTime: DateTime.fromMillisecondsSinceEpoch(1698433137000),
-    endTime: DateTime.fromMillisecondsSinceEpoch(1698433137099),
-    eventTags: ['education', 'technology'],
-    semester: Semester.FALL_2023,
-    maxAttendees: 30,
-    feedback: [],
-    checkedInStudents: [],
-    createdAt: DateTime.now(),
-    updatedAt: DateTime.now(),
-  ),
-  Event(
-    id: '3',
-    name: 'movie night',
-    description: 'need someone to collect tickets',
-    location: 'pegasus ballroom',
-    sponsoringOrganization: 'Organization Z',
-    attendees: [],
-    registeredVolunteers: [],
-    profilePicPath: 'assets/profile pictures/icon_planet.png',
-    startTime: DateTime.fromMillisecondsSinceEpoch(1695774773000),
-    endTime: DateTime.fromMillisecondsSinceEpoch(1695774773099),
-    eventTags: ['movie', 'education', 'food'],
-    semester: Semester.FALL_2023,
-    maxAttendees: 400,
-    feedback: [],
-    checkedInStudents: [],
-    createdAt: DateTime.now(),
-    updatedAt: DateTime.now(),
-  ),
-  Event(
-    id: '5',
-    name:
-        'movie night with long desc and title hahahaha hahaha wegJKHgekljbdgKLJBgdkbg;JKBglkjbasdg',
-    description:
-        'Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum dolor s Lorem ipsum ',
-    location: 'pegasus ballroom',
-    sponsoringOrganization: 'Organization Z',
-    attendees: [],
-    registeredVolunteers: [],
-    profilePicPath: 'assets/profile pictures/icon_cookie.png',
-    startTime: DateTime.fromMillisecondsSinceEpoch(1734218796000),
-    endTime: DateTime.fromMillisecondsSinceEpoch(1734219036000),
-    eventTags: ['movie', 'education', 'food'],
-    semester: Semester.FALL_2023,
-    maxAttendees: 400,
-    feedback: [],
-    checkedInStudents: [],
-    createdAt: DateTime.now(),
-    updatedAt: DateTime.now(),
-  ),
-  Event(
-    id: '1',
-    name: 'concert 2',
-    description: '2 events on the same day',
-    location: 'addition financial arena',
-    sponsoringOrganization:
-        'Organization X is really long !!!!! !!!!! !!!!! !!!!!',
-    attendees: [],
-    registeredVolunteers: [],
-    profilePicPath: 'assets/profile pictures/icon_musicnote.png',
-    startTime: DateTime.fromMillisecondsSinceEpoch(1699875173000),
-    endTime: DateTime.fromMillisecondsSinceEpoch(1699875173099),
-    eventTags: ['music', 'food'],
-    semester: Semester.FALL_2023,
-    maxAttendees: 1000,
-    feedback: [],
-    checkedInStudents: [],
-    createdAt: DateTime.now(),
-    updatedAt: DateTime.now(),
-  ),
-  Event(
-    id: '1',
-    name: 'concert',
-    description: 'really cool music, need someone to serve food',
-    location: 'addition financial arena',
-    sponsoringOrganization: 'Organization X',
-    attendees: [],
-    registeredVolunteers: [],
-    profilePicPath: 'assets/profile pictures/icon_apple.png',
-    startTime: DateTime.fromMillisecondsSinceEpoch(1699875173000),
-    endTime: DateTime.fromMillisecondsSinceEpoch(1699875173099),
-    eventTags: ['music', 'food'],
-    semester: Semester.FALL_2023,
-    maxAttendees: 1000,
-    feedback: [],
-    checkedInStudents: [],
-    createdAt: DateTime.now(),
-    updatedAt: DateTime.now(),
-  ),
-  Event(
-    id: '1',
-    name: 'concert',
-    description: 'really cool music, need someone to serve food',
-    location: 'addition financial arena',
-    sponsoringOrganization: 'Organization X',
-    attendees: [],
-    registeredVolunteers: [],
-    profilePicPath: 'assets/profile pictures/icon_weight.png',
-    startTime: DateTime.fromMillisecondsSinceEpoch(1699875173000),
-    endTime: DateTime.fromMillisecondsSinceEpoch(1699875173099),
-    eventTags: ['music', 'food'],
-    semester: Semester.FALL_2023,
-    maxAttendees: 1000,
-    feedback: [],
-    checkedInStudents: [],
-    createdAt: DateTime.now(),
-    updatedAt: DateTime.now(),
-  ),
-  Event(
-    id: '1',
-    name: 'concert',
-    description: 'really cool music, need someone to serve food',
-    location: 'addition financial arena',
-    sponsoringOrganization:
-        'Organization X is really long !!!!! !!!!! !!!!! !!!!!',
-    attendees: [],
-    registeredVolunteers: [],
-    profilePicPath: 'assets/profile pictures/icon_controller.png',
-    startTime: DateTime.fromMillisecondsSinceEpoch(1699875173000),
-    endTime: DateTime.fromMillisecondsSinceEpoch(1699875173099),
-    eventTags: ['music', 'food'],
-    semester: Semester.FALL_2023,
-    maxAttendees: 1000,
-    feedback: [],
-    checkedInStudents: [],
-    createdAt: DateTime.now(),
-    updatedAt: DateTime.now(),
-  ),
-];
+List<Event> events = [];
 
 class CalendarView extends StatefulWidget {
   const CalendarView({super.key});
@@ -220,90 +65,113 @@ class _CalendarViewState extends State<CalendarView>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButton: isOrg
-          ? Column(
-              mainAxisSize: MainAxisSize.min,
-              children: List.generate(icons.length, (int index) {
-                Widget child = Container(
-                  height: 100.0,
-                  width: 300.0,
-                  alignment: FractionalOffset.topCenter,
-                  child: ScaleTransition(
-                    scale: CurvedAnimation(
-                      parent: _controller,
-                      curve: Interval(0.0, 1.0 - index / icons.length / 2.0,
-                          curve: Curves.easeOut),
-                    ),
-                    child: ElevatedButton(
-                      child: SizedBox(
-                        height: 70,
-                        width: 200,
-                        child: Center(
-                          child: Text(
-                            icons[index],
-                            style: const TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w400,
-                                fontSize: 20),
+    return Consumer(
+      builder: (context, ref, child) {
+        final authRepository = ref.watch(authRepositoryProvider);
+        final user = authRepository.currentUser;
+        isOrg = user?.role == 'organization';
+        final organizationsRepository =
+            ref.watch(organizationsRepositoryProvider);
+        final eventsRepository = ref.watch(eventsRepositoryProvider);
+        if (isOrg) {
+          eventsRepository
+              .fetchEventsByOrg(user!.id)
+              .then((value) => setState(() {
+                    events = value;
+                  }));
+        } else {
+          eventsRepository
+              .fetchEventsByStudent(user!.id)
+              .then((value) => setState(() {
+                    events = value;
+                  }));
+        }
+
+        return Scaffold(
+          floatingActionButton: isOrg
+              ? Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: List.generate(icons.length, (int index) {
+                    Widget child = Container(
+                      height: 100.0,
+                      width: 300.0,
+                      alignment: FractionalOffset.topCenter,
+                      child: ScaleTransition(
+                        scale: CurvedAnimation(
+                          parent: _controller,
+                          curve: Interval(0.0, 1.0 - index / icons.length / 2.0,
+                              curve: Curves.easeOut),
+                        ),
+                        child: ElevatedButton(
+                          child: SizedBox(
+                            height: 70,
+                            width: 200,
+                            child: Center(
+                              child: Text(
+                                icons[index],
+                                style: const TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 20),
+                              ),
+                            ),
+                          ),
+                          //),
+                          onPressed: () {
+                            if (index == 0) {
+                              context.pushNamed(AppRoute.createUpdate.name);
+                            } else {
+                              context.pushNamed(AppRoute.createEvent.name);
+                            }
+                          },
+                        ),
+                      ),
+                    );
+                    return child;
+                  }).toList()
+                    ..add(
+                      FloatingActionButton(
+                        onPressed: () {
+                          setState(() {
+                            _pressed = !_pressed;
+                          });
+                          if (_controller.isDismissed) {
+                            _controller.forward();
+                          } else {
+                            _controller.reverse();
+                          }
+                        },
+                        tooltip: 'Create an event or announcement',
+                        shape: const CircleBorder(side: BorderSide(width: 1.0)),
+                        elevation: 2.0,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(25),
+                            gradient: const LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment(0.8, 1),
+                              colors: <Color>[
+                                Color.fromARGB(255, 91, 78, 119),
+                                Color.fromARGB(255, 211, 195, 232)
+                              ],
+                              tileMode: TileMode.mirror,
+                            ),
+                          ),
+                          child: Icon(
+                            _pressed == true
+                                ? Icons.keyboard_arrow_up_sharp
+                                : Icons.add,
+                            color: Colors.white,
+                            size: 54,
                           ),
                         ),
                       ),
-                      //),
-                      onPressed: () {
-                        if (index == 0) {
-                          context.pushNamed(AppRoute.createUpdate.name);
-                        } else {
-                          context.pushNamed(AppRoute.createEvent.name);
-                        }
-                      },
                     ),
-                  ),
-                );
-                return child;
-              }).toList()
-                ..add(
-                  FloatingActionButton(
-                    onPressed: () {
-                      setState(() {
-                        _pressed = !_pressed;
-                      });
-                      if (_controller.isDismissed) {
-                        _controller.forward();
-                      } else {
-                        _controller.reverse();
-                      }
-                    },
-                    tooltip: 'Create an event or announcement',
-                    shape: const CircleBorder(side: BorderSide(width: 1.0)),
-                    elevation: 2.0,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(25),
-                        gradient: const LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment(0.8, 1),
-                          colors: <Color>[
-                            Color.fromARGB(255, 91, 78, 119),
-                            Color.fromARGB(255, 211, 195, 232)
-                          ],
-                          tileMode: TileMode.mirror,
-                        ),
-                      ),
-                      child: Icon(
-                        _pressed == true
-                            ? Icons.keyboard_arrow_up_sharp
-                            : Icons.add,
-                        color: Colors.white,
-                        size: 54,
-                      ),
-                    ),
-                  ),
-                ),
-            )
-          : null,
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      /*appBar: AppBar(
+                )
+              : null,
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked,
+          /*appBar: AppBar(
         title: const Text('Calendar View', style: TextStyle(fontWeight: FontWeight.w600),),
         centerTitle: true,
         automaticallyImplyLeading: true,
@@ -341,110 +209,114 @@ class _CalendarViewState extends State<CalendarView>
           )
         ],
       ),*/
-      body: tapped
-          ? _widgetOptions.elementAt(_selectedIndex)
-          : Calendar(), //Calendar(),
-      drawer: Drawer(
-        child: ListView(
-          children: [
-            ListTile(
-              title: const Text('Home'),
-              onTap: () {
-                context.pushNamed(AppRoute.homeScreen.name);
-              },
+          body: tapped
+              ? _widgetOptions.elementAt(_selectedIndex)
+              : Calendar(), //Calendar(),
+          drawer: Drawer(
+            child: ListView(
+              children: [
+                ListTile(
+                  title: const Text('Home'),
+                  onTap: () {
+                    context.pushNamed(AppRoute.homeScreen.name);
+                  },
+                ),
+                ListTile(
+                  title: const Text('Calendar'),
+                  onTap: () {
+                    context.pushNamed(AppRoute.calendar.name);
+                  },
+                ),
+                ListTile(
+                  title: const Text('Organizations'),
+                  onTap: () {
+                    context.pushNamed(AppRoute.organizations.name);
+                  },
+                ),
+                ListTile(
+                  title: const Text('Events'),
+                  onTap: () {
+                    context.pushNamed(AppRoute.events.name);
+                  },
+                ),
+                ListTile(
+                  title: const Text('Announcements'),
+                  onTap: () {
+                    context.pushNamed(AppRoute.updates.name);
+                  },
+                ),
+                isOrg
+                    ? ListTile(
+                        title: const Text('Feedback'),
+                        onTap: () {
+                          context.pushNamed(AppRoute.feedbacklist.name);
+                        },
+                      )
+                    : ListTile(
+                        title: const Text('QR Scan'),
+                        onTap: () {
+                          context.pushNamed(AppRoute.qrScanner.name);
+                        },
+                      ),
+                ListTile(
+                  title: const Text('History'),
+                  onTap: () {
+                    context.pushNamed(AppRoute.eventHistory.name);
+                  },
+                ),
+                ListTile(
+                  title: const Text('Settings'),
+                  onTap: () {
+                    context.pushNamed(AppRoute.account.name);
+                  },
+                ),
+                ListTile(
+                  title: const Text('Sign Out'),
+                  onTap: () {
+                    context.pushNamed(AppRoute.emailConfirm.name);
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
             ),
-            ListTile(
-              title: const Text('Calendar'),
-              onTap: () {
-                context.pushNamed(AppRoute.calendar.name);
-              },
+          ),
+          bottomNavigationBar: Container(
+            decoration: const BoxDecoration(
+                color: Colors.white,
+                border:
+                    Border(top: BorderSide(color: Colors.black, width: 2.0))),
+            child: BottomNavigationBar(
+              items: [
+                isOrg
+                    ? const BottomNavigationBarItem(
+                        icon: Icon(Icons.edit_calendar_sharp), label: "Events")
+                    : BottomNavigationBarItem(
+                        icon: Icon(Icons.search), label: "Explore"),
+                isOrg
+                    ? const BottomNavigationBarItem(
+                        icon: Icon(Icons.campaign), label: "Announcements")
+                    : const BottomNavigationBarItem(
+                        icon: Icon(Icons.home_outlined), label: "Home"),
+                isOrg
+                    ? const BottomNavigationBarItem(
+                        icon: Icon(Icons.home_outlined), label: "Home")
+                    : BottomNavigationBarItem(
+                        icon: Icon(Icons.camera_alt_outlined),
+                        label: "QR Scan"),
+                if (isOrg)
+                  const BottomNavigationBarItem(
+                      icon: Icon(Icons.reviews), label: "Feedback"),
+              ],
+              currentIndex: _selectedIndex,
+              selectedItemColor: Color.fromARGB(255, 29, 16, 57),
+              unselectedItemColor: Colors.black,
+              selectedFontSize: 16.0,
+              unselectedFontSize: 14.0,
+              onTap: _onItemTapped,
             ),
-            ListTile(
-              title: const Text('Organizations'),
-              onTap: () {
-                context.pushNamed(AppRoute.organizations.name);
-              },
-            ),
-            ListTile(
-              title: const Text('Events'),
-              onTap: () {
-                context.pushNamed(AppRoute.events.name);
-              },
-            ),
-            ListTile(
-              title: const Text('Announcements'),
-              onTap: () {
-                context.pushNamed(AppRoute.updates.name);
-              },
-            ),
-            isOrg
-                ? ListTile(
-                    title: const Text('Feedback'),
-                    onTap: () {
-                      context.pushNamed(AppRoute.feedbacklist.name);
-                    },
-                  )
-                : ListTile(
-                    title: const Text('QR Scan'),
-                    onTap: () {
-                      context.pushNamed(AppRoute.qrScanner.name);
-                    },
-                  ),
-            ListTile(
-              title: const Text('History'),
-              onTap: () {
-                context.pushNamed(AppRoute.eventHistory.name);
-              },
-            ),
-            ListTile(
-              title: const Text('Settings'),
-              onTap: () {
-                context.pushNamed(AppRoute.account.name);
-              },
-            ),
-            ListTile(
-              title: const Text('Sign Out'),
-              onTap: () {
-                context.pushNamed(AppRoute.emailConfirm.name);
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        ),
-      ),
-      bottomNavigationBar: Container(
-        decoration: const BoxDecoration(
-            color: Colors.white,
-            border: Border(top: BorderSide(color: Colors.black, width: 2.0))),
-        child: BottomNavigationBar(
-          items: [
-            isOrg
-                ? const BottomNavigationBarItem(
-                    icon: Icon(Icons.edit_calendar_sharp), label: "Events")
-                : BottomNavigationBarItem(
-                    icon: Icon(Icons.search), label: "Explore"),
-            isOrg
-                ? const BottomNavigationBarItem(
-                    icon: Icon(Icons.campaign), label: "Announcements")
-                : const BottomNavigationBarItem(
-                    icon: Icon(Icons.home_outlined), label: "Home"),
-            isOrg
-                ? const BottomNavigationBarItem(
-                    icon: Icon(Icons.home_outlined), label: "Home")
-                : BottomNavigationBarItem(
-                    icon: Icon(Icons.camera_alt_outlined), label: "QR Scan"),
-            if (isOrg)
-              const BottomNavigationBarItem(
-                  icon: Icon(Icons.reviews), label: "Feedback"),
-          ],
-          currentIndex: _selectedIndex,
-          selectedItemColor: Color.fromARGB(255, 29, 16, 57),
-          unselectedItemColor: Colors.black,
-          selectedFontSize: 16.0,
-          unselectedFontSize: 14.0,
-          onTap: _onItemTapped,
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }
@@ -592,7 +464,7 @@ class _CalendarState extends State<Calendar> {
             rangeSelectionMode: _rangeSelectionMode,
             eventLoader: _getEventsForDay,
             startingDayOfWeek: StartingDayOfWeek.monday,
-            calendarStyle: CalendarStyle(
+            calendarStyle: const CalendarStyle(
                 defaultTextStyle: TextStyle(fontWeight: FontWeight.w200),
                 weekendTextStyle: TextStyle(
                     color: Color(0xFF5A5A5A), fontWeight: FontWeight.w200),
