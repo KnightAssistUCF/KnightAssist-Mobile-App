@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
+import 'package:knightassist_mobile_app/src/features/organizations/data/organizations_repository.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 
@@ -18,6 +19,10 @@ class EventScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
+
+    final organizationsRepository = ref.read(organizationsRepositoryProvider);
+    final org =
+        organizationsRepository.getOrganization(event.sponsoringOrganization);
 
     return Scaffold(
       appBar: AppBar(
@@ -71,8 +76,8 @@ class EventScreen extends ConsumerWidget {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextButton(
-                  onPressed: () => context.pushNamed(AppRoute.organization.name,
-                      extra: event.sponsoringOrganization),
+                  onPressed: () =>
+                      context.pushNamed(AppRoute.organization.name, extra: org),
                   child: Wrap(
                     children: [
                       ClipRRect(
