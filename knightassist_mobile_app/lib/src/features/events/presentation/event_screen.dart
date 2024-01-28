@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:knightassist_mobile_app/src/features/authentication/data/auth_repository.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/data/organizations_repository.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
@@ -12,9 +13,6 @@ class EventScreen extends ConsumerWidget {
   //final String eventID;
   final Event event;
 
-  bool curOrg =
-      true; // true if the organization who made the event is viewing it (shows edit button)
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     double h = MediaQuery.of(context).size.height;
@@ -23,6 +21,11 @@ class EventScreen extends ConsumerWidget {
     final organizationsRepository = ref.read(organizationsRepositoryProvider);
     final org =
         organizationsRepository.getOrganization(event.sponsoringOrganization);
+    final authRepository = ref.read(authRepositoryProvider);
+    final user = authRepository.currentUser;
+
+    bool curOrg = (user?.id == event.sponsoringOrganization);
+    // true if the organization who made the event is viewing it (shows edit button)
 
     return Scaffold(
       appBar: AppBar(
@@ -88,7 +91,7 @@ class EventScreen extends ConsumerWidget {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          event.sponsoringOrganization,
+                          org!.name,
                           style: const TextStyle(
                               fontWeight: FontWeight.w400, fontSize: 25),
                           textAlign: TextAlign.start,

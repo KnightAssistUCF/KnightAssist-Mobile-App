@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:go_router/go_router.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/data/auth_repository.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/data/organizations_repository.dart';
 import 'package:knightassist_mobile_app/src/features/rsvp/data/rsvp_repository.dart';
 import 'package:knightassist_mobile_app/src/features/rsvp/presentation/rsvp_widget.dart';
+import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 
 class EventCard extends ConsumerWidget {
   const EventCard({super.key, required this.event, this.onPressed});
@@ -27,22 +29,22 @@ class EventCard extends ConsumerWidget {
     final user = authRepository.currentUser;
     print("Id:" + user!.id);
     print(event.sponsoringOrganization);
-    if (user?.role == 'organization') {
-      if (user != null) {
-        //print(user.id);
-        //final org = organizationsRepository.getOrganization(user.id);
-        //final orgs = organizationsRepository.fetchOrganizationsList;
-        //print(orgs);
-        //print(org?.id);
-        //print(org?.eventsArray);
-        //print(org?.name);
-        //print(event.sponsoringOrganization);
+    if (user.role == 'organization') {
+      //print(user.id);
+      //final org = organizationsRepository.getOrganization(user.id);
+      //final orgs = organizationsRepository.fetchOrganizationsList;
+      //print(orgs);
+      //print(org?.id);
+      //print(org?.eventsArray);
+      //print(org?.name);
 
-        if (event.sponsoringOrganization == user.id) {
-          sponsorOrg = true;
-        }
+      if (event.sponsoringOrganization == user.id) {
+        sponsorOrg = true;
       }
     }
+
+    final sponsor =
+        organizationsRepository.getOrganization(event.sponsoringOrganization);
 
     return Card(
       child: InkWell(
@@ -57,7 +59,7 @@ class EventCard extends ConsumerWidget {
                   child: Container(
                     decoration: BoxDecoration(
                         image: DecorationImage(
-                            image: AssetImage(event.profilePicPath),
+                            image: NetworkImage(event.profilePicPath),
                             fit: BoxFit.fill)),
                     width: 120,
                     height: 210,
@@ -88,13 +90,14 @@ class EventCard extends ConsumerWidget {
                         children: [
                           ClipRRect(
                               borderRadius: BorderRadius.circular(25.0),
-                              child: const Image(
-                                  image: AssetImage('assets/example.png'),
+                              child: Image(
+                                  image: NetworkImage(
+                                      sponsor?.profilePicPath ?? ''),
                                   height: 20)),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
-                              event.sponsoringOrganization,
+                              sponsor?.name ?? '',
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
                               style:
@@ -107,28 +110,9 @@ class EventCard extends ConsumerWidget {
                           )
                         ],
                       ),
-                      user?.role == "student"
+                      user.role == 'student'
                           ? RSVPWidget(event: event)
-                          : _renderOrgEditState(
-                              sponsorOrg) /*SizedBox(
-                                  height: 20,
-                                  width: 20,
-                                  child: FilledButton(
-                                    onPressed: () {
-                                      /*rsvpRepository.setRSVP(
-                                user!.id, event.id, event.name);
-                                                          showAboutDialog(context: context, children: [
-                                                            Text('Rsvped for event: ${event.name}')
-                                                          ]);*/
-                                    },
-                                    style: ButtonStyle(
-                                        backgroundColor:
-                                            MaterialStateProperty.all(
-                                                const Color.fromARGB(
-                                                    255, 91, 78, 119))),
-                                    child: const Text('Edit'),
-                                  ),
-                                )*/
+                          : _renderOrgEditState(sponsorOrg, context, event),
                     ],
                   ),
                 ),
@@ -139,10 +123,10 @@ class EventCard extends ConsumerWidget {
   }
 }
 
-Widget _renderOrgEditState(bool curOrg) {
+Widget _renderOrgEditState(bool curOrg, BuildContext context, Event event) {
   if (curOrg) {
     return FilledButton(
-      onPressed: () {},
+      onPressed: () => context.pushNamed("editevent", extra: event),
       style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all(
               const Color.fromARGB(255, 91, 78, 119))),

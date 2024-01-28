@@ -14,8 +14,8 @@ class LeaveReviewAction extends ConsumerWidget {
         onPressed: () {
           context.pushNamed(AppRoute.createFeedback.name);
         },
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
+        child: const Padding(
+          padding: EdgeInsets.all(8.0),
           child: Text(
             'Leave Feedback',
             style: TextStyle(fontSize: 20),
