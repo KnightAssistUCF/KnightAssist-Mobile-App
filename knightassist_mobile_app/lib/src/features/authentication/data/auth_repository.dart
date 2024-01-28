@@ -87,7 +87,7 @@ class AuthRepository {
                   lastName: user['lastName'],
                   profilePicture: user['profilePicture'],
                   favoritedOrganizations: favOrgs,
-                  eventsRSVP: eventsRSVP,
+                  eventsRsvp: eventsRSVP,
                   eventsHistory: eventsHistory,
                   totalVolunteerHours: user['totalVolunteerHours'],
                   semesterVolunteerHourGoal: user['semesterVolunteerHourGoal'],
@@ -96,7 +96,14 @@ class AuthRepository {
                   recoveryToken: user['recoveryToken'] ?? '',
                   confirmToken: user['confirmToken'] ?? '',
                   emailToken: user['EmailToken'] ?? '',
-                  emailValidated: user['EmailValidated']);
+                  emailValidated: user['EmailValidated'],
+                  studentId: user['studentID'] ?? '',
+                  password: user['password'],
+                  createdAt: DateTime.parse(user['createdAt']),
+                  updatedAt: DateTime.parse(user['updatedAt']),
+                  profilePicPath: user['profilePicPath'],
+                  role: user['role'],
+                  firstTimeLogin: user['firstTimeLogin']);
           _authState.value = u;
         } else if (user["role"] == "organization") {
           //Organization u = Organization.fromMap(user);
