@@ -18,16 +18,17 @@ List<StudentUser> rsvps = [];
 
 class viewRSVPsScreen extends StatefulWidget {
   final Event event;
-  const viewRSVPsScreen({super.key, required this.event});
+
+  const viewRSVPsScreen({
+    super.key,
+    required this.event,
+  });
 
   @override
   State<viewRSVPsScreen> createState() => _viewRSVPsScreenState();
 }
 
 class _viewRSVPsScreenState extends State<viewRSVPsScreen> {
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-
   late final Event event;
 
   @override
@@ -44,18 +45,32 @@ class _viewRSVPsScreenState extends State<viewRSVPsScreen> {
       builder: (context, ref, child) {
         final eventsRepository = ref.watch(eventsRepositoryProvider);
 
+        print(event.id);
+        print(eventsRepository.getEvent(event.id)?.name);
+        print(eventsRepository.getEventAttendees(event.id));
+
+        /*Future rsvpList = eventsRepository.getEventAttendees(event.id);
+
+        rsvpList.then((data) {
+          for (StudentUser s in data) {
+            rsvps.add(s);
+            print(s.firstName);
+            print(s.id);
+          }
+        });*/
+
         eventsRepository
             .getEventAttendees(event.id)
             .then((value) => setState(() {
                   rsvps = value;
                 }));
 
-        print('RSVPS:');
-        for (StudentUser s in rsvps) {
-          print(s.firstName);
-          print(s.lastName);
-          print(s.id);
-        }
+        //print('RSVPS:');
+        //for (StudentUser s in rsvps) {
+        //print(s.firstName);
+        //print(s.lastName);
+        //print(s.id);
+        //}
 
         return Scaffold(
           appBar: AppBar(
@@ -104,7 +119,7 @@ class _viewRSVPsScreenState extends State<viewRSVPsScreen> {
               child: Column(children: [
                 _topSection(w),
                 Flexible(
-                  child: rsvps.isEmpty
+                  child: /*rsvps.isEmpty
                       ? const Center(
                           child: Text(
                             "There are no volunteers who RSVPed for this event.",
@@ -119,7 +134,8 @@ class _viewRSVPsScreenState extends State<viewRSVPsScreen> {
                             event: event,
                             volunteer: rsvps.elementAt(index),
                           ),
-                        ),
+                        ),*/
+                      RSVPS(event: event),
                 ),
               ])),
         );
@@ -222,6 +238,150 @@ class VolunteerCard extends StatelessWidget {
               ),
             )),
       ),
+    );
+  }
+}
+
+class RSVPS extends StatefulWidget {
+  final Event event;
+
+  const RSVPS({
+    super.key,
+    required this.event,
+  });
+
+  @override
+  _RSVPSState createState() => _RSVPSState();
+}
+
+class _RSVPSState extends State<RSVPS> {
+  late final Event event;
+
+  static const TextStyle optionStyle =
+      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+
+  @override
+  void initState() {
+    super.initState();
+    event = widget.event;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  List<StudentUser> _getRSVPSForDay() {
+    List<StudentUser> RSVPSForDay = [];
+    for (StudentUser s in rsvps) {
+      RSVPSForDay.add(s);
+    }
+    return RSVPSForDay;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer(
+      builder: (context, ref, child) {
+        final eventsRepository = ref.watch(eventsRepositoryProvider);
+        return Scaffold(
+          body: Container(
+            child: FutureBuilder<List<StudentUser>>(
+              future: eventsRepository.getEventAttendees(event.id),
+              builder: (context, AsyncSnapshot<List<StudentUser>> snapshot) {
+                List<Widget> children;
+                if (snapshot.hasData) {
+                  print(snapshot.data);
+                  children = [
+                    snapshot.data!.isEmpty
+                        ? const Center(
+                            child: Text(
+                              "There are no volunteers who RSVPed for this event.",
+                              style: optionStyle,
+                            ),
+                          )
+                        : Container(
+                            height: MediaQuery.of(context).size.height,
+                            child: ListView.builder(
+                              itemCount: snapshot.data!.length,
+                              itemBuilder: (context, index) {
+                                return Container(
+                                    margin: const EdgeInsets.symmetric(
+                                      horizontal: 12.0,
+                                      vertical: 4.0,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      border: Border.all(),
+                                      borderRadius: BorderRadius.circular(12.0),
+                                    ),
+                                    child: VolunteerCard(
+                                        event: event,
+                                        volunteer:
+                                            snapshot.data!.elementAt(index)));
+                              },
+                            ),
+                          )
+                  ];
+                } else if (snapshot.hasError) {
+                  print(snapshot.error);
+                  children = <Widget>[
+                    const Icon(
+                      Icons.error_outline,
+                      color: Colors.red,
+                      size: 60,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 16),
+                      child: Text('Error: ${snapshot.error}'),
+                    ),
+                  ];
+                } else {
+                  children = const <Widget>[
+                    SizedBox(
+                      width: 60,
+                      height: 60,
+                      child: CircularProgressIndicator(),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 16),
+                      child: Text('Awaiting result...'),
+                    ),
+                  ];
+                }
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: children,
+                  ),
+                );
+                /*return value.length == 0
+                    ? const Center(
+                        child: Text(
+                          "There are no volunteers who RSVPed for this event.",
+                          style: optionStyle,
+                        ),
+                      )
+                    : ListView.builder(
+                        itemCount: value.length,
+                        itemBuilder: (context, index) {
+                          return Container(
+                              margin: const EdgeInsets.symmetric(
+                                horizontal: 12.0,
+                                vertical: 4.0,
+                              ),
+                              decoration: BoxDecoration(
+                                border: Border.all(),
+                                borderRadius: BorderRadius.circular(12.0),
+                              ),
+                              child: VolunteerCard(
+                                  event: event, volunteer: value[index]));
+                        },
+                      );*/
+              },
+            ),
+          ),
+        );
+      },
     );
   }
 }

@@ -21,12 +21,12 @@ class StudentUser extends AppUser {
   String profilePicture;
   List<String> favoritedOrganizations;
   List<String> eventsRsvp;
-  List<dynamic> eventsHistory;
+  List<String> eventsHistory;
   int totalVolunteerHours;
   int semesterVolunteerHourGoal;
-  List<dynamic> userStudentSemesters;
+  List<String> userStudentSemesters;
   List<String> categoryTags;
-  dynamic recoveryToken;
+  String recoveryToken;
   String confirmToken;
   String emailToken;
   bool emailValidated;
@@ -73,11 +73,11 @@ class StudentUser extends AppUser {
         favoritedOrganizations:
             List<String>.from(json["favoritedOrganizations"].map((x) => x)),
         eventsRsvp: List<String>.from(json["eventsRSVP"].map((x) => x)),
-        eventsHistory: List<dynamic>.from(json["eventsHistory"].map((x) => x)),
+        eventsHistory: List<String>.from(json["eventsHistory"].map((x) => x)),
         totalVolunteerHours: json["totalVolunteerHours"],
         semesterVolunteerHourGoal: json["semesterVolunteerHourGoal"],
         userStudentSemesters:
-            List<dynamic>.from(json["userStudentSemesters"].map((x) => x)),
+            List<String>.from(json["userStudentSemesters"].map((x) => x)),
         categoryTags: List<String>.from(json["categoryTags"].map((x) => x)),
         recoveryToken: json["recoveryToken"],
         confirmToken: json["confirmToken"],

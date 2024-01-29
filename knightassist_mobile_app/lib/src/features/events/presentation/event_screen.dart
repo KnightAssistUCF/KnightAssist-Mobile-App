@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/data/auth_repository.dart';
+import 'package:knightassist_mobile_app/src/features/events/data/events_repository.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/data/organizations_repository.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
@@ -24,6 +25,9 @@ class EventScreen extends ConsumerWidget {
         organizationsRepository.getOrganization(event.sponsoringOrganization);
     final authRepository = ref.read(authRepositoryProvider);
     final user = authRepository.currentUser;
+    final eventsRepository = ref.read(eventsRepositoryProvider);
+
+    eventsRepository.getEventAttendees(event.id);
 
     bool curOrg = (user?.id == event.sponsoringOrganization);
     // true if the organization who made the event is viewing it (shows edit button)

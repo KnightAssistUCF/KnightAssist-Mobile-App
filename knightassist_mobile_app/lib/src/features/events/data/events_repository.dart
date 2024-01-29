@@ -478,11 +478,11 @@ class EventsRepository {
           }
 
           StudentUser s = StudentUser(
-              id: studentData['_id'],
-              email: studentData['email'],
-              firstName: studentData['firstName'],
-              lastName: studentData['lastName'],
-              profilePicture: studentData['profilePicPath'],
+              id: studentData['_id'] ?? '',
+              email: studentData['email'] ?? '',
+              firstName: studentData['firstName'] ?? '',
+              lastName: studentData['lastName'] ?? '',
+              profilePicture: studentData['profilePicPath'] ?? '',
               favoritedOrganizations: favoritedOrganizations,
               eventsRsvp: eventsRSVP,
               eventsHistory: eventsHistory,
@@ -491,17 +491,19 @@ class EventsRepository {
                   studentData['semesterVolunteerHourGoal'],
               userStudentSemesters: userStudentSemesters,
               categoryTags: tags,
-              recoveryToken: studentData['recoveryToken'],
-              confirmToken: studentData['confirmTokeb'],
-              emailToken: studentData['EmailToken'],
-              emailValidated: studentData['emailValidated'],
+              recoveryToken: studentData['recoveryToken'] ?? '',
+              confirmToken: studentData['confirmToken'] ?? '',
+              emailToken: studentData['EmailToken'] ?? '',
+              emailValidated: studentData['emailValidated'] ?? false,
               studentId: studentData['studentID'] ?? '',
-              password: studentData['password'],
-              createdAt: studentData['createdAt'],
-              updatedAt: studentData['updatedAt'],
-              profilePicPath: studentData['profilePicPath'],
-              role: studentData['role'],
-              firstTimeLogin: studentData['firstTimeLogin']);
+              password: studentData['password'] ?? '',
+              createdAt:
+                  DateTime.parse(studentData['createdAt']) ?? DateTime.now(),
+              updatedAt:
+                  DateTime.parse(studentData['updatedAt']) ?? DateTime.now(),
+              profilePicPath: studentData['profilePicPath'] ?? '',
+              role: studentData['role'] ?? '',
+              firstTimeLogin: studentData['firstTimeLogin'] ?? false);
 
           list.add(s);
         }
