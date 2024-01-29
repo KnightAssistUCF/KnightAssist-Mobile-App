@@ -21,6 +21,7 @@ class EventScreen extends ConsumerWidget {
     double w = MediaQuery.of(context).size.width;
 
     final organizationsRepository = ref.read(organizationsRepositoryProvider);
+    organizationsRepository.fetchOrganizationsList();
     final org =
         organizationsRepository.getOrganization(event.sponsoringOrganization);
     final authRepository = ref.read(authRepositoryProvider);
@@ -191,7 +192,7 @@ _title(double width, Event e) {
             decoration: BoxDecoration(
               image: DecorationImage(
                 fit: BoxFit.fill,
-                image: AssetImage(e.profilePicPath),
+                image: NetworkImage(e.profilePicPath),
               ),
             ),
           ),
@@ -339,7 +340,7 @@ class _TabBarEventState extends State<TabBarEvent>
                         child: Wrap(children: [
                           const Icon(Icons.person),
                           Text(
-                            "x / ${event.maxAttendees} spots reserved",
+                            "${event.attendees.length} / ${event.maxAttendees} spots reserved",
                             style: const TextStyle(fontSize: 20),
                           ),
                         ]),

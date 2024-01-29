@@ -161,7 +161,7 @@ _title(double width, Event e) {
               decoration: BoxDecoration(
                 image: DecorationImage(
                   fit: BoxFit.fill,
-                  image: AssetImage(e.profilePicPath),
+                  image: NetworkImage(e.profilePicPath),
                 ),
               ),
             ),

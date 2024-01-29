@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/events_list/event_card.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/events_list/events_search_state_provider.dart';
+import 'package:knightassist_mobile_app/src/features/organizations/data/organizations_repository.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 
 class EventsList extends ConsumerWidget {
@@ -13,6 +14,8 @@ class EventsList extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final eventsListValue = ref.watch(eventsSearchResultsProvider);
+    final organizationsRepository = ref.watch(organizationsRepositoryProvider);
+    organizationsRepository.fetchOrganizationsList();
     return AsyncValueWidget<List<Event>>(
       value: eventsListValue,
       data: (events) => events.isEmpty
