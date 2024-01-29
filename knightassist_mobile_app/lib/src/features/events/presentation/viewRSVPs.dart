@@ -295,13 +295,16 @@ class _RSVPSState extends State<RSVPS> {
                   children = [
                     snapshot.data!.isEmpty
                         ? const Center(
-                            child: Text(
-                              "There are no volunteers who RSVPed for this event.",
-                              style: optionStyle,
+                            child: Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text(
+                                "There are no volunteers who RSVPed for this event.",
+                                style: optionStyle,
+                              ),
                             ),
                           )
                         : Container(
-                            height: MediaQuery.of(context).size.height,
+                            height: 500,
                             child: ListView.builder(
                               itemCount: snapshot.data!.length,
                               itemBuilder: (context, index) {
@@ -323,16 +326,16 @@ class _RSVPSState extends State<RSVPS> {
                           )
                   ];
                 } else if (snapshot.hasError) {
-                  print(snapshot.error);
+                  print(snapshot.error); // when the json response is empty it is read as a map
                   children = <Widget>[
                     const Icon(
                       Icons.error_outline,
                       color: Colors.red,
                       size: 60,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 16),
-                      child: Text('Error: ${snapshot.error}'),
+                    const Padding(
+                      padding: EdgeInsets.only(top: 16),
+                      child: Text('There are no volunteers who RSVPed for this event.', style: optionStyle,),
                     ),
                   ];
                 } else {

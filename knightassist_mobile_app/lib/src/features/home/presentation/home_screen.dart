@@ -353,6 +353,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 border:
                     Border(top: BorderSide(color: Colors.black, width: 2.0))),
             child: BottomNavigationBar(
+                type: BottomNavigationBarType.fixed,
               items: [
                 isOrg
                     ? const BottomNavigationBarItem(
@@ -361,7 +362,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                         icon: Icon(Icons.search), label: "Explore"),
                 isOrg
                     ? const BottomNavigationBarItem(
-                        icon: Icon(Icons.campaign), label: "Announcements")
+                        icon: Icon(Icons.campaign), label: "Updates")
                     : const BottomNavigationBarItem(
                         icon: Icon(Icons.home_outlined), label: "Home"),
                 isOrg

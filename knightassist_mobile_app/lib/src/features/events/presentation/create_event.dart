@@ -98,8 +98,8 @@ class CreateEvent extends ConsumerWidget {
           ),
           const SelectDate(),
           const MultiDayEvent(),
-          const SizedBox(height: 52, width: 50, child: SelectTime()),
-          const SizedBox(height: 52, width: 50, child: SelectEndTime()),
+          const SizedBox(height: 100, width: 50, child: SelectTime()),
+          const SizedBox(height: 100, width: 50, child: SelectEndTime()),
           const SizedBox(
             height: 20,
           ),
