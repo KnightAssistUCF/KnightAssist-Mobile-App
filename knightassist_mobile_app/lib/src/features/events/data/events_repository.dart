@@ -202,8 +202,10 @@ class EventsRepository {
     }
   }
 
-  Future<void> editEvent(String eventID,
-      {String? name,
+  Future<void> editEvent(
+      String eventID,
+      String organizationID,
+      String? name,
       String? description,
       String? location,
       DateTime? startTime,
@@ -211,7 +213,7 @@ class EventsRepository {
       String? picLink,
       List<String>? eventTags,
       String? semester,
-      int? maxAttendees}) async {
+      int? maxAttendees) async {
     Map<String, dynamic> params = {'eventID': eventID};
     if (name != null) params['name'] = name;
     if (description != null) params['description'] = description;
@@ -224,7 +226,22 @@ class EventsRepository {
 
     var uri = Uri.parse(
         "https://knightassist-43ab3aeaada9.herokuapp.com/api/editEvent");
-    var response = await http.post(uri, body: params);
+    var response = await http.post(uri,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, dynamic>{
+          'organizationID': organizationID,
+          'eventID': eventID,
+          'name': name,
+          'description': description,
+          'location': location,
+          'startTime': startTime?.toIso8601String(),
+          'endTime': endTime?.toIso8601String(),
+          'eventTags': eventTags,
+          'semester': semester,
+          'maxAttendees': maxAttendees.toString(),
+        }));
     var body = jsonDecode(response.body);
     switch (response.statusCode) {
       case 200:
@@ -245,7 +262,14 @@ class EventsRepository {
     };
     var uri = Uri.parse(
         "https://knightassist-43ab3aeaada9.herokuapp.com/api/deleteSingleEvent");
-    var response = await http.delete(uri, body: params);
+    var response = await http.delete(uri,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, dynamic>{
+          'organizationID': organizationID,
+          'eventID': eventID,
+        }));
     var body = jsonDecode(response.body);
     switch (response.statusCode) {
       case 200:

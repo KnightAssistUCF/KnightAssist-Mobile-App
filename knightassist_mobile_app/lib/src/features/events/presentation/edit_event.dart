@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:knightassist_mobile_app/src/features/authentication/data/auth_repository.dart';
 import 'package:knightassist_mobile_app/src/features/events/data/events_repository.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
@@ -20,16 +21,53 @@ File? _eventPicFile;
 DateTime endDate = DateTime
     .now(); // used for events that have a different start date and end date
 
-class EditEvent extends ConsumerWidget {
-  EditEvent({super.key, required this.event});
-
-  Event event;
+class EditEvent extends ConsumerStatefulWidget {
+  final Event event;
+  const EditEvent({super.key, required this.event});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<EditEvent> createState() => _EditEventState();
+}
+
+class _EditEventState extends ConsumerState<EditEvent> {
+  late final Event event;
+  final _formKey = GlobalKey<FormState>();
+  final _node = FocusScopeNode();
+  final _titleController = TextEditingController();
+  final _descriptionController = TextEditingController();
+  final _locationController = TextEditingController();
+  final _maxVolunteersController = TextEditingController();
+
+  String get title => _titleController.text;
+  String get description => _descriptionController.text;
+  String get location => _locationController.text;
+  String get maxVolunteers => _maxVolunteersController.text;
+
+  var _submitted = false;
+
+  @override
+  void initState() {
+    event = widget.event;
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _node.dispose();
+    _titleController.dispose();
+    _descriptionController.dispose();
+    _locationController.dispose();
+    _maxVolunteersController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
     final eventsRepository = ref.watch(eventsRepositoryProvider);
+    final authRepository = ref.watch(authRepositoryProvider);
+    final user = authRepository.currentUser;
 
     return Scaffold(
       appBar: AppBar(
@@ -78,7 +116,8 @@ class EditEvent extends ConsumerWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextFormField(
-              initialValue: event.name,
+              controller: _titleController,
+              //initialValue: event.name,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Event Title',
@@ -91,10 +130,11 @@ class EditEvent extends ConsumerWidget {
                 width: 240,
                 height: 120,
                 child: TextFormField(
+                  controller: _descriptionController,
                   maxLines: null,
                   expands: true,
                   keyboardType: TextInputType.multiline,
-                  initialValue: event.description,
+                  //initialValue: event.description,
                   decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       filled: false,
@@ -128,10 +168,22 @@ class EditEvent extends ConsumerWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextFormField(
-              initialValue: event.location,
+              controller: _locationController,
+              //initialValue: event.location,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Event Location',
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              controller: _maxVolunteersController,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Max Volunteers',
               ),
             ),
           ),
@@ -168,18 +220,33 @@ class EditEvent extends ConsumerWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: ElevatedButton(
                     onPressed: () {
-                      /*              Map<dynamic, dynamic> map = {
-  "name": name,
-  String? description,
-  String? location,
-  DateTime? startTime,
-  DateTime? endTime,
-  String? picLink,
-  List<String>? eventTags,
-  String? semester,
-  int? maxAttendees,
-}
-                      eventsRepository.editEvent(event.id, map);*/
+                      DateTime startTime = DateTime(
+                          selectedDate.year,
+                          selectedDate.month,
+                          selectedDate.day,
+                          selectedStartTime.hour,
+                          selectedEndTime.minute);
+
+                      DateTime endTime = DateTime(
+                          selectedDate.year,
+                          selectedDate.month,
+                          selectedDate.day,
+                          selectedEndTime.hour,
+                          selectedEndTime.minute);
+
+                      eventsRepository.editEvent(
+                          event.id,
+                          event.sponsoringOrganization,
+                          title,
+                          description,
+                          location,
+                          startTime,
+                          endTime,
+                          _eventPicFile?.path ??
+                              'assets/orgdefaultbackground.png',
+                          [],
+                          '',
+                          int.parse(maxVolunteers));
                     },
                     child: const Padding(
                       padding: EdgeInsets.all(8.0),
@@ -193,8 +260,8 @@ class EditEvent extends ConsumerWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: ElevatedButton(
                     onPressed: () {
-                      eventsRepository.deleteEvent(
-                          event.sponsoringOrganization, event.id);
+                      //eventsRepository.deleteEvent(
+                      //event.sponsoringOrganization, event.id);
                       Navigator.pop(context);
                     },
                     child: const Padding(
