@@ -176,7 +176,22 @@ class EventsRepository {
     };
     var uri = Uri.parse(
         "https://knightassist-43ab3aeaada9.herokuapp.com/api/addEvent");
-    var response = await http.post(uri, body: params);
+    var response = await http.post(uri,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, dynamic>{
+          'name': name,
+          'description': description,
+          'location': location,
+          'date': date.toIso8601String(),
+          'sponsoringOrganization': sponsoringOrganization,
+          'startTime': startTime.toIso8601String(),
+          'endTime': endTime.toIso8601String(),
+          'eventTags': eventTags,
+          'semester': semester,
+          'maxAttendees': maxAttendees.toString(),
+        }));
     var body = jsonDecode(response.body);
     switch (response.statusCode) {
       case 200:

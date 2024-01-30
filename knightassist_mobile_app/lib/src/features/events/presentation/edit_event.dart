@@ -5,10 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:knightassist_mobile_app/src/features/events/data/events_repository.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/update.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:flutter/services.dart';
 
 DateTime selectedDate = DateTime.now();
 TimeOfDay selectedStartTime = TimeOfDay.now();
@@ -26,6 +29,7 @@ class EditEvent extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
+    final eventsRepository = ref.watch(eventsRepositoryProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -75,7 +79,7 @@ class EditEvent extends ConsumerWidget {
             padding: const EdgeInsets.all(8.0),
             child: TextFormField(
               initialValue: event.name,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Event Title',
               ),
@@ -91,13 +95,13 @@ class EditEvent extends ConsumerWidget {
                   expands: true,
                   keyboardType: TextInputType.multiline,
                   initialValue: event.description,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       filled: false,
                       hintText: 'Event Description'),
                 )),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           SelectDate(
@@ -118,7 +122,7 @@ class EditEvent extends ConsumerWidget {
               child: SelectEndTime(
                 event: event,
               )),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           Padding(
@@ -155,20 +159,6 @@ class EditEvent extends ConsumerWidget {
                     event: event,
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Center(
-                    child: ElevatedButton(
-                        onPressed: () {},
-                        child: const Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text(
-                            'Delete Image (reverts to default)',
-                            style: TextStyle(fontSize: 15),
-                          ),
-                        )),
-                  ),
-                ),
               ],
             ),
           ),
@@ -177,9 +167,22 @@ class EditEvent extends ConsumerWidget {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ElevatedButton(
-                    onPressed: () {},
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                    onPressed: () {
+                      /*              Map<dynamic, dynamic> map = {
+  "name": name,
+  String? description,
+  String? location,
+  DateTime? startTime,
+  DateTime? endTime,
+  String? picLink,
+  List<String>? eventTags,
+  String? semester,
+  int? maxAttendees,
+}
+                      eventsRepository.editEvent(event.id, map);*/
+                    },
+                    child: const Padding(
+                      padding: EdgeInsets.all(8.0),
                       child: Text(
                         'Update Event',
                         style: TextStyle(fontSize: 20),
@@ -189,9 +192,13 @@ class EditEvent extends ConsumerWidget {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ElevatedButton(
-                    onPressed: () {},
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                    onPressed: () {
+                      eventsRepository.deleteEvent(
+                          event.sponsoringOrganization, event.id);
+                      Navigator.pop(context);
+                    },
+                    child: const Padding(
+                      padding: EdgeInsets.all(8.0),
                       child: Text(
                         'Delete Event',
                         style: TextStyle(fontSize: 20),
@@ -295,7 +302,7 @@ class _SelectTimeState extends State<SelectTime> {
         Center(
             child:
                 Text(TimeOfDay.fromDateTime(event.startTime).format(context))),
-        SizedBox(
+        const SizedBox(
           width: 10,
         ),
         Padding(
@@ -345,7 +352,7 @@ class _SelectEndTimeState extends State<SelectEndTime> {
       children: [
         Center(
             child: Text(TimeOfDay.fromDateTime(event.endTime).format(context))),
-        SizedBox(
+        const SizedBox(
           width: 10,
         ),
         Padding(
@@ -371,6 +378,10 @@ class EditImage extends StatefulWidget {
 class _EditImageState extends State<EditImage> {
   late final Event event;
 
+  File? get imagePlaceHolder => null;
+
+  set imagePlaceHolder(File? imagePlaceHolder) {}
+
   @override
   void initState() {
     super.initState();
@@ -385,23 +396,56 @@ class _EditImageState extends State<EditImage> {
     });
   }
 
+  Future<void> _deleteImage() async {
+    File imagePlaceHolder;
+
+    _setPlaceHolder() async {
+      this.imagePlaceHolder = await ImageUtils.imageToFile(
+          imageName: "orgdefaultbackground", ext: "png");
+    }
+
+    setState(() {
+      _eventPicFile = this.imagePlaceHolder;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return EditableImage(
-      onChange: _directUpdateImage,
-      image: _eventPicFile != null
-          ? Image.file(_eventPicFile!, fit: BoxFit.cover)
-          : Image(image: AssetImage(event.profilePicPath)),
-      size: 150,
-      imagePickerTheme: ThemeData(
-        primaryColor: Colors.yellow,
-        shadowColor: Colors.deepOrange,
-        colorScheme: const ColorScheme.light(background: Colors.indigo),
-        iconTheme: const IconThemeData(color: Colors.red),
-        fontFamily: 'Papyrus',
-      ),
-      imageBorder: Border.all(color: Colors.lime, width: 2),
-      editIconBorder: Border.all(color: Colors.purple, width: 2),
+    return Column(
+      children: [
+        EditableImage(
+          onChange: _directUpdateImage,
+          image: _eventPicFile != null
+              ? Image.file(_eventPicFile!, fit: BoxFit.cover)
+              : Image(image: AssetImage(event.profilePicPath)),
+          size: 150,
+          imagePickerTheme: ThemeData(
+            primaryColor: Colors.yellow,
+            shadowColor: Colors.deepOrange,
+            colorScheme: const ColorScheme.light(background: Colors.indigo),
+            iconTheme: const IconThemeData(color: Colors.red),
+            fontFamily: 'Papyrus',
+          ),
+          imageBorder: Border.all(color: Colors.lime, width: 2),
+          editIconBorder: Border.all(color: Colors.purple, width: 2),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Center(
+            child: ElevatedButton(
+                onPressed: () {
+                  _deleteImage();
+                },
+                child: const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text(
+                    'Delete Image (reverts to default)',
+                    style: TextStyle(fontSize: 15),
+                  ),
+                )),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -455,7 +499,7 @@ class _MultiDayEventState extends State<MultiDayEvent> {
     return Column(
       children: [
         CheckboxListTile(
-          title: Text(
+          title: const Text(
             "Multi-Day Event (end date different than start date)",
             textAlign: TextAlign.center,
           ),
@@ -474,7 +518,7 @@ class _MultiDayEventState extends State<MultiDayEvent> {
             children: [
               Center(
                   child: Text(DateFormat.yMMMMEEEEd().format(event.endTime))),
-              SizedBox(
+              const SizedBox(
                 width: 10,
               ),
               Padding(
@@ -489,5 +533,17 @@ class _MultiDayEventState extends State<MultiDayEvent> {
         ),
       ],
     );
+  }
+}
+
+class ImageUtils {
+  static Future<File> imageToFile(
+      {required String imageName, required String ext}) async {
+    var bytes = await rootBundle.load('assets/$imageName.$ext');
+    String tempPath = (await getTemporaryDirectory()).path;
+    File file = File('$tempPath/profile.png');
+    await file.writeAsBytes(
+        bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes));
+    return file;
   }
 }
