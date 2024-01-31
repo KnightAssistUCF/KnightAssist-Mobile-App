@@ -6,7 +6,6 @@ import 'package:knightassist_mobile_app/src/features/authentication/data/auth_re
 import 'package:knightassist_mobile_app/src/features/events/data/events_repository.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/events_list/events_list_screen.dart';
-import 'package:knightassist_mobile_app/src/features/events/presentation/events_list_screen.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/feedback_list_screen.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/qr_scanner.dart';
 import 'package:knightassist_mobile_app/src/features/home/presentation/home_screen.dart';
@@ -32,13 +31,13 @@ class _CalendarViewState extends State<CalendarView>
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static final List<Widget> _widgetOptions = isOrg
       ? <Widget>[
-          const EventListScreen(),
+          const EventsListScreen(),
           const UpdateScreenTab(),
           const HomeScreenTab(),
           const FeedbackListScreenTab(),
         ]
       : <Widget>[
-          const EventListScreen(),
+          const EventsListScreen(),
           const HomeScreenTab(),
           QRCodeScanner(),
         ];

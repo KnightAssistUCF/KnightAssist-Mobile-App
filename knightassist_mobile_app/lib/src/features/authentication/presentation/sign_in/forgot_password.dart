@@ -7,6 +7,10 @@ import 'package:knightassist_mobile_app/src/features/authentication/data/auth_re
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/sign_in/sign_in_screen.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 
+final _emailController = TextEditingController();
+
+String get email => _emailController.text;
+
 class ForgotPassword extends ConsumerWidget {
   const ForgotPassword({super.key});
 
@@ -64,6 +68,7 @@ class ForgotPassword extends ConsumerWidget {
 
 TextField _buildTextField({String labelText = '', bool obscureText = false}) {
   return TextField(
+    controller: _emailController,
     cursorColor: Colors.black54,
     cursorWidth: 1,
     obscureText: obscureText,
@@ -105,7 +110,7 @@ class BuildTextButton extends ConsumerWidget {
 
     return TextButton(
       onPressed: () {
-        authRepository.resetPassword("hi@hi.com");
+        authRepository.resetPassword(email);
 
         showDialog(
             context: context,

@@ -13,6 +13,8 @@ import 'package:http/http.dart' as http;
 
 part 'auth_repository.g.dart';
 
+bool isOrg = false;
+
 class AuthRepository {
   final _authState = InMemoryStore<AppUser?>(null);
   final _token = InMemoryStore<String?>(null);
@@ -56,6 +58,7 @@ class AuthRepository {
         _token.value = body["token"];
         // Successful Login
         if (user["role"] == "student") {
+          isOrg = false;
           List<String> favOrgs = [];
           List<String> eventsRSVP = [];
           List<String> eventsHistory = [];
@@ -106,6 +109,7 @@ class AuthRepository {
                   firstTimeLogin: user['firstTimeLogin']);
           _authState.value = u;
         } else if (user["role"] == "organization") {
+          isOrg = true;
           //Organization u = Organization.fromMap(user);
           //Organization u = Organization.fromJson(user);
 
@@ -291,12 +295,17 @@ class AuthRepository {
         break;
       case 400:
         // Please provide email so we can send a new password to the user
+        throw Exception(
+            'Please provide email so we can send a new password to the user');
         break;
       case 404:
         // Email not found -> User or Org not registered with KnightAssist
+        throw Exception(
+            'Email not found -> User or Org not registered with KnightAssist');
         break;
       case 500:
         // "Error - Error Printed To The Console"
+        throw Exception('Error - $response.body');
         break;
       default:
         var body = jsonDecode(response.body);
@@ -307,6 +316,7 @@ class AuthRepository {
 
   Future<void> signOut() async {
     _authState.value = null;
+    // isOrg = false;
   }
 
   void dispose() => _authState.close();

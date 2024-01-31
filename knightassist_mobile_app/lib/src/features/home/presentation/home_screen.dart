@@ -14,28 +14,27 @@ import 'package:knightassist_mobile_app/src/features/organizations/presentation/
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
-import '../../events/presentation/events_list_screen.dart';
+class HomeScreen extends ConsumerStatefulWidget {
+  const HomeScreen({super.key, required});
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
-
-  State<HomeScreen> createState() => _HomeScreenState();
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
+class _HomeScreenState extends ConsumerState<HomeScreen>
+    with TickerProviderStateMixin {
   int _selectedIndex = isOrg ? 2 : 1;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
   static final List<Widget> _widgetOptions = isOrg
       ? <Widget>[
-          const EventListScreen(),
+          const EventsListScreen(),
           const UpdateScreenTab(),
           const HomeScreenTab(),
           const FeedbackListScreenTab(),
         ]
       : <Widget>[
-          const EventListScreen(),
+          const EventsListScreen(),
           const HomeScreenTab(),
           QRCodeScanner(),
         ];
@@ -353,7 +352,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 border:
                     Border(top: BorderSide(color: Colors.black, width: 2.0))),
             child: BottomNavigationBar(
-                type: BottomNavigationBarType.fixed,
+              type: BottomNavigationBarType.fixed,
               items: [
                 isOrg
                     ? const BottomNavigationBarItem(
@@ -906,7 +905,7 @@ class HomeScreenTab extends ConsumerWidget {
                 final authRepository = ref.watch(authRepositoryProvider);
                 authRepository.signOut();
                 context.pushNamed(AppRoute.emailConfirm.name);
-                Navigator.pop(context);
+                //Navigator.pop(context);
               },
             ),
           ],
