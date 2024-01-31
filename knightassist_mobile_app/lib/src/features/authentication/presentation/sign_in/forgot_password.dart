@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:knightassist_mobile_app/src/common_widgets/primary_button.dart';
 import 'package:knightassist_mobile_app/src/common_widgets/responsive_scrollable_card.dart';
+import 'package:knightassist_mobile_app/src/features/authentication/data/auth_repository.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/sign_in/sign_in_screen.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 
@@ -95,25 +96,30 @@ TextField _buildTextField({String labelText = '', bool obscureText = false}) {
   );
 }
 
-class BuildTextButton extends StatelessWidget {
+class BuildTextButton extends ConsumerWidget {
   const BuildTextButton({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authRepository = ref.watch(authRepositoryProvider);
+
     return TextButton(
-      onPressed: () => showDialog(
-          context: context,
-          builder: (BuildContext context) => AlertDialog(
-                title: const Text(
-                    'Check your email for a temporary new password for KnightAssist.'),
-                actions: <Widget>[
-                  TextButton(
-                    onPressed: () =>
-                        Navigator.popAndPushNamed(context, "signIn"),
-                    child: const Text('OK'),
-                  ),
-                ],
-              )),
+      onPressed: () {
+        authRepository.resetPassword("hi@hi.com");
+
+        showDialog(
+            context: context,
+            builder: (BuildContext context) => AlertDialog(
+                  title: const Text(
+                      'Check your email for a temporary new password for KnightAssist.'),
+                  actions: <Widget>[
+                    TextButton(
+                      onPressed: () => context.pushNamed(AppRoute.signIn.name),
+                      child: const Text('OK'),
+                    ),
+                  ],
+                ));
+      },
       style: ButtonStyle(
         //padding: MaterialStateProperty.all(
         //const EdgeInsets.symmetric(vertical: 20),

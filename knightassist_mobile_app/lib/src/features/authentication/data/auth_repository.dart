@@ -276,6 +276,35 @@ class AuthRepository {
     }
   }
 
+  Future<void> resetPassword(String email) async {
+    var uri = Uri.parse(
+        'https://knightassist-43ab3aeaada9.herokuapp.com/api/forgotPassword');
+    var response = await http.post(uri,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{'email': email}));
+    debugPrint(response.body);
+    switch (response.statusCode) {
+      case 200:
+        // Email with temporary password sent successfully, and encrypted password stored in the DB
+        break;
+      case 400:
+        // Please provide email so we can send a new password to the user
+        break;
+      case 404:
+        // Email not found -> User or Org not registered with KnightAssist
+        break;
+      case 500:
+        // "Error - Error Printed To The Console"
+        break;
+      default:
+        var body = jsonDecode(response.body);
+        String err = body["error"];
+        throw Exception(err);
+    }
+  }
+
   Future<void> signOut() async {
     _authState.value = null;
   }
