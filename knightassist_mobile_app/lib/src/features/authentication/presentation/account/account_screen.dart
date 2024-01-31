@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:knightassist_mobile_app/src/common_widgets/action_text_button.dart';
 import 'package:knightassist_mobile_app/src/common_widgets/alert_dialogs.dart';
 import 'package:knightassist_mobile_app/src/common_widgets/responsive_center.dart';
 import 'package:knightassist_mobile_app/src/constants/app_sizes.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/data/auth_repository.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/account/account_screen_controller.dart';
+import 'package:knightassist_mobile_app/src/features/organizations/data/organizations_repository.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 import 'package:knightassist_mobile_app/src/utils/async_value_ui.dart';
 import 'package:rxdart/rxdart.dart';
@@ -20,6 +22,15 @@ class AccountScreen extends ConsumerWidget {
     ref.listen<AsyncValue>(accountScreenControllerProvider,
         (_, state) => state.showAlertDialogOnError(context));
     final state = ref.watch(accountScreenControllerProvider);
+
+    final authRepository = ref.watch(authRepositoryProvider);
+    final user = authRepository.currentUser;
+    bool isOrg = user?.role == 'organization';
+    final organizationsRepository = ref.watch(organizationsRepositoryProvider);
+
+    organizationsRepository.fetchOrganizationsList();
+    final org = organizationsRepository.getOrganization(user?.id ?? '');
+
     return Scaffold(
         appBar: AppBar(
           title: state.isLoading
@@ -61,28 +72,30 @@ class AccountScreen extends ConsumerWidget {
               height: 50,
             ),
             Padding(
-              padding: EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(8.0),
               child: Stack(alignment: Alignment.center, children: [
-                const Positioned(
+                Positioned(
                   top: 65,
                   child: Padding(
-                    padding: EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(8.0),
                     child: Card(
                         child: Padding(
-                      padding: EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(8.0),
                       child: Column(
                         children: [
-                          SizedBox(height: 40),
+                          const SizedBox(height: 40),
                           Text(
-                            "Student User Name",
-                            style: TextStyle(
+                            isOrg ? org?.name ?? '' : "Student User Name",
+                            style: const TextStyle(
                                 fontWeight: FontWeight.w600,
                                 color: Colors.black,
                                 fontSize: 25),
                           ),
                           Text(
-                            "Joined October 20th, 2023",
-                            style: TextStyle(
+                            isOrg
+                                ? "Joined on ${DateFormat.yMMMEd().format(org!.createdAt)}"
+                                : "Joined October 20th, 2023",
+                            style: const TextStyle(
                                 fontWeight: FontWeight.w600,
                                 color: Colors.black,
                                 fontSize: 20),
@@ -135,28 +148,46 @@ class AccountScreen extends ConsumerWidget {
                         SettingsSection(
                           tiles: <SettingsTile>[
                             SettingsTile.navigation(
-                              leading: Icon(Icons.person),
-                              title: Text('Profile'),
-                              onPressed: (context) => context
-                                  .pushNamed(AppRoute.profileScreen.name),
-                            ),
-                            SettingsTile.navigation(
-                              leading: Icon(Icons.access_time_rounded),
-                              title: Text('Semester Goal'),
-                              value: Text('120 hours'),
-                              onPressed: (context) =>
-                                  context.pushNamed(AppRoute.semesterGoal.name),
-                            ),
-                            SettingsTile.navigation(
-                              leading: Icon(Icons.favorite_border),
-                              title: Text('Favorite Organizations'),
-                              value: Text('5'),
-                              onPressed: (context) => context
-                                  .pushNamed(AppRoute.organizations.name),
-                            ),
+                                leading: Icon(Icons.person),
+                                title: Text('Profile'),
+                                onPressed: (context) {
+                                  isOrg
+                                      ? context.pushNamed("organization",
+                                          extra: org)
+                                      : context.pushNamed(
+                                          AppRoute.profileScreen.name);
+                                }),
+                            isOrg
+                                ? SettingsTile.navigation(
+                                    leading:
+                                        const Icon(Icons.notifications_none),
+                                    title: Text('Notifications'),
+                                    onPressed: (context) {},
+                                  )
+                                : SettingsTile.navigation(
+                                    leading:
+                                        const Icon(Icons.access_time_rounded),
+                                    title: Text('Semester Goal'),
+                                    value: Text('120 hours'),
+                                    onPressed: (context) => context
+                                        .pushNamed(AppRoute.semesterGoal.name),
+                                  ),
+                            isOrg
+                                ? SettingsTile.navigation(
+                                    leading: Icon(Icons.favorite_border),
+                                    title: Text('Top Volunteers'),
+                                    value: Text('5'),
+                                    onPressed: (context) => {})
+                                : SettingsTile.navigation(
+                                    leading: Icon(Icons.favorite_border),
+                                    title: Text('Favorite Organizations'),
+                                    value: Text('5'),
+                                    onPressed: (context) => context
+                                        .pushNamed(AppRoute.organizations.name),
+                                  ),
                             SettingsTile.navigation(
                               leading: Icon(Icons.star_border_outlined),
-                              title: Text('Interests'),
+                              title: Text(isOrg ? 'Tags' : 'Interests'),
                               value: Text('10'),
                               onPressed: (context) =>
                                   context.pushNamed(AppRoute.tagSelection.name),
