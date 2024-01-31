@@ -28,12 +28,12 @@ class SignInScreen extends StatelessWidget {
             image: AssetImage('assets/KnightAssistCoA3.png'),
             height: 60,
           ),
-          Center(
-            child: const Text('welcome to',
+          const Center(
+            child: Text('welcome to',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
           ),
-          Center(
-            child: const Text('KnightAssist',
+          const Center(
+            child: Text('KnightAssist',
                 style: TextStyle(fontSize: 30, fontWeight: FontWeight.w700)),
           ),
           const Padding(
@@ -176,7 +176,7 @@ class _SignInContentsState extends ConsumerState<SignInContents>
               style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
               onPressed: () => state.isLoading
                   ? null
-                  : context.pushNamed(AppRoute.registerStudent.name),
+                  : context.pushNamed(AppRoute.forgotPassword.name),
             ),
             gapH8,
             const Row(children: <Widget>[

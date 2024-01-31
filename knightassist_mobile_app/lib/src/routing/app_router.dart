@@ -8,6 +8,7 @@ import 'package:knightassist_mobile_app/src/features/authentication/presentation
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/register/register_emailconfirm_screen.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/register/register_organization_screen.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/register/register_student_screen.dart';
+import 'package:knightassist_mobile_app/src/features/authentication/presentation/sign_in/forgot_password.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/sign_in/sign_in_screen.dart';
 import 'package:knightassist_mobile_app/src/features/events/data/events_repository.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
@@ -79,6 +80,7 @@ enum AppRoute {
   editUpdate,
   viewRSVPs,
   editOrgProfile,
+  forgotPassword
 }
 
 @Riverpod(keepAlive: true)
@@ -314,6 +316,11 @@ GoRouter goRouter(GoRouterRef ref) {
                     //final updateID = state.pathParameters['id']!;
                     return EditOrganizationProfile(organization: org);
                   }),
+              GoRoute(
+                  path: 'forgotpassword',
+                  name: AppRoute.forgotPassword.name,
+                  pageBuilder: (context, state) => const MaterialPage(
+                      fullscreenDialog: true, child: ForgotPassword())),
             ])
       ],
       errorBuilder: (context, state) => const NotFoundScreen());
