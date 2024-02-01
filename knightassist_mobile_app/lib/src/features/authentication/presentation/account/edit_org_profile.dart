@@ -9,8 +9,10 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:knightassist_mobile_app/src/common_widgets/responsive_center.dart';
 import 'package:knightassist_mobile_app/src/constants/breakpoints.dart';
+import 'package:knightassist_mobile_app/src/features/authentication/data/auth_repository.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/feedback.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/feedback_list_screen.dart';
+import 'package:knightassist_mobile_app/src/features/organizations/data/organizations_repository.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -94,6 +96,14 @@ class _OrganizationTopState extends State<OrganizationTop> {
   late final Organization organization;
   late final double width;
 
+    final _formKey = GlobalKey<FormState>();
+  final _node = FocusScopeNode();
+  final _nameController = TextEditingController();
+
+  String get name => _nameController.text;
+
+  var _submitted = false;
+
   _OrganizationTopState();
 
   @override
@@ -101,6 +111,13 @@ class _OrganizationTopState extends State<OrganizationTop> {
     super.initState();
     organization = widget.organization;
     width = widget.width;
+  }
+
+    @override
+  void dispose() {
+    _node.dispose();
+    _nameController.dispose();
+    super.dispose();
   }
 
   @override
@@ -114,7 +131,7 @@ class _OrganizationTopState extends State<OrganizationTop> {
         Column(
           children: [
             Container(
-              width: MediaQuery.sizeOf(context).width,
+              width: width,
               height: 200,
               decoration: BoxDecoration(
                 image: DecorationImage(
@@ -131,7 +148,8 @@ class _OrganizationTopState extends State<OrganizationTop> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: TextFormField(
-                initialValue: organization.name,
+                controller: _nameController,
+                //initialValue: organization.name,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Organization Name',
@@ -179,6 +197,30 @@ class _TabBarOrgState extends State<TabBarOrg> with TickerProviderStateMixin {
   late final TabController _tabController;
   late final Organization organization;
 
+   final _formKey = GlobalKey<FormState>();
+  final _node = FocusScopeNode();
+  final _descriptionController = TextEditingController();
+  final _instagramController = TextEditingController();
+  final _facebookController = TextEditingController();
+  final _twitterController = TextEditingController();
+  final _linkedinController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _phoneController = TextEditingController();
+  final _locationController = TextEditingController();
+  final _websiteController = TextEditingController();
+
+  String get description => _descriptionController.text;
+  String get instagram => _instagramController.text;
+  String get facebook => _facebookController.text;
+  String get twitter => _twitterController.text;
+  String get linkedin => _linkedinController.text;
+  String get email => _emailController.text;
+  String get phone => _phoneController.text;
+  String get location => _locationController.text;
+  String get website => _websiteController.text;
+
+  var _submitted = false;
+
   @override
   void initState() {
     super.initState();
@@ -189,12 +231,32 @@ class _TabBarOrgState extends State<TabBarOrg> with TickerProviderStateMixin {
   @override
   void dispose() {
     _tabController.dispose();
+    _node.dispose();
+    _descriptionController.dispose();
+    _instagramController.dispose();
+    _facebookController.dispose();
+    _twitterController.dispose();
+    _linkedinController.dispose();
+    _emailController.dispose();
+    _phoneController.dispose();
+    _locationController.dispose();
+    _websiteController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
+    return Consumer(builder: (context, ref, child) { 
+
+      final organizationsRepository = ref.watch(organizationsRepositoryProvider);
+      final authRepository = ref.watch(authRepositoryProvider);
+      final user = authRepository.currentUser;
+
+      organizationsRepository.fetchOrganizationsList();
+
+      final org = organizationsRepository.getOrganization(user!.id);
+      
+      return DefaultTabController(
       length: 2,
       child: Scaffold(
         body: Column(
@@ -216,10 +278,11 @@ class _TabBarOrgState extends State<TabBarOrg> with TickerProviderStateMixin {
                             width: 240,
                             height: 120,
                             child: TextFormField(
+                              controller: _descriptionController,
                               maxLines: null,
                               expands: true,
                               keyboardType: TextInputType.multiline,
-                              initialValue: organization.description,
+                              //initialValue: organization.description,
                               decoration: const InputDecoration(
                                   border: OutlineInputBorder(),
                                   filled: false,
@@ -250,9 +313,10 @@ class _TabBarOrgState extends State<TabBarOrg> with TickerProviderStateMixin {
                                 child: SizedBox(
                                   width: 300,
                                   child: TextFormField(
-                                    initialValue: organization
-                                            .contact?.socialMedia?.instagram ??
-                                        '',
+                                    controller: _instagramController,
+                                    //initialValue: organization
+                                     //       .contact?.socialMedia?.instagram ??
+                                      //  '',
                                     decoration: const InputDecoration(
                                       border: OutlineInputBorder(),
                                       labelText: 'Instagram URL (Optional)',
@@ -280,9 +344,10 @@ class _TabBarOrgState extends State<TabBarOrg> with TickerProviderStateMixin {
                                 child: SizedBox(
                                   width: 300,
                                   child: TextFormField(
-                                    initialValue: organization
-                                            .contact?.socialMedia?.facebook ??
-                                        '',
+                                    controller: _facebookController,
+                                    //initialValue: organization
+                                     //       .contact?.socialMedia?.facebook ??
+                                     //   '',
                                     decoration: const InputDecoration(
                                       border: OutlineInputBorder(),
                                       labelText: 'Facebook URL (Optional)',
@@ -310,9 +375,10 @@ class _TabBarOrgState extends State<TabBarOrg> with TickerProviderStateMixin {
                                 child: SizedBox(
                                   width: 300,
                                   child: TextFormField(
-                                    initialValue: organization
-                                            .contact?.socialMedia?.twitter ??
-                                        '',
+                                    controller: _twitterController,
+                                    //initialValue: organization
+                                     //       .contact?.socialMedia?.twitter ??
+                                     //   '',
                                     decoration: const InputDecoration(
                                       border: OutlineInputBorder(),
                                       labelText: 'Twitter URL (Optional)',
@@ -340,9 +406,10 @@ class _TabBarOrgState extends State<TabBarOrg> with TickerProviderStateMixin {
                                 child: SizedBox(
                                   width: 300,
                                   child: TextFormField(
-                                    initialValue: organization
-                                            .contact?.socialMedia?.linkedin ??
-                                        '',
+                                    controller: _linkedinController,
+                                    //initialValue: organization
+                                     //       .contact?.socialMedia?.linkedin ??
+                                     //   '',
                                     decoration: const InputDecoration(
                                       border: OutlineInputBorder(),
                                       labelText: 'LinkedIn URL (Optional)',
@@ -366,7 +433,8 @@ class _TabBarOrgState extends State<TabBarOrg> with TickerProviderStateMixin {
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: TextFormField(
-                                      initialValue: organization.contact?.email,
+                                      controller: _emailController,
+                                      //initialValue: organization.contact?.email,
                                       decoration: const InputDecoration(
                                         border: OutlineInputBorder(),
                                         labelText: 'Organization Email',
@@ -387,7 +455,8 @@ class _TabBarOrgState extends State<TabBarOrg> with TickerProviderStateMixin {
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: TextFormField(
-                                      initialValue: organization.contact?.phone,
+                                      controller: _phoneController,
+                                      //initialValue: organization.contact?.phone,
                                       decoration: const InputDecoration(
                                         border: OutlineInputBorder(),
                                         labelText:
@@ -411,7 +480,8 @@ class _TabBarOrgState extends State<TabBarOrg> with TickerProviderStateMixin {
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: TextFormField(
-                                  initialValue: organization.location,
+                                  controller: _locationController,
+                                  //initialValue: organization.location,
                                   decoration: const InputDecoration(
                                     border: OutlineInputBorder(),
                                     labelText:
@@ -439,7 +509,8 @@ class _TabBarOrgState extends State<TabBarOrg> with TickerProviderStateMixin {
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: TextFormField(
-                                initialValue: organization.contact?.website,
+                                controller: _websiteController,
+                                //initialValue: organization.contact?.website,
                                 decoration: const InputDecoration(
                                   border: OutlineInputBorder(),
                                   labelText: 'Website URL (Optional)',
@@ -477,13 +548,15 @@ class _TabBarOrgState extends State<TabBarOrg> with TickerProviderStateMixin {
                     style: TextStyle(fontSize: 20),
                   ),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  organizationsRepository.editOrganization(user.id, org?.password ?? '', org?.name ?? '', email, description, org?.logoUrl ?? '', org?.favorites ?? [], org?.favorites ?? [], org?.updates., org?.calendarLink, org?.contact?.email, org?.isActive, org?.eventHappeningNow, org?.backgroundUrl, org?.eventsArray, org?.location, org?.categoryTags);
+                },
               ),
             ),
           ],
         ),
       ),
-    );
+    ); },);
   }
 }
 

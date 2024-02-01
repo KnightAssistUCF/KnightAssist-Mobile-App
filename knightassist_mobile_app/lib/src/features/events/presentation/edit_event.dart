@@ -244,8 +244,8 @@ class _EditEventState extends ConsumerState<EditEvent> {
                           endTime,
                           _eventPicFile?.path ??
                               'assets/orgdefaultbackground.png',
-                          [],
-                          '',
+                          event.eventTags,
+                          event.semester.toString(),
                           int.parse(maxVolunteers));
                     },
                     child: const Padding(
