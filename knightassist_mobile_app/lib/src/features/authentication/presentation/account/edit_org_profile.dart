@@ -10,6 +10,8 @@ import 'package:intl/intl.dart';
 import 'package:knightassist_mobile_app/src/common_widgets/responsive_center.dart';
 import 'package:knightassist_mobile_app/src/constants/breakpoints.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/data/auth_repository.dart';
+import 'package:knightassist_mobile_app/src/features/events/data/events_repository.dart';
+import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/feedback.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/feedback_list_screen.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/data/organizations_repository.dart';
@@ -549,7 +551,31 @@ class _TabBarOrgState extends State<TabBarOrg> with TickerProviderStateMixin {
                   ),
                 ),
                 onPressed: () {
-                  organizationsRepository.editOrganization(user.id, org?.password ?? '', org?.name ?? '', email, description, org?.logoUrl ?? '', org?.favorites ?? [], org?.favorites ?? [], org?.updates., org?.calendarLink, org?.contact?.email, org?.isActive, org?.eventHappeningNow, org?.backgroundUrl, org?.eventsArray, org?.location, org?.categoryTags);
+                  List<String> updateIDs = [];
+                  List<String> eventIDs = [];
+
+                  for (Update u in org!.updates) {
+                    updateIDs.add(u.id);
+                  }
+
+                   for (Event e in org!.eventsArray) {
+                    eventIDs.add(e.id);
+                  }
+
+                  if (email != '') {
+                    org.contact?.email = email;
+                  }
+                  if (phone != '') {
+                    org.contact?.phone = phone;
+                  }
+                  if (website != '') {
+                    org.contact?.website = website;
+                  }
+                  if (email != '') {
+                    org.contact?.email = email;
+                  }
+
+                  organizationsRepository.editOrganization(user.id, org?.password ?? '', org?.name ?? '', email, description, org?.logoUrl ?? '', org?.favorites ?? [], org?.favorites ?? [], updateIDs, org?.calendarLink, org?.contact, org?.isActive, org?.eventHappeningNow, org?.backgroundUrl, eventIDs, org?.location, org?.categoryTags);
                 },
               ),
             ),

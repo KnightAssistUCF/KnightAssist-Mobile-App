@@ -61,6 +61,7 @@ class RSVPRepository {
     switch (response.statusCode) {
       case 200:
         // Handle API cases
+        return "R"
         print(body);
         break;
       case 404:
