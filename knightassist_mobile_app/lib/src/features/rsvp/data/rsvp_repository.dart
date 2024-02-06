@@ -38,7 +38,7 @@ class RSVPRepository {
     return _rsvps.stream;
   }
 
-  Future<void> setRSVP(String uid, String eventID, String eventName) async {
+  Future<String> setRSVP(String uid, String eventID, String eventName) async {
     Map<String, dynamic> params = {
       "userID": uid,
       "eventID": eventID,
@@ -61,8 +61,8 @@ class RSVPRepository {
     switch (response.statusCode) {
       case 200:
         // Handle API cases
-        return "R"
-        print(body);
+        return "R";
+        print(body); // TODO: add the correct responses based on status codes
         break;
       case 404:
         throw EventNotFoundException();

@@ -35,6 +35,7 @@ import 'package:knightassist_mobile_app/src/features/organizations/domain/update
     as prefix;
 import 'package:knightassist_mobile_app/src/features/organizations/presentation/create_update.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/presentation/edit_update.dart';
+import 'package:knightassist_mobile_app/src/features/organizations/presentation/leaderboard.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/presentation/organization_screen.dart'
     as prefix;
 import 'package:knightassist_mobile_app/src/features/organizations/presentation/organizations_list/organizations_list.dart';
@@ -80,7 +81,8 @@ enum AppRoute {
   editUpdate,
   viewRSVPs,
   editOrgProfile,
-  forgotPassword
+  forgotPassword,
+  leaderboard
 }
 
 @Riverpod(keepAlive: true)
@@ -110,9 +112,10 @@ GoRouter goRouter(GoRouterRef ref) {
         GoRoute(
             path: '/',
             name: AppRoute.home.name,
-            builder: (context, state) => isLoggedIn
-                ? HomeScreen()
-                : SignInScreen(), // TEMP, change this to whatever screen you want to test (will need to rerun)
+            builder: (context, state) => //isLoggedIn
+                //? HomeScreen()
+                //: SignInScreen(), // TEMP, change this to whatever screen you want to test (will need to rerun)
+                leaderboard(),
             routes: [
               GoRoute(
                   path: 'events',
@@ -321,6 +324,11 @@ GoRouter goRouter(GoRouterRef ref) {
                   name: AppRoute.forgotPassword.name,
                   pageBuilder: (context, state) => const MaterialPage(
                       fullscreenDialog: true, child: ForgotPassword())),
+              GoRoute(
+                  path: 'leaderboard',
+                  name: AppRoute.leaderboard.name,
+                  pageBuilder: (context, state) => const MaterialPage(
+                      fullscreenDialog: true, child: leaderboard())),
             ])
       ],
       errorBuilder: (context, state) => const NotFoundScreen());
