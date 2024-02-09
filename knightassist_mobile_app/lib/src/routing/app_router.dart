@@ -1,3 +1,6 @@
+import 'package:knightassist_mobile_app/src/features/announcements/domain/announcement.dart';
+import 'package:knightassist_mobile_app/src/features/announcements/presentation/announcement_screen/announcement_screen.dart';
+import 'package:knightassist_mobile_app/src/features/announcements/presentation/announcements_list/announcements_list_screen.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/data/auth_repository.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/account/account_screen.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/account/profile_screen.dart';
@@ -52,7 +55,8 @@ enum AppRoute {
   semesterGoal,
   tagSelection,
   qrScanner,
-  calendar
+  calendar,
+  announcements
 }
 
 @Riverpod(keepAlive: true)
@@ -114,6 +118,22 @@ GoRouter goRouter(GoRouterRef ref) {
                           Organization org = state.extra as Organization;
                           //final orgID = state.pathParameters['id']!;
                           return OrganizationScreen(organization: org);
+                        })
+                  ]),
+              GoRoute(
+                  path: 'announcements',
+                  name: AppRoute.announcements.name,
+                  builder: (context, state) {
+                    return const AnnouncementsListScreen();
+                  },
+                  routes: [
+                    GoRoute(
+                        path: 'announcement',
+                        name: 'announcement',
+                        builder: (context, state) {
+                          Announcement announcement =
+                              state.extra as Announcement;
+                          return AnnouncementScreen(announcement: announcement);
                         })
                   ]),
               GoRoute(

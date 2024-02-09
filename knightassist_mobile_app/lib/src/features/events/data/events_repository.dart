@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:knightassist_mobile_app/src/exceptions/app_exception.dart';
-import 'package:knightassist_mobile_app/src/features/authentication/domain/student_user.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
 
 import 'package:http/http.dart' as http;
@@ -203,27 +202,6 @@ class EventsRepository {
         return list;
       case 404:
         throw UserNotFoundException();
-      default:
-        String err = body["error"];
-        throw Exception(err);
-    }
-  }
-
-  Future<List<StudentUser>> getEventAttendees(String eventID) async {
-    Map<String, String?> params = {"eventID": eventID};
-    var uri = Uri.https('knightassist-43ab3aeaada9.herokuapp.com',
-        '/api/loadAllEventAttendees', params);
-    var response = await http.get(uri);
-    var body = jsonDecode(response.body);
-    switch (response.statusCode) {
-      case 200:
-        List<StudentUser> list = [];
-        for (String json in List<String>.from(body)) {
-          list.add(StudentUser.fromMap(jsonDecode(json)));
-        }
-        return list;
-      case 404:
-        throw EventNotFoundException();
       default:
         String err = body["error"];
         throw Exception(err);
