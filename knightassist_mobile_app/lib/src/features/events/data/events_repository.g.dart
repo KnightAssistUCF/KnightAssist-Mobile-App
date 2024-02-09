@@ -700,5 +700,437 @@ class _EventsListSearchProviderElement
   @override
   String get query => (origin as EventsListSearchProvider).query;
 }
+
+String _$eventHistoryListStreamHash() =>
+    r'db6b73575681299313d8545a33f5a5af2a5376a4';
+
+/// See also [eventHistoryListStream].
+@ProviderFor(eventHistoryListStream)
+final eventHistoryListStreamProvider =
+    AutoDisposeStreamProvider<List<EventHistory>>.internal(
+  eventHistoryListStream,
+  name: r'eventHistoryListStreamProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$eventHistoryListStreamHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef EventHistoryListStreamRef
+    = AutoDisposeStreamProviderRef<List<EventHistory>>;
+String _$eventHistoryListFutureHash() =>
+    r'9bc17be9bf2b51283741c2f668e5cf41c2a7a91b';
+
+/// See also [eventHistoryListFuture].
+@ProviderFor(eventHistoryListFuture)
+const eventHistoryListFutureProvider = EventHistoryListFutureFamily();
+
+/// See also [eventHistoryListFuture].
+class EventHistoryListFutureFamily
+    extends Family<AsyncValue<List<EventHistory>>> {
+  /// See also [eventHistoryListFuture].
+  const EventHistoryListFutureFamily();
+
+  /// See also [eventHistoryListFuture].
+  EventHistoryListFutureProvider call(
+    String id,
+  ) {
+    return EventHistoryListFutureProvider(
+      id,
+    );
+  }
+
+  @override
+  EventHistoryListFutureProvider getProviderOverride(
+    covariant EventHistoryListFutureProvider provider,
+  ) {
+    return call(
+      provider.id,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'eventHistoryListFutureProvider';
+}
+
+/// See also [eventHistoryListFuture].
+class EventHistoryListFutureProvider
+    extends AutoDisposeFutureProvider<List<EventHistory>> {
+  /// See also [eventHistoryListFuture].
+  EventHistoryListFutureProvider(
+    String id,
+  ) : this._internal(
+          (ref) => eventHistoryListFuture(
+            ref as EventHistoryListFutureRef,
+            id,
+          ),
+          from: eventHistoryListFutureProvider,
+          name: r'eventHistoryListFutureProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$eventHistoryListFutureHash,
+          dependencies: EventHistoryListFutureFamily._dependencies,
+          allTransitiveDependencies:
+              EventHistoryListFutureFamily._allTransitiveDependencies,
+          id: id,
+        );
+
+  EventHistoryListFutureProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.id,
+  }) : super.internal();
+
+  final String id;
+
+  @override
+  Override overrideWith(
+    FutureOr<List<EventHistory>> Function(EventHistoryListFutureRef provider)
+        create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: EventHistoryListFutureProvider._internal(
+        (ref) => create(ref as EventHistoryListFutureRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        id: id,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<List<EventHistory>> createElement() {
+    return _EventHistoryListFutureProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is EventHistoryListFutureProvider && other.id == id;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, id.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin EventHistoryListFutureRef
+    on AutoDisposeFutureProviderRef<List<EventHistory>> {
+  /// The parameter `id` of this provider.
+  String get id;
+}
+
+class _EventHistoryListFutureProviderElement
+    extends AutoDisposeFutureProviderElement<List<EventHistory>>
+    with EventHistoryListFutureRef {
+  _EventHistoryListFutureProviderElement(super.provider);
+
+  @override
+  String get id => (origin as EventHistoryListFutureProvider).id;
+}
+
+String _$eventHistoryHash() => r'61a4d70e43b5be4f356227176cad26d49c1e357c';
+
+/// See also [eventHistory].
+@ProviderFor(eventHistory)
+const eventHistoryProvider = EventHistoryFamily();
+
+/// See also [eventHistory].
+class EventHistoryFamily extends Family<AsyncValue<EventHistory?>> {
+  /// See also [eventHistory].
+  const EventHistoryFamily();
+
+  /// See also [eventHistory].
+  EventHistoryProvider call(
+    String id,
+  ) {
+    return EventHistoryProvider(
+      id,
+    );
+  }
+
+  @override
+  EventHistoryProvider getProviderOverride(
+    covariant EventHistoryProvider provider,
+  ) {
+    return call(
+      provider.id,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'eventHistoryProvider';
+}
+
+/// See also [eventHistory].
+class EventHistoryProvider extends AutoDisposeStreamProvider<EventHistory?> {
+  /// See also [eventHistory].
+  EventHistoryProvider(
+    String id,
+  ) : this._internal(
+          (ref) => eventHistory(
+            ref as EventHistoryRef,
+            id,
+          ),
+          from: eventHistoryProvider,
+          name: r'eventHistoryProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$eventHistoryHash,
+          dependencies: EventHistoryFamily._dependencies,
+          allTransitiveDependencies:
+              EventHistoryFamily._allTransitiveDependencies,
+          id: id,
+        );
+
+  EventHistoryProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.id,
+  }) : super.internal();
+
+  final String id;
+
+  @override
+  Override overrideWith(
+    Stream<EventHistory?> Function(EventHistoryRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: EventHistoryProvider._internal(
+        (ref) => create(ref as EventHistoryRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        id: id,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeStreamProviderElement<EventHistory?> createElement() {
+    return _EventHistoryProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is EventHistoryProvider && other.id == id;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, id.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin EventHistoryRef on AutoDisposeStreamProviderRef<EventHistory?> {
+  /// The parameter `id` of this provider.
+  String get id;
+}
+
+class _EventHistoryProviderElement
+    extends AutoDisposeStreamProviderElement<EventHistory?>
+    with EventHistoryRef {
+  _EventHistoryProviderElement(super.provider);
+
+  @override
+  String get id => (origin as EventHistoryProvider).id;
+}
+
+String _$eventHistoryListSearchHash() =>
+    r'0215cbdc93b1b61ae9fa1681cd8734d6cff361c9';
+
+/// See also [eventHistoryListSearch].
+@ProviderFor(eventHistoryListSearch)
+const eventHistoryListSearchProvider = EventHistoryListSearchFamily();
+
+/// See also [eventHistoryListSearch].
+class EventHistoryListSearchFamily
+    extends Family<AsyncValue<List<EventHistory>>> {
+  /// See also [eventHistoryListSearch].
+  const EventHistoryListSearchFamily();
+
+  /// See also [eventHistoryListSearch].
+  EventHistoryListSearchProvider call(
+    String id,
+    String query,
+  ) {
+    return EventHistoryListSearchProvider(
+      id,
+      query,
+    );
+  }
+
+  @override
+  EventHistoryListSearchProvider getProviderOverride(
+    covariant EventHistoryListSearchProvider provider,
+  ) {
+    return call(
+      provider.id,
+      provider.query,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'eventHistoryListSearchProvider';
+}
+
+/// See also [eventHistoryListSearch].
+class EventHistoryListSearchProvider
+    extends AutoDisposeFutureProvider<List<EventHistory>> {
+  /// See also [eventHistoryListSearch].
+  EventHistoryListSearchProvider(
+    String id,
+    String query,
+  ) : this._internal(
+          (ref) => eventHistoryListSearch(
+            ref as EventHistoryListSearchRef,
+            id,
+            query,
+          ),
+          from: eventHistoryListSearchProvider,
+          name: r'eventHistoryListSearchProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$eventHistoryListSearchHash,
+          dependencies: EventHistoryListSearchFamily._dependencies,
+          allTransitiveDependencies:
+              EventHistoryListSearchFamily._allTransitiveDependencies,
+          id: id,
+          query: query,
+        );
+
+  EventHistoryListSearchProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.id,
+    required this.query,
+  }) : super.internal();
+
+  final String id;
+  final String query;
+
+  @override
+  Override overrideWith(
+    FutureOr<List<EventHistory>> Function(EventHistoryListSearchRef provider)
+        create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: EventHistoryListSearchProvider._internal(
+        (ref) => create(ref as EventHistoryListSearchRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        id: id,
+        query: query,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<List<EventHistory>> createElement() {
+    return _EventHistoryListSearchProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is EventHistoryListSearchProvider &&
+        other.id == id &&
+        other.query == query;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, id.hashCode);
+    hash = _SystemHash.combine(hash, query.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin EventHistoryListSearchRef
+    on AutoDisposeFutureProviderRef<List<EventHistory>> {
+  /// The parameter `id` of this provider.
+  String get id;
+
+  /// The parameter `query` of this provider.
+  String get query;
+}
+
+class _EventHistoryListSearchProviderElement
+    extends AutoDisposeFutureProviderElement<List<EventHistory>>
+    with EventHistoryListSearchRef {
+  _EventHistoryListSearchProviderElement(super.provider);
+
+  @override
+  String get id => (origin as EventHistoryListSearchProvider).id;
+  @override
+  String get query => (origin as EventHistoryListSearchProvider).query;
+}
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

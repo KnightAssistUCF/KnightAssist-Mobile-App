@@ -12,13 +12,13 @@ class RSVPWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.listen<AsyncValue<int>>(
-      rsvpControllerProvider,
+      rSVPControllerProvider,
       (_, state) => state.showAlertDialogOnError(context),
     );
-    final state = ref.watch(rsvpControllerProvider);
+    final state = ref.watch(rSVPControllerProvider);
     return PrimaryButton(
       isLoading: state.isLoading,
-      onPressed: () => ref.read(rsvpControllerProvider.notifier).rsvp(event.id),
+      onPressed: () => ref.read(rSVPControllerProvider.notifier).rsvp(event.id),
       text: 'RSVP',
     );
   }

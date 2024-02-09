@@ -5,6 +5,7 @@ import 'package:knightassist_mobile_app/src/exceptions/app_exception.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:knightassist_mobile_app/src/features/events/domain/event_history.dart';
 import 'package:knightassist_mobile_app/src/utils/in_memory_store.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -12,6 +13,7 @@ part 'events_repository.g.dart';
 
 class EventsRepository {
   final _events = InMemoryStore<List<Event>>([]);
+  final _history = InMemoryStore<List<EventHistory>>([]);
 
   List<Event> getEventsList() {
     return _events.value;
@@ -145,7 +147,7 @@ class EventsRepository {
     }
   }
 
-  Future<void> deleteEvent(String organizationID, String eventID) async {
+  Future<String> deleteEvent(String organizationID, String eventID) async {
     Map<String, String?> params = {
       "organizationID": organizationID,
       "eventID": eventID
@@ -156,8 +158,7 @@ class EventsRepository {
     var body = jsonDecode(response.body);
     switch (response.statusCode) {
       case 200:
-        // TODO: Does frontend want a success message for deleting a single event?
-        break;
+        return ("Success");
       case 404:
         throw EventNotFoundException();
       default:
@@ -205,6 +206,64 @@ class EventsRepository {
       default:
         String err = body["error"];
         throw Exception(err);
+    }
+  }
+
+  List<EventHistory> getEventHistoryList() {
+    return _history.value;
+  }
+
+  EventHistory? getEventHistory(String id) {
+    return _getEventHistory(_history.value, id);
+  }
+
+  Future<List<EventHistory>> fetchEventHistoryList(String studentID) async {
+    Map<String, dynamic> params = {"studentId": studentID};
+    var uri = Uri.https('knightassist-43ab3aeaada9.herokuapp.com',
+        '/api/historyOfEvents_User', params);
+    var response = await http.get(uri);
+
+    switch (response.statusCode) {
+      case 200:
+        _history.value = (json.decode(response.body) as List)
+            .map((i) => EventHistory.fromMap(i))
+            .toList();
+        return _history.value;
+      default:
+        throw Exception();
+    }
+  }
+
+  Stream<List<EventHistory>> watchEventHistoryList() {
+    return _history.stream;
+  }
+
+  Stream<EventHistory?> watchEventHistory(String id) {
+    return watchEventHistoryList()
+        .map((history) => _getEventHistory(history, id));
+  }
+
+  Future<List<EventHistory>> searchEventHistories(
+      String id, String query) async {
+    assert(
+      _history.value.length <= 100,
+      'Client-side search should only be performed if the number of histories is small. '
+      'Consider doing server-side search for larger datasets.',
+    );
+
+    final historyList = await fetchEventHistoryList(id);
+    return historyList
+        .where((history) =>
+            history.name.toLowerCase().contains(query.toLowerCase()))
+        .toList();
+  }
+
+  static EventHistory? _getEventHistory(
+      List<EventHistory> histories, String id) {
+    try {
+      return histories.firstWhere((history) => history.id == id);
+    } catch (e) {
+      return null;
     }
   }
 }
@@ -255,4 +314,36 @@ Future<List<Event>> eventsListSearch(
   ref.onDispose(() => timer.cancel());
   final eventsRepository = ref.watch(eventsRepositoryProvider);
   return eventsRepository.searchEvents(query);
+}
+
+@riverpod
+Stream<List<EventHistory>> eventHistoryListStream(
+    EventHistoryListStreamRef ref) {
+  final eventsRepository = ref.watch(eventsRepositoryProvider);
+  return eventsRepository.watchEventHistoryList();
+}
+
+@riverpod
+Future<List<EventHistory>> eventHistoryListFuture(
+    EventHistoryListFutureRef ref, String id) {
+  final eventsRepository = ref.watch(eventsRepositoryProvider);
+  return eventsRepository.fetchEventHistoryList(id);
+}
+
+@riverpod
+Stream<EventHistory?> eventHistory(EventHistoryRef ref, String id) {
+  final eventsRepository = ref.watch(eventsRepositoryProvider);
+  return eventsRepository.watchEventHistory(id);
+}
+
+@riverpod
+Future<List<EventHistory>> eventHistoryListSearch(
+    EventHistoryListSearchRef ref, String id, String query) async {
+  final link = ref.keepAlive();
+  final timer = Timer(const Duration(seconds: 60), () {
+    link.close();
+  });
+  ref.onDispose(() => timer.cancel());
+  final eventsRepository = ref.watch(eventsRepositoryProvider);
+  return eventsRepository.searchEventHistories(id, query);
 }

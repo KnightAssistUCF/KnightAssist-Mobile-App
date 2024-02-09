@@ -7,7 +7,7 @@ part of 'announcements_search_state_provider.dart';
 // **************************************************************************
 
 String _$announcementsSearchResultsHash() =>
-    r'6a297452d304eb49902cd3babef685acd9a0ad9d';
+    r'5575f703eded6172a78ca1f00de05b7cdbf00a82';
 
 /// See also [announcementsSearchResults].
 @ProviderFor(announcementsSearchResults)
