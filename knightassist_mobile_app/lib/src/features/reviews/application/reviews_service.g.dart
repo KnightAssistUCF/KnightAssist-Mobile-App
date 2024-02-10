@@ -21,7 +21,7 @@ final reviewsServiceProvider = Provider<ReviewsService>.internal(
 );
 
 typedef ReviewsServiceRef = ProviderRef<ReviewsService>;
-String _$userReviewFutureHash() => r'c75a428dd7d57424233016720b2655cbf5b192b2';
+String _$userReviewFutureHash() => r'6a4c0bde9e4511e88d6ac43fc80386db1ed0f3a5';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -53,7 +53,7 @@ const userReviewFutureProvider = UserReviewFutureFamily();
 /// Check if a product was previously reviewed by the user
 ///
 /// Copied from [userReviewFuture].
-class UserReviewFutureFamily extends Family<AsyncValue<Review?>> {
+class UserReviewFutureFamily extends Family<AsyncValue> {
   /// Check if a product was previously reviewed by the user
   ///
   /// Copied from [userReviewFuture].
@@ -97,7 +97,7 @@ class UserReviewFutureFamily extends Family<AsyncValue<Review?>> {
 /// Check if a product was previously reviewed by the user
 ///
 /// Copied from [userReviewFuture].
-class UserReviewFutureProvider extends AutoDisposeFutureProvider<Review?> {
+class UserReviewFutureProvider extends AutoDisposeFutureProvider<Object?> {
   /// Check if a product was previously reviewed by the user
   ///
   /// Copied from [userReviewFuture].
@@ -134,7 +134,7 @@ class UserReviewFutureProvider extends AutoDisposeFutureProvider<Review?> {
 
   @override
   Override overrideWith(
-    FutureOr<Review?> Function(UserReviewFutureRef provider) create,
+    FutureOr<Object?> Function(UserReviewFutureRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -151,7 +151,7 @@ class UserReviewFutureProvider extends AutoDisposeFutureProvider<Review?> {
   }
 
   @override
-  AutoDisposeFutureProviderElement<Review?> createElement() {
+  AutoDisposeFutureProviderElement<Object?> createElement() {
     return _UserReviewFutureProviderElement(this);
   }
 
@@ -169,27 +169,27 @@ class UserReviewFutureProvider extends AutoDisposeFutureProvider<Review?> {
   }
 }
 
-mixin UserReviewFutureRef on AutoDisposeFutureProviderRef<Review?> {
+mixin UserReviewFutureRef on AutoDisposeFutureProviderRef<Object?> {
   /// The parameter `id` of this provider.
   String get id;
 }
 
 class _UserReviewFutureProviderElement
-    extends AutoDisposeFutureProviderElement<Review?> with UserReviewFutureRef {
+    extends AutoDisposeFutureProviderElement<Object?> with UserReviewFutureRef {
   _UserReviewFutureProviderElement(super.provider);
 
   @override
   String get id => (origin as UserReviewFutureProvider).id;
 }
 
-String _$userReviewStreamHash() => r'e30b04bb8fcd545c1e28c3596d4fc9628b3a8eb7';
+String _$userReviewStreamHash() => r'd5cf427e5e6a78152e59a3e32988d75382ebccec';
 
 /// See also [userReviewStream].
 @ProviderFor(userReviewStream)
 const userReviewStreamProvider = UserReviewStreamFamily();
 
 /// See also [userReviewStream].
-class UserReviewStreamFamily extends Family<AsyncValue<Review?>> {
+class UserReviewStreamFamily extends Family<AsyncValue> {
   /// See also [userReviewStream].
   const UserReviewStreamFamily();
 
@@ -227,7 +227,7 @@ class UserReviewStreamFamily extends Family<AsyncValue<Review?>> {
 }
 
 /// See also [userReviewStream].
-class UserReviewStreamProvider extends AutoDisposeStreamProvider<Review?> {
+class UserReviewStreamProvider extends AutoDisposeStreamProvider<Object?> {
   /// See also [userReviewStream].
   UserReviewStreamProvider(
     String id,
@@ -262,7 +262,7 @@ class UserReviewStreamProvider extends AutoDisposeStreamProvider<Review?> {
 
   @override
   Override overrideWith(
-    Stream<Review?> Function(UserReviewStreamRef provider) create,
+    Stream Function(UserReviewStreamRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -279,7 +279,7 @@ class UserReviewStreamProvider extends AutoDisposeStreamProvider<Review?> {
   }
 
   @override
-  AutoDisposeStreamProviderElement<Review?> createElement() {
+  AutoDisposeStreamProviderElement<Object?> createElement() {
     return _UserReviewStreamProviderElement(this);
   }
 
@@ -297,13 +297,13 @@ class UserReviewStreamProvider extends AutoDisposeStreamProvider<Review?> {
   }
 }
 
-mixin UserReviewStreamRef on AutoDisposeStreamProviderRef<Review?> {
+mixin UserReviewStreamRef on AutoDisposeStreamProviderRef<Object?> {
   /// The parameter `id` of this provider.
   String get id;
 }
 
 class _UserReviewStreamProviderElement
-    extends AutoDisposeStreamProviderElement<Review?> with UserReviewStreamRef {
+    extends AutoDisposeStreamProviderElement<Object?> with UserReviewStreamRef {
   _UserReviewStreamProviderElement(super.provider);
 
   @override

@@ -27,9 +27,12 @@ class LeaveReviewScreen extends StatelessWidget {
         padding: const EdgeInsets.all(Sizes.p16),
         child: Consumer(builder: (context, ref, child) {
           final reviewValue = ref.watch(userReviewFutureProvider(eventID));
-          return AsyncValueWidget<Review?>(
-            value: reviewValue,
-            data: (review) => LeaveReviewForm(eventID: eventID, review: review),
+          //return AsyncValueWidget<Review?>(
+          //value: reviewValue,
+          //data: (review) => LeaveReviewForm(eventID: eventID, review: review),
+          //);
+          return const SizedBox(
+            height: 0,
           );
         }),
       ),

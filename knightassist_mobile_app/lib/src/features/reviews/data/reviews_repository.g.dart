@@ -21,7 +21,7 @@ final reviewsRepositoryProvider = Provider<ReviewsRepository>.internal(
 );
 
 typedef ReviewsRepositoryRef = ProviderRef<ReviewsRepository>;
-String _$eventReviewsHash() => r'ab22848f0862a1fb909789696ff919106063bb57';
+String _$eventReviewsHash() => r'58eb251e3a47fffae1bee73b6b7576cda3960dde';
 
 /// Copied from Dart SDK
 class _SystemHash {

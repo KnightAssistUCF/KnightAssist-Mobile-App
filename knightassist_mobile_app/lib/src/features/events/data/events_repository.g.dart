@@ -37,7 +37,7 @@ final eventsListStreamProvider =
 );
 
 typedef EventsListStreamRef = AutoDisposeStreamProviderRef<List<Event>>;
-String _$eventsListFutureHash() => r'9442ea87dc3d2048fff338b855ab69f737e4b3e8';
+String _$eventsListFutureHash() => r'207131a097177f215915409beb92629a64b0ced0';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -187,7 +187,7 @@ class _EventsListFutureProviderElement
   String get id => (origin as EventsListFutureProvider).id;
 }
 
-String _$eventHash() => r'ff688a7f2d4406cb14e3824d5ecc9fc7d520adb1';
+String _$eventHash() => r'bc1844a457654c4a3670159b253ed634ce14efc9';
 
 /// See also [event].
 @ProviderFor(event)

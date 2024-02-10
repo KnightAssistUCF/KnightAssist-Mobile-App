@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:knightassist_mobile_app/src/common_widgets/responsive_center.dart';
 import 'package:knightassist_mobile_app/src/constants/breakpoints.dart';
-import 'package:knightassist_mobile_app/src/features/authentication/domain/student_user.dart';
 import 'package:knightassist_mobile_app/src/features/events/data/events_repository.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/events_list_screen.dart';
@@ -11,6 +10,8 @@ import 'package:knightassist_mobile_app/src/features/events/presentation/feedbac
 import 'package:knightassist_mobile_app/src/features/events/presentation/qr_scanner.dart';
 import 'package:knightassist_mobile_app/src/features/home/presentation/home_screen.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/presentation/update_screen.dart';
+import 'package:knightassist_mobile_app/src/features/students/data/students_repository.dart';
+import 'package:knightassist_mobile_app/src/features/students/domain/student_user.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 import 'package:intl/intl.dart';
 
@@ -44,10 +45,11 @@ class _viewRSVPsScreenState extends State<viewRSVPsScreen> {
     return Consumer(
       builder: (context, ref, child) {
         final eventsRepository = ref.watch(eventsRepositoryProvider);
+        final studentsRepository = ref.watch(studentsRepositoryProvider);
 
-        print(event.id);
-        print(eventsRepository.getEvent(event.id)?.name);
-        print(eventsRepository.getEventAttendees(event.id));
+        //print(event.id);
+        // print(eventsRepository.getEvent(event.id)?.name);
+        //print(studentsRepository.fetchEventAttendees(event.id));
 
         /*Future rsvpList = eventsRepository.getEventAttendees(event.id);
 
@@ -59,8 +61,8 @@ class _viewRSVPsScreenState extends State<viewRSVPsScreen> {
           }
         });*/
 
-        eventsRepository
-            .getEventAttendees(event.id)
+        studentsRepository
+            .fetchEventAttendees(event.id)
             .then((value) => setState(() {
                   rsvps = value;
                 }));
@@ -283,15 +285,15 @@ class _RSVPSState extends State<RSVPS> {
   Widget build(BuildContext context) {
     return Consumer(
       builder: (context, ref, child) {
-        final eventsRepository = ref.watch(eventsRepositoryProvider);
+        final studentsRepository = ref.watch(studentsRepositoryProvider);
         return Scaffold(
           body: Container(
             child: FutureBuilder<List<StudentUser>>(
-              future: eventsRepository.getEventAttendees(event.id),
+              future: studentsRepository.fetchEventAttendees(event.id),
               builder: (context, AsyncSnapshot<List<StudentUser>> snapshot) {
                 List<Widget> children;
                 if (snapshot.hasData) {
-                  print(snapshot.data);
+                  //print(snapshot.data);
                   children = [
                     snapshot.data!.isEmpty
                         ? const Center(
@@ -326,7 +328,8 @@ class _RSVPSState extends State<RSVPS> {
                           )
                   ];
                 } else if (snapshot.hasError) {
-                  print(snapshot.error); // when the json response is empty it is read as a map
+                  print(snapshot
+                      .error); // when the json response is empty it is read as a map
                   children = <Widget>[
                     const Icon(
                       Icons.error_outline,
@@ -335,7 +338,10 @@ class _RSVPSState extends State<RSVPS> {
                     ),
                     const Padding(
                       padding: EdgeInsets.only(top: 16),
-                      child: Text('There are no volunteers who RSVPed for this event.', style: optionStyle,),
+                      child: Text(
+                        'There are no volunteers who RSVPed for this event.',
+                        style: optionStyle,
+                      ),
                     ),
                   ];
                 } else {

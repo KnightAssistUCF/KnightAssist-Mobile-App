@@ -20,7 +20,7 @@ final rsvpServiceProvider = Provider<RSVPService>.internal(
 );
 
 typedef RsvpServiceRef = ProviderRef<RSVPService>;
-String _$rsvpsHash() => r'f6197cff744342b3245e9da7784ad83430541457';
+String _$rsvpsHash() => r'5492b57db7c825d35bb7b6dae8e3a7221b506282';
 
 /// See also [rsvps].
 @ProviderFor(rsvps)

@@ -8,6 +8,7 @@ import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/data/organizations_repository.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
 import 'package:knightassist_mobile_app/src/features/rsvp/presentation/rsvp_widget.dart';
+import 'package:knightassist_mobile_app/src/features/students/data/students_repository.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 
 class EventScreen extends ConsumerWidget {
@@ -27,8 +28,9 @@ class EventScreen extends ConsumerWidget {
     final authRepository = ref.read(authRepositoryProvider);
     final user = authRepository.currentUser;
     final eventsRepository = ref.read(eventsRepositoryProvider);
+    final studentsRepository = ref.read(studentsRepositoryProvider);
 
-    eventsRepository.getEventAttendees(event.id);
+    studentsRepository.fetchEventAttendees(event.id);
 
     bool curOrg = (user?.id == event.sponsoringOrganization);
     // true if the organization who made the event is viewing it (shows edit button)

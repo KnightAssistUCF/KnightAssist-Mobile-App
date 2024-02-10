@@ -1,26 +1,27 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'rsvp_controller.dart';
+part of 'students_repository.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$rSVPControllerHash() => r'67c0b8f804d4c3821493b6e7c1b7d02e45b634e0';
+String _$studentsRepositoryHash() =>
+    r'85122da263319f962233522639799c5ace3bfc40';
 
-/// See also [RSVPController].
-@ProviderFor(RSVPController)
-final rSVPControllerProvider =
-    AutoDisposeAsyncNotifierProvider<RSVPController, int>.internal(
-  RSVPController.new,
-  name: r'rSVPControllerProvider',
+/// See also [studentsRepository].
+@ProviderFor(studentsRepository)
+final studentsRepositoryProvider =
+    AutoDisposeProvider<StudentsRepository>.internal(
+  studentsRepository,
+  name: r'studentsRepositoryProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$rSVPControllerHash,
+      : _$studentsRepositoryHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$RSVPController = AutoDisposeAsyncNotifier<int>;
+typedef StudentsRepositoryRef = AutoDisposeProviderRef<StudentsRepository>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

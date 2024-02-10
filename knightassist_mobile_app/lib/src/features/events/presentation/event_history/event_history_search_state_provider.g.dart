@@ -7,7 +7,7 @@ part of 'event_history_search_state_provider.dart';
 // **************************************************************************
 
 String _$eventHistorySearchResultsHash() =>
-    r'f5a8664e7f38b378b92cdaca79f3b9eade918da1';
+    r'429e2b714a4eb003f1b7cea6954709627b5013d7';
 
 /// See also [eventHistorySearchResults].
 @ProviderFor(eventHistorySearchResults)

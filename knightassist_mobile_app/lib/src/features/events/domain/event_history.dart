@@ -13,7 +13,7 @@ class EventHistory {
     this.whoAdjusted,
   });
 
-  final EventID id;
+  final String id;
   final String name;
   final String org;
   final DateTime checkIn;
