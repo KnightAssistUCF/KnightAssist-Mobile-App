@@ -5,7 +5,7 @@ import 'package:knightassist_mobile_app/src/common_widgets/alert_dialogs.dart';
 import 'package:knightassist_mobile_app/src/exceptions/app_exception.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/domain/app_user.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
-import 'package:knightassist_mobile_app/src/features/authentication/domain/student_user.dart';
+import 'package:knightassist_mobile_app/src/features/students/domain/student_user.dart';
 import 'package:knightassist_mobile_app/src/utils/in_memory_store.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

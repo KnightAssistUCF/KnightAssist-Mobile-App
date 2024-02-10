@@ -6,14 +6,14 @@ part of 'rsvp_controller.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$rSVPControllerHash() => r'f963be173cf661d55862ce7418929a895148bb7b';
+String _$rSVPControllerHash() => r'87e7a98065389231c1f5376e18af61132c0f2df7';
 
 /// See also [RSVPController].
 @ProviderFor(RSVPController)
-final rsvpControllerProvider =
+final rSVPControllerProvider =
     AutoDisposeAsyncNotifierProvider<RSVPController, int>.internal(
   RSVPController.new,
-  name: r'rsvpControllerProvider',
+  name: r'rSVPControllerProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
       : _$rSVPControllerHash,

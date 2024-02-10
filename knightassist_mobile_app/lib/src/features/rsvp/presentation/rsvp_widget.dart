@@ -14,15 +14,15 @@ class RSVPWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.listen<AsyncValue<int>>(
-      rsvpControllerProvider,
+      rSVPControllerProvider,
       (_, state) => state.showAlertDialogOnError(context),
     );
-    final state = ref.watch(rsvpControllerProvider);
+    final state = ref.watch(rSVPControllerProvider);
     return PrimaryButton(
       isLoading: state.isLoading,
       onPressed: () {
         final body = ref
-            .read(rsvpControllerProvider.notifier)
+            .read(rSVPControllerProvider.notifier)
             .rsvp(event.id, event.name)
             .toString();
         showAlertDialog(context: context, title: body);

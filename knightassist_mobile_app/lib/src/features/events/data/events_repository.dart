@@ -2,10 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:knightassist_mobile_app/src/exceptions/app_exception.dart';
-import 'package:knightassist_mobile_app/src/features/authentication/domain/student_user.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:knightassist_mobile_app/src/features/events/domain/event_history.dart';
 import 'package:knightassist_mobile_app/src/utils/in_memory_store.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -13,6 +13,7 @@ part 'events_repository.g.dart';
 
 class EventsRepository {
   final _events = InMemoryStore<List<Event>>([]);
+  final _history = InMemoryStore<List<EventHistory>>([]);
 
   List<Event> getEventsList() {
     return _events.value;
@@ -255,7 +256,7 @@ class EventsRepository {
     }
   }
 
-  Future<void> deleteEvent(String organizationID, String eventID) async {
+  Future<String> deleteEvent(String organizationID, String eventID) async {
     Map<String, String?> params = {
       "organizationID": organizationID,
       "eventID": eventID
@@ -273,8 +274,7 @@ class EventsRepository {
     var body = jsonDecode(response.body);
     switch (response.statusCode) {
       case 200:
-        // TODO: Does frontend want a success message for deleting a single event?
-        break;
+        return ("Success");
       case 404:
         throw EventNotFoundException();
       default:
@@ -466,92 +466,61 @@ class EventsRepository {
     }
   }
 
-  Future<List<StudentUser>> getEventAttendees(String eventID) async {
-    Map<String, dynamic>? params = {"eventID": eventID};
+  List<EventHistory> getEventHistoryList() {
+    return _history.value;
+  }
+
+  EventHistory? getEventHistory(String id) {
+    return _getEventHistory(_history.value, id);
+  }
+
+  Future<List<EventHistory>> fetchEventHistoryList(String studentID) async {
+    Map<String, dynamic> params = {"studentId": studentID};
     var uri = Uri.https('knightassist-43ab3aeaada9.herokuapp.com',
-        '/api/loadAllEventAttendees', params);
+        '/api/historyOfEvents_User', params);
     var response = await http.get(uri);
-    var body = jsonDecode(response.body);
-    final List<dynamic> dataList = jsonDecode(response.body);
-    print("Responsebody:");
-    print(body);
+
     switch (response.statusCode) {
       case 200:
-        List<StudentUser> list = [];
-        //for (String json in List<String>.from(body)) {
-        //list.add(StudentUser.fromMap(jsonDecode(json)));
-        //}
-        for (dynamic d in dataList) {
-          Map<String, String?> params = {"userID": d['_id']};
-          var uri = Uri.https('knightassist-43ab3aeaada9.herokuapp.com',
-              '/api/userSearch', params);
-          var response = await http.get(uri);
-          print("Response body under searchUser");
-          print(jsonDecode(response.body));
-
-          final dynamic studentData = jsonDecode(response.body);
-          print(studentData['firstName']);
-
-          List<String> favoritedOrganizations = [];
-          List<String> eventsRSVP = [];
-          List<String> eventsHistory = [];
-          List<String> userStudentSemesters = [];
-          List<String> tags = [];
-
-          for (dynamic s in studentData['favoritedOrganizations']) {
-            favoritedOrganizations.add(s);
-          }
-          for (dynamic s in studentData['eventsRSVP']) {
-            eventsRSVP.add(s);
-          }
-          for (dynamic s in studentData['eventsHistory']) {
-            eventsHistory.add(s);
-          }
-          for (dynamic s in studentData['userStudentSemesters']) {
-            userStudentSemesters.add(s);
-          }
-          if (studentData['categoryTags'] != null) {
-            for (dynamic s in studentData['categoryTags']) {
-              tags.add(s);
-            }
-          }
-
-          StudentUser s = StudentUser(
-              id: studentData['_id'] ?? '',
-              email: studentData['email'] ?? '',
-              firstName: studentData['firstName'] ?? '',
-              lastName: studentData['lastName'] ?? '',
-              profilePicture: studentData['profilePicPath'] ?? '',
-              favoritedOrganizations: favoritedOrganizations,
-              eventsRsvp: eventsRSVP,
-              eventsHistory: eventsHistory,
-              totalVolunteerHours: studentData['totalVolunteerHours'],
-              semesterVolunteerHourGoal:
-                  studentData['semesterVolunteerHourGoal'],
-              userStudentSemesters: userStudentSemesters,
-              categoryTags: tags,
-              recoveryToken: studentData['recoveryToken'] ?? '',
-              confirmToken: studentData['confirmToken'] ?? '',
-              emailToken: studentData['EmailToken'] ?? '',
-              emailValidated: studentData['emailValidated'] ?? false,
-              studentId: studentData['studentID'] ?? '',
-              password: studentData['password'] ?? '',
-              createdAt:
-                  DateTime.parse(studentData['createdAt']) ?? DateTime.now(),
-              updatedAt:
-                  DateTime.parse(studentData['updatedAt']) ?? DateTime.now(),
-              profilePicPath: studentData['profilePicPath'] ?? '',
-              role: studentData['role'] ?? '',
-              firstTimeLogin: studentData['firstTimeLogin'] ?? false);
-
-          list.add(s);
-        }
-        return list;
-      case 404:
-        throw EventNotFoundException();
+        _history.value = (json.decode(response.body) as List)
+            .map((i) => EventHistory.fromMap(i))
+            .toList();
+        return _history.value;
       default:
-        String err = body["error"];
-        throw Exception(err);
+        throw Exception();
+    }
+  }
+
+  Stream<List<EventHistory>> watchEventHistoryList() {
+    return _history.stream;
+  }
+
+  Stream<EventHistory?> watchEventHistory(String id) {
+    return watchEventHistoryList()
+        .map((history) => _getEventHistory(history, id));
+  }
+
+  Future<List<EventHistory>> searchEventHistories(
+      String id, String query) async {
+    assert(
+      _history.value.length <= 100,
+      'Client-side search should only be performed if the number of histories is small. '
+      'Consider doing server-side search for larger datasets.',
+    );
+
+    final historyList = await fetchEventHistoryList(id);
+    return historyList
+        .where((history) =>
+            history.name.toLowerCase().contains(query.toLowerCase()))
+        .toList();
+  }
+
+  static EventHistory? _getEventHistory(
+      List<EventHistory> histories, String id) {
+    try {
+      return histories.firstWhere((history) => history.id == id);
+    } catch (e) {
+      return null;
     }
   }
 }
@@ -602,4 +571,36 @@ Future<List<Event>> eventsListSearch(
   ref.onDispose(() => timer.cancel());
   final eventsRepository = ref.watch(eventsRepositoryProvider);
   return eventsRepository.searchEvents(query);
+}
+
+@riverpod
+Stream<List<EventHistory>> eventHistoryListStream(
+    EventHistoryListStreamRef ref) {
+  final eventsRepository = ref.watch(eventsRepositoryProvider);
+  return eventsRepository.watchEventHistoryList();
+}
+
+@riverpod
+Future<List<EventHistory>> eventHistoryListFuture(
+    EventHistoryListFutureRef ref, String id) {
+  final eventsRepository = ref.watch(eventsRepositoryProvider);
+  return eventsRepository.fetchEventHistoryList(id);
+}
+
+@riverpod
+Stream<EventHistory?> eventHistory(EventHistoryRef ref, String id) {
+  final eventsRepository = ref.watch(eventsRepositoryProvider);
+  return eventsRepository.watchEventHistory(id);
+}
+
+@riverpod
+Future<List<EventHistory>> eventHistoryListSearch(
+    EventHistoryListSearchRef ref, String id, String query) async {
+  final link = ref.keepAlive();
+  final timer = Timer(const Duration(seconds: 60), () {
+    link.close();
+  });
+  ref.onDispose(() => timer.cancel());
+  final eventsRepository = ref.watch(eventsRepositoryProvider);
+  return eventsRepository.searchEventHistories(id, query);
 }
