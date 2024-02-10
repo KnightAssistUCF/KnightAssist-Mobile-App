@@ -3,9 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:knightassist_mobile_app/src/common_widgets/responsive_center.dart';
 import 'package:knightassist_mobile_app/src/constants/breakpoints.dart';
+import 'package:knightassist_mobile_app/src/features/authentication/data/auth_repository.dart';
 import 'package:knightassist_mobile_app/src/features/events/data/events_repository.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
-import 'package:knightassist_mobile_app/src/features/events/presentation/events_list_screen.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/feedback_list_screen.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/qr_scanner.dart';
 import 'package:knightassist_mobile_app/src/features/home/presentation/home_screen.dart';
@@ -93,6 +93,82 @@ class _leaderboardState extends State<leaderboard> {
                   child: Board(),
                 ),
               ])),
+          drawer: Drawer(
+            child: ListView(
+              children: [
+                ListTile(
+                  title: const Text('Home'),
+                  onTap: () {
+                    context.pushNamed(AppRoute.homeScreen.name);
+                  },
+                ),
+                ListTile(
+                  title: const Text('Calendar'),
+                  onTap: () {
+                    context.pushNamed(AppRoute.calendar.name);
+                  },
+                ),
+                ListTile(
+                  title: const Text('Organizations'),
+                  onTap: () {
+                    context.pushNamed(AppRoute.organizations.name);
+                  },
+                ),
+                ListTile(
+                  title: const Text('Events'),
+                  onTap: () {
+                    context.pushNamed(AppRoute.events.name);
+                  },
+                ),
+                ListTile(
+                  title: const Text('Announcements'),
+                  onTap: () {
+                    context.pushNamed(AppRoute.updates.name);
+                  },
+                ),
+                isOrg
+                    ? ListTile(
+                        title: const Text('Feedback'),
+                        onTap: () {
+                          context.pushNamed(AppRoute.feedbacklist.name);
+                        },
+                      )
+                    : ListTile(
+                        title: const Text('QR Scan'),
+                        onTap: () {
+                          context.pushNamed(AppRoute.qrScanner.name);
+                        },
+                      ),
+                ListTile(
+                  title: const Text('History'),
+                  onTap: () {
+                    context.pushNamed(AppRoute.eventHistory.name);
+                  },
+                ),
+                ListTile(
+                  title: const Text('Leaderboard'),
+                  onTap: () {
+                    context.pushNamed(AppRoute.leaderboard.name);
+                  },
+                ),
+                ListTile(
+                  title: const Text('Settings'),
+                  onTap: () {
+                    context.pushNamed(AppRoute.account.name);
+                  },
+                ),
+                ListTile(
+                  title: const Text('Sign Out'),
+                  onTap: () {
+                    final authRepository = ref.watch(authRepositoryProvider);
+                    authRepository.signOut();
+                    context.pushNamed(AppRoute.emailConfirm.name);
+                    //Navigator.pop(context);
+                  },
+                ),
+              ],
+            ),
+          ),
         );
       },
     );

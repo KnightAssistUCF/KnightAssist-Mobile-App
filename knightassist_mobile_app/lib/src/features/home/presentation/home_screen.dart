@@ -894,6 +894,12 @@ class HomeScreenTab extends ConsumerWidget {
               },
             ),
             ListTile(
+              title: const Text('Leaderboard'),
+              onTap: () {
+                context.pushNamed(AppRoute.leaderboard.name);
+              },
+            ),
+            ListTile(
               title: const Text('Settings'),
               onTap: () {
                 context.pushNamed(AppRoute.account.name);

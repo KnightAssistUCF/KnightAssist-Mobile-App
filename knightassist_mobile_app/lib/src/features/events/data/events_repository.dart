@@ -42,10 +42,10 @@ class EventsRepository {
           var response = await http.get(uri);
           //print(jsonDecode(response.body));
           //print(
-          // "-------------------------------------------------------------------------------------------------");
+          //"-------------------------------------------------------------------------------------------------");
 
           final dynamic eventData = jsonDecode(response.body);
-          //print(eventData['name'].toString());
+          //print(eventData[0]['name'].toString());
           //print(eventData);
 
           List<String> attendees = [];
@@ -54,8 +54,10 @@ class EventsRepository {
           List<CheckedInStudent> checkins = [];
           List<Review> reviews = [];
 
-          for (dynamic s in eventData[0]['attendees']) {
-            attendees.add(s);
+          if (eventData[0]['attendees'] != null) {
+            for (dynamic s in eventData[0]['attendees']) {
+              attendees.add(s);
+            }
           }
           for (dynamic s in eventData[0]['registeredVolunteers']) {
             registeredVolunteers.add(s);

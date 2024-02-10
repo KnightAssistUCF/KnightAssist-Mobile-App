@@ -116,10 +116,9 @@ GoRouter goRouter(GoRouterRef ref) {
         GoRoute(
             path: '/',
             name: AppRoute.home.name,
-            builder: (context, state) => //isLoggedIn
-                //? HomeScreen()
-                //: SignInScreen(), // TEMP, change this to whatever screen you want to test (will need to rerun)
-                const leaderboard(),
+            builder: (context, state) => isLoggedIn
+                ? HomeScreen()
+                : SignInScreen(), // TEMP, change this to whatever screen you want to test (will need to rerun)
             routes: [
               GoRoute(
                   path: 'events',
