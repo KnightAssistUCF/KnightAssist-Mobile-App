@@ -215,31 +215,90 @@ class _BoardState extends State<Board> {
   Widget build(BuildContext context) {
     return Consumer(
       builder: (context, ref, child) {
+        final leaderboardRepository = ref.watch(leaderboardRepositoryProvider);
         return Scaffold(
-            body: Container(
-                child: leaders.isEmpty
-                    ? const Center(
-                        child: Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text(
-                            "There are no volunteers to show on the leaderboard.",
-                            style: optionStyle,
-                          ),
-                        ),
-                      )
-                    : ListView.builder(
-                        itemCount: leaders.length,
-                        itemBuilder: (context, index) {
-                          return Container(
-                              margin: const EdgeInsets.symmetric(
-                                horizontal: 12.0,
-                                vertical: 4.0,
+          body: Container(
+            child: FutureBuilder<List<LeaderboardEntry>>(
+              future: leaderboardRepository.fetchLeaderboard(),
+              builder:
+                  (context, AsyncSnapshot<List<LeaderboardEntry>> snapshot) {
+                List<Widget> children;
+                if (snapshot.hasData) {
+                  //print(snapshot.data);
+                  children = [
+                    snapshot.data!.isEmpty
+                        ? const Center(
+                            child: Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text(
+                                "There are no volunteers to display on the leaderboard.",
+                                style: optionStyle,
                               ),
-                              child: VolunteerCard(
-                                  volunteer: leaders[index],
-                                  number: index + 1));
-                        },
-                      )));
+                            ),
+                          )
+                        : Container(
+                            height: 500,
+                            child: ListView.builder(
+                              itemCount: snapshot.data!.length,
+                              itemBuilder: (context, index) {
+                                return Container(
+                                    margin: const EdgeInsets.symmetric(
+                                      horizontal: 12.0,
+                                      vertical: 4.0,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      border: Border.all(),
+                                      borderRadius: BorderRadius.circular(12.0),
+                                    ),
+                                    child: VolunteerCard(
+                                      volunteer:
+                                          snapshot.data!.elementAt(index),
+                                      number: index + 1,
+                                    ));
+                              },
+                            ),
+                          )
+                  ];
+                } else if (snapshot.hasError) {
+                  print(snapshot
+                      .error); // when the json response is empty it is read as a map
+                  children = <Widget>[
+                    const Icon(
+                      Icons.error_outline,
+                      color: Colors.red,
+                      size: 60,
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.only(top: 16),
+                      child: Text(
+                        'There are no volunteers to display on the leaderboard.',
+                        style: optionStyle,
+                      ),
+                    ),
+                  ];
+                } else {
+                  children = const <Widget>[
+                    SizedBox(
+                      width: 60,
+                      height: 60,
+                      child: CircularProgressIndicator(),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 16),
+                      child: Text('Awaiting result...'),
+                    ),
+                  ];
+                }
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: children,
+                  ),
+                );
+              },
+            ),
+          ),
+        );
       },
     );
   }

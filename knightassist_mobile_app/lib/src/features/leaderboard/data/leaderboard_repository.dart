@@ -17,11 +17,60 @@ class LeaderboardRepository {
     Map<String, dynamic> map = jsonDecode(response.body);
     switch (response.statusCode) {
       case 200:
-        String leaderboardJson = map['data'];
-        _leaderboard.value = (json.decode(leaderboardJson) as List)
-            .map((i) => LeaderboardEntry.fromMap(i))
-            .toList();
+        List<dynamic> leaderboardJson = map['data'];
+
+        for (dynamic d in leaderboardJson) {
+          Map<String, String?> params = {"userID": d['_id']};
+          var uri = Uri.https('knightassist-43ab3aeaada9.herokuapp.com',
+              '/api/userSearch', params);
+          var response = await http.get(uri);
+          final dynamic studentData = jsonDecode(response.body);
+
+          List<String> favoritedOrganizations = [];
+          List<String> eventsRSVP = [];
+          List<String> eventsHistory = [];
+          List<String> userStudentSemesters = [];
+          List<String> tags = [];
+
+          for (dynamic s in studentData['favoritedOrganizations']) {
+            favoritedOrganizations.add(s);
+          }
+          for (dynamic s in studentData['eventsRSVP']) {
+            eventsRSVP.add(s);
+          }
+          for (dynamic s in studentData['eventsHistory']) {
+            eventsHistory.add(s);
+          }
+          if (studentData['userStudentSemesters'] != null) {
+            for (dynamic s in studentData['userStudentSemesters']) {
+              userStudentSemesters.add(s);
+            }
+          }
+
+          if (studentData['categoryTags'] != null) {
+            for (dynamic s in studentData['categoryTags']) {
+              tags.add(s);
+            }
+          }
+
+          LeaderboardEntry s = LeaderboardEntry(
+              id: studentData['_id'] ?? '',
+              firstName: studentData['firstName'] ?? '',
+              lastName: studentData['lastName'] ?? '',
+              eventHistory: eventsHistory,
+              totalVolunteerHours:
+                  studentData['totalVolunteerHours'].toString(),
+              profilePicPath: studentData['profilePicPath'] ?? '');
+
+          _leaderboard.value.add(s);
+        }
+        // _leaderboard.value = (json.decode(leaderboardJson) as List)
+        //   .map((i) => LeaderboardEntry.fromMap(i))
+        //  .toList();
+        //print(_leaderboard.value);
+
         return _leaderboard.value;
+
       default:
         throw Exception();
     }

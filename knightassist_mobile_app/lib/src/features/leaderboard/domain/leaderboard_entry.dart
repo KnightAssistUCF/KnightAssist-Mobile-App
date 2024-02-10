@@ -12,7 +12,7 @@ class LeaderboardEntry {
   final String firstName;
   final String lastName;
   final List<String> eventHistory;
-  final int totalVolunteerHours;
+  final String totalVolunteerHours;
   final String profilePicPath;
 
   factory LeaderboardEntry.fromMap(Map<String, dynamic> map) {
