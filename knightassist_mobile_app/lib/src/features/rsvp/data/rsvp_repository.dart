@@ -61,9 +61,13 @@ class RSVPRepository {
     switch (response.statusCode) {
       case 200:
         // Handle API cases
-        return "R";
-        print(body); // TODO: add the correct responses based on status codes
-        break;
+        return "Registered for event!";
+      case 201:
+        return "Already RSVPd for event.";
+      case 202:
+        return "Event at max capacity.";
+      case 400:
+        throw Exception("Missing credentials to RSVP for event");
       case 404:
         throw EventNotFoundException();
       default:
