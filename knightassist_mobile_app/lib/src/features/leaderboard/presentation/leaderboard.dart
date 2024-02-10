@@ -9,63 +9,14 @@ import 'package:knightassist_mobile_app/src/features/events/presentation/events_
 import 'package:knightassist_mobile_app/src/features/events/presentation/feedback_list_screen.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/qr_scanner.dart';
 import 'package:knightassist_mobile_app/src/features/home/presentation/home_screen.dart';
+import 'package:knightassist_mobile_app/src/features/leaderboard/data/leaderboard_repository.dart';
+import 'package:knightassist_mobile_app/src/features/leaderboard/domain/leaderboard_entry.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/presentation/update_screen.dart';
 import 'package:knightassist_mobile_app/src/features/students/domain/student_user.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 import 'package:intl/intl.dart';
 
-List<StudentUser> leaders = [
-  StudentUser(
-      id: '5',
-      studentId: '5',
-      firstName: 'John',
-      lastName: 'Doe',
-      email: 'johndoe@example.com',
-      password: '',
-      profilePicture: '',
-      favoritedOrganizations: [],
-      eventsRsvp: [],
-      eventsHistory: [],
-      totalVolunteerHours: 52,
-      semesterVolunteerHourGoal: 300,
-      userStudentSemesters: [],
-      categoryTags: [],
-      recoveryToken: '',
-      confirmToken: '',
-      emailToken: '',
-      emailValidated: false,
-      createdAt: DateTime.now(),
-      updatedAt: DateTime.now(),
-      profilePicPath:
-          'https://static-00.iconduck.com/assets.00/profile-circle-icon-512x512-zxne30hp.png',
-      role: '',
-      firstTimeLogin: false),
-  StudentUser(
-      id: '6',
-      studentId: '6',
-      firstName: 'Test',
-      lastName: 'User',
-      email: 'test@test.com',
-      password: '',
-      profilePicture: '',
-      favoritedOrganizations: [],
-      eventsRsvp: [],
-      eventsHistory: [],
-      totalVolunteerHours: 140,
-      semesterVolunteerHourGoal: 500,
-      userStudentSemesters: [],
-      categoryTags: [],
-      recoveryToken: '',
-      confirmToken: '',
-      emailToken: '',
-      emailValidated: false,
-      createdAt: DateTime.now(),
-      updatedAt: DateTime.now(),
-      profilePicPath:
-          'https://i.pinimg.com/474x/4c/3e/3b/4c3e3b91f05a5765aa544ac7557d6642.jpg',
-      role: '',
-      firstTimeLogin: false)
-];
+List<LeaderboardEntry> leaders = [];
 
 class leaderboard extends StatefulWidget {
   const leaderboard({
@@ -88,6 +39,10 @@ class _leaderboardState extends State<leaderboard> {
     double w = MediaQuery.of(context).size.width;
     return Consumer(
       builder: (context, ref, child) {
+        final leaderboardRepository = ref.watch(leaderboardRepositoryProvider);
+        leaderboardRepository.fetchLeaderboard().then((value) => setState(() {
+              leaders = value;
+            }));
         return Scaffold(
           appBar: AppBar(
             title: const Text(
@@ -153,7 +108,7 @@ _topSection(double width) {
 }
 
 class VolunteerCard extends StatelessWidget {
-  final StudentUser volunteer;
+  final LeaderboardEntry volunteer;
   final int number;
 
   const VolunteerCard(
@@ -248,9 +203,9 @@ class _BoardState extends State<Board> {
     super.dispose();
   }
 
-  List<StudentUser> _getLeaderBoard() {
-    List<StudentUser> leaderlist = [];
-    for (StudentUser s in leaders) {
+  List<LeaderboardEntry> _getLeaderBoard() {
+    List<LeaderboardEntry> leaderlist = [];
+    for (LeaderboardEntry s in leaders) {
       leaderlist.add(s);
     }
     return leaderlist;

@@ -5,6 +5,7 @@ class LeaderboardEntry {
     required this.lastName,
     required this.eventHistory,
     required this.totalVolunteerHours,
+    required this.profilePicPath,
   });
 
   final String id;
@@ -12,6 +13,7 @@ class LeaderboardEntry {
   final String lastName;
   final List<String> eventHistory;
   final int totalVolunteerHours;
+  final String profilePicPath;
 
   factory LeaderboardEntry.fromMap(Map<String, dynamic> map) {
     return LeaderboardEntry(
@@ -19,6 +21,7 @@ class LeaderboardEntry {
         firstName: map['firstName'],
         lastName: map['lastName'],
         eventHistory: List<String>.from(map['eventsHistory']),
-        totalVolunteerHours: map['totalVolunteerHours']);
+        totalVolunteerHours: map['totalVolunteerHours'],
+        profilePicPath: map['profilePicPath']);
   }
 }

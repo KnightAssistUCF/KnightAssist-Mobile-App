@@ -3,6 +3,9 @@ import 'dart:convert';
 import 'package:knightassist_mobile_app/src/features/leaderboard/domain/leaderboard_entry.dart';
 import 'package:knightassist_mobile_app/src/utils/in_memory_store.dart';
 import 'package:http/http.dart' as http;
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'leaderboard_repository.g.dart';
 
 class LeaderboardRepository {
   final _leaderboard = InMemoryStore<List<LeaderboardEntry>>([]);
@@ -41,4 +44,9 @@ class LeaderboardRepository {
         throw Exception();
     }
   }
+}
+
+@riverpod
+LeaderboardRepository leaderboardRepository(LeaderboardRepositoryRef ref) {
+  return LeaderboardRepository();
 }

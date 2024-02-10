@@ -38,7 +38,7 @@ import 'package:knightassist_mobile_app/src/features/organizations/domain/update
     as prefix;
 import 'package:knightassist_mobile_app/src/features/organizations/presentation/create_update.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/presentation/edit_update.dart';
-import 'package:knightassist_mobile_app/src/features/organizations/presentation/leaderboard.dart';
+import 'package:knightassist_mobile_app/src/features/leaderboard/presentation/leaderboard.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/presentation/organization_screen.dart'
     as prefix;
 import 'package:knightassist_mobile_app/src/features/organizations/presentation/organizations_list/organizations_list.dart';
@@ -119,7 +119,7 @@ GoRouter goRouter(GoRouterRef ref) {
             builder: (context, state) => //isLoggedIn
                 //? HomeScreen()
                 //: SignInScreen(), // TEMP, change this to whatever screen you want to test (will need to rerun)
-                leaderboard(),
+                const leaderboard(),
             routes: [
               GoRoute(
                   path: 'events',
