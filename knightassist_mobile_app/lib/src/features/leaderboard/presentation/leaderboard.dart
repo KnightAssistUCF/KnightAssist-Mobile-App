@@ -114,6 +114,18 @@ class VolunteerCard extends StatelessWidget {
   const VolunteerCard(
       {super.key, required this.volunteer, required this.number});
 
+  Color? _getColor() {
+    if (number == 1) {
+      return Colors.yellow;
+    } else if (number == 2) {
+      return Colors.grey[500];
+    } else if (number == 3) {
+      return Colors.brown[200];
+    } else {
+      return Colors.white;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -126,7 +138,7 @@ class VolunteerCard extends StatelessWidget {
         child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Card(
-              color: Colors.white,
+              color: _getColor(),
               elevation: 5,
               child: InkWell(
                 onTap: () {},
@@ -152,7 +164,8 @@ class VolunteerCard extends StatelessWidget {
                       children: [
                         Text(
                           "${volunteer.totalVolunteerHours} hours",
-                          style: const TextStyle(fontWeight: FontWeight.w400),
+                          style: const TextStyle(
+                              fontWeight: FontWeight.w500, fontSize: 15),
                           textAlign: TextAlign.start,
                         ),
                       ],
@@ -160,7 +173,7 @@ class VolunteerCard extends StatelessWidget {
                     trailing: Container(
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(60.0),
-                          color: Colors.white,
+                          color: _getColor(),
                           border: Border.all()),
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -203,14 +216,6 @@ class _BoardState extends State<Board> {
     super.dispose();
   }
 
-  List<LeaderboardEntry> _getLeaderBoard() {
-    List<LeaderboardEntry> leaderlist = [];
-    for (LeaderboardEntry s in leaders) {
-      leaderlist.add(s);
-    }
-    return leaderlist;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Consumer(
@@ -245,10 +250,6 @@ class _BoardState extends State<Board> {
                                     margin: const EdgeInsets.symmetric(
                                       horizontal: 12.0,
                                       vertical: 4.0,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      border: Border.all(),
-                                      borderRadius: BorderRadius.circular(12.0),
                                     ),
                                     child: VolunteerCard(
                                       volunteer:

@@ -18,6 +18,7 @@ class LeaderboardRepository {
     switch (response.statusCode) {
       case 200:
         List<dynamic> leaderboardJson = map['data'];
+        List<LeaderboardEntry> list = [];
 
         for (dynamic d in leaderboardJson) {
           Map<String, String?> params = {"userID": d['_id']};
@@ -62,6 +63,7 @@ class LeaderboardRepository {
                   studentData['totalVolunteerHours'].toString(),
               profilePicPath: studentData['profilePicPath'] ?? '');
 
+          list.add(s);
           _leaderboard.value.add(s);
         }
         // _leaderboard.value = (json.decode(leaderboardJson) as List)
@@ -69,7 +71,7 @@ class LeaderboardRepository {
         //  .toList();
         //print(_leaderboard.value);
 
-        return _leaderboard.value;
+        return list;
 
       default:
         throw Exception();
