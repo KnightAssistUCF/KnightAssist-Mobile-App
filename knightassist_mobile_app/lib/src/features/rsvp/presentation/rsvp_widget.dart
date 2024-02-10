@@ -43,11 +43,8 @@ class _RSVPWidgetState extends State<RSVPWidget> {
         final state = ref.watch(rSVPControllerProvider);
 
         final studentRepository = ref.watch(studentsRepositoryProvider);
-
         final authRepository = ref.watch(authRepositoryProvider);
-
         final user = authRepository.currentUser;
-
         final student = studentRepository.getStudent();
 
         bool eventFull = event.registeredVolunteers.length >= event.maxAttendees
@@ -62,16 +59,23 @@ class _RSVPWidgetState extends State<RSVPWidget> {
         return PrimaryButton(
           isLoading: state.isLoading,
           onPressed: () {
-            ref
-                .read(rSVPControllerProvider.notifier)
-                .rsvp(event.id, event.name)
-                .then((value) {
-              setState(() {
-                bodyString = value;
+            if (alreadyRSVPd) {
+              // cancel RSVP
+            } else if (eventFull) {
+              // do nothing
+            } else {
+              // RSVP for event
+              ref
+                  .read(rSVPControllerProvider.notifier)
+                  .rsvp(event.id, event.name)
+                  .then((value) {
+                setState(() {
+                  bodyString = value;
+                });
               });
-            });
 
-            showAlertDialog(context: context, title: bodyString);
+              showAlertDialog(context: context, title: 'RSVPd');
+            }
           },
           text: alreadyRSVPd
               ? 'Cancel RSVP'
