@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:knightassist_mobile_app/src/common_widgets/alert_dialogs.dart';
 import 'package:knightassist_mobile_app/src/common_widgets/primary_button.dart';
+import 'package:knightassist_mobile_app/src/features/authentication/data/auth_repository.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
 import 'package:knightassist_mobile_app/src/features/rsvp/data/rsvp_repository.dart';
 import 'package:knightassist_mobile_app/src/features/rsvp/presentation/rsvp_controller.dart';
+import 'package:knightassist_mobile_app/src/features/students/data/students_repository.dart';
 import 'package:knightassist_mobile_app/src/utils/async_value_ui.dart';
 
 String bodyString = '';
@@ -40,6 +42,23 @@ class _RSVPWidgetState extends State<RSVPWidget> {
         );
         final state = ref.watch(rSVPControllerProvider);
 
+        final studentRepository = ref.watch(studentsRepositoryProvider);
+
+        final authRepository = ref.watch(authRepositoryProvider);
+
+        final user = authRepository.currentUser;
+
+        final student = studentRepository.getStudent();
+
+        bool eventFull = event.registeredVolunteers.length >= event.maxAttendees
+            ? true
+            : false;
+
+        bool alreadyRSVPd = student!.eventsRsvp.contains(event.id);
+
+        //student.then(
+        //(value) => alreadyRSVPd = value.eventsRsvp.contains(event.id));
+
         return PrimaryButton(
           isLoading: state.isLoading,
           onPressed: () {
@@ -54,7 +73,11 @@ class _RSVPWidgetState extends State<RSVPWidget> {
 
             showAlertDialog(context: context, title: bodyString);
           },
-          text: 'RSVP',
+          text: alreadyRSVPd
+              ? 'Cancel RSVP'
+              : eventFull
+                  ? 'Event Full'
+                  : 'RSVP',
         );
       },
     );

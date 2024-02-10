@@ -3,11 +3,14 @@ import 'dart:convert';
 import 'package:knightassist_mobile_app/src/exceptions/app_exception.dart';
 import 'package:knightassist_mobile_app/src/features/students/domain/student_user.dart';
 import 'package:http/http.dart' as http;
+import 'package:knightassist_mobile_app/src/utils/in_memory_store.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'students_repository.g.dart';
 
 class StudentsRepository {
+  final _student = InMemoryStore<StudentUser?>(null);
+
   Future<List<StudentUser>> fetchStudentsInOrg(String orgID) async {
     Map<String, dynamic> params = {"organizationID": orgID};
     var uri = Uri.https('knightassist-43ab3aeaada9.herokuapp.com',
@@ -177,6 +180,72 @@ class StudentsRepository {
         String err = body["error"];
         throw Exception(err);
     }
+  }
+
+  Future<StudentUser> fetchStudent(String studentID) async {
+    Map<String, String?> params = {"userID": studentID};
+    var uri = Uri.https(
+        'knightassist-43ab3aeaada9.herokuapp.com', '/api/userSearch', params);
+    var response = await http.get(uri);
+
+    final dynamic studentData = jsonDecode(response.body);
+
+    List<String> favoritedOrganizations = [];
+    List<String> eventsRSVP = [];
+    List<String> eventsHistory = [];
+    List<String> userStudentSemesters = [];
+    List<String> tags = [];
+
+    for (dynamic s in studentData['favoritedOrganizations']) {
+      favoritedOrganizations.add(s);
+    }
+    for (dynamic s in studentData['eventsRSVP']) {
+      eventsRSVP.add(s);
+    }
+    for (dynamic s in studentData['eventsHistory']) {
+      eventsHistory.add(s);
+    }
+    for (dynamic s in studentData['userStudentSemesters']) {
+      userStudentSemesters.add(s);
+    }
+    if (studentData['categoryTags'] != null) {
+      for (dynamic s in studentData['categoryTags']) {
+        tags.add(s);
+      }
+    }
+
+    StudentUser s = StudentUser(
+        id: studentData['_id'] ?? '',
+        email: studentData['email'] ?? '',
+        firstName: studentData['firstName'] ?? '',
+        lastName: studentData['lastName'] ?? '',
+        profilePicture: studentData['profilePicPath'] ?? '',
+        favoritedOrganizations: favoritedOrganizations,
+        eventsRsvp: eventsRSVP,
+        eventsHistory: eventsHistory,
+        totalVolunteerHours: studentData['totalVolunteerHours'],
+        semesterVolunteerHourGoal: studentData['semesterVolunteerHourGoal'],
+        userStudentSemesters: userStudentSemesters,
+        categoryTags: tags,
+        recoveryToken: studentData['recoveryToken'] ?? '',
+        confirmToken: studentData['confirmToken'] ?? '',
+        emailToken: studentData['EmailToken'] ?? '',
+        emailValidated: studentData['emailValidated'] ?? false,
+        studentId: studentData['studentID'] ?? '',
+        password: studentData['password'] ?? '',
+        createdAt: DateTime.parse(studentData['createdAt']) ?? DateTime.now(),
+        updatedAt: DateTime.parse(studentData['updatedAt']) ?? DateTime.now(),
+        profilePicPath: studentData['profilePicPath'] ?? '',
+        role: studentData['role'] ?? '',
+        firstTimeLogin: studentData['firstTimeLogin'] ?? false);
+
+    _student.value = s;
+
+    return s;
+  }
+
+  StudentUser? getStudent() {
+    return _student.value;
   }
 }
 

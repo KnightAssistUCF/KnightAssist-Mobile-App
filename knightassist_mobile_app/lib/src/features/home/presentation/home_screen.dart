@@ -11,6 +11,7 @@ import 'package:knightassist_mobile_app/src/features/events/presentation/feedbac
 import 'package:knightassist_mobile_app/src/features/events/presentation/qr_scanner.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/data/organizations_repository.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/presentation/update_screen.dart';
+import 'package:knightassist_mobile_app/src/features/students/data/students_repository.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
@@ -68,6 +69,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
         final authRepository = ref.watch(authRepositoryProvider);
         final user = authRepository.currentUser;
         bool isOrg = user?.role == "organization";
+        final organizationsRepository =
+            ref.watch(organizationsRepositoryProvider);
+        final studentRepository = ref.watch(studentsRepositoryProvider);
+        organizationsRepository.fetchOrganizationsList();
+        if (user?.role == 'student') {
+          studentRepository.fetchStudent(user!.id);
+        }
 
         return Scaffold(
           floatingActionButton: isOrg
