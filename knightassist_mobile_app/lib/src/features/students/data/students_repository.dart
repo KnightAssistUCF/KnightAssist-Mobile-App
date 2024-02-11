@@ -249,9 +249,10 @@ class StudentsRepository {
   }
 
   Future<String> editStudent(
-      String organizationID,
+      String studentID,
       String? password,
-      String? name,
+      String? firstName,
+      String? lastName,
       String? email,
       String? description,
       String? logoUrl,
@@ -266,8 +267,9 @@ class StudentsRepository {
       List<String>? events,
       String? location,
       List<String>? categoryTags) async {
-    Map<String, dynamic> params = {'organizationID': organizationID};
-    if (name != null) params['name'] = name;
+    Map<String, dynamic> params = {'studentID': studentID};
+    if (firstName != null) params['firstName'] = firstName;
+    if (lastName != null) params['lastName'] = lastName;
     if (password != null) params['password'] = password;
     if (email != null) params['email'] = email;
     if (description != null) params['description'] = description;
@@ -292,8 +294,9 @@ class StudentsRepository {
           'Content-Type': 'application/json; charset=UTF-8',
         },
         body: jsonEncode(<String, dynamic>{
-          'id': organizationID,
-          'name': name,
+          'id': studentID,
+          'firstName': firstName,
+          'lastName': lastName,
           'email': email,
           'password': password,
           'description': description,
