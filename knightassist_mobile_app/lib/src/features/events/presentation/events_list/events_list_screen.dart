@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/data/auth_repository.dart';
+import 'package:knightassist_mobile_app/src/features/events/data/events_repository.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/events_list/events_list.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/events_list/events_search_text_field.dart';
 import 'package:flutter/material.dart';
@@ -49,6 +50,8 @@ class _EventsListScreenState extends ConsumerState<EventsListScreen> {
         final authRepository = ref.watch(authRepositoryProvider);
         final organizationsRepository =
             ref.watch(organizationsRepositoryProvider);
+        final eventsRepository = ref.watch(eventsRepositoryProvider);
+        eventsRepository.fetchEventsList();
         final user = authRepository.currentUser;
         bool isOrg = user?.role == "organization";
 

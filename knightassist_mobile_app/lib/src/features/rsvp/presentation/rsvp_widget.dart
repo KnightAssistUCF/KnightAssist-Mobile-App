@@ -45,6 +45,7 @@ class _RSVPWidgetState extends State<RSVPWidget> {
         final studentRepository = ref.watch(studentsRepositoryProvider);
         final authRepository = ref.watch(authRepositoryProvider);
         final user = authRepository.currentUser;
+        studentRepository.fetchEventAttendees(event.id);
         final student = studentRepository.getStudent();
 
         bool eventFull = event.registeredVolunteers.length >= event.maxAttendees
@@ -70,7 +71,7 @@ class _RSVPWidgetState extends State<RSVPWidget> {
                 });
               });
 
-              //student.eventsRsvp.remove(event.id);
+              student.eventsRsvp.remove(event.id);
 
               showAlertDialog(context: context, title: 'Canceled RSVP');
             } else if (eventFull) {
@@ -86,7 +87,7 @@ class _RSVPWidgetState extends State<RSVPWidget> {
                 });
               });
 
-              //student.eventsRsvp.add(event.id);
+              student.eventsRsvp.add(event.id);
 
               showAlertDialog(context: context, title: 'RSVPd');
             }
