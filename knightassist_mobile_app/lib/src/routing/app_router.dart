@@ -41,6 +41,7 @@ import 'package:knightassist_mobile_app/src/features/organizations/presentation/
 import 'package:knightassist_mobile_app/src/features/leaderboard/presentation/leaderboard.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/presentation/organization_screen.dart'
     as prefix;
+import 'package:knightassist_mobile_app/src/features/organizations/presentation/organizations_list/fav_orgs_list.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/presentation/organizations_list/organizations_list.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/presentation/organizations_list/organizations_list_screen.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/presentation/organization_screen/organization_screen.dart';
@@ -86,7 +87,8 @@ enum AppRoute {
   editOrgProfile,
   forgotPassword,
   leaderboard,
-  announcements
+  announcements,
+  favoriteOrgs
 }
 
 @Riverpod(keepAlive: true)
@@ -348,6 +350,12 @@ GoRouter goRouter(GoRouterRef ref) {
                   name: AppRoute.leaderboard.name,
                   pageBuilder: (context, state) => const MaterialPage(
                       fullscreenDialog: true, child: leaderboard())),
+              GoRoute(
+                  path: 'favoriteorgs',
+                  name: AppRoute.favoriteOrgs.name,
+                  pageBuilder: (context, state) => const MaterialPage(
+                      fullscreenDialog: true,
+                      child: FavoriteOrganizationsListScreen())),
             ])
       ],
       errorBuilder: (context, state) => const NotFoundScreen());

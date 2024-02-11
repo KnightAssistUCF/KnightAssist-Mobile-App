@@ -214,7 +214,7 @@ class AccountScreen extends ConsumerWidget {
                                         ? '${student!.favoritedOrganizations.length}'
                                         : '5'),
                                     onPressed: (context) => context
-                                        .pushNamed(AppRoute.organizations.name),
+                                        .pushNamed(AppRoute.favoriteOrgs.name),
                                   ),
                             SettingsTile.navigation(
                               leading: Icon(Icons.star_border_outlined),

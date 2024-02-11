@@ -7,7 +7,7 @@ import 'package:knightassist_mobile_app/src/constants/breakpoints.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
 
 class OrganizationCard extends StatefulWidget {
-  final Organization organization;
+  final Organization? organization;
   final VoidCallback? onPressed;
   final bool isOrg;
 
@@ -23,7 +23,7 @@ class OrganizationCard extends StatefulWidget {
 
 class _OrganizationCardState extends State<OrganizationCard> {
   bool _isFavoriteOrg = false;
-  late final Organization organization;
+  late final Organization? organization;
   late final VoidCallback? onPressed;
   late final bool isOrg;
 
@@ -46,7 +46,7 @@ class _OrganizationCardState extends State<OrganizationCard> {
 
     const style = TextStyle(fontSize: 20, fontWeight: FontWeight.normal);
 
-    final Organization organization = this.organization;
+    final Organization? organization = this.organization;
     final bool isOrg = this.isOrg;
     return SingleChildScrollView(
       child: ResponsiveCenter(
@@ -85,9 +85,9 @@ class _OrganizationCardState extends State<OrganizationCard> {
                                 child: Image(
                                   fit: BoxFit.fill,
                                   image: AssetImage(
-                                      organization.backgroundUrl == ''
+                                      organization?.backgroundUrl == ''
                                           ? 'assets/orgdefaultbackground.png'
-                                          : organization.backgroundUrl),
+                                          : organization!.backgroundUrl),
                                 ),
                               ),
                             ),
@@ -113,7 +113,7 @@ class _OrganizationCardState extends State<OrganizationCard> {
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(12.0),
                                   child: Image(
-                                    image: AssetImage(organization.logoUrl),
+                                    image: AssetImage(organization!.logoUrl),
                                   ),
                                 ),
                               ),
