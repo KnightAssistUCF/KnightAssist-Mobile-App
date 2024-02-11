@@ -61,6 +61,18 @@ class _RSVPWidgetState extends State<RSVPWidget> {
           onPressed: () {
             if (alreadyRSVPd) {
               // cancel RSVP
+              ref
+                  .read(rSVPControllerProvider.notifier)
+                  .cancelrsvp(event.id, event.name)
+                  .then((value) {
+                setState(() {
+                  bodyString = value;
+                });
+              });
+
+              //student.eventsRsvp.remove(event.id);
+
+              showAlertDialog(context: context, title: 'Canceled RSVP');
             } else if (eventFull) {
               // do nothing
             } else {
@@ -73,6 +85,8 @@ class _RSVPWidgetState extends State<RSVPWidget> {
                   bodyString = value;
                 });
               });
+
+              //student.eventsRsvp.add(event.id);
 
               showAlertDialog(context: context, title: 'RSVPd');
             }

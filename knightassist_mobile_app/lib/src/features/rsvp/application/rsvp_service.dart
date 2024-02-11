@@ -27,6 +27,17 @@ class RSVPService {
     }
     await ref.read(rsvpRepositoryProvider).setRSVP(user.id, eventID, eventName);
   }
+
+  Future<void> cancelRSVP(String eventID, String eventName) async {
+    final user = ref.read(authRepositoryProvider).currentUser;
+    assert(user != null);
+    if (user == null) {
+      throw AssertionError('Can\'t cancel RSVPs if user is not signed in');
+    }
+    await ref
+        .read(rsvpRepositoryProvider)
+        .cancelRSVP(user.id, eventID, eventName);
+  }
 }
 
 @Riverpod(keepAlive: true)

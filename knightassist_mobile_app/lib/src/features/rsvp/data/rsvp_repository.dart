@@ -75,6 +75,41 @@ class RSVPRepository {
         throw Exception(err);
     }
   }
+
+  Future<String> cancelRSVP(
+      String uid, String eventID, String eventName) async {
+    Map<String, dynamic> params = {
+      "userID": uid,
+      "eventID": eventID,
+      "eventName": eventName
+    };
+    var uri = Uri.parse(
+        "https://knightassist-43ab3aeaada9.herokuapp.com/api/cancelRSVP");
+    var response = await http.delete(
+      uri,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'userID': uid,
+        'eventID': eventID,
+        'eventName': eventName
+      }),
+    );
+    var body = jsonDecode(response.body);
+    switch (response.statusCode) {
+      case 200:
+        // Handle API cases
+        return "Cancelled RSVP for event.";
+      case 400:
+        return "Incorrect credentials provided.";
+      case 404:
+        return "Event or user not found.";
+      default:
+        String err = body["error"];
+        throw Exception(err);
+    }
+  }
 }
 
 @Riverpod(keepAlive: true)

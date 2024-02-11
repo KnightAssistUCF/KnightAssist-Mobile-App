@@ -25,4 +25,18 @@ class RSVPController extends _$RSVPController {
     }
     return '';
   }
+
+  Future<String> cancelrsvp(String eventID, String eventName) async {
+    final rsvpService = ref.read(rsvpServiceProvider);
+    state = const AsyncLoading<int>().copyWithPrevious(state);
+    final value = await AsyncValue.guard(
+        () => rsvpService.cancelRSVP(eventID, eventName));
+    if (value.hasError) {
+      state = AsyncError(value.error!, StackTrace.current);
+    } else {
+      state = const AsyncData(1);
+      return rsvpService.cancelRSVP(eventID, eventName).toString();
+    }
+    return '';
+  }
 }
