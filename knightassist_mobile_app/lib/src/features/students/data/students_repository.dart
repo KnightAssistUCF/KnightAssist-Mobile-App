@@ -254,37 +254,22 @@ class StudentsRepository {
       String? firstName,
       String? lastName,
       String? email,
-      String? description,
-      String? logoUrl,
-      List<String>? followers,
-      List<String>? favorites,
-      List<String>? updates,
-      String? calendarLink,
-      Contact? contact,
-      bool? isActive,
-      bool? eventHappeningNow,
-      String? backgroundUrl,
-      List<String>? events,
-      String? location,
+      String? profilePicPath,
+      int? totalVolunteerHours,
+      int? semesterVolunteerHourGoal,
       List<String>? categoryTags) async {
     Map<String, dynamic> params = {'studentID': studentID};
     if (firstName != null) params['firstName'] = firstName;
     if (lastName != null) params['lastName'] = lastName;
     if (password != null) params['password'] = password;
     if (email != null) params['email'] = email;
-    if (description != null) params['description'] = description;
-    if (location != null) params['location'] = location;
-    if (logoUrl != null) params['logoUrl'] = logoUrl;
-    if (followers != null) params['followers'] = followers;
-    if (favorites != null) params['favorites'] = favorites;
-    if (updates != null) params['updates'] = updates;
-    if (calendarLink != null) params['calendarLink'] = calendarLink;
-    if (contact != null) params['contact'] = contact;
-    if (isActive != null) params['isActive'] = isActive;
-    if (eventHappeningNow != null)
-      params['eventHappeningNow'] = eventHappeningNow;
-    if (backgroundUrl != null) params['backgroundUrl'] = backgroundUrl;
-    if (events != null) params['events'] = events;
+    if (profilePicPath != null) params['profilePicPath '] = profilePicPath;
+    if (totalVolunteerHours != null) {
+      params['totalVolunteerHours'] = totalVolunteerHours;
+    }
+    if (semesterVolunteerHourGoal != null) {
+      params['semesterVolunteerHourGoal'] = semesterVolunteerHourGoal;
+    }
     if (categoryTags != null) params['categoryTags'] = categoryTags;
 
     var uri = Uri.parse(
@@ -299,18 +284,10 @@ class StudentsRepository {
           'lastName': lastName,
           'email': email,
           'password': password,
-          'description': description,
-          'logoUrl': logoUrl,
-          'favorites': favorites,
-          'updates': updates,
-          'calendarLink': calendarLink,
-          'location': location,
+          'profilePicPath': profilePicPath,
           'categoryTags': categoryTags,
-          'contact': contact?.toJson(),
-          'isActive': isActive,
-          'eventHappeningNow': eventHappeningNow,
-          'backgroundUrl': backgroundUrl,
-          'eventsArray': events,
+          'totalVolunteerHours': totalVolunteerHours,
+          'semesterVolunteerHourGoal': semesterVolunteerHourGoal,
         }));
     var body = jsonDecode(response.body);
     switch (response.statusCode) {

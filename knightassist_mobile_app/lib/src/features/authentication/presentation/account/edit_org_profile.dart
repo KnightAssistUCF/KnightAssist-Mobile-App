@@ -98,7 +98,7 @@ class _OrganizationTopState extends State<OrganizationTop> {
   late final Organization organization;
   late final double width;
 
-    final _formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
   final _node = FocusScopeNode();
   final _nameController = TextEditingController();
 
@@ -115,7 +115,7 @@ class _OrganizationTopState extends State<OrganizationTop> {
     width = widget.width;
   }
 
-    @override
+  @override
   void dispose() {
     _node.dispose();
     _nameController.dispose();
@@ -199,7 +199,7 @@ class _TabBarOrgState extends State<TabBarOrg> with TickerProviderStateMixin {
   late final TabController _tabController;
   late final Organization organization;
 
-   final _formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
   final _node = FocusScopeNode();
   final _descriptionController = TextEditingController();
   final _instagramController = TextEditingController();
@@ -228,6 +228,33 @@ class _TabBarOrgState extends State<TabBarOrg> with TickerProviderStateMixin {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
     organization = widget.organization;
+    if (organization.description != null) {
+      _descriptionController.text = organization.description!;
+    }
+    if (organization.contact!.socialMedia?.instagram != null) {
+      _instagramController.text = organization.contact!.socialMedia!.instagram!;
+    }
+    if (organization.contact!.socialMedia?.facebook != null) {
+      _facebookController.text = organization.contact!.socialMedia!.facebook!;
+    }
+    if (organization.contact!.socialMedia?.twitter != null) {
+      _twitterController.text = organization.contact!.socialMedia!.twitter!;
+    }
+    if (organization.contact!.socialMedia?.linkedin != null) {
+      _linkedinController.text = organization.contact!.socialMedia!.linkedin!;
+    }
+    if (organization.email != null) {
+      _emailController.text = organization.email!;
+    }
+    if (organization.contact?.phone != null) {
+      _phoneController.text = organization.contact!.phone!;
+    }
+    if (organization.location != null) {
+      _locationController.text = organization.location!;
+    }
+    if (organization.contact?.website != null) {
+      _websiteController.text = organization.contact!.website!;
+    }
   }
 
   @override
@@ -248,222 +275,289 @@ class _TabBarOrgState extends State<TabBarOrg> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer(builder: (context, ref, child) { 
+    return Consumer(
+      builder: (context, ref, child) {
+        final organizationsRepository =
+            ref.watch(organizationsRepositoryProvider);
+        final authRepository = ref.watch(authRepositoryProvider);
+        final user = authRepository.currentUser;
 
-      final organizationsRepository = ref.watch(organizationsRepositoryProvider);
-      final authRepository = ref.watch(authRepositoryProvider);
-      final user = authRepository.currentUser;
+        organizationsRepository.fetchOrganizationsList();
 
-      organizationsRepository.fetchOrganizationsList();
+        final org = organizationsRepository.getOrganization(user!.id);
 
-      final org = organizationsRepository.getOrganization(user!.id);
-      
-      return DefaultTabController(
-      length: 2,
-      child: Scaffold(
-        body: Column(
-          children: [
-            const TabBar(
-              tabs: [
-                Tab(icon: Text("About")),
-                Tab(icon: Text("Contact")),
-              ],
-            ),
-            Expanded(
-              child: TabBarView(
-                children: [
-                  ListView(
+        return DefaultTabController(
+          length: 2,
+          child: Scaffold(
+            body: Column(
+              children: [
+                const TabBar(
+                  tabs: [
+                    Tab(icon: Text("About")),
+                    Tab(icon: Text("Contact")),
+                  ],
+                ),
+                Expanded(
+                  child: TabBarView(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: SizedBox(
-                            width: 240,
-                            height: 120,
-                            child: TextFormField(
-                              controller: _descriptionController,
-                              maxLines: null,
-                              expands: true,
-                              keyboardType: TextInputType.multiline,
-                              //initialValue: organization.description,
-                              decoration: const InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  filled: false,
-                                  hintText: 'Your Organization Description'),
-                            )),
-                      ),
-                    ],
-                  ),
-                  ListView(
-                    children: [
-                      Wrap(
+                      ListView(
                         children: [
-                          Wrap(
-                            children: [
-                              IconButton(
-                                  onPressed: () async {
-                                    final Uri url = Uri.parse(organization
-                                            .contact?.socialMedia?.instagram ??
-                                        '');
-                                    if (!await launchUrl(url)) {
-                                      throw Exception('Could not launch $url');
-                                    }
-                                  },
-                                  icon:
-                                      const FaIcon(FontAwesomeIcons.instagram)),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: SizedBox(
-                                  width: 300,
-                                  child: TextFormField(
-                                    controller: _instagramController,
-                                    //initialValue: organization
-                                     //       .contact?.socialMedia?.instagram ??
-                                      //  '',
-                                    decoration: const InputDecoration(
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: SizedBox(
+                                width: 240,
+                                height: 120,
+                                child: TextFormField(
+                                  controller: _descriptionController,
+                                  maxLines: null,
+                                  expands: true,
+                                  keyboardType: TextInputType.multiline,
+                                  //initialValue: organization.description,
+                                  decoration: const InputDecoration(
                                       border: OutlineInputBorder(),
-                                      labelText: 'Instagram URL (Optional)',
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Wrap(
-                            children: [
-                              IconButton(
-                                  onPressed: () async {
-                                    final Uri url = Uri.parse(organization
-                                            .contact?.socialMedia?.facebook ??
-                                        '');
-                                    if (!await launchUrl(url)) {
-                                      throw Exception('Could not launch $url');
-                                    }
-                                  },
-                                  icon:
-                                      const FaIcon(FontAwesomeIcons.facebook)),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: SizedBox(
-                                  width: 300,
-                                  child: TextFormField(
-                                    controller: _facebookController,
-                                    //initialValue: organization
-                                     //       .contact?.socialMedia?.facebook ??
-                                     //   '',
-                                    decoration: const InputDecoration(
-                                      border: OutlineInputBorder(),
-                                      labelText: 'Facebook URL (Optional)',
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Wrap(
-                            children: [
-                              IconButton(
-                                  onPressed: () async {
-                                    final Uri url = Uri.parse(organization
-                                            .contact?.socialMedia!.twitter ??
-                                        '');
-                                    if (!await launchUrl(url)) {
-                                      throw Exception('Could not launch $url');
-                                    }
-                                  },
-                                  icon:
-                                      const FaIcon(FontAwesomeIcons.xTwitter)),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: SizedBox(
-                                  width: 300,
-                                  child: TextFormField(
-                                    controller: _twitterController,
-                                    //initialValue: organization
-                                     //       .contact?.socialMedia?.twitter ??
-                                     //   '',
-                                    decoration: const InputDecoration(
-                                      border: OutlineInputBorder(),
-                                      labelText: 'Twitter URL (Optional)',
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Wrap(
-                            children: [
-                              IconButton(
-                                  onPressed: () async {
-                                    final Uri url = Uri.parse(organization
-                                            .contact?.socialMedia?.linkedin ??
-                                        '');
-                                    if (!await launchUrl(url)) {
-                                      throw Exception('Could not launch $url');
-                                    }
-                                  },
-                                  icon: const FaIcon(
-                                      FontAwesomeIcons.linkedinIn)),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: SizedBox(
-                                  width: 300,
-                                  child: TextFormField(
-                                    controller: _linkedinController,
-                                    //initialValue: organization
-                                     //       .contact?.socialMedia?.linkedin ??
-                                     //   '',
-                                    decoration: const InputDecoration(
-                                      border: OutlineInputBorder(),
-                                      labelText: 'LinkedIn URL (Optional)',
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
+                                      filled: false,
+                                      hintText:
+                                          'Your Organization Description'),
+                                )),
                           ),
                         ],
                       ),
-                      Wrap(
+                      ListView(
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Wrap(
-                              children: [
-                                const Icon(Icons.email_outlined),
-                                SizedBox(
-                                  width: 300,
-                                  child: Padding(
+                          Wrap(
+                            children: [
+                              Wrap(
+                                children: [
+                                  IconButton(
+                                      onPressed: () async {
+                                        final Uri url = Uri.parse(organization
+                                                .contact
+                                                ?.socialMedia
+                                                ?.instagram ??
+                                            '');
+                                        if (!await launchUrl(url)) {
+                                          throw Exception(
+                                              'Could not launch $url');
+                                        }
+                                      },
+                                      icon: const FaIcon(
+                                          FontAwesomeIcons.instagram)),
+                                  Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: TextFormField(
-                                      controller: _emailController,
-                                      //initialValue: organization.contact?.email,
-                                      decoration: const InputDecoration(
-                                        border: OutlineInputBorder(),
-                                        labelText: 'Organization Email',
+                                    child: SizedBox(
+                                      width: 300,
+                                      child: TextFormField(
+                                        controller: _instagramController,
+                                        //initialValue: organization
+                                        //       .contact?.socialMedia?.instagram ??
+                                        //  '',
+                                        decoration: const InputDecoration(
+                                          border: OutlineInputBorder(),
+                                          labelText: 'Instagram URL (Optional)',
+                                        ),
                                       ),
                                     ),
                                   ),
+                                ],
+                              ),
+                              Wrap(
+                                children: [
+                                  IconButton(
+                                      onPressed: () async {
+                                        final Uri url = Uri.parse(organization
+                                                .contact
+                                                ?.socialMedia
+                                                ?.facebook ??
+                                            '');
+                                        if (!await launchUrl(url)) {
+                                          throw Exception(
+                                              'Could not launch $url');
+                                        }
+                                      },
+                                      icon: const FaIcon(
+                                          FontAwesomeIcons.facebook)),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: SizedBox(
+                                      width: 300,
+                                      child: TextFormField(
+                                        controller: _facebookController,
+                                        //initialValue: organization
+                                        //       .contact?.socialMedia?.facebook ??
+                                        //   '',
+                                        decoration: const InputDecoration(
+                                          border: OutlineInputBorder(),
+                                          labelText: 'Facebook URL (Optional)',
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Wrap(
+                                children: [
+                                  IconButton(
+                                      onPressed: () async {
+                                        final Uri url = Uri.parse(organization
+                                                .contact
+                                                ?.socialMedia!
+                                                .twitter ??
+                                            '');
+                                        if (!await launchUrl(url)) {
+                                          throw Exception(
+                                              'Could not launch $url');
+                                        }
+                                      },
+                                      icon: const FaIcon(
+                                          FontAwesomeIcons.xTwitter)),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: SizedBox(
+                                      width: 300,
+                                      child: TextFormField(
+                                        controller: _twitterController,
+                                        //initialValue: organization
+                                        //       .contact?.socialMedia?.twitter ??
+                                        //   '',
+                                        decoration: const InputDecoration(
+                                          border: OutlineInputBorder(),
+                                          labelText: 'Twitter URL (Optional)',
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Wrap(
+                                children: [
+                                  IconButton(
+                                      onPressed: () async {
+                                        final Uri url = Uri.parse(organization
+                                                .contact
+                                                ?.socialMedia
+                                                ?.linkedin ??
+                                            '');
+                                        if (!await launchUrl(url)) {
+                                          throw Exception(
+                                              'Could not launch $url');
+                                        }
+                                      },
+                                      icon: const FaIcon(
+                                          FontAwesomeIcons.linkedinIn)),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: SizedBox(
+                                      width: 300,
+                                      child: TextFormField(
+                                        controller: _linkedinController,
+                                        //initialValue: organization
+                                        //       .contact?.socialMedia?.linkedin ??
+                                        //   '',
+                                        decoration: const InputDecoration(
+                                          border: OutlineInputBorder(),
+                                          labelText: 'LinkedIn URL (Optional)',
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          Wrap(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Wrap(
+                                  children: [
+                                    const Icon(Icons.email_outlined),
+                                    SizedBox(
+                                      width: 300,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: TextFormField(
+                                          controller: _emailController,
+                                          //initialValue: organization.contact?.email,
+                                          decoration: const InputDecoration(
+                                            border: OutlineInputBorder(),
+                                            labelText: 'Organization Email',
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Wrap(
+                                  children: [
+                                    const Icon(Icons.phone_rounded),
+                                    SizedBox(
+                                      width: 300,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: TextFormField(
+                                          controller: _phoneController,
+                                          //initialValue: organization.contact?.phone,
+                                          decoration: const InputDecoration(
+                                            border: OutlineInputBorder(),
+                                            labelText:
+                                                'Organization Phone (Optional)',
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Wrap(
-                              children: [
-                                const Icon(Icons.phone_rounded),
-                                SizedBox(
-                                  width: 300,
-                                  child: Padding(
+                            child: Container(
+                              alignment: Alignment.centerLeft,
+                              child: Wrap(
+                                children: [
+                                  const Icon(Icons.location_on),
+                                  Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: TextFormField(
-                                      controller: _phoneController,
-                                      //initialValue: organization.contact?.phone,
+                                      controller: _locationController,
+                                      //initialValue: organization.location,
                                       decoration: const InputDecoration(
                                         border: OutlineInputBorder(),
                                         labelText:
-                                            'Organization Phone (Optional)',
+                                            'Organization Address (Optional)',
                                       ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Wrap(
+                              children: [
+                                IconButton(
+                                    onPressed: () async {
+                                      final Uri url = Uri.parse(
+                                          organization.contact?.website ?? '');
+                                      if (!await launchUrl(url)) {
+                                        throw Exception(
+                                            'Could not launch $url');
+                                      }
+                                    },
+                                    icon: const Icon(Icons.computer)),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: TextFormField(
+                                    controller: _websiteController,
+                                    //initialValue: organization.contact?.website,
+                                    decoration: const InputDecoration(
+                                      border: OutlineInputBorder(),
+                                      labelText: 'Website URL (Optional)',
                                     ),
                                   ),
                                 ),
@@ -472,62 +566,10 @@ class _TabBarOrgState extends State<TabBarOrg> with TickerProviderStateMixin {
                           ),
                         ],
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          alignment: Alignment.centerLeft,
-                          child: Wrap(
-                            children: [
-                              const Icon(Icons.location_on),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: TextFormField(
-                                  controller: _locationController,
-                                  //initialValue: organization.location,
-                                  decoration: const InputDecoration(
-                                    border: OutlineInputBorder(),
-                                    labelText:
-                                        'Organization Address (Optional)',
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Wrap(
-                          children: [
-                            IconButton(
-                                onPressed: () async {
-                                  final Uri url = Uri.parse(
-                                      organization.contact?.website ?? '');
-                                  if (!await launchUrl(url)) {
-                                    throw Exception('Could not launch $url');
-                                  }
-                                },
-                                icon: const Icon(Icons.computer)),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: TextFormField(
-                                controller: _websiteController,
-                                //initialValue: organization.contact?.website,
-                                decoration: const InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  labelText: 'Website URL (Optional)',
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
                     ],
                   ),
-                ],
-              ),
-            ),
-            /*Padding(
+                ),
+                /*Padding(
               padding: const EdgeInsets.all(8.0),
               child: Center(
                 child: ElevatedButton(
@@ -541,48 +583,67 @@ class _TabBarOrgState extends State<TabBarOrg> with TickerProviderStateMixin {
                     )),
               ),
             ),*/
-            Center(
-              child: ElevatedButton(
-                child: const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Text(
-                    "Update Profile",
-                    style: TextStyle(fontSize: 20),
+                Center(
+                  child: ElevatedButton(
+                    child: const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        "Update Profile",
+                        style: TextStyle(fontSize: 20),
+                      ),
+                    ),
+                    onPressed: () {
+                      List<String> updateIDs = [];
+                      List<String> eventIDs = [];
+
+                      for (Update u in org!.updates) {
+                        updateIDs.add(u.id);
+                      }
+
+                      for (Event e in org!.eventsArray) {
+                        eventIDs.add(e.id);
+                      }
+
+                      if (email != '') {
+                        org.contact?.email = email;
+                      }
+                      if (phone != '') {
+                        org.contact?.phone = phone;
+                      }
+                      if (website != '') {
+                        org.contact?.website = website;
+                      }
+                      if (email != '') {
+                        org.contact?.email = email;
+                      }
+
+                      organizationsRepository.editOrganization(
+                          user.id,
+                          org?.password ?? '',
+                          org?.name ?? '',
+                          email,
+                          description,
+                          org?.logoUrl ?? '',
+                          org?.favorites ?? [],
+                          org?.favorites ?? [],
+                          updateIDs,
+                          org?.calendarLink,
+                          org?.contact,
+                          org?.isActive,
+                          org?.eventHappeningNow,
+                          org?.backgroundUrl,
+                          eventIDs,
+                          org?.location,
+                          org?.categoryTags);
+                    },
                   ),
                 ),
-                onPressed: () {
-                  List<String> updateIDs = [];
-                  List<String> eventIDs = [];
-
-                  for (Update u in org!.updates) {
-                    updateIDs.add(u.id);
-                  }
-
-                   for (Event e in org!.eventsArray) {
-                    eventIDs.add(e.id);
-                  }
-
-                  if (email != '') {
-                    org.contact?.email = email;
-                  }
-                  if (phone != '') {
-                    org.contact?.phone = phone;
-                  }
-                  if (website != '') {
-                    org.contact?.website = website;
-                  }
-                  if (email != '') {
-                    org.contact?.email = email;
-                  }
-
-                  organizationsRepository.editOrganization(user.id, org?.password ?? '', org?.name ?? '', email, description, org?.logoUrl ?? '', org?.favorites ?? [], org?.favorites ?? [], updateIDs, org?.calendarLink, org?.contact, org?.isActive, org?.eventHappeningNow, org?.backgroundUrl, eventIDs, org?.location, org?.categoryTags);
-                },
-              ),
+              ],
             ),
-          ],
-        ),
-      ),
-    ); },);
+          ),
+        );
+      },
+    );
   }
 }
 
