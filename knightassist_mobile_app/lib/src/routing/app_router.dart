@@ -36,7 +36,7 @@ import 'package:knightassist_mobile_app/src/features/events/presentation/events_
 import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/update.dart'
     as prefix;
-import 'package:knightassist_mobile_app/src/features/organizations/presentation/create_announcement.dart';
+import 'package:knightassist_mobile_app/src/features/announcements/presentation/create_announcement.dart';
 import 'package:knightassist_mobile_app/src/features/announcements/presentation/edit_announcement.dart';
 import 'package:knightassist_mobile_app/src/features/leaderboard/presentation/leaderboard.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/presentation/organization_screen.dart'
@@ -231,12 +231,12 @@ GoRouter goRouter(GoRouterRef ref) {
                   },
                   routes: [
                     GoRoute(
-                        path: 'updatedetail',
-                        name: 'updatedetail',
+                        path: 'announcementdetail',
+                        name: 'announcementdetail',
                         builder: (context, state) {
-                          Announcement u = state.extra as Announcement;
-                          //final updateID = state.pathParameters['id']!;
-                          return AnnouncementDetails(announcement: u);
+                          Announcement a = state.extra as Announcement;
+                          //final announcementID = state.pathParameters['id']!;
+                          return AnnouncementDetails(announcement: a);
                         })
                   ]),
               GoRoute(

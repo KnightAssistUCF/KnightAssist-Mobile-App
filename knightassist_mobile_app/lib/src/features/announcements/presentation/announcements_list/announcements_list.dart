@@ -30,11 +30,11 @@ class AnnouncementsList extends ConsumerWidget {
               itemCount: announcements.length,
               itemBuilder: (_, index) {
                 final announcement = announcements[index];
-                return AnnouncementCard(
-                    announcement: announcement,
-                    onPressed: () => context.goNamed(
-                        AppRoute.announcements.name,
-                        pathParameters: {'title': announcement.title}));
+                return AnnouncementCard(announcement: announcement
+                    //onPressed: () => context.goNamed(
+                    //AppRoute.announcements.name,
+                    //pathParameters: {'title': announcement.title})
+                    );
               },
             ),
     );

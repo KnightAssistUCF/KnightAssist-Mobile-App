@@ -8,10 +8,9 @@ import 'package:knightassist_mobile_app/src/common_widgets/responsive_center.dar
 import 'package:knightassist_mobile_app/src/constants/app_sizes.dart';
 import 'package:knightassist_mobile_app/src/features/announcements/data/announcements_repository.dart';
 import 'package:knightassist_mobile_app/src/features/announcements/domain/announcement.dart';
+import 'package:knightassist_mobile_app/src/features/authentication/data/auth_repository.dart';
+import 'package:knightassist_mobile_app/src/features/organizations/data/organizations_repository.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
-
-bool curOrg =
-    true; // true if the organization who made the update is viewing it (shows edit button)
 
 class AnnouncementScreen extends StatelessWidget {
   const AnnouncementScreen({super.key, required this.announcement});
@@ -74,7 +73,6 @@ class AnnouncementScreen extends StatelessWidget {
                       padding: const EdgeInsets.all(Sizes.p16),
                       child: AnnouncementDetails(announcement: announcement),
                     ),
-                    // TODO: Add widget for edit announcement button
                   ],
                 ),
         );
@@ -89,7 +87,57 @@ class AnnouncementDetails extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    bool curOrg =
+        false; // true if the organization who made the announcement is viewing it (shows edit button)
+    final authRepository = ref.watch(authRepositoryProvider);
+    final user = authRepository.currentUser;
+    final organizationsRepository = ref.watch(organizationsRepositoryProvider);
+    if (user?.role == 'organization') {
+      final org = organizationsRepository.getOrganization(user!.id);
+      if (org!.announcements.contains(announcement)) {
+        curOrg = true;
+      }
+    }
     return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'Announcements',
+        ),
+        automaticallyImplyLeading: true,
+        actions: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: IconButton(
+              onPressed: () {},
+              tooltip: 'View notifications',
+              icon: const Icon(
+                Icons.notifications_outlined,
+                color: Colors.white,
+                semanticLabel: 'Notifications',
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: GestureDetector(
+              onTap: () {
+                context.pushNamed(AppRoute.profileScreen.name);
+              },
+              child: Tooltip(
+                message: 'Go to your profile',
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(25.0),
+                  child: const Image(
+                      semanticLabel: 'Profile picture',
+                      image: AssetImage(
+                          'assets/profile pictures/icon_paintbrush.png'),
+                      height: 20),
+                ),
+              ),
+            ),
+          )
+        ],
+      ),
       body: ListView(scrollDirection: Axis.vertical, children: <Widget>[
         Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Padding(

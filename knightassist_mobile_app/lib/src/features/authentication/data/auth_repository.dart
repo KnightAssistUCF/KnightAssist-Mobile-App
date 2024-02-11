@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:knightassist_mobile_app/src/common_widgets/alert_dialogs.dart';
 import 'package:knightassist_mobile_app/src/exceptions/app_exception.dart';
+import 'package:knightassist_mobile_app/src/features/announcements/domain/announcement.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/domain/app_user.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
 import 'package:knightassist_mobile_app/src/features/students/domain/student_user.dart';
@@ -116,7 +117,7 @@ class AuthRepository {
           List<String> tags = [];
           List<String> followers = [];
           List<String> favorites = [];
-          List<Update> updates = [];
+          List<Announcement> updates = [];
           List<String> eventsArray = [];
 
           for (dynamic s in user['categoryTags']) {
@@ -131,13 +132,13 @@ class AuthRepository {
             favorites.add(s);
           }
           for (dynamic s in user['updates']) {
-            Update u = Update(
+            Announcement a = Announcement(
                 title: s['title'] == null ? '' : s['title'] ?? '',
                 content: s['content'] ?? '',
                 date: DateTime.parse(s['date'] ?? ''),
                 id: (s['_id'] ?? ''));
 
-            updates.add(u);
+            updates.add(a);
           }
           for (dynamic s in user['eventsArray']) {
             eventsArray.add(s);
@@ -175,7 +176,7 @@ class AuthRepository {
               categoryTags: tags,
               followers: followers,
               favorites: favorites,
-              updates: updates,
+              announcements: updates,
               calendarLink: user['calendarLink'] ?? '',
               isActive: user['isActive'],
               eventHappeningNow: user['eventHappeningNow'],

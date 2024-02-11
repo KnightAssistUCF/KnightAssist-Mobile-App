@@ -4,6 +4,7 @@
 
 import 'dart:convert';
 
+import 'package:knightassist_mobile_app/src/features/announcements/domain/announcement.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/domain/app_user.dart';
 
 Organization organizationFromJson(String str) =>
@@ -23,7 +24,7 @@ class Organization extends AppUser {
   List<String> categoryTags;
   List<dynamic> followers;
   List<String> favorites;
-  List<Update> updates;
+  List<Announcement> announcements;
   String? calendarLink;
   bool isActive;
   bool eventHappeningNow;
@@ -54,7 +55,7 @@ class Organization extends AppUser {
     required this.categoryTags,
     required this.followers,
     required this.favorites,
-    required this.updates,
+    required this.announcements,
     this.calendarLink,
     required this.isActive,
     required this.eventHappeningNow,
@@ -86,8 +87,8 @@ class Organization extends AppUser {
         categoryTags: List<String>.from(json["categoryTags"].map((x) => x)),
         followers: List<dynamic>.from(json["followers"].map((x) => x)),
         favorites: List<String>.from(json["favorites"].map((x) => x)),
-        updates:
-            List<Update>.from(json["updates"].map((x) => Update.fromJson(x))),
+        announcements: List<Announcement>.from(
+            json["update"].map((x) => Announcement.fromJson(x))),
         calendarLink: json["calendarLink"],
         isActive: json["isActive"],
         eventHappeningNow: json["eventHappeningNow"],
@@ -120,7 +121,7 @@ class Organization extends AppUser {
         "categoryTags": List<dynamic>.from(categoryTags.map((x) => x)),
         "followers": List<dynamic>.from(followers.map((x) => x)),
         "favorites": List<dynamic>.from(favorites.map((x) => x)),
-        "updates": List<dynamic>.from(updates.map((x) => x.toJson())),
+        "updates": List<dynamic>.from(announcements.map((x) => x.toJson())),
         "calendarLink": calendarLink,
         "isActive": isActive,
         "eventHappeningNow": eventHappeningNow,

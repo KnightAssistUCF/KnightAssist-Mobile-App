@@ -46,6 +46,7 @@ class AnnouncementsRepository {
           final dynamic announcementData = jsonDecode(response.body);*/
 
           Announcement s = Announcement(
+            id: d['updateID'] ?? '',
             title: d['title'] ?? '',
             content: d['content'] ?? '',
             date: DateTime.parse(d['date']),
@@ -95,6 +96,7 @@ class AnnouncementsRepository {
           final dynamic announcementData = jsonDecode(response.body);
 
           Announcement s = Announcement(
+            id: announcementData[0]['updateID'] ?? '',
             title: announcementData[0]['title'] ?? '',
             content: announcementData[0]['content'] ?? '',
             date: DateTime.parse(announcementData[0]['date']),

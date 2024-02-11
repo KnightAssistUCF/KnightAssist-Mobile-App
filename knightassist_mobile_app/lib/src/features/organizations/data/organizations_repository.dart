@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:knightassist_mobile_app/src/exceptions/app_exception.dart';
+import 'package:knightassist_mobile_app/src/features/announcements/domain/announcement.dart';
 import 'package:knightassist_mobile_app/src/features/students/domain/student_user.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
 import 'package:knightassist_mobile_app/src/utils/in_memory_store.dart';
@@ -60,7 +61,7 @@ class OrganizationsRepository {
           List<String> tags = [];
           List<String> followers = [];
           List<String> favorites = [];
-          List<Update> updates = [];
+          List<Announcement> updates = [];
           List<String> eventsArray = [];
 
           for (dynamic s in orgData['categoryTags']) {
@@ -75,13 +76,13 @@ class OrganizationsRepository {
             favorites.add(s);
           }
           for (dynamic s in orgData['updates']) {
-            Update u = Update(
+            Announcement a = Announcement(
                 title: s['title'] == null ? '' : s['title'] ?? '',
                 content: s['content'] ?? '',
                 date: DateTime.parse(s['date'] ?? ''),
-                id: (s['_id'] ?? ''));
+                id: (s['updateID'] ?? ''));
 
-            updates.add(u);
+            updates.add(a);
           }
           for (dynamic s in orgData['eventsArray']) {
             eventsArray.add(s);
@@ -119,7 +120,7 @@ class OrganizationsRepository {
               categoryTags: tags,
               followers: followers,
               favorites: favorites,
-              updates: updates,
+              announcements: updates,
               calendarLink: orgData['calendarLink'] ?? '',
               isActive: orgData['isActive'],
               eventHappeningNow: orgData['eventHappeningNow'],
@@ -193,26 +194,28 @@ class OrganizationsRepository {
       String? location,
       List<String>? categoryTags) async {
     Map<String, dynamic> params = {'organizationID': organizationID};
-   if (name != null) params['name'] = name;
-   if (password != null) params['password'] = password;
-   if (email != null) params['email'] = email;
+    if (name != null) params['name'] = name;
+    if (password != null) params['password'] = password;
+    if (email != null) params['email'] = email;
     if (description != null) params['description'] = description;
     if (location != null) params['location'] = location;
-     if (logoUrl != null) params['logoUrl'] = logoUrl;
-     if (followers != null) params['followers'] = followers;
-     if (favorites != null) params['favorites'] = favorites;
-     if (updates != null) params['updates'] = updates;
-     if (calendarLink != null) params['calendarLink'] = calendarLink;
-     if (contact != null) params['contact'] = contact;
-     if (isActive != null) params['isActive'] = isActive;
-    if (eventHappeningNow != null) params['eventHappeningNow'] = eventHappeningNow;
+    if (logoUrl != null) params['logoUrl'] = logoUrl;
+    if (followers != null) params['followers'] = followers;
+    if (favorites != null) params['favorites'] = favorites;
+    if (updates != null) params['updates'] = updates;
+    if (calendarLink != null) params['calendarLink'] = calendarLink;
+    if (contact != null) params['contact'] = contact;
+    if (isActive != null) params['isActive'] = isActive;
+    if (eventHappeningNow != null)
+      params['eventHappeningNow'] = eventHappeningNow;
     if (backgroundUrl != null) params['backgroundUrl'] = backgroundUrl;
     if (events != null) params['events'] = events;
     if (categoryTags != null) params['categoryTags'] = categoryTags;
 
     var uri = Uri.parse(
         "https://knightassist-43ab3aeaada9.herokuapp.com/api/editOrganizationProfile");
-    var response = await http.post(uri, headers: <String, String>{
+    var response = await http.post(uri,
+        headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
         body: jsonEncode(<String, dynamic>{

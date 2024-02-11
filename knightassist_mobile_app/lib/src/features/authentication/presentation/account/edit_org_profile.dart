@@ -9,6 +9,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:knightassist_mobile_app/src/common_widgets/responsive_center.dart';
 import 'package:knightassist_mobile_app/src/constants/breakpoints.dart';
+import 'package:knightassist_mobile_app/src/features/announcements/domain/announcement.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/data/auth_repository.dart';
 import 'package:knightassist_mobile_app/src/features/events/data/events_repository.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
@@ -597,8 +598,8 @@ class _TabBarOrgState extends State<TabBarOrg> with TickerProviderStateMixin {
                       List<String> updateIDs = [];
                       List<String> eventIDs = [];
 
-                      for (Update u in org!.updates) {
-                        updateIDs.add(u.id);
+                      for (Announcement a in org!.announcements) {
+                        updateIDs.add(a.id);
                       }
 
                       for (Event e in org!.eventsArray) {
