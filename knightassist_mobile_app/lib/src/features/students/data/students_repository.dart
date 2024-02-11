@@ -247,6 +247,79 @@ class StudentsRepository {
   StudentUser? getStudent() {
     return _student.value;
   }
+
+  Future<String> editStudent(
+      String organizationID,
+      String? password,
+      String? name,
+      String? email,
+      String? description,
+      String? logoUrl,
+      List<String>? followers,
+      List<String>? favorites,
+      List<String>? updates,
+      String? calendarLink,
+      Contact? contact,
+      bool? isActive,
+      bool? eventHappeningNow,
+      String? backgroundUrl,
+      List<String>? events,
+      String? location,
+      List<String>? categoryTags) async {
+    Map<String, dynamic> params = {'organizationID': organizationID};
+    if (name != null) params['name'] = name;
+    if (password != null) params['password'] = password;
+    if (email != null) params['email'] = email;
+    if (description != null) params['description'] = description;
+    if (location != null) params['location'] = location;
+    if (logoUrl != null) params['logoUrl'] = logoUrl;
+    if (followers != null) params['followers'] = followers;
+    if (favorites != null) params['favorites'] = favorites;
+    if (updates != null) params['updates'] = updates;
+    if (calendarLink != null) params['calendarLink'] = calendarLink;
+    if (contact != null) params['contact'] = contact;
+    if (isActive != null) params['isActive'] = isActive;
+    if (eventHappeningNow != null)
+      params['eventHappeningNow'] = eventHappeningNow;
+    if (backgroundUrl != null) params['backgroundUrl'] = backgroundUrl;
+    if (events != null) params['events'] = events;
+    if (categoryTags != null) params['categoryTags'] = categoryTags;
+
+    var uri = Uri.parse(
+        "https://knightassist-43ab3aeaada9.herokuapp.com/api/editUserProfile");
+    var response = await http.post(uri,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, dynamic>{
+          'id': organizationID,
+          'name': name,
+          'email': email,
+          'password': password,
+          'description': description,
+          'logoUrl': logoUrl,
+          'favorites': favorites,
+          'updates': updates,
+          'calendarLink': calendarLink,
+          'location': location,
+          'categoryTags': categoryTags,
+          'contact': contact?.toJson(),
+          'isActive': isActive,
+          'eventHappeningNow': eventHappeningNow,
+          'backgroundUrl': backgroundUrl,
+          'eventsArray': events,
+        }));
+    var body = jsonDecode(response.body);
+    switch (response.statusCode) {
+      case 200:
+        return body["ID"];
+      case 404:
+        throw EventNotFoundException();
+      default:
+        String err = body["error"];
+        throw Exception(err);
+    }
+  }
 }
 
 @riverpod
