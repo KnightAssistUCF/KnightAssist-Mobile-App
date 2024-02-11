@@ -36,8 +36,8 @@ import 'package:knightassist_mobile_app/src/features/events/presentation/events_
 import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/update.dart'
     as prefix;
-import 'package:knightassist_mobile_app/src/features/organizations/presentation/create_update.dart';
-import 'package:knightassist_mobile_app/src/features/organizations/presentation/edit_update.dart';
+import 'package:knightassist_mobile_app/src/features/organizations/presentation/create_announcement.dart';
+import 'package:knightassist_mobile_app/src/features/announcements/presentation/edit_announcement.dart';
 import 'package:knightassist_mobile_app/src/features/leaderboard/presentation/leaderboard.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/presentation/organization_screen.dart'
     as prefix;
@@ -80,9 +80,9 @@ enum AppRoute {
   postScan,
   createEvent,
   createFeedback,
-  createUpdate,
+  createAnnouncement,
   editEvent,
-  editUpdate,
+  editAnnouncement,
   viewRSVPs,
   editOrgProfile,
   forgotPassword,
@@ -304,10 +304,10 @@ GoRouter goRouter(GoRouterRef ref) {
                     return CreateFeedback(event: e);
                   }),
               GoRoute(
-                  path: 'createupdate',
-                  name: AppRoute.createUpdate.name,
+                  path: 'createannouncement',
+                  name: AppRoute.createAnnouncement.name,
                   pageBuilder: (context, state) => const MaterialPage(
-                      fullscreenDialog: true, child: CreateUpdate())),
+                      fullscreenDialog: true, child: CreateAnnouncement())),
               GoRoute(
                   path: 'editevent',
                   name: 'editevent',
@@ -317,12 +317,12 @@ GoRouter goRouter(GoRouterRef ref) {
                     return EditEvent(event: e);
                   }),
               GoRoute(
-                  path: 'editupdate',
-                  name: 'editupdate',
+                  path: 'editannouncement',
+                  name: 'editannouncement',
                   builder: (context, state) {
-                    Update u = state.extra as Update;
-                    //final updateID = state.pathParameters['id']!;
-                    return EditUpdate(update: u);
+                    Announcement a = state.extra as Announcement;
+                    //final announcementID = state.pathParameters['id']!;
+                    return EditAnnouncement(announcement: a);
                   }),
               GoRoute(
                   path: 'viewrsvps',

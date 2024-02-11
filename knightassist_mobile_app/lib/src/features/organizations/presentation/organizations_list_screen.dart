@@ -262,7 +262,7 @@ class _OrganizationsListScreenState extends State<OrganizationsListScreen>
                       //),
                       onPressed: () {
                         if (index == 0) {
-                          context.pushNamed(AppRoute.createUpdate.name);
+                          context.pushNamed(AppRoute.createAnnouncement.name);
                         } else {
                           context.pushNamed(AppRoute.createEvent.name);
                         }

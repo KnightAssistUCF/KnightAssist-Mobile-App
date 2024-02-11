@@ -7,8 +7,8 @@ import 'package:knightassist_mobile_app/src/features/organizations/domain/organi
 import 'package:knightassist_mobile_app/src/features/organizations/domain/update.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 
-class CreateUpdate extends ConsumerWidget {
-  const CreateUpdate({super.key});
+class CreateAnnouncement extends ConsumerWidget {
+  const CreateAnnouncement({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -56,8 +56,8 @@ class CreateUpdate extends ConsumerWidget {
         ],
       ),
       body: ListView(scrollDirection: Axis.vertical, children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.all(8.0),
+        const Padding(
+          padding: EdgeInsets.all(8.0),
           child: TextField(
             decoration: InputDecoration(
               border: OutlineInputBorder(),
@@ -65,8 +65,8 @@ class CreateUpdate extends ConsumerWidget {
             ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
+        const Padding(
+          padding: EdgeInsets.all(8.0),
           child: SizedBox(
               width: 240,
               height: 120,
@@ -84,8 +84,8 @@ class CreateUpdate extends ConsumerWidget {
           padding: const EdgeInsets.all(8.0),
           child: ElevatedButton(
               onPressed: () {},
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
+              child: const Padding(
+                padding: EdgeInsets.all(8.0),
                 child: Text(
                   'Create Announcement',
                   style: TextStyle(fontSize: 20),

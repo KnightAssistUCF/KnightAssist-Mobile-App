@@ -109,7 +109,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                           //),
                           onPressed: () {
                             if (index == 0) {
-                              context.pushNamed(AppRoute.createUpdate.name);
+                              context
+                                  .pushNamed(AppRoute.createAnnouncement.name);
                             } else {
                               context.pushNamed(AppRoute.createEvent.name);
                             }
@@ -700,7 +701,7 @@ class HomeScreenTab extends ConsumerWidget {
                                     height: 100,
                                     child: InkWell(
                                       onTap: () => context.pushNamed(
-                                          AppRoute.createUpdate.name),
+                                          AppRoute.createAnnouncement.name),
                                       child: const Center(
                                         child: Column(children: [
                                           Icon(Icons.campaign),
