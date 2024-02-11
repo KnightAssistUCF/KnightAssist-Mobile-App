@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:knightassist_mobile_app/src/features/announcements/domain/announcement.dart';
+import 'package:knightassist_mobile_app/src/features/students/data/students_repository.dart';
 import 'package:knightassist_mobile_app/src/utils/in_memory_store.dart';
 
 import 'package:http/http.dart' as http;
@@ -20,18 +21,46 @@ class AnnouncementsRepository {
     return _getAnnouncement(_announcements.value, title);
   }
 
-  Future<List<Announcement>> fetchAnnouncementsList() async {
+// returns the list of all announcements from all a student's favorited organizations
+  Future<List<Announcement>> fetchStudentFavOrgAnnouncements(
+      String studentID) async {
+    Map<String, String?> params = {"studentID": studentID};
     var uri = Uri.https('knightassist-43ab3aeaada9.herokuapp.com',
-        '/api/loadAllOrgAnnouncements');
+        '/api/favoritedOrgsAnnouncements', params);
     var response = await http.get(uri);
     Map<String, dynamic> map = jsonDecode(response.body);
     switch (response.statusCode) {
       case 200:
-        String announcementsJson = map['announcements'];
-        _announcements.value = (json.decode(announcementsJson) as List)
-            .map((i) => Announcement.fromMap(i))
-            .toList();
-        return _announcements.value;
+        List<dynamic> announcementJson = map['data'];
+        List<Announcement> list = [];
+
+        for (dynamic d in announcementJson) {
+          Map<String, String?> params = {
+            "title": d['title'],
+            "organizationID": d['organizationID']
+          };
+          var uri = Uri.https('knightassist-43ab3aeaada9.herokuapp.com',
+              '/api/searchForAnnouncement', params);
+          var response = await http.get(uri);
+          final dynamic announcementData = jsonDecode(response.body);
+
+          Announcement s = Announcement(
+            title: announcementData['title'] ?? '',
+            content: announcementData['content'] ?? '',
+            date: DateTime.parse(announcementData['date']),
+          );
+
+          list.add(s);
+          _announcements.value.add(s);
+        }
+
+        //String announcementsJson = map['announcements'];
+        //_announcements.value = (json.decode(announcementsJson) as List)
+        //.map((i) => Announcement.fromMap(i))
+        // .toList();
+        //return _announcements.value;
+
+        return list;
       default:
         throw Exception(response.body);
     }
@@ -52,7 +81,7 @@ class AnnouncementsRepository {
       'Client-side search should only be performed if the number of announcements is small. '
       'Consider doing server-side search for larger datasets.',
     );
-    final announcementsList = await fetchAnnouncementsList();
+    final announcementsList = await fetchStudentFavOrgAnnouncements('');
     return announcementsList
         .where((announcement) =>
             announcement.title.toLowerCase().contains(query.toLowerCase()))
@@ -120,12 +149,12 @@ Stream<List<Announcement>> announcementsListStream(
   return announcementsRepository.watchAnnouncementsList();
 }
 
-@riverpod
+/*@riverpod
 Future<List<Announcement>> announcementsListFuture(
     AnnouncementsListFutureRef ref) {
   final announcementsRepository = ref.watch(announcementsRepositoryProvider);
   return announcementsRepository.fetchAnnouncementsList();
-}
+}*/
 
 @riverpod
 Stream<Announcement?> announcement(AnnouncementRef ref, String title) {
