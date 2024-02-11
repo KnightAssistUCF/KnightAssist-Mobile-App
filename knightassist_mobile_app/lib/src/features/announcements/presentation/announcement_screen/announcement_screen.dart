@@ -14,7 +14,7 @@ class AnnouncementScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("temp")),
+      appBar: AppBar(title: const Text("Announcement")),
       body: Consumer(builder: (context, ref, _) {
         final announcementValue =
             ref.watch(announcementProvider(announcement.title));

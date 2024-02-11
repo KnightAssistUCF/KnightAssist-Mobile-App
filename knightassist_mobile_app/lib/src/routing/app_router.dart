@@ -227,16 +227,16 @@ GoRouter goRouter(GoRouterRef ref) {
                   path: 'updates',
                   name: AppRoute.updates.name,
                   builder: (context, state) {
-                    return const UpdateScreen();
+                    return const AnnouncementsListScreen();
                   },
                   routes: [
                     GoRoute(
                         path: 'updatedetail',
                         name: 'updatedetail',
                         builder: (context, state) {
-                          Update u = state.extra as Update;
+                          Announcement u = state.extra as Announcement;
                           //final updateID = state.pathParameters['id']!;
-                          return UpdateDetailScreen(update: u);
+                          return AnnouncementDetails(announcement: u);
                         })
                   ]),
               GoRoute(

@@ -22,7 +22,7 @@ class AnnouncementsRepository {
 
   Future<List<Announcement>> fetchAnnouncementsList() async {
     var uri = Uri.https('knightassist-43ab3aeaada9.herokuapp.com',
-        '/api/favoritedOrgsAnnouncements');
+        '/api/loadAllOrgAnnouncements');
     var response = await http.get(uri);
     Map<String, dynamic> map = jsonDecode(response.body);
     switch (response.statusCode) {

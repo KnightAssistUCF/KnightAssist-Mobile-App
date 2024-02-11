@@ -40,7 +40,7 @@ class _AnnouncementsListScreenState extends State<AnnouncementsListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("temp")),
+      appBar: AppBar(title: const Text("Announcements")),
       body: CustomScrollView(
         controller: _scrollController,
         slivers: const [
