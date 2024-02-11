@@ -66,6 +66,48 @@ class AnnouncementsRepository {
     }
   }
 
+  // returns the list of all announcements from an organization
+  Future<List<Announcement>> fetchOrgAnnouncements(
+      String organizationName, String organizationID) async {
+    Map<String, String?> params = {
+      "organizationName": organizationName,
+      "organizationID": organizationID
+    };
+    var uri = Uri.https('knightassist-43ab3aeaada9.herokuapp.com',
+        '/api/loadAllOrgAnnouncements', params);
+    var response = await http.get(uri);
+    Map<String, dynamic> map = jsonDecode(response.body);
+    switch (response.statusCode) {
+      case 200:
+        List<dynamic> announcementJson = map['data'];
+        List<Announcement> list = [];
+
+        for (dynamic d in announcementJson) {
+          Map<String, String?> params = {
+            "title": d['title'],
+            "organizationID": d['organizationID']
+          };
+          var uri = Uri.https('knightassist-43ab3aeaada9.herokuapp.com',
+              '/api/searchForAnnouncement', params);
+          var response = await http.get(uri);
+          final dynamic announcementData = jsonDecode(response.body);
+
+          Announcement s = Announcement(
+            title: announcementData['title'] ?? '',
+            content: announcementData['content'] ?? '',
+            date: DateTime.parse(announcementData['date']),
+          );
+
+          list.add(s);
+          _announcements.value.add(s);
+        }
+
+        return list;
+      default:
+        throw Exception(response.body);
+    }
+  }
+
   Stream<List<Announcement>> watchAnnouncementsList() {
     return _announcements.stream;
   }
@@ -149,12 +191,12 @@ Stream<List<Announcement>> announcementsListStream(
   return announcementsRepository.watchAnnouncementsList();
 }
 
-/*@riverpod
+@riverpod
 Future<List<Announcement>> announcementsListFuture(
     AnnouncementsListFutureRef ref) {
   final announcementsRepository = ref.watch(announcementsRepositoryProvider);
-  return announcementsRepository.fetchAnnouncementsList();
-}*/
+  return announcementsRepository.fetchOrgAnnouncements('');
+}
 
 @riverpod
 Stream<Announcement?> announcement(AnnouncementRef ref, String title) {
