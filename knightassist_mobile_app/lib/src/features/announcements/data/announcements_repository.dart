@@ -28,26 +28,27 @@ class AnnouncementsRepository {
     var uri = Uri.https('knightassist-43ab3aeaada9.herokuapp.com',
         '/api/favoritedOrgsAnnouncements', params);
     var response = await http.get(uri);
+    print(response.body);
     Map<String, dynamic> map = jsonDecode(response.body);
     switch (response.statusCode) {
       case 200:
-        List<dynamic> announcementJson = map['data'];
+        List<dynamic> announcementJson = map['announcements'];
         List<Announcement> list = [];
 
         for (dynamic d in announcementJson) {
-          Map<String, String?> params = {
+          /*Map<String, String?> params = {
             "title": d['title'],
-            "organizationID": d['organizationID']
+            "organizationID": organizationID
           };
           var uri = Uri.https('knightassist-43ab3aeaada9.herokuapp.com',
               '/api/searchForAnnouncement', params);
           var response = await http.get(uri);
-          final dynamic announcementData = jsonDecode(response.body);
+          final dynamic announcementData = jsonDecode(response.body);*/
 
           Announcement s = Announcement(
-            title: announcementData['title'] ?? '',
-            content: announcementData['content'] ?? '',
-            date: DateTime.parse(announcementData['date']),
+            title: d['title'] ?? '',
+            content: d['content'] ?? '',
+            date: DateTime.parse(d['date']),
           );
 
           list.add(s);
@@ -76,16 +77,17 @@ class AnnouncementsRepository {
     var uri = Uri.https('knightassist-43ab3aeaada9.herokuapp.com',
         '/api/loadAllOrgAnnouncements', params);
     var response = await http.get(uri);
+    print(response.body);
     Map<String, dynamic> map = jsonDecode(response.body);
     switch (response.statusCode) {
       case 200:
-        List<dynamic> announcementJson = map['data'];
+        List<dynamic> announcementJson = map['announcements'];
         List<Announcement> list = [];
 
         for (dynamic d in announcementJson) {
           Map<String, String?> params = {
             "title": d['title'],
-            "organizationID": d['organizationID']
+            "organizationID": organizationID
           };
           var uri = Uri.https('knightassist-43ab3aeaada9.herokuapp.com',
               '/api/searchForAnnouncement', params);
@@ -93,9 +95,9 @@ class AnnouncementsRepository {
           final dynamic announcementData = jsonDecode(response.body);
 
           Announcement s = Announcement(
-            title: announcementData['title'] ?? '',
-            content: announcementData['content'] ?? '',
-            date: DateTime.parse(announcementData['date']),
+            title: announcementData[0]['title'] ?? '',
+            content: announcementData[0]['content'] ?? '',
+            date: DateTime.parse(announcementData[0]['date']),
           );
 
           list.add(s);
@@ -123,7 +125,10 @@ class AnnouncementsRepository {
       'Client-side search should only be performed if the number of announcements is small. '
       'Consider doing server-side search for larger datasets.',
     );
-    final announcementsList = await fetchStudentFavOrgAnnouncements('');
+    final announcementsList = await fetchOrgAnnouncements(
+      'My Organization!',
+      '657e15abf893392ca98665d1',
+    ); // TODO: get value from auth
     return announcementsList
         .where((announcement) =>
             announcement.title.toLowerCase().contains(query.toLowerCase()))
@@ -195,7 +200,7 @@ Stream<List<Announcement>> announcementsListStream(
 Future<List<Announcement>> announcementsListFuture(
     AnnouncementsListFutureRef ref) {
   final announcementsRepository = ref.watch(announcementsRepositoryProvider);
-  return announcementsRepository.fetchOrgAnnouncements('');
+  return announcementsRepository.fetchStudentFavOrgAnnouncements('');
 }
 
 @riverpod
