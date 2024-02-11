@@ -113,6 +113,7 @@ class _OrganizationTopState extends State<OrganizationTop> {
     super.initState();
     organization = widget.organization;
     width = widget.width;
+    _nameController.text = organization.name;
   }
 
   @override

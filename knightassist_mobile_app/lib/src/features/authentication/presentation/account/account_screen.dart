@@ -9,6 +9,8 @@ import 'package:knightassist_mobile_app/src/constants/app_sizes.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/data/auth_repository.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/account/account_screen_controller.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/data/organizations_repository.dart';
+import 'package:knightassist_mobile_app/src/features/students/data/students_repository.dart';
+import 'package:knightassist_mobile_app/src/features/students/domain/student_user.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 import 'package:knightassist_mobile_app/src/utils/async_value_ui.dart';
 import 'package:rxdart/rxdart.dart';
@@ -23,6 +25,8 @@ class AccountScreen extends ConsumerWidget {
         (_, state) => state.showAlertDialogOnError(context));
     final state = ref.watch(accountScreenControllerProvider);
 
+    StudentUser? student = null;
+
     final authRepository = ref.watch(authRepositoryProvider);
     final user = authRepository.currentUser;
     bool isOrg = user?.role == 'organization';
@@ -30,6 +34,12 @@ class AccountScreen extends ConsumerWidget {
 
     organizationsRepository.fetchOrganizationsList();
     final org = organizationsRepository.getOrganization(user?.id ?? '');
+
+    final studentRepository = ref.watch(studentsRepositoryProvider);
+    if (user?.role == 'student') {
+      studentRepository.fetchStudent(user!.id);
+      student = studentRepository.getStudent();
+    }
 
     return Scaffold(
         appBar: AppBar(
@@ -85,7 +95,11 @@ class AccountScreen extends ConsumerWidget {
                         children: [
                           const SizedBox(height: 40),
                           Text(
-                            isOrg ? org?.name ?? '' : "Student User Name",
+                            isOrg
+                                ? org?.name ?? ''
+                                : user?.role == 'student'
+                                    ? '${student!.firstName} ${student!.lastName}'
+                                    : 'Not Logged In',
                             style: const TextStyle(
                                 fontWeight: FontWeight.w600,
                                 color: Colors.black,
@@ -94,7 +108,9 @@ class AccountScreen extends ConsumerWidget {
                           Text(
                             isOrg
                                 ? "Joined on ${DateFormat.yMMMEd().format(org!.createdAt)}"
-                                : "Joined October 20th, 2023",
+                                : user?.role == 'student'
+                                    ? 'Joined on ${DateFormat.yMMMEd().format(student!.createdAt)}'
+                                    : 'Not Logged In',
                             style: const TextStyle(
                                 fontWeight: FontWeight.w600,
                                 color: Colors.black,
@@ -164,31 +180,50 @@ class AccountScreen extends ConsumerWidget {
                                     title: Text('Notifications'),
                                     onPressed: (context) {},
                                   )
-                                : SettingsTile.navigation(
-                                    leading:
-                                        const Icon(Icons.access_time_rounded),
-                                    title: Text('Semester Goal'),
-                                    value: Text('120 hours'),
-                                    onPressed: (context) => context
-                                        .pushNamed(AppRoute.semesterGoal.name),
-                                  ),
+                                : user?.role == 'student'
+                                    ? SettingsTile.navigation(
+                                        leading: const Icon(
+                                            Icons.access_time_rounded),
+                                        title: Text('Semester Goal'),
+                                        value: Text(
+                                            '${student!.semesterVolunteerHourGoal}'),
+                                        onPressed: (context) =>
+                                            context.pushNamed(
+                                                AppRoute.semesterGoal.name),
+                                      )
+                                    : SettingsTile.navigation(
+                                        leading: const Icon(
+                                            Icons.access_time_rounded),
+                                        title: Text('Semester Goal'),
+                                        value: const Text("120"),
+                                        onPressed: (context) =>
+                                            context.pushNamed(
+                                                AppRoute.semesterGoal.name),
+                                      ),
                             isOrg
                                 ? SettingsTile.navigation(
                                     leading: Icon(Icons.favorite_border),
                                     title: Text('Top Volunteers'),
                                     value: Text('5'),
-                                    onPressed: (context) => {})
+                                    onPressed: (context) => context
+                                        .pushNamed(AppRoute.leaderboard.name))
                                 : SettingsTile.navigation(
                                     leading: Icon(Icons.favorite_border),
                                     title: Text('Favorite Organizations'),
-                                    value: Text('5'),
+                                    value: Text(user?.role == 'student'
+                                        ? '${student!.favoritedOrganizations.length}'
+                                        : '5'),
                                     onPressed: (context) => context
                                         .pushNamed(AppRoute.organizations.name),
                                   ),
                             SettingsTile.navigation(
                               leading: Icon(Icons.star_border_outlined),
                               title: Text(isOrg ? 'Tags' : 'Interests'),
-                              value: Text('10'),
+                              value: Text(isOrg
+                                  ? '${org!.categoryTags.length}'
+                                  : user?.role == 'student'
+                                      ? '${student!.categoryTags.length}'
+                                      : '10'),
                               onPressed: (context) =>
                                   context.pushNamed(AppRoute.tagSelection.name),
                             ),
