@@ -481,6 +481,7 @@ class EventsRepository {
     var uri = Uri.https('knightassist-43ab3aeaada9.herokuapp.com',
         '/api/historyOfEvents_User', params);
     var response = await http.get(uri);
+    print(response.body);
 
     switch (response.statusCode) {
       case 200:

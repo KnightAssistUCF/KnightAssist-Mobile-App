@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
 
 class EventHistory {
@@ -24,16 +26,26 @@ class EventHistory {
   final String? whoAdjusted;
 
   factory EventHistory.fromMap(Map<String, dynamic> map) {
+    // format dates from the event history api to be parsed in Dart DateTimes
+    String date = map['checkOut'][0].toString().replaceAll('/', '-');
+    List<String> numbers = [];
+    NumberFormat formatter = new NumberFormat("00");
+
+    for (String s in date.split('-')) {
+      String formattedNumber = formatter.format(double.parse(s));
+      numbers.add(formattedNumber);
+    }
+    String number = numbers.join('-');
+    String str = number.split('-').reversed.join('-');
+
     return EventHistory(
-      id: map['_id'] ?? '',
+      id: map['ID'],
       name: map['name'],
       org: map['org'],
-      //checkIn: DateTime.parse(map['checkIn']),
-      //checkOut: DateTime.parse(map['checkOut']),
+      //checkIn: (map['checkIn'][0]),
       checkIn: DateTime.now(),
-      checkOut: DateTime.now(),
-      //hours: map['total'],
-      hours: 0.0,
+      checkOut: DateTime.parse(number),
+      hours: map['hours'],
       wasAdjusted: map['wasAdjusted'],
       adjustedTotal: map['adjustedTotal'],
       whoAdjusted: map['whoAdjusted'],
