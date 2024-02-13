@@ -25,12 +25,15 @@ class EventHistory {
 
   factory EventHistory.fromMap(Map<String, dynamic> map) {
     return EventHistory(
-      id: map['id'],
+      id: map['_id'] ?? '',
       name: map['name'],
       org: map['org'],
-      checkIn: DateTime.parse(map['checkIn']),
-      checkOut: DateTime.parse(map['checkOut']),
-      hours: map['total'],
+      //checkIn: DateTime.parse(map['checkIn']),
+      //checkOut: DateTime.parse(map['checkOut']),
+      checkIn: DateTime.now(),
+      checkOut: DateTime.now(),
+      //hours: map['total'],
+      hours: 0.0,
       wasAdjusted: map['wasAdjusted'],
       adjustedTotal: map['adjustedTotal'],
       whoAdjusted: map['whoAdjusted'],

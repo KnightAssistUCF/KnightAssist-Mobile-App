@@ -30,10 +30,12 @@ class EventHistoryList extends ConsumerWidget {
                 final history = histories[index];
                 return EventHistoryCard(
                   eventHistory: history,
-                  onPressed: () => context.goNamed(
-                    AppRoute.eventHistory.name,
-                    pathParameters: {'id': history.id},
-                  ),
+                  //onPressed: () => context.goNamed(
+                  //AppRoute.eventHistory.name,
+                  //pathParameters: {'id': history.id},
+                  //),
+                  onPressed: () =>
+                      context.goNamed("historydetail", extra: history),
                 );
               },
             ),

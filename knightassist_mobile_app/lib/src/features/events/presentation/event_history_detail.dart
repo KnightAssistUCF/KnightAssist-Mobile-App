@@ -3,19 +3,20 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
+import 'package:knightassist_mobile_app/src/features/events/domain/event_history.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 
 class HistoryDetailScreen extends ConsumerWidget {
   const HistoryDetailScreen({super.key, required this.event});
-  final Event event;
+  final EventHistory event;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
 
-    final difference = event.endTime.difference(event.startTime).inHours;
+    final difference = event.checkOut.difference(event.checkIn).inHours;
 
     return Scaffold(
       appBar: AppBar(
@@ -63,8 +64,9 @@ class HistoryDetailScreen extends ConsumerWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextButton(
-              onPressed: () => context.pushNamed(AppRoute.organization.name,
-                  extra: event.sponsoringOrganization),
+              //onPressed: () => context.pushNamed(AppRoute.organization.name,
+              //extra: event.sponsoringOrganization),
+              onPressed: () {},
               child: Wrap(
                 children: [
                   ClipRRect(
@@ -74,7 +76,8 @@ class HistoryDetailScreen extends ConsumerWidget {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      event.sponsoringOrganization,
+                      //event.sponsoringOrganization,
+                      'sponsor org',
                       style: const TextStyle(
                           fontWeight: FontWeight.w400, fontSize: 25),
                       textAlign: TextAlign.justify,
@@ -91,14 +94,14 @@ class HistoryDetailScreen extends ConsumerWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              "Check in time: ${event.startTime}",
+              "Check in time: ${event.checkIn}",
               style: const TextStyle(fontSize: 20),
             ),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              "Check out time: ${event.endTime}",
+              "Check out time: ${event.checkOut}",
               style: const TextStyle(fontSize: 20),
             ),
           ),
@@ -149,7 +152,7 @@ class HistoryDetailScreen extends ConsumerWidget {
   }
 }
 
-_title(double width, Event e) {
+_title(double width, EventHistory e) {
   return Builder(builder: (context) {
     return Stack(children: [
       Center(
@@ -161,7 +164,7 @@ _title(double width, Event e) {
               decoration: BoxDecoration(
                 image: DecorationImage(
                   fit: BoxFit.fill,
-                  image: NetworkImage(e.profilePicPath),
+                  image: NetworkImage(''),
                 ),
               ),
             ),
