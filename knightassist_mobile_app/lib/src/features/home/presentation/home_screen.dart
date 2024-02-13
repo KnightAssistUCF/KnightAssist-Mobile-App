@@ -10,8 +10,10 @@ import 'package:knightassist_mobile_app/src/features/events/presentation/events_
 import 'package:knightassist_mobile_app/src/features/events/presentation/feedback_list_screen.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/qr_scanner.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/data/organizations_repository.dart';
+import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/presentation/update_screen.dart';
 import 'package:knightassist_mobile_app/src/features/students/data/students_repository.dart';
+import 'package:knightassist_mobile_app/src/features/students/domain/student_user.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
@@ -628,8 +630,23 @@ class HomeScreenTab extends ConsumerWidget {
 
     final authRepository = ref.watch(authRepositoryProvider);
     final organizationsRepository = ref.watch(organizationsRepositoryProvider);
+    organizationsRepository.fetchOrganizationsList();
+    final studentsRepository = ref.watch(studentsRepositoryProvider);
     final user = authRepository.currentUser;
     bool isOrg = user?.role == "organization";
+    bool isStudent = user?.role == "student";
+    Organization? org;
+    StudentUser? student;
+
+    if (isOrg) {
+      org = organizationsRepository.getOrganization(user!.id);
+    }
+
+    if (isStudent) {
+      studentsRepository.fetchStudent(user!.id);
+      print("isStudent");
+      student = studentsRepository.getStudent();
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -651,7 +668,16 @@ class HomeScreenTab extends ConsumerWidget {
             padding: const EdgeInsets.all(8.0),
             child: GestureDetector(
               onTap: () {
-                context.pushNamed(AppRoute.profileScreen.name);
+                if (isOrg) {
+                context.pushNamed(
+                  "organization", extra: org
+                );
+                } else if (isStudent) {
+                  context.pushNamed("profileScreen", extra: student);
+                }
+               else {
+                context.pushNamed(AppRoute.signIn.name);
+               }
               },
               child: Tooltip(
                 message: 'Go to your profile',

@@ -9,12 +9,14 @@ import 'package:knightassist_mobile_app/src/constants/breakpoints.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/data/auth_repository.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/events_list/events_list_screen.dart';
 import 'package:knightassist_mobile_app/src/features/students/data/students_repository.dart';
+import 'package:knightassist_mobile_app/src/features/students/domain/student_user.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:editable_image/editable_image.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+  const ProfileScreen({super.key, required this.student});
+  final StudentUser student;
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -22,6 +24,7 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   File? _profilePicFile;
+  late final StudentUser student;
 
   final _formKey = GlobalKey<FormState>();
   final _node = FocusScopeNode();
@@ -40,6 +43,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
+    student = widget.student;
+    _firstNameController.text = student.firstName;
+    _lastNameController.text = student.lastName;
+    _emailController.text = student.email;
+    _passwordController.text = student.password;
   }
 
   @override

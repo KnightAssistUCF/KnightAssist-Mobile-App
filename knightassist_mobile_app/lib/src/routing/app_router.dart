@@ -49,6 +49,7 @@ import 'package:knightassist_mobile_app/src/features/organizations/presentation/
 import 'package:knightassist_mobile_app/src/features/organizations/presentation/organization_screen/organization_screen.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/presentation/update_detail.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/presentation/update_screen.dart';
+import 'package:knightassist_mobile_app/src/features/students/domain/student_user.dart';
 import 'package:knightassist_mobile_app/src/routing/go_router_refresh_stream.dart';
 import 'package:knightassist_mobile_app/src/routing/not_found_screen.dart';
 import 'package:flutter/material.dart';
@@ -206,9 +207,12 @@ GoRouter goRouter(GoRouterRef ref) {
                       fullscreenDialog: true, child: HomeScreen())),
               GoRoute(
                   path: 'profileScreen',
-                  name: AppRoute.profileScreen.name,
-                  pageBuilder: (context, state) => const MaterialPage(
-                      fullscreenDialog: true, child: ProfileScreen())),
+                  name: 'profileScreen',
+                  builder: (context, state) {
+                    StudentUser s = state.extra as StudentUser;
+                    return ProfileScreen(student: s);
+                   })
+                ,
               GoRoute(
                   path: 'eventHistory',
                   name: AppRoute.eventHistory.name,
