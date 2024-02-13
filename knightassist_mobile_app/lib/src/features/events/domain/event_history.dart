@@ -37,15 +37,27 @@ class EventHistory {
     }
     String number = numbers.join('-');
     String str = number.split('-').reversed.join('-');
+    String remove = number.replaceAll('-', '');
+
+    // format dates from the event history api to be parsed in Dart DateTimes
+    String dateCheckIn = map['checkIn'][0].toString().replaceAll('/', '-');
+    List<String> numbersCheckIn = [];
+
+    for (String s in dateCheckIn.split('-')) {
+      String formattedNumberCheckIn = formatter.format(double.parse(s));
+      numbersCheckIn.add(formattedNumberCheckIn);
+    }
+    String numberCheckIn = numbersCheckIn.join('-');
+    String strCheckIn = numberCheckIn.split('-').reversed.join('-');
+    String removeCheckIn = numberCheckIn.replaceAll('-', '');
 
     return EventHistory(
       id: map['ID'],
       name: map['name'],
       org: map['org'],
-      //checkIn: (map['checkIn'][0]),
-      checkIn: DateTime.now(),
-      checkOut: DateTime.parse(number),
-      hours: map['hours'],
+      checkIn: DateTime.parse(strCheckIn),
+      checkOut: DateTime.parse(str),
+      hours: double.parse(map['hours']),
       wasAdjusted: map['wasAdjusted'],
       adjustedTotal: map['adjustedTotal'],
       whoAdjusted: map['whoAdjusted'],
