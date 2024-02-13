@@ -65,6 +65,7 @@ flutter:
     - assets/icon/icon.png
     - assets/icon/icontransparent.png
     - assets/orgdefaultbackground.png
+    - assets/ca/lets-encrypt-r3.pem
   fonts:
     - family: League Spartan
       fonts:

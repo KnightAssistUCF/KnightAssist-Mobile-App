@@ -6,6 +6,7 @@ import 'package:knightassist_mobile_app/src/common_widgets/responsive_scrollable
 import 'package:knightassist_mobile_app/src/features/authentication/data/auth_repository.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/sign_in/sign_in_screen.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/data/organizations_repository.dart';
+import 'package:knightassist_mobile_app/src/features/students/data/students_repository.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 
 List<String> tags = [
@@ -76,6 +77,13 @@ class TagSelection extends ConsumerWidget {
     organizationsRepository.fetchOrganizationsList();
     final org = organizationsRepository.getOrganization(user?.id ?? '');
     selectedTags = org?.categoryTags ?? [];
+
+    if (user?.role == 'student') {
+      final studentsRepository = ref.watch(studentsRepositoryProvider);
+    final student = studentsRepository.fetchStudent(user!.id);
+    selectedTags = studentsRepository.getStudent()!.categoryTags;
+
+    }
 
     return Scaffold(
       appBar: AppBar(

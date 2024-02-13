@@ -100,6 +100,7 @@ class RSVPRepository {
     switch (response.statusCode) {
       case 200:
         // Handle API cases
+        print(response.body);
         return "Cancelled RSVP for event.";
       case 400:
         return "Incorrect credentials provided.";
