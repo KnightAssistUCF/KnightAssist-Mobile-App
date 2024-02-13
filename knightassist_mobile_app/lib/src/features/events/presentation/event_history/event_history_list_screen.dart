@@ -39,7 +39,7 @@ class _EventHistoryListScreenState extends State<EventHistoryListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("temp")),
+      appBar: AppBar(title: const Text("Event History")),
       body: CustomScrollView(
         controller: _scrollController,
         slivers: const [
