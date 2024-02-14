@@ -148,8 +148,9 @@ class AnnouncementsRepository {
   }
 
   Future<String> addAnnouncement(
-      String title, String content, DateTime date) async {
+      String title, String content, DateTime date, String orgID) async {
     Map<String, dynamic> params = {
+      'organizationID': orgID,
       'title': title,
       'content': content,
       'date': date.toIso8601String(),
@@ -157,12 +158,21 @@ class AnnouncementsRepository {
 
     var uri = Uri.parse(
         "https://knightassist-43ab3aeaada9.herokuapp.com/api/createOrgAnnouncement");
-    var response = await http.post(uri, body: params);
+    var response = await http.post(uri,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, dynamic>{
+          'organizationID': orgID,
+          'title': title,
+          'content': content,
+          'date': date.toIso8601String(),
+        }));
     switch (response.statusCode) {
       case 200:
         return "Success";
       default:
-        throw Exception();
+        throw Exception(response.body);
     }
   }
 

@@ -211,8 +211,7 @@ GoRouter goRouter(GoRouterRef ref) {
                   builder: (context, state) {
                     StudentUser s = state.extra as StudentUser;
                     return ProfileScreen(student: s);
-                   })
-                ,
+                  }),
               GoRoute(
                   path: 'eventHistory',
                   name: AppRoute.eventHistory.name,
@@ -312,7 +311,7 @@ GoRouter goRouter(GoRouterRef ref) {
               GoRoute(
                   path: 'createannouncement',
                   name: AppRoute.createAnnouncement.name,
-                  pageBuilder: (context, state) => const MaterialPage(
+                  pageBuilder: (context, state) => MaterialPage(
                       fullscreenDialog: true, child: CreateAnnouncement())),
               GoRoute(
                   path: 'editevent',
