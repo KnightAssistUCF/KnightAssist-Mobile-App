@@ -77,7 +77,7 @@ class HistoryDetailScreen extends ConsumerWidget {
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
                       //event.sponsoringOrganization,
-                      'sponsor org',
+                      event.org,
                       style: const TextStyle(
                           fontWeight: FontWeight.w400, fontSize: 25),
                       textAlign: TextAlign.justify,
