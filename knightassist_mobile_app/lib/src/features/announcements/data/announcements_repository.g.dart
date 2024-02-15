@@ -43,7 +43,7 @@ final announcementsListStreamProvider =
 typedef AnnouncementsListStreamRef
     = AutoDisposeStreamProviderRef<List<Announcement>>;
 String _$announcementsListFutureHash() =>
-    r'f5004988fa17f9d8adb62682aa62a25e982f17f1';
+    r'7ec99094183be5a5c65ee85b9b9f49a654c596ca';
 
 /// See also [announcementsListFuture].
 @ProviderFor(announcementsListFuture)
