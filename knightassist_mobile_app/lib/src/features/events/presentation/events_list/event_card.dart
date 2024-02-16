@@ -1,10 +1,12 @@
 import 'package:flutter/foundation.dart';
 import 'package:go_router/go_router.dart';
+import 'package:knightassist_mobile_app/src/common_widgets/async_value_widget.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/data/auth_repository.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
 import 'package:flutter/material.dart';
 import 'package:knightassist_mobile_app/src/constants/app_sizes.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:knightassist_mobile_app/src/features/images/data/images_repository.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/data/organizations_repository.dart';
 import 'package:knightassist_mobile_app/src/features/rsvp/data/rsvp_repository.dart';
 import 'package:knightassist_mobile_app/src/features/rsvp/presentation/rsvp_widget.dart';
@@ -26,6 +28,7 @@ class EventCard extends ConsumerWidget {
     final rsvpRepository = ref.watch(rsvpRepositoryProvider);
     final authRepository = ref.watch(authRepositoryProvider);
     final organizationsRepository = ref.watch(organizationsRepositoryProvider);
+    final imagesRepository = ref.watch(imagesRepositoryProvider);
     final user = authRepository.currentUser;
     print("Id:" + user!.id);
     print(event.sponsoringOrganization);
@@ -46,6 +49,22 @@ class EventCard extends ConsumerWidget {
     final sponsor =
         organizationsRepository.getOrganization(event.sponsoringOrganization);
 
+    Widget getImage() {
+      return FutureBuilder(
+          future: imagesRepository.retriveImage('1', event.id),
+          builder: (context, snapshot) {
+            final String imageUrl = snapshot.data ?? 'No initial data';
+            final String state = snapshot.connectionState.toString();
+            return Container(
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: NetworkImage(imageUrl), fit: BoxFit.fill)),
+              width: 120,
+              height: 210,
+            );
+          });
+    }
+
     return Card(
       child: InkWell(
         key: eventCardKey,
@@ -55,16 +74,16 @@ class EventCard extends ConsumerWidget {
             child: Row(
               children: [
                 ClipRRect(
-                  borderRadius: BorderRadius.circular(20.0),
-                  child: Container(
+                    borderRadius: BorderRadius.circular(20.0),
+                    child: /*Container(
                     decoration: BoxDecoration(
                         image: DecorationImage(
                             image: NetworkImage(event.profilePicPath),
                             fit: BoxFit.fill)),
                     width: 120,
                     height: 210,
-                  ),
-                ),
+                  ),*/
+                        getImage()),
                 const SizedBox(width: 10),
                 Expanded(
                   child: Column(

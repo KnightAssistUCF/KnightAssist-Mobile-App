@@ -10,23 +10,29 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'images_repository.g.dart';
 
 class ImagesRepository {
-
   // this returns the URL of an image from KnightAssist S3 bucket
+  // event picture: typeOfImage = 1
+  // organization profilepicture: typeOfImage = 2
+  // user profile picture: typeOfImage = 3
+  // organization background picture: typeOfImage = 4
   Future<String> retriveImage(String typeOfImage, String idOfEntity) async {
-    Map<String, String?> params = {"typeOfImage": typeOfImage, "idOfEntity": idOfEntity};
+    Map<String, String?> params = {
+      "typeOfImage": typeOfImage,
+      "id": idOfEntity
+    };
     var uri = Uri.https('knightassist-43ab3aeaada9.herokuapp.com',
         '/api/retrieveImage', params);
     var response = await http.get(uri);
     var body = jsonDecode(response.body);
     switch (response.statusCode) {
       case 200:
-        return response.body;
+        print(body['url']);
+        return body['url'];
       default:
         String err = body["error"];
         throw Exception(err);
     }
   }
-
 }
 
 @Riverpod(keepAlive: true)
