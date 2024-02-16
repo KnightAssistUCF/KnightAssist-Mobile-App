@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/data/auth_repository.dart';
 import 'package:knightassist_mobile_app/src/features/events/data/events_repository.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
+import 'package:knightassist_mobile_app/src/features/images/data/images_repository.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/data/organizations_repository.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
 import 'package:knightassist_mobile_app/src/features/rsvp/presentation/rsvp_widget.dart';
@@ -26,6 +27,7 @@ class EventScreen extends ConsumerWidget {
     final org =
         organizationsRepository.getOrganization(event.sponsoringOrganization);
     final authRepository = ref.read(authRepositoryProvider);
+    final imagesRepository = ref.watch(imagesRepositoryProvider);
     final user = authRepository.currentUser;
     final eventsRepository = ref.read(eventsRepositoryProvider);
     final studentsRepository = ref.read(studentsRepositoryProvider);
@@ -36,6 +38,18 @@ class EventScreen extends ConsumerWidget {
     // true if the organization who made the event is viewing it (shows edit button)
 
     bool isOrg = (user?.role == 'organization');
+
+    Widget getImage() {
+      return FutureBuilder(
+          future: imagesRepository.retriveImage('2', org!.id),
+          builder: (context, snapshot) {
+            final String imageUrl = snapshot.data ?? 'No initial data';
+            final String state = snapshot.connectionState.toString();
+            return ClipRRect(
+                borderRadius: BorderRadius.circular(25.0),
+                child: Image(image: NetworkImage(imageUrl), height: 50));
+          });
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -93,11 +107,7 @@ class EventScreen extends ConsumerWidget {
                       context.pushNamed(AppRoute.organization.name, extra: org),
                   child: Wrap(
                     children: [
-                      ClipRRect(
-                          borderRadius: BorderRadius.circular(25.0),
-                          child: const Image(
-                              image: AssetImage('assets/example.png'),
-                              height: 50)),
+                      getImage(),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
@@ -184,36 +194,52 @@ class EventScreen extends ConsumerWidget {
 
 _title(double width, Event e) {
   return Builder(builder: (context) {
-    return Stack(children: [
-      Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: MediaQuery.of(context).size.width,
-            height: 200,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                fit: BoxFit.fill,
-                image: NetworkImage(e.profilePicPath),
+    return Consumer(
+      builder: (context, ref, child) {
+        final imagesRepository = ref.watch(imagesRepositoryProvider);
+
+        Widget getImage() {
+          return FutureBuilder(
+              future: imagesRepository.retriveImage('1', e.id),
+              builder: (context, snapshot) {
+                final String imageUrl = snapshot.data ?? 'No initial data';
+                final String state = snapshot.connectionState.toString();
+                return Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: 200,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      fit: BoxFit.fill,
+                      image: NetworkImage(imageUrl),
+                    ),
+                  ),
+                );
+              });
+        }
+
+        return Stack(children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              getImage(),
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    e.name,
+                    style: const TextStyle(
+                        fontSize: 40,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w900),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                e.name,
-                style: const TextStyle(
-                    fontSize: 40,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w900),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ),
-        ],
-      ),
-    ]);
+        ]);
+      },
+    );
   });
 }
 

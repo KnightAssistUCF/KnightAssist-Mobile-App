@@ -9,6 +9,7 @@ import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/feedback_list_screen.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/qr_scanner.dart';
 import 'package:knightassist_mobile_app/src/features/home/presentation/home_screen.dart';
+import 'package:knightassist_mobile_app/src/features/images/data/images_repository.dart';
 import 'package:knightassist_mobile_app/src/features/leaderboard/data/leaderboard_repository.dart';
 import 'package:knightassist_mobile_app/src/features/leaderboard/domain/leaderboard_entry.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/presentation/update_screen.dart';
@@ -208,63 +209,77 @@ class VolunteerCard extends StatelessWidget {
 
     const style = TextStyle(fontSize: 20, fontWeight: FontWeight.normal);
 
-    return SingleChildScrollView(
-      child: ResponsiveCenter(
-        maxContentWidth: Breakpoint.tablet,
-        child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Card(
-              color: _getColor(),
-              elevation: 5,
-              child: InkWell(
-                onTap: () {},
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ListTile(
-                    contentPadding: EdgeInsets.zero,
-                    leading: ClipRRect(
-                        borderRadius: BorderRadius.circular(12.0),
-                        child: Image(
-                            image: NetworkImage(volunteer.profilePicPath),
-                            height: 75)),
-                    title: Text(
-                      '${volunteer.firstName} ${volunteer.lastName}',
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 3,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.w600, fontSize: 18),
-                      textAlign: TextAlign.start,
-                    ),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "${volunteer.totalVolunteerHours} hours",
+    return Consumer(
+      builder: (context, ref, child) {
+        final imagesRepository = ref.watch(imagesRepositoryProvider);
+
+        Widget getImage() {
+          return FutureBuilder(
+              future: imagesRepository.retriveImage('3', volunteer.id),
+              builder: (context, snapshot) {
+                final String imageUrl = snapshot.data ?? 'No initial data';
+                final String state = snapshot.connectionState.toString();
+                return ClipRRect(
+                    borderRadius: BorderRadius.circular(12.0),
+                    child: Image(image: NetworkImage(imageUrl), height: 75));
+              });
+        }
+
+        return SingleChildScrollView(
+          child: ResponsiveCenter(
+            maxContentWidth: Breakpoint.tablet,
+            child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Card(
+                  color: _getColor(),
+                  elevation: 5,
+                  child: InkWell(
+                    onTap: () {},
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        leading: getImage(),
+                        title: Text(
+                          '${volunteer.firstName} ${volunteer.lastName}',
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 3,
                           style: const TextStyle(
-                              fontWeight: FontWeight.w500, fontSize: 15),
+                              fontWeight: FontWeight.w600, fontSize: 18),
                           textAlign: TextAlign.start,
                         ),
-                      ],
-                    ),
-                    trailing: Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(60.0),
-                          color: _getColor(),
-                          border: Border.all()),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          number.toString(),
-                          style: const TextStyle(
-                              fontWeight: FontWeight.w800, fontSize: 20),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "${volunteer.totalVolunteerHours} hours",
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.w500, fontSize: 15),
+                              textAlign: TextAlign.start,
+                            ),
+                          ],
                         ),
+                        trailing: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(60.0),
+                              color: _getColor(),
+                              border: Border.all()),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              number.toString(),
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.w800, fontSize: 20),
+                            ),
+                          ),
+                        ), // space to include org name
                       ),
-                    ), // space to include org name
+                    ),
                   ),
-                ),
-              ),
-            )),
-      ),
+                )),
+          ),
+        );
+      },
     );
   }
 }

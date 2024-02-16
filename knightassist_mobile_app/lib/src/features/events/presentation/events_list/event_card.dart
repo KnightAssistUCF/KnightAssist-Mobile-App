@@ -65,6 +65,18 @@ class EventCard extends ConsumerWidget {
           });
     }
 
+    Widget getOrgImage() {
+      return FutureBuilder(
+          future: imagesRepository.retriveImage('2', sponsor!.id),
+          builder: (context, snapshot) {
+            final String imageUrl = snapshot.data ?? 'No initial data';
+            final String state = snapshot.connectionState.toString();
+            return ClipRRect(
+                borderRadius: BorderRadius.circular(25.0),
+                child: Image(image: NetworkImage(imageUrl), height: 20));
+          });
+    }
+
     return Card(
       child: InkWell(
         key: eventCardKey,
@@ -107,12 +119,7 @@ class EventCard extends ConsumerWidget {
                       ),
                       OverflowBar(
                         children: [
-                          ClipRRect(
-                              borderRadius: BorderRadius.circular(25.0),
-                              child: Image(
-                                  image: NetworkImage(
-                                      sponsor?.profilePicPath ?? ''),
-                                  height: 20)),
+                          getOrgImage(),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
