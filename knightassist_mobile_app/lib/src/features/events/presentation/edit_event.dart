@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/data/auth_repository.dart';
 import 'package:knightassist_mobile_app/src/features/events/data/events_repository.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
+import 'package:knightassist_mobile_app/src/features/images/data/images_repository.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/update.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
@@ -478,41 +479,58 @@ class _EditImageState extends State<EditImage> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        EditableImage(
-          onChange: _directUpdateImage,
-          image: _eventPicFile != null
-              ? Image.file(_eventPicFile!, fit: BoxFit.cover)
-              : Image(image: AssetImage(event.profilePicPath)),
-          size: 150,
-          imagePickerTheme: ThemeData(
-            primaryColor: Colors.yellow,
-            shadowColor: Colors.deepOrange,
-            colorScheme: const ColorScheme.light(background: Colors.indigo),
-            iconTheme: const IconThemeData(color: Colors.red),
-            fontFamily: 'Papyrus',
-          ),
-          imageBorder: Border.all(color: Colors.lime, width: 2),
-          editIconBorder: Border.all(color: Colors.purple, width: 2),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Center(
-            child: ElevatedButton(
-                onPressed: () {
-                  _deleteImage();
-                },
-                child: const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Text(
-                    'Delete Image (reverts to default)',
-                    style: TextStyle(fontSize: 15),
+    return Consumer(
+      builder: (context, ref, child) {
+        final imagesRepository = ref.watch(imagesRepositoryProvider);
+
+        Widget getEditableImage() {
+          return FutureBuilder(
+              future: imagesRepository.retrieveImage('1', event.id),
+              builder: (context, snapshot) {
+                final String imageUrl = snapshot.data ?? 'No initial data';
+                final String state = snapshot.connectionState.toString();
+                return EditableImage(
+                  onChange: _directUpdateImage,
+                  image: _eventPicFile != null
+                      ? Image.file(_eventPicFile!, fit: BoxFit.cover)
+                      : Image(image: NetworkImage(imageUrl)),
+                  size: 150,
+                  imagePickerTheme: ThemeData(
+                    primaryColor: Colors.yellow,
+                    shadowColor: Colors.deepOrange,
+                    colorScheme:
+                        const ColorScheme.light(background: Colors.indigo),
+                    iconTheme: const IconThemeData(color: Colors.red),
+                    fontFamily: 'Papyrus',
                   ),
-                )),
-          ),
-        ),
-      ],
+                  imageBorder: Border.all(color: Colors.lime, width: 2),
+                  editIconBorder: Border.all(color: Colors.purple, width: 2),
+                );
+              });
+        }
+
+        return Column(
+          children: [
+            getEditableImage(),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Center(
+                child: ElevatedButton(
+                    onPressed: () {
+                      _deleteImage();
+                    },
+                    child: const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        'Delete Image (reverts to default)',
+                        style: TextStyle(fontSize: 15),
+                      ),
+                    )),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
