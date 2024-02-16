@@ -31,7 +31,7 @@ class EventCard extends ConsumerWidget {
     final imagesRepository = ref.watch(imagesRepositoryProvider);
     final user = authRepository.currentUser;
     print("Id:" + user!.id);
-    print(event.sponsoringOrganization);
+    //print(event.sponsoringOrganization);
     if (user.role == 'organization') {
       //print(user.id);
       //final org = organizationsRepository.getOrganization(user.id);
@@ -51,7 +51,7 @@ class EventCard extends ConsumerWidget {
 
     Widget getImage() {
       return FutureBuilder(
-          future: imagesRepository.retriveImage('1', event.id),
+          future: imagesRepository.retrieveImage('1', event.id),
           builder: (context, snapshot) {
             final String imageUrl = snapshot.data ?? 'No initial data';
             final String state = snapshot.connectionState.toString();
@@ -67,7 +67,7 @@ class EventCard extends ConsumerWidget {
 
     Widget getOrgImage() {
       return FutureBuilder(
-          future: imagesRepository.retriveImage('2', sponsor!.id),
+          future: imagesRepository.retrieveImage('2', sponsor!.id),
           builder: (context, snapshot) {
             final String imageUrl = snapshot.data ?? 'No initial data';
             final String state = snapshot.connectionState.toString();

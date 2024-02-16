@@ -8,6 +8,7 @@ import 'package:knightassist_mobile_app/src/common_widgets/responsive_center.dar
 import 'package:knightassist_mobile_app/src/constants/app_sizes.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/data/auth_repository.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/account/account_screen_controller.dart';
+import 'package:knightassist_mobile_app/src/features/images/data/images_repository.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/data/organizations_repository.dart';
 import 'package:knightassist_mobile_app/src/features/students/data/students_repository.dart';
 import 'package:knightassist_mobile_app/src/features/students/domain/student_user.dart';
@@ -39,6 +40,44 @@ class AccountScreen extends ConsumerWidget {
     if (user?.role == 'student') {
       studentRepository.fetchStudent(user!.id);
       student = studentRepository.getStudent();
+    }
+
+    final imagesRepository = ref.watch(imagesRepositoryProvider);
+
+    Widget getOrgProfileImage() {
+      return FutureBuilder(
+          future: imagesRepository.retrieveImage('2', org!.id),
+          builder: (context, snapshot) {
+            final String imageUrl = snapshot.data ?? 'No initial data';
+            final String state = snapshot.connectionState.toString();
+            return ClipOval(
+              child: SizedBox.fromSize(
+                size: const Size.fromRadius(48),
+                child: Image(
+                    semanticLabel: 'User profile picture',
+                    image: NetworkImage(imageUrl),
+                    fit: BoxFit.cover),
+              ),
+            );
+          });
+    }
+
+    Widget getStudentProfileImage() {
+      return FutureBuilder(
+          future: imagesRepository.retrieveImage('3', student!.id),
+          builder: (context, snapshot) {
+            final String imageUrl = snapshot.data ?? 'No initial data';
+            final String state = snapshot.connectionState.toString();
+            return ClipOval(
+              child: SizedBox.fromSize(
+                size: const Size.fromRadius(48),
+                child: Image(
+                    semanticLabel: 'User profile picture',
+                    image: NetworkImage(imageUrl),
+                    fit: BoxFit.cover),
+              ),
+            );
+          });
     }
 
     return Scaffold(
@@ -126,7 +165,7 @@ class AccountScreen extends ConsumerWidget {
                   child: Align(
                     alignment: Alignment.center,
                     child: Container(
-                      padding: EdgeInsets.all(5),
+                      padding: const EdgeInsets.all(5),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         shape: BoxShape.circle,
@@ -140,16 +179,9 @@ class AccountScreen extends ConsumerWidget {
                           ),
                         ],
                       ),
-                      child: ClipOval(
-                        child: SizedBox.fromSize(
-                          size: const Size.fromRadius(48),
-                          child: const Image(
-                              semanticLabel: 'User profile picture',
-                              image: AssetImage(
-                                  'assets/profile pictures/icon_paintbrush.png'),
-                              fit: BoxFit.cover),
-                        ),
-                      ),
+                      child: isOrg
+                          ? getOrgProfileImage()
+                          : getStudentProfileImage(),
                     ),
                   ),
                 ),
@@ -164,27 +196,27 @@ class AccountScreen extends ConsumerWidget {
                         SettingsSection(
                           tiles: <SettingsTile>[
                             SettingsTile.navigation(
-                                leading: Icon(Icons.person),
-                                title: Text('Profile'),
+                                leading: const Icon(Icons.person),
+                                title: const Text('Profile'),
                                 onPressed: (context) {
                                   isOrg
                                       ? context.pushNamed("organization",
                                           extra: org)
-                                      : context.pushNamed(
-                                          AppRoute.profileScreen.name);
+                                      : context.pushNamed("profileScreen",
+                                          extra: student);
                                 }),
                             isOrg
                                 ? SettingsTile.navigation(
                                     leading:
                                         const Icon(Icons.notifications_none),
-                                    title: Text('Notifications'),
+                                    title: const Text('Notifications'),
                                     onPressed: (context) {},
                                   )
                                 : user?.role == 'student'
                                     ? SettingsTile.navigation(
                                         leading: const Icon(
                                             Icons.access_time_rounded),
-                                        title: Text('Semester Goal'),
+                                        title: const Text('Semester Goal'),
                                         value: Text(
                                             '${student!.semesterVolunteerHourGoal}'),
                                         onPressed: (context) =>
@@ -194,7 +226,7 @@ class AccountScreen extends ConsumerWidget {
                                     : SettingsTile.navigation(
                                         leading: const Icon(
                                             Icons.access_time_rounded),
-                                        title: Text('Semester Goal'),
+                                        title: const Text('Semester Goal'),
                                         value: const Text("120"),
                                         onPressed: (context) =>
                                             context.pushNamed(
@@ -202,14 +234,15 @@ class AccountScreen extends ConsumerWidget {
                                       ),
                             isOrg
                                 ? SettingsTile.navigation(
-                                    leading: Icon(Icons.favorite_border),
-                                    title: Text('Top Volunteers'),
-                                    value: Text('5'),
+                                    leading: const Icon(Icons.favorite_border),
+                                    title: const Text('Top Volunteers'),
+                                    value:
+                                        Text(org!.favorites.length.toString()),
                                     onPressed: (context) => context
                                         .pushNamed(AppRoute.leaderboard.name))
                                 : SettingsTile.navigation(
-                                    leading: Icon(Icons.favorite_border),
-                                    title: Text('Favorite Organizations'),
+                                    leading: const Icon(Icons.favorite_border),
+                                    title: const Text('Favorite Organizations'),
                                     value: Text(user?.role == 'student'
                                         ? '${student!.favoritedOrganizations.length}'
                                         : '5'),
@@ -217,7 +250,7 @@ class AccountScreen extends ConsumerWidget {
                                         .pushNamed(AppRoute.favoriteOrgs.name),
                                   ),
                             SettingsTile.navigation(
-                              leading: Icon(Icons.star_border_outlined),
+                              leading: const Icon(Icons.star_border_outlined),
                               title: Text(isOrg ? 'Tags' : 'Interests'),
                               value: Text(isOrg
                                   ? '${org!.categoryTags.length}'

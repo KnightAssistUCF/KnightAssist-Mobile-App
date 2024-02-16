@@ -9,6 +9,7 @@ import 'package:knightassist_mobile_app/src/features/events/presentation/events_
 import 'package:knightassist_mobile_app/src/features/events/presentation/feedback_list_screen.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/qr_scanner.dart';
 import 'package:knightassist_mobile_app/src/features/home/presentation/home_screen.dart';
+import 'package:knightassist_mobile_app/src/features/images/data/images_repository.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/data/organizations_repository.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/presentation/update_screen.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
@@ -409,143 +410,162 @@ class _CalendarState extends State<Calendar> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Calendar View',
-          style: TextStyle(fontWeight: FontWeight.w600),
-        ),
-        centerTitle: true,
-        automaticallyImplyLeading: true,
-        actions: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: IconButton(
-              onPressed: () {},
-              tooltip: 'View notifications',
-              icon: const Icon(
-                Icons.notifications_outlined,
-                color: Colors.white,
-                semanticLabel: 'Notifications',
-              ),
+    return Consumer(
+      builder: (context, ref, child) {
+        final imagesRepository = ref.watch(imagesRepositoryProvider);
+
+        Widget getImage(Event event) {
+          return FutureBuilder(
+              future: imagesRepository.retrieveImage('1', event.id),
+              builder: (context, snapshot) {
+                final String imageUrl = snapshot.data ?? 'No initial data';
+                final String state = snapshot.connectionState.toString();
+                return ClipRRect(
+                    borderRadius: BorderRadius.circular(12.0),
+                    child: Image(
+                        image: NetworkImage(imageUrl), height: 50, width: 50));
+              });
+        }
+
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text(
+              'Calendar View',
+              style: TextStyle(fontWeight: FontWeight.w600),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: GestureDetector(
-              onTap: () {
-                context.pushNamed(AppRoute.profileScreen.name);
-              },
-              child: Tooltip(
-                message: 'Go to your profile',
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(25.0),
-                  child: const Image(
-                      semanticLabel: 'Profile picture',
-                      image: AssetImage(
-                          'assets/profile pictures/icon_paintbrush.png'),
-                      height: 20),
+            centerTitle: true,
+            automaticallyImplyLeading: true,
+            actions: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: IconButton(
+                  onPressed: () {},
+                  tooltip: 'View notifications',
+                  icon: const Icon(
+                    Icons.notifications_outlined,
+                    color: Colors.white,
+                    semanticLabel: 'Notifications',
+                  ),
                 ),
               ),
-            ),
-          )
-        ],
-      ),
-      body: Column(
-        children: [
-          TableCalendar<Event>(
-            firstDay: DateTime.fromMillisecondsSinceEpoch(1641031200000),
-            lastDay: DateTime.fromMillisecondsSinceEpoch(1767063659000),
-            focusedDay: _focusedDay,
-            selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
-            rangeStartDay: _rangeStart,
-            rangeEndDay: _rangeEnd,
-            calendarFormat: _calendarFormat,
-            rangeSelectionMode: _rangeSelectionMode,
-            eventLoader: _getEventsForDay,
-            startingDayOfWeek: StartingDayOfWeek.monday,
-            calendarStyle: const CalendarStyle(
-                defaultTextStyle: TextStyle(fontWeight: FontWeight.w200),
-                weekendTextStyle: TextStyle(
-                    color: Color(0xFF5A5A5A), fontWeight: FontWeight.w200),
-                outsideTextStyle: TextStyle(
-                    color: Color(0xFFAEAEAE), fontWeight: FontWeight.w200),
-                todayDecoration: BoxDecoration(
-                    color: Color.fromARGB(255, 160, 151, 181),
-                    shape: BoxShape.circle),
-                selectedDecoration: BoxDecoration(
-                    color: Color.fromARGB(255, 91, 78, 119),
-                    shape: BoxShape.circle)),
-            onDaySelected: _onDaySelected,
-            onRangeSelected: _onRangeSelected,
-            onFormatChanged: (format) {
-              if (_calendarFormat != format) {
-                setState(() {
-                  _calendarFormat = format;
-                });
-              }
-            },
-            onPageChanged: (focusedDay) {
-              _focusedDay = focusedDay;
-            },
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: GestureDetector(
+                  onTap: () {
+                    context.pushNamed(AppRoute.profileScreen.name);
+                  },
+                  child: Tooltip(
+                    message: 'Go to your profile',
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(25.0),
+                      child: const Image(
+                          semanticLabel: 'Profile picture',
+                          image: AssetImage(
+                              'assets/profile pictures/icon_paintbrush.png'),
+                          height: 20),
+                    ),
+                  ),
+                ),
+              )
+            ],
           ),
-          const SizedBox(height: 8.0),
-          Expanded(
-            child: ValueListenableBuilder<List<Event>>(
-              valueListenable: _selectedEvents,
-              builder: (context, value, _) {
-                return value.length == 0
-                    ? Center(
-                        child:
-                            Text("You have no events scheduled on this day."),
-                      )
-                    : ListView.builder(
-                        itemCount: value.length,
-                        itemBuilder: (context, index) {
-                          return Container(
-                            margin: const EdgeInsets.symmetric(
-                              horizontal: 12.0,
-                              vertical: 4.0,
-                            ),
-                            decoration: BoxDecoration(
-                              border: Border.all(),
-                              borderRadius: BorderRadius.circular(12.0),
-                            ),
-                            child: ListTile(
-                              onTap: () {
-                                print(
-                                    'event name: ${value[index].name}, event ID: ${value[index].id}');
-                                context.pushNamed("event",
-                                    extra: value.elementAt(index));
-                              },
-                              title: Text(
-                                value[index].name,
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 3,
-                              ),
-                              subtitle: Text(
-                                value[index].sponsoringOrganization,
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 3,
-                              ),
-                              trailing: Text(
-                                  "${DateFormat.jmv().format(value[index].startTime)} - ${DateFormat.jmv().format(value[index].endTime)}"),
-                              leading: ClipRRect(
+          body: Column(
+            children: [
+              TableCalendar<Event>(
+                firstDay: DateTime.fromMillisecondsSinceEpoch(1641031200000),
+                lastDay: DateTime.fromMillisecondsSinceEpoch(1767063659000),
+                focusedDay: _focusedDay,
+                selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
+                rangeStartDay: _rangeStart,
+                rangeEndDay: _rangeEnd,
+                calendarFormat: _calendarFormat,
+                rangeSelectionMode: _rangeSelectionMode,
+                eventLoader: _getEventsForDay,
+                startingDayOfWeek: StartingDayOfWeek.monday,
+                calendarStyle: const CalendarStyle(
+                    defaultTextStyle: TextStyle(fontWeight: FontWeight.w200),
+                    weekendTextStyle: TextStyle(
+                        color: Color(0xFF5A5A5A), fontWeight: FontWeight.w200),
+                    outsideTextStyle: TextStyle(
+                        color: Color(0xFFAEAEAE), fontWeight: FontWeight.w200),
+                    todayDecoration: BoxDecoration(
+                        color: Color.fromARGB(255, 160, 151, 181),
+                        shape: BoxShape.circle),
+                    selectedDecoration: BoxDecoration(
+                        color: Color.fromARGB(255, 91, 78, 119),
+                        shape: BoxShape.circle)),
+                onDaySelected: _onDaySelected,
+                onRangeSelected: _onRangeSelected,
+                onFormatChanged: (format) {
+                  if (_calendarFormat != format) {
+                    setState(() {
+                      _calendarFormat = format;
+                    });
+                  }
+                },
+                onPageChanged: (focusedDay) {
+                  _focusedDay = focusedDay;
+                },
+              ),
+              const SizedBox(height: 8.0),
+              Expanded(
+                child: ValueListenableBuilder<List<Event>>(
+                  valueListenable: _selectedEvents,
+                  builder: (context, value, _) {
+                    return value.length == 0
+                        ? const Center(
+                            child: Text(
+                                "You have no events scheduled on this day."),
+                          )
+                        : ListView.builder(
+                            itemCount: value.length,
+                            itemBuilder: (context, index) {
+                              final organizationsRepository =
+                                  ref.watch(organizationsRepositoryProvider);
+                              final org =
+                                  organizationsRepository.getOrganization(
+                                      value[index].sponsoringOrganization);
+
+                              return Container(
+                                margin: const EdgeInsets.symmetric(
+                                  horizontal: 12.0,
+                                  vertical: 4.0,
+                                ),
+                                decoration: BoxDecoration(
+                                  border: Border.all(),
                                   borderRadius: BorderRadius.circular(12.0),
-                                  child: Image(
-                                      image: AssetImage(
-                                          value[index].profilePicPath),
-                                      height: 50,
-                                      width: 50)),
-                            ),
+                                ),
+                                child: ListTile(
+                                  onTap: () {
+                                    //print(
+                                    //'event name: ${value[index].name}, event ID: ${value[index].id}');
+                                    context.pushNamed("event",
+                                        extra: value.elementAt(index));
+                                  },
+                                  title: Text(
+                                    value[index].name,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 3,
+                                  ),
+                                  subtitle: Text(
+                                    org!.name,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 3,
+                                  ),
+                                  trailing: Text(
+                                      "${DateFormat.jmv().format(value[index].startTime)} - ${DateFormat.jmv().format(value[index].endTime)}"),
+                                  leading: getImage(value[index]),
+                                ),
+                              );
+                            },
                           );
-                        },
-                      );
-              },
-            ),
+                  },
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

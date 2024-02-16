@@ -15,7 +15,7 @@ class ImagesRepository {
   // organization profilepicture: typeOfImage = 2
   // user profile picture: typeOfImage = 3
   // organization background picture: typeOfImage = 4
-  Future<String> retriveImage(String typeOfImage, String idOfEntity) async {
+  Future<String> retrieveImage(String typeOfImage, String idOfEntity) async {
     Map<String, String?> params = {
       "typeOfImage": typeOfImage,
       "id": idOfEntity

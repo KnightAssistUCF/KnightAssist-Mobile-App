@@ -215,7 +215,7 @@ class VolunteerCard extends StatelessWidget {
 
         Widget getImage() {
           return FutureBuilder(
-              future: imagesRepository.retriveImage('3', volunteer.id),
+              future: imagesRepository.retrieveImage('3', volunteer.id),
               builder: (context, snapshot) {
                 final String imageUrl = snapshot.data ?? 'No initial data';
                 final String state = snapshot.connectionState.toString();

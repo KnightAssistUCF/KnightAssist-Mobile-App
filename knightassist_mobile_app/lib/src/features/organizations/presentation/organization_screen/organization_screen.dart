@@ -11,6 +11,7 @@ import 'package:knightassist_mobile_app/src/common_widgets/responsive_center.dar
 import 'package:knightassist_mobile_app/src/constants/app_sizes.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/data/auth_repository.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
+import 'package:knightassist_mobile_app/src/features/images/data/images_repository.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/data/organizations_repository.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/presentation/organization_screen.dart';
@@ -192,87 +193,112 @@ class _OrganizationTopState extends State<OrganizationTop> {
     final bool isOrg = this
         .isOrg; // true if an organization is viewing the page (removes favorite icon)
 
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        Column(
-          children: [
-            Container(
-              width: MediaQuery.sizeOf(context).width,
-              height: 200,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  fit: BoxFit.fill,
-                  image: AssetImage(organization.backgroundUrl == ''
-                      ? 'assets/orgdefaultbackground.png'
-                      : organization.backgroundUrl),
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 50,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Wrap(
-                children: [
-                  Text(
-                    organization.name,
-                    style: const TextStyle(
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black,
-                        fontSize: 25),
+    return Consumer(
+      builder: (context, ref, child) {
+        final imagesRepository = ref.watch(imagesRepositoryProvider);
+
+        Widget getProfileImage() {
+          return FutureBuilder(
+              future: imagesRepository.retrieveImage('2', organization.id),
+              builder: (context, snapshot) {
+                final String imageUrl = snapshot.data ?? 'No initial data';
+                final String state = snapshot.connectionState.toString();
+                return Container(
+                  padding: const EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 2,
+                        blurRadius: 5,
+                        offset:
+                            const Offset(0, 3), // changes position of shadow
+                      ),
+                    ],
                   ),
-                  isOrg
-                      ? SizedBox(
-                          height: 0,
-                        )
-                      : IconButton(
-                          iconSize: 30.0,
-                          padding:
-                              const EdgeInsets.only(left: 4, right: 4, top: 0),
-                          icon: _isFavoriteOrg == true
-                              ? const Icon(Icons.favorite)
-                              : const Icon(Icons.favorite_outline),
-                          color: Colors.pink,
-                          onPressed: () {
-                            setState(() {
-                              _isFavoriteOrg = !_isFavoriteOrg;
-                            });
-                          })
-                ],
-              ),
-            )
-          ],
-        ),
-        Positioned(
-          top: 150.0,
-          child: Container(
-            padding: const EdgeInsets.all(5),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
-                  spreadRadius: 2,
-                  blurRadius: 5,
-                  offset: const Offset(0, 3), // changes position of shadow
+                  child: ClipOval(
+                    child: SizedBox.fromSize(
+                      size: const Size.fromRadius(48),
+                      child: Image(
+                          semanticLabel: 'Organization profile picture',
+                          image: NetworkImage(imageUrl),
+                          fit: BoxFit.cover),
+                    ),
+                  ),
+                );
+              });
+        }
+
+        Widget getBackgroundImage() {
+          return FutureBuilder(
+              future: imagesRepository.retrieveImage('4', organization.id),
+              builder: (context, snapshot) {
+                final String imageUrl = snapshot.data ?? 'No initial data';
+                final String state = snapshot.connectionState.toString();
+                return Container(
+                  width: MediaQuery.sizeOf(context).width,
+                  height: 200,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      fit: BoxFit.fill,
+                      image: NetworkImage(imageUrl),
+                    ),
+                  ),
+                );
+              });
+        }
+
+        return Stack(
+          alignment: Alignment.center,
+          children: [
+            Column(
+              children: [
+                getBackgroundImage(),
+                const SizedBox(
+                  height: 50,
                 ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Wrap(
+                    children: [
+                      Text(
+                        organization.name,
+                        style: const TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black,
+                            fontSize: 25),
+                      ),
+                      isOrg
+                          ? const SizedBox(
+                              height: 0,
+                            )
+                          : IconButton(
+                              iconSize: 30.0,
+                              padding: const EdgeInsets.only(
+                                  left: 4, right: 4, top: 0),
+                              icon: _isFavoriteOrg == true
+                                  ? const Icon(Icons.favorite)
+                                  : const Icon(Icons.favorite_outline),
+                              color: Colors.pink,
+                              onPressed: () {
+                                setState(() {
+                                  _isFavoriteOrg = !_isFavoriteOrg;
+                                });
+                              })
+                    ],
+                  ),
+                )
               ],
             ),
-            child: ClipOval(
-              child: SizedBox.fromSize(
-                size: const Size.fromRadius(48),
-                child: Image(
-                    semanticLabel: 'Organization profile picture',
-                    image: AssetImage(organization.logoUrl),
-                    fit: BoxFit.cover),
-              ),
-            ),
-          ),
-        )
-      ],
+            Positioned(
+              top: 150.0,
+              child: getProfileImage(),
+            )
+          ],
+        );
+      },
     );
   }
 }

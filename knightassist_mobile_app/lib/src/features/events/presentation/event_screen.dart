@@ -41,7 +41,7 @@ class EventScreen extends ConsumerWidget {
 
     Widget getImage() {
       return FutureBuilder(
-          future: imagesRepository.retriveImage('2', org!.id),
+          future: imagesRepository.retrieveImage('2', org!.id),
           builder: (context, snapshot) {
             final String imageUrl = snapshot.data ?? 'No initial data';
             final String state = snapshot.connectionState.toString();
@@ -200,7 +200,7 @@ _title(double width, Event e) {
 
         Widget getImage() {
           return FutureBuilder(
-              future: imagesRepository.retriveImage('1', e.id),
+              future: imagesRepository.retrieveImage('1', e.id),
               builder: (context, snapshot) {
                 final String imageUrl = snapshot.data ?? 'No initial data';
                 final String state = snapshot.connectionState.toString();

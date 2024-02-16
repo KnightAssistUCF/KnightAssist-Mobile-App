@@ -9,6 +9,7 @@ import 'package:knightassist_mobile_app/src/features/authentication/data/auth_re
 import 'package:knightassist_mobile_app/src/features/events/presentation/events_list/events_list_screen.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/feedback_list_screen.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/qr_scanner.dart';
+import 'package:knightassist_mobile_app/src/features/images/data/images_repository.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/data/organizations_repository.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/presentation/update_screen.dart';
@@ -633,6 +634,7 @@ class HomeScreenTab extends ConsumerWidget {
     organizationsRepository.fetchOrganizationsList();
     final studentsRepository = ref.watch(studentsRepositoryProvider);
     final user = authRepository.currentUser;
+    final imagesRepository = ref.watch(imagesRepositoryProvider);
     bool isOrg = user?.role == "organization";
     bool isStudent = user?.role == "student";
     Organization? org;
@@ -646,6 +648,24 @@ class HomeScreenTab extends ConsumerWidget {
       studentsRepository.fetchStudent(user!.id);
       print("isStudent");
       student = studentsRepository.getStudent();
+    }
+
+    Widget getAppbarProfileImage() {
+      return FutureBuilder(
+          future: isOrg
+              ? imagesRepository.retrieveImage('2', org!.id)
+              : imagesRepository.retrieveImage('3', user!.id),
+          builder: (context, snapshot) {
+            final String imageUrl = snapshot.data ?? 'No initial data';
+            final String state = snapshot.connectionState.toString();
+            return ClipRRect(
+              borderRadius: BorderRadius.circular(25.0),
+              child: Image(
+                  semanticLabel: 'Profile picture',
+                  image: NetworkImage(imageUrl),
+                  height: 20),
+            );
+          });
     }
 
     return Scaffold(
@@ -669,26 +689,16 @@ class HomeScreenTab extends ConsumerWidget {
             child: GestureDetector(
               onTap: () {
                 if (isOrg) {
-                context.pushNamed(
-                  "organization", extra: org
-                );
+                  context.pushNamed("organization", extra: org);
                 } else if (isStudent) {
                   context.pushNamed("profileScreen", extra: student);
+                } else {
+                  context.pushNamed(AppRoute.signIn.name);
                 }
-               else {
-                context.pushNamed(AppRoute.signIn.name);
-               }
               },
               child: Tooltip(
                 message: 'Go to your profile',
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(25.0),
-                  child: const Image(
-                      semanticLabel: 'Profile picture',
-                      image: NetworkImage(
-                          'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y'),
-                      height: 20),
-                ),
+                child: getAppbarProfileImage(),
               ),
             ),
           )

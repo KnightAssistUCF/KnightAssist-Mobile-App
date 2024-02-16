@@ -8,6 +8,7 @@ import 'package:knightassist_mobile_app/src/common_widgets/responsive_scrollable
 import 'package:knightassist_mobile_app/src/constants/breakpoints.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/data/auth_repository.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/events_list/events_list_screen.dart';
+import 'package:knightassist_mobile_app/src/features/images/data/images_repository.dart';
 import 'package:knightassist_mobile_app/src/features/students/data/students_repository.dart';
 import 'package:knightassist_mobile_app/src/features/students/domain/student_user.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
@@ -80,6 +81,50 @@ class _ProfileScreenState extends State<ProfileScreen> {
         final user = authRepository.currentUser;
         studentsRepository.fetchStudent(user!.id);
         final student = studentsRepository.getStudent();
+        final imagesRepository = ref.watch(imagesRepositoryProvider);
+
+        Widget getAppbarProfileImage() {
+          return FutureBuilder(
+              future: imagesRepository.retrieveImage('3', student!.id),
+              builder: (context, snapshot) {
+                final String imageUrl = snapshot.data ?? 'No initial data';
+                final String state = snapshot.connectionState.toString();
+                return ClipRRect(
+                  borderRadius: BorderRadius.circular(25.0),
+                  child: Image(
+                      semanticLabel: 'Profile picture',
+                      image: NetworkImage(imageUrl),
+                      height: 20),
+                );
+              });
+        }
+
+        Widget getEditableImage() {
+          return FutureBuilder(
+              future: imagesRepository.retrieveImage('3', student!.id),
+              builder: (context, snapshot) {
+                final String imageUrl = snapshot.data ?? 'No initial data';
+                final String state = snapshot.connectionState.toString();
+                return EditableImage(
+                  onChange: _directUpdateImage,
+                  image: _profilePicFile != null
+                      ? Image.file(_profilePicFile!, fit: BoxFit.cover)
+                      : Image(image: NetworkImage(imageUrl)),
+                  size: 150,
+                  imagePickerTheme: ThemeData(
+                    primaryColor: Colors.yellow,
+                    shadowColor: Colors.deepOrange,
+                    colorScheme:
+                        const ColorScheme.light(background: Colors.indigo),
+                    iconTheme: const IconThemeData(color: Colors.red),
+                    fontFamily: 'Papyrus',
+                  ),
+                  imageBorder: Border.all(color: Colors.lime, width: 2),
+                  editIconBorder: Border.all(color: Colors.purple, width: 2),
+                );
+              });
+        }
+
         return Scaffold(
           appBar: AppBar(
             title: const Text(
@@ -104,19 +149,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 padding: const EdgeInsets.all(8.0),
                 child: GestureDetector(
                   onTap: () {
-                    context.pushNamed(AppRoute.profileScreen.name);
+                    context.pushNamed("profileScreen", extra: student);
                   },
                   child: Tooltip(
-                    message: 'Go to your profile',
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(25.0),
-                      child: const Image(
-                          semanticLabel: 'Profile picture',
-                          image: AssetImage(
-                              'assets/profile pictures/icon_paintbrush.png'),
-                          height: 20),
-                    ),
-                  ),
+                      message: 'Go to your profile',
+                      child: getAppbarProfileImage()),
                 ),
               )
             ],
@@ -125,25 +162,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             children: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: EditableImage(
-                  onChange: _directUpdateImage,
-                  image: _profilePicFile != null
-                      ? Image.file(_profilePicFile!, fit: BoxFit.cover)
-                      : const Image(
-                          image: AssetImage(
-                              'assets/profile pictures/icon_paintbrush.png')),
-                  size: 150,
-                  imagePickerTheme: ThemeData(
-                    primaryColor: Colors.yellow,
-                    shadowColor: Colors.deepOrange,
-                    colorScheme:
-                        const ColorScheme.light(background: Colors.indigo),
-                    iconTheme: const IconThemeData(color: Colors.red),
-                    fontFamily: 'Papyrus',
-                  ),
-                  imageBorder: Border.all(color: Colors.lime, width: 2),
-                  editIconBorder: Border.all(color: Colors.purple, width: 2),
-                ),
+                child: getEditableImage(),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
