@@ -332,7 +332,7 @@ class _TabBarOrgState extends State<TabBarOrg> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3,
+      length: 4,
       child: Scaffold(
         body: Column(
           children: [
@@ -340,6 +340,7 @@ class _TabBarOrgState extends State<TabBarOrg> with TickerProviderStateMixin {
               tabs: [
                 Tab(icon: Text("About")),
                 Tab(icon: Text("Contact")),
+                Tab(icon: Text("Tags")),
                 Tab(icon: Text("Ratings")),
               ],
             ),
@@ -511,6 +512,16 @@ class _TabBarOrgState extends State<TabBarOrg> with TickerProviderStateMixin {
                     children: [
                       Padding(
                         padding: const EdgeInsets.all(8.0),
+                        child: Wrap(
+                        children: [for (var tag in organization.categoryTags) Tags(tag: tag)]
+                        )
+                      ),
+                    ],
+                  ),
+                  ListView(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
                         child: Text(
                           '4.3',
                           style: const TextStyle(
@@ -566,3 +577,24 @@ class _TabBarOrgState extends State<TabBarOrg> with TickerProviderStateMixin {
     );
   }
 }
+
+class Tags extends ConsumerWidget {
+  String tag;
+   Tags ({required this.tag});
+  Widget build(BuildContext context, WidgetRef ref) {
+    final TextTheme textTheme = Theme.of(context).textTheme;
+
+    return Padding(
+      padding: const EdgeInsets.all(4.0),
+      child: Chip(
+        backgroundColor: (
+          Colors.grey[300]),
+        label: Text(
+          tag,
+          style: const TextStyle(color: (Colors.black)),
+        ),
+      ),
+    );
+  }
+}
+

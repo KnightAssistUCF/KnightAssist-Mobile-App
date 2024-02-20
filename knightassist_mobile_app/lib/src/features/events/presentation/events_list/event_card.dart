@@ -58,7 +58,7 @@ class EventCard extends ConsumerWidget {
             return Container(
               decoration: BoxDecoration(
                   image: DecorationImage(
-                      image: NetworkImage(imageUrl), fit: BoxFit.fill)),
+                      image: NetworkImage(imageUrl), fit: BoxFit.cover)),
               width: 120,
               height: 210,
             );
