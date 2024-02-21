@@ -31,6 +31,7 @@ class Organization extends AppUser {
   String backgroundUrl;
   List<dynamic> eventsArray;
   String? location;
+  WorkingHoursPerWeek workingHoursPerWeek;
   //List<dynamic> organizationSemesters;
   dynamic recoveryTokenForOrg;
   String confirmTokenForOrg;
@@ -62,6 +63,7 @@ class Organization extends AppUser {
     required this.backgroundUrl,
     required this.eventsArray,
     this.location,
+    required this.workingHoursPerWeek,
     //required this.organizationSemesters,
     required this.recoveryTokenForOrg,
     required this.confirmTokenForOrg,
@@ -92,6 +94,7 @@ class Organization extends AppUser {
         calendarLink: json["calendarLink"],
         isActive: json["isActive"],
         eventHappeningNow: json["eventHappeningNow"],
+        workingHoursPerWeek: WorkingHoursPerWeek.fromJson(json["workingHoursPerWeek"]),
         backgroundUrl: json["backgroundURL"],
         eventsArray: List<dynamic>.from(json["eventsArray"].map((x) => x)),
         location: json["location"],
@@ -128,6 +131,7 @@ class Organization extends AppUser {
         "backgroundURL": backgroundUrl,
         "eventsArray": List<dynamic>.from(eventsArray.map((x) => x)),
         "location": location,
+        "workingHoursPerWeek": workingHoursPerWeek,
         //"organizationSemesters":
         //List<dynamic>.from(organizationSemesters.map((x) => x)),
         "recoveryTokenForORG": recoveryTokenForOrg,
@@ -224,6 +228,66 @@ class Update {
         "content": content,
         "date": date.toIso8601String(),
         "_id": id,
+      };
+}
+
+class WorkingHoursPerWeek {
+  WeekDay? monday;
+  WeekDay? tuesday;
+  WeekDay? wednesday;
+  WeekDay? thursday;
+  WeekDay? friday;
+  WeekDay? saturday;
+  WeekDay? sunday;
+
+  WorkingHoursPerWeek({
+    this.monday,
+    this.tuesday,
+    this.wednesday,
+    this.thursday,
+    this.friday,
+    this.saturday,
+    this.sunday
+  });
+
+  factory WorkingHoursPerWeek.fromJson(Map<String, dynamic> json) => WorkingHoursPerWeek(
+        monday: WeekDay.fromJson(json["monday"]),
+        tuesday: WeekDay.fromJson(json["tuesday"]),
+        wednesday: WeekDay.fromJson(json["wednesday"]),
+        thursday: WeekDay.fromJson(json["thursday"]),
+        friday: WeekDay.fromJson(json["friday"]),
+        saturday: WeekDay.fromJson(json["saturday"]),
+        sunday: WeekDay.fromJson(json["sunday"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "monday": monday?.toJson(),
+        "tuesday": tuesday?.toJson(),
+        "wednesday": wednesday?.toJson(),
+        "thursday": thursday?.toJson(),
+        "friday": friday?.toJson(),
+        "saturday": saturday?.toJson(),
+        "sunday": sunday?.toJson(),
+      };
+}
+
+class WeekDay {
+  DateTime? start;
+  DateTime? end;
+
+  WeekDay({
+    this.start,
+    this.end,
+  });
+
+  factory WeekDay.fromJson(Map<String, dynamic> json) => WeekDay(
+        start: DateTime.parse(json["start"]),
+        end: DateTime.parse(json["end"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "start": start?.toIso8601String(),
+        "end": end?.toIso8601String()
       };
 }
 
