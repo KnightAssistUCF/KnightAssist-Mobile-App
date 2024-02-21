@@ -8,6 +8,7 @@ import 'package:knightassist_mobile_app/src/common_widgets/async_value_widget.da
 import 'package:knightassist_mobile_app/src/common_widgets/custom_image.dart';
 import 'package:knightassist_mobile_app/src/common_widgets/empty_placeholder_widget.dart';
 import 'package:knightassist_mobile_app/src/common_widgets/responsive_center.dart';
+import 'package:knightassist_mobile_app/src/common_widgets/tags.dart';
 import 'package:knightassist_mobile_app/src/constants/app_sizes.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/data/auth_repository.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
@@ -512,7 +513,10 @@ class _TabBarOrgState extends State<TabBarOrg> with TickerProviderStateMixin {
                     children: [
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Wrap(
+                        child: organization.categoryTags.isEmpty? const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text("This organization has no tags.", style: TextStyle(fontSize: Sizes.p20),),
+                        ) : Wrap(
                         children: [for (var tag in organization.categoryTags) Tags(tag: tag)]
                         )
                       ),
@@ -577,24 +581,3 @@ class _TabBarOrgState extends State<TabBarOrg> with TickerProviderStateMixin {
     );
   }
 }
-
-class Tags extends ConsumerWidget {
-  String tag;
-   Tags ({required this.tag});
-  Widget build(BuildContext context, WidgetRef ref) {
-    final TextTheme textTheme = Theme.of(context).textTheme;
-
-    return Padding(
-      padding: const EdgeInsets.all(4.0),
-      child: Chip(
-        backgroundColor: (
-          Colors.grey[300]),
-        label: Text(
-          tag,
-          style: const TextStyle(color: (Colors.black)),
-        ),
-      ),
-    );
-  }
-}
-

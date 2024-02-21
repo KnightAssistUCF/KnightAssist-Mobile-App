@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:knightassist_mobile_app/src/common_widgets/tags.dart';
+import 'package:knightassist_mobile_app/src/constants/app_sizes.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/data/auth_repository.dart';
 import 'package:knightassist_mobile_app/src/features/events/data/events_repository.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
@@ -315,7 +317,7 @@ class _TabBarEventState extends State<TabBarEvent>
     final difference = event.endTime.difference(event.startTime).inHours;
 
     return DefaultTabController(
-      length: 2,
+      length: 3,
       child: Scaffold(
         body: Column(
           children: [
@@ -323,6 +325,7 @@ class _TabBarEventState extends State<TabBarEvent>
               tabs: [
                 Tab(icon: Text("Details")),
                 Tab(icon: Text("Description")),
+                Tab(icon: Text("Tags")),
               ],
             ),
             Expanded(
@@ -385,7 +388,20 @@ class _TabBarEventState extends State<TabBarEvent>
                         ),
                       ),
                     ],
-                  )
+                  ),
+                  ListView(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: event.eventTags.isEmpty? const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text("This event has no tags.", style: TextStyle(fontSize: Sizes.p20),),
+                        ) : Wrap(
+                        children: [for (var tag in event.eventTags) Tags(tag: tag)]
+                        )
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
