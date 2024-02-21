@@ -507,6 +507,63 @@ class _TabBarOrgState extends State<TabBarOrg> with TickerProviderStateMixin {
                                 ),
                               ),
                             ),
+                            Text("Working Hours per Week"),
+                            Text("Monday:"),
+                            organization.workingHoursPerWeek.monday?.start == null? SizedBox(height: 0) :
+                            Text(DateFormat.jm().format(organization.workingHoursPerWeek.monday
+                            !.start!)),
+                            Text("-"),
+                            organization.workingHoursPerWeek.monday?.end == null? SizedBox(height: 0) :
+                            Text(DateFormat.jm().format(organization.workingHoursPerWeek.monday
+                            !.end!)), 
+                             Text("Tuesday:"),
+                            organization.workingHoursPerWeek.tuesday?.start == null? SizedBox(height: 0) :
+                            Text(DateFormat.jm().format(organization.workingHoursPerWeek.tuesday
+                            !.start!)),
+                            Text("-"),
+                            organization.workingHoursPerWeek.tuesday?.end == null? SizedBox(height: 0) :
+                            Text(DateFormat.jm().format(organization.workingHoursPerWeek.tuesday
+                            !.end!)), 
+                             Text("Wednesday:"),
+                            organization.workingHoursPerWeek.wednesday?.start == null? SizedBox(height: 0) :
+                            Text(DateFormat.jm().format(organization.workingHoursPerWeek.wednesday
+                            !.start!)),
+                            Text("-"),
+                            organization.workingHoursPerWeek.wednesday?.end == null? SizedBox(height: 0) :
+                            Text(DateFormat.jm().format(organization.workingHoursPerWeek.wednesday
+                            !.end!)), 
+                             Text("Thursday:"),
+                            organization.workingHoursPerWeek.thursday?.start == null? SizedBox(height: 0) :
+                            Text(DateFormat.jm().format(organization.workingHoursPerWeek.thursday
+                            !.start!)),
+                            Text("-"),
+                            organization.workingHoursPerWeek.thursday?.end == null? SizedBox(height: 0) :
+                            Text(DateFormat.jm().format(organization.workingHoursPerWeek.thursday
+                            !.end!)), 
+                             Text("Friday:"),
+                            organization.workingHoursPerWeek.friday?.start == null? SizedBox(height: 0) :
+                            Text(DateFormat.jm().format(organization.workingHoursPerWeek.friday
+                            !.start!)),
+                            Text("-"),
+                            organization.workingHoursPerWeek.friday?.end == null? SizedBox(height: 0) :
+                            Text(DateFormat.jm().format(organization.workingHoursPerWeek.friday
+                            !.end!)), 
+                             Text("Saturday:"),
+                            organization.workingHoursPerWeek.saturday?.start == null? SizedBox(height: 0) :
+                            Text(DateFormat.jm().format(organization.workingHoursPerWeek.saturday
+                            !.start!)),
+                            Text("-"),
+                            organization.workingHoursPerWeek.saturday?.end == null? SizedBox(height: 0) :
+                            Text(DateFormat.jm().format(organization.workingHoursPerWeek.saturday
+                            !.end!)), 
+                             Text("Sunday:"),
+                            organization.workingHoursPerWeek.sunday?.start == null? SizedBox(height: 0) :
+                            Text(DateFormat.jm().format(organization.workingHoursPerWeek.sunday
+                            !.start!)),
+                            Text("-"),
+                            organization.workingHoursPerWeek.sunday?.end == null? SizedBox(height: 0) :
+                            Text(DateFormat.jm().format(organization.workingHoursPerWeek.sunday
+                            !.end!)), 
                     ],
                   ),
                   ListView(
