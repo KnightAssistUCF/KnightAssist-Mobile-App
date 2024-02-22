@@ -1,4 +1,8 @@
 import 'dart:convert';
+import 'dart:io';
+import 'package:path/path.dart';
+import 'package:async/async.dart';
+import 'dart:io';
 
 import 'package:knightassist_mobile_app/src/common_widgets/alert_dialogs.dart';
 import 'package:knightassist_mobile_app/src/exceptions/app_exception.dart';
@@ -32,6 +36,35 @@ class ImagesRepository {
         String err = body["error"];
         throw Exception(err);
     }
+  }
+
+  storeImage(String typeOfImage, String idOfEntity, File imageFile) async {
+    Map<String, String?> params = {
+      "typeOfImage": typeOfImage,
+      "id": idOfEntity,
+    };
+    
+      var stream = new http.ByteStream(DelegatingStream.typed(imageFile.openRead()));
+      
+      var length = await imageFile.length();
+
+    var uri = Uri.https('knightassist-43ab3aeaada9.herokuapp.com',
+        '/api/storeImage', params);
+      
+      // create multipart request for including image file
+      var request = new http.MultipartRequest("POST", uri);
+
+      var multipartFile = new http.MultipartFile('file', stream, length,
+          filename: basename(imageFile.path));
+      request.files.add(multipartFile);
+
+      var response = await request.send();
+      print(response.statusCode);
+
+      // listen for response
+      response.stream.transform(utf8.decoder).listen((value) {
+        print(value);
+      });
   }
 }
 

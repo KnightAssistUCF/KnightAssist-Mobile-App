@@ -248,7 +248,7 @@ class AuthRepository {
         break;
       case 409:
         // Send StudentUserAlreadyExists exception
-        break;
+        throw Exception("User already exists with this email address.");
       default:
         var body = jsonDecode(response.body);
         String err = body["error"];
@@ -282,7 +282,7 @@ class AuthRepository {
         break;
       case 409:
         // Send OrganizationAlreadyExists exception
-        break;
+        throw Exception("Organization already exists with this email address.");
       default:
         var body = jsonDecode(response.body);
         String err = body["error"];
