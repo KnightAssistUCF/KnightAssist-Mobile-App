@@ -11,7 +11,10 @@ import 'package:knightassist_mobile_app/src/features/events/presentation/qr_scan
 import 'package:knightassist_mobile_app/src/features/home/presentation/home_screen.dart';
 import 'package:knightassist_mobile_app/src/features/images/data/images_repository.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/data/organizations_repository.dart';
+import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/presentation/update_screen.dart';
+import 'package:knightassist_mobile_app/src/features/students/data/students_repository.dart';
+import 'package:knightassist_mobile_app/src/features/students/domain/student_user.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -414,6 +417,25 @@ class _CalendarState extends State<Calendar> {
       builder: (context, ref, child) {
         final imagesRepository = ref.watch(imagesRepositoryProvider);
 
+       final authRepository = ref.watch(authRepositoryProvider);
+    final organizationsRepository = ref.watch(organizationsRepositoryProvider);
+    organizationsRepository.fetchOrganizationsList();
+    final studentsRepository = ref.watch(studentsRepositoryProvider);
+    final user = authRepository.currentUser;
+    bool isOrg = user?.role == "organization";
+    bool isStudent = user?.role == "student";
+    Organization? org;
+    StudentUser? student;
+
+    if (isOrg) {
+      org = organizationsRepository.getOrganization(user!.id);
+    }
+
+    if (isStudent) {
+      studentsRepository.fetchStudent(user!.id);
+      student = studentsRepository.getStudent();
+    }
+
         Widget getImage(Event event) {
           return FutureBuilder(
               future: imagesRepository.retrieveImage('1', event.id),
@@ -426,6 +448,24 @@ class _CalendarState extends State<Calendar> {
                         image: NetworkImage(imageUrl), height: 50, width: 50));
               });
         }
+
+         Widget getAppbarProfileImage() {
+      return FutureBuilder(
+          future: isOrg
+              ? imagesRepository.retrieveImage('2', org!.id)
+              : imagesRepository.retrieveImage('3', user!.id),
+          builder: (context, snapshot) {
+            final String imageUrl = snapshot.data ?? 'No initial data';
+            final String state = snapshot.connectionState.toString();
+            return ClipRRect(
+              borderRadius: BorderRadius.circular(25.0),
+              child: Image(
+                  semanticLabel: 'Profile picture',
+                  image: NetworkImage(imageUrl),
+                  height: 20),
+            );
+          });
+    }
 
         return Scaffold(
           appBar: AppBar(
@@ -452,18 +492,17 @@ class _CalendarState extends State<Calendar> {
                 padding: const EdgeInsets.all(8.0),
                 child: GestureDetector(
                   onTap: () {
-                    context.pushNamed(AppRoute.profileScreen.name);
+                       if (isOrg) {
+                  context.pushNamed("organization", extra: org);
+                } else if (isStudent) {
+                  context.pushNamed("profileScreen", extra: student);
+                } else {
+                  context.pushNamed(AppRoute.signIn.name);
+                }
                   },
                   child: Tooltip(
                     message: 'Go to your profile',
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(25.0),
-                      child: const Image(
-                          semanticLabel: 'Profile picture',
-                          image: AssetImage(
-                              'assets/profile pictures/icon_paintbrush.png'),
-                          height: 20),
-                    ),
+                    child: getAppbarProfileImage(),
                   ),
                 ),
               )

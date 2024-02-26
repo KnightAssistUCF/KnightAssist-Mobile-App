@@ -12,6 +12,7 @@ import 'package:knightassist_mobile_app/src/features/organizations/data/organiza
 import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
 import 'package:knightassist_mobile_app/src/features/rsvp/presentation/rsvp_widget.dart';
 import 'package:knightassist_mobile_app/src/features/students/data/students_repository.dart';
+import 'package:knightassist_mobile_app/src/features/students/domain/student_user.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 
 class EventScreen extends ConsumerWidget {
@@ -33,6 +34,7 @@ class EventScreen extends ConsumerWidget {
     final user = authRepository.currentUser;
     final eventsRepository = ref.read(eventsRepositoryProvider);
     final studentsRepository = ref.read(studentsRepositoryProvider);
+    bool isStudent = user?.role == "student";
 
     studentsRepository.fetchEventAttendees(event.id);
 
@@ -40,6 +42,18 @@ class EventScreen extends ConsumerWidget {
     // true if the organization who made the event is viewing it (shows edit button)
 
     bool isOrg = (user?.role == 'organization');
+
+    Organization? userOrg;
+    StudentUser? student;
+
+    if (isOrg) {
+      userOrg = organizationsRepository.getOrganization(user!.id);
+    }
+
+    if (isStudent) {
+      studentsRepository.fetchStudent(user!.id);
+      student = studentsRepository.getStudent();
+    }
 
     Widget getImage() {
       return FutureBuilder(
@@ -52,6 +66,25 @@ class EventScreen extends ConsumerWidget {
                 child: Image(image: NetworkImage(imageUrl), height: 50));
           });
     }
+
+      Widget getAppbarProfileImage() {
+      return FutureBuilder(
+          future: isOrg
+              ? imagesRepository.retrieveImage('2', org!.id)
+              : imagesRepository.retrieveImage('3', user!.id),
+          builder: (context, snapshot) {
+            final String imageUrl = snapshot.data ?? 'No initial data';
+            final String state = snapshot.connectionState.toString();
+            return ClipRRect(
+              borderRadius: BorderRadius.circular(25.0),
+              child: Image(
+                  semanticLabel: 'Profile picture',
+                  image: NetworkImage(imageUrl),
+                  height: 20),
+            );
+          });
+    }
+
 
     return Scaffold(
       appBar: AppBar(
@@ -77,7 +110,13 @@ class EventScreen extends ConsumerWidget {
             padding: const EdgeInsets.all(8.0),
             child: GestureDetector(
               onTap: () {
-                context.pushNamed(AppRoute.profileScreen.name);
+                  if (isOrg) {
+                  context.pushNamed("organization", extra: userOrg);
+                } else if (isStudent) {
+                  context.pushNamed("profileScreen", extra: student);
+                } else {
+                  context.pushNamed(AppRoute.signIn.name);
+                }
               },
               child: Tooltip(
                 message: 'Go to your profile',

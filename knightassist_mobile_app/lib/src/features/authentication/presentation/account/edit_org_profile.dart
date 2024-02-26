@@ -15,6 +15,7 @@ import 'package:knightassist_mobile_app/src/features/events/data/events_reposito
 import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/feedback.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/feedback_list_screen.dart';
+import 'package:knightassist_mobile_app/src/features/images/data/images_repository.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/data/organizations_repository.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
@@ -31,6 +32,31 @@ class EditOrganizationProfile extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
+
+    final organizationsRepository = ref.read(organizationsRepositoryProvider);
+    organizationsRepository.fetchOrganizationsList();
+    final authRepository = ref.read(authRepositoryProvider);
+    final imagesRepository = ref.watch(imagesRepositoryProvider);
+    final user = authRepository.currentUser;
+    Organization? userOrg = organizationsRepository.getOrganization(user!.id);
+
+
+    Widget getAppbarProfileImage() {
+      return FutureBuilder(
+          future: imagesRepository.retrieveImage('2', user!.id),
+          builder: (context, snapshot) {
+            final String imageUrl = snapshot.data ?? 'No initial data';
+            final String state = snapshot.connectionState.toString();
+            return ClipRRect(
+              borderRadius: BorderRadius.circular(25.0),
+              child: Image(
+                  semanticLabel: 'Profile picture',
+                  image: NetworkImage(imageUrl),
+                  height: 20),
+            );
+          });
+    }
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: true,
@@ -52,7 +78,7 @@ class EditOrganizationProfile extends ConsumerWidget {
             padding: const EdgeInsets.all(8.0),
             child: GestureDetector(
               onTap: () {
-                context.pushNamed("organization", extra: organization);
+                  context.pushNamed("organization", extra: userOrg);
               },
               child: Tooltip(
                 message: 'Go to your profile',
