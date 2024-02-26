@@ -59,8 +59,8 @@ class EventCard extends ConsumerWidget {
               decoration: BoxDecoration(
                   image: DecorationImage(
                       image: NetworkImage(imageUrl), fit: BoxFit.cover)),
-              width: 120,
-              height: 210,
+              width: MediaQuery.sizeOf(context).width,
+              height: 100,
             );
           });
     }
@@ -83,7 +83,7 @@ class EventCard extends ConsumerWidget {
         onTap: onPressed,
         child: Padding(
             padding: const EdgeInsets.all(Sizes.p16),
-            child: Row(
+            child: Column(
               children: [
                 ClipRRect(
                     borderRadius: BorderRadius.circular(20.0),
@@ -97,51 +97,43 @@ class EventCard extends ConsumerWidget {
                   ),*/
                         getImage()),
                 const SizedBox(width: 10),
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        event.name,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 2,
-                        style: const TextStyle(
-                            fontWeight: FontWeight.w600, fontSize: 18),
-                        textAlign: TextAlign.start,
-                      ),
-                      Text(
-                        event.location,
+                Text(
+                  event.name,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
+                  style: const TextStyle(
+                      fontWeight: FontWeight.w600, fontSize: 18),
+                  textAlign: TextAlign.start,
+                ),
+                Text(
+                  event.location,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                  style: const TextStyle(fontWeight: FontWeight.w400),
+                  textAlign: TextAlign.start,
+                ),
+                OverflowBar(
+                  children: [
+                    getOrgImage(),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        sponsor?.name ?? '',
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
-                        style: const TextStyle(fontWeight: FontWeight.w400),
+                        style:
+                            const TextStyle(fontWeight: FontWeight.w400),
                         textAlign: TextAlign.start,
                       ),
-                      OverflowBar(
-                        children: [
-                          getOrgImage(),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              sponsor?.name ?? '',
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.w400),
-                              textAlign: TextAlign.start,
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 5,
-                          )
-                        ],
-                      ),
-                      user.role == 'student'
-                          ? RSVPWidget(event: event)
-                          : _renderOrgEditState(sponsorOrg, context, event),
-                    ],
-                  ),
+                    ),
+                    const SizedBox(
+                      width: 5,
+                    )
+                  ],
                 ),
+                user.role == 'student'
+                    ? RSVPWidget(event: event)
+                    : _renderOrgEditState(sponsorOrg, context, event),
               ],
             )),
       ),

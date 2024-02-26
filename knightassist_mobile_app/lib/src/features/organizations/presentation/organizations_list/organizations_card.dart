@@ -82,7 +82,7 @@ class _OrganizationCardState extends State<OrganizationCard> {
                         left: Radius.circular(20.0),
                         right: Radius.circular(20.0)),
                     child: Image(
-                      fit: BoxFit.fill,
+                      fit: BoxFit.cover,
                       image: NetworkImage(imageUrl),
                     ),
                   ),
