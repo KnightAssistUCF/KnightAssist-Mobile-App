@@ -5,7 +5,10 @@ import 'package:intl/intl.dart';
 import 'package:knightassist_mobile_app/src/common_widgets/responsive_center.dart';
 import 'package:knightassist_mobile_app/src/common_widgets/responsive_scrollable_card.dart';
 import 'package:knightassist_mobile_app/src/constants/breakpoints.dart';
+import 'package:knightassist_mobile_app/src/features/announcements/domain/announcement.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/data/auth_repository.dart';
+import 'package:knightassist_mobile_app/src/features/events/data/events_repository.dart';
+import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/events_list/events_list_screen.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/feedback_list_screen.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/qr_scanner.dart';
@@ -17,6 +20,9 @@ import 'package:knightassist_mobile_app/src/features/students/data/students_repo
 import 'package:knightassist_mobile_app/src/features/students/domain/student_user.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+
+List<Event> events = [];
+List<Announcement> announcements = [];
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key, required});
@@ -75,9 +81,23 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
         final organizationsRepository =
             ref.watch(organizationsRepositoryProvider);
         final studentRepository = ref.watch(studentsRepositoryProvider);
+        final eventsRepository = ref.watch(eventsRepositoryProvider);
         organizationsRepository.fetchOrganizationsList();
         if (user?.role == 'student') {
           studentRepository.fetchStudent(user!.id);
+        }
+        if (isOrg) {
+          eventsRepository
+              .fetchEventsByOrg(user!.id)
+              .then((value) => setState(() {
+                    events = value;
+                  }));
+        } else {
+          eventsRepository
+              .fetchEventsByStudent(user!.id)
+              .then((value) => setState(() {
+                    events = value;
+                  }));
         }
 
         return Scaffold(
@@ -449,9 +469,9 @@ _topSection(double width, bool isOrg) {
           ),
           SizedBox(
             height: 175,
-            child: ListView(scrollDirection: Axis.horizontal, children: const [
-              EventCard(),
-              EventCard(),
+            child: ListView(scrollDirection: Axis.horizontal, children: [
+              EventCard(event: events.elementAt(0),),
+              EventCard(event: events.elementAt(1),),
             ]),
           ),
           Row(
@@ -562,7 +582,8 @@ class AnnouncementCard extends StatelessWidget {
 }
 
 class EventCard extends StatelessWidget {
-  const EventCard({super.key});
+  final Event event;
+  const EventCard({super.key, required this.event});
 
   @override
   Widget build(BuildContext context) {
@@ -582,31 +603,31 @@ class EventCard extends StatelessWidget {
                       child: const Image(
                           image: AssetImage('assets/example.png'),
                           height: 100)),
-                  const Padding(
+                  Padding(
                     padding: EdgeInsets.all(8.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(
-                          'Concert',
-                          style: TextStyle(
+                          event.name,
+                          style: const TextStyle(
                               fontWeight: FontWeight.w600, fontSize: 18),
                           textAlign: TextAlign.start,
                         ),
                         Text(
-                          'January 31 at 5:00 PM',
-                          style: TextStyle(fontWeight: FontWeight.w400),
+                         DateFormat.yMMMMEEEEd().format(event.startTime),
+                          style: const TextStyle(fontWeight: FontWeight.w400),
                           textAlign: TextAlign.start,
                         ),
                         Text(
-                          'Additon Financial Arena',
-                          style: TextStyle(fontWeight: FontWeight.w400),
+                          event.location,
+                          style: const TextStyle(fontWeight: FontWeight.w400),
                           textAlign: TextAlign.start,
                         ),
                         Text(
-                          'Organization Y',
-                          style: TextStyle(fontWeight: FontWeight.w400),
+                          event.sponsoringOrganization,
+                          style: const TextStyle(fontWeight: FontWeight.w400),
                           textAlign: TextAlign.start,
                         ),
                       ],
@@ -646,7 +667,7 @@ class HomeScreenTab extends ConsumerWidget {
 
     if (isStudent) {
       studentsRepository.fetchStudent(user!.id);
-      print("isStudent");
+      //print("isStudent");
       student = studentsRepository.getStudent();
     }
 
