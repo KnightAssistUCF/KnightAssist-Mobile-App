@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:knightassist_mobile_app/src/common_widgets/responsive_center.dart';
 import 'package:knightassist_mobile_app/src/common_widgets/responsive_scrollable_card.dart';
 import 'package:knightassist_mobile_app/src/constants/breakpoints.dart';
+import 'package:knightassist_mobile_app/src/features/announcements/data/announcements_repository.dart';
 import 'package:knightassist_mobile_app/src/features/announcements/domain/announcement.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/data/auth_repository.dart';
 import 'package:knightassist_mobile_app/src/features/events/data/events_repository.dart';
@@ -82,6 +83,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
             ref.watch(organizationsRepositoryProvider);
         final studentRepository = ref.watch(studentsRepositoryProvider);
         final eventsRepository = ref.watch(eventsRepositoryProvider);
+        final announcementsRepository = ref.watch(announcementsRepositoryProvider);
         organizationsRepository.fetchOrganizationsList();
         if (user?.role == 'student') {
           studentRepository.fetchStudent(user!.id);
@@ -90,15 +92,28 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
           eventsRepository
               .fetchEventsByOrg(user!.id)
               .then((value) => setState(() {
-                    events = value;
+                    value.sort((a, b) => a.startTime.compareTo(b.startTime),);
+                    events.add(value.elementAt(value.length-1));
+                    events.add(value.elementAt(value.length-2));
                   }));
+   
         } else {
           eventsRepository
               .fetchEventsByStudent(user!.id)
               .then((value) => setState(() {
-                    events = value;
+                      value.sort((a, b) => a.startTime.compareTo(b.startTime),);
+                    events.add(value.elementAt(value.length-1));
+                    events.add(value.elementAt(value.length-2));
                   }));
         }
+
+// TODO: load an org's announcements for org and fav org announcements for students (requires non null user to get org name)
+         announcementsRepository.fetchOrgAnnouncements('My Organization!',
+      '657e15abf893392ca98665d1').then((value) => setState(() {
+        value.sort((a,b) => a.date.compareTo(b.date),);
+        announcements.add(value.elementAt(value.length-1));
+        announcements.add(value.elementAt(value.length-2));
+      }));
 
         return Scaffold(
           floatingActionButton: isOrg
@@ -420,7 +435,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
   }
 }
 
-_topSection(double width, bool isOrg) {
+_topSection(double width, bool isOrg, Organization? org, StudentUser? student) {
   return Builder(builder: (context) {
     return Stack(children: [
       Container(
@@ -437,8 +452,8 @@ _topSection(double width, bool isOrg) {
                         children: [
                           Text(
                             isOrg
-                                ? "Welcome, Organization"
-                                : "Welcome, Student User",
+                                ? "Welcome, ${org?.name}"
+                                : "Welcome, ${student?.firstName} ${student?.lastName}",
                             style: const TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w900,
@@ -469,10 +484,9 @@ _topSection(double width, bool isOrg) {
           ),
           SizedBox(
             height: 175,
-            child: ListView(scrollDirection: Axis.horizontal, children: [
-              EventCard(event: events.elementAt(0),),
-              EventCard(event: events.elementAt(1),),
-            ]),
+            //child: ListView(scrollDirection: Axis.horizontal, children: [
+           //for (var event in events) EventCard(event: event)
+            //]),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -493,7 +507,7 @@ _topSection(double width, bool isOrg) {
               //),
               TextButton(
                   onPressed: () {
-                    context.pushNamed(AppRoute.events.name);
+                    context.pushNamed(AppRoute.calendar.name);
                   },
                   child: Row(
                     children: [
@@ -514,7 +528,8 @@ _topSection(double width, bool isOrg) {
 }
 
 class AnnouncementCard extends StatelessWidget {
-  const AnnouncementCard({super.key});
+  final Announcement announcement;
+  const AnnouncementCard({super.key, required this.announcement});
 
   @override
   Widget build(BuildContext context) {
@@ -536,34 +551,38 @@ class AnnouncementCard extends StatelessWidget {
             ),
             color: Colors.white,
             elevation: 5,
-            child: const Padding(
-              padding: EdgeInsets.all(15.0),
+            child: Padding(
+              padding: const EdgeInsets.all(15.0),
               child: Wrap(
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.close,
                     color: Colors.grey,
                     size: 15,
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   Text(
-                    '01-31-24',
-                    style: TextStyle(fontSize: 16),
+                    DateFormat.yMEd().format(announcement.date),
+                    style: const TextStyle(fontSize: 16),
                     textAlign: TextAlign.justify,
                   ),
-                  SizedBox(width: 5),
+                  const SizedBox(width: 5),
                   Text(
-                    'Event location changed for this event',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                    announcement.title,
+                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                     textAlign: TextAlign.justify,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  SizedBox(width: 20),
+                  const SizedBox(width: 20),
                   Text(
-                    '"The location for..."',
-                    style: TextStyle(fontStyle: FontStyle.italic),
+                    announcement.content,
+                    style: const TextStyle(fontStyle: FontStyle.italic),
                     textAlign: TextAlign.justify,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  Row(
+                  const Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Icon(
@@ -581,61 +600,83 @@ class AnnouncementCard extends StatelessWidget {
   }
 }
 
-class EventCard extends StatelessWidget {
+class EventCard extends ConsumerWidget {
   final Event event;
   const EventCard({super.key, required this.event});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final imagesRepository = ref.watch(imagesRepositoryProvider);
+
+  Widget getImage(Event event) {
+          return FutureBuilder(
+              future: imagesRepository.retrieveImage('1', event.id),
+              builder: (context, snapshot) {
+                final String imageUrl = snapshot.data ?? 'No initial data';
+                final String state = snapshot.connectionState.toString();
+                return ClipRRect(
+                    borderRadius: BorderRadius.circular(12.0),
+                    child: Image(
+                        image: NetworkImage(imageUrl), height: 50, width: 50, fit: BoxFit.cover,));
+              });
+        }
+
     return Center(
-      child: Card(
-        child: SizedBox(
-          height: 150,
-          width: 300,
-          child: Column(
-            children: [
-              const Text('Next Event'),
-              const Divider(height: 15),
-              Wrap(
-                children: [
-                  ClipRRect(
-                      borderRadius: BorderRadius.circular(12.0),
-                      child: const Image(
-                          image: AssetImage('assets/example.png'),
-                          height: 100)),
-                  Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          event.name,
-                          style: const TextStyle(
-                              fontWeight: FontWeight.w600, fontSize: 18),
-                          textAlign: TextAlign.start,
-                        ),
-                        Text(
-                         DateFormat.yMMMMEEEEd().format(event.startTime),
-                          style: const TextStyle(fontWeight: FontWeight.w400),
-                          textAlign: TextAlign.start,
-                        ),
-                        Text(
-                          event.location,
-                          style: const TextStyle(fontWeight: FontWeight.w400),
-                          textAlign: TextAlign.start,
-                        ),
-                        Text(
-                          event.sponsoringOrganization,
-                          style: const TextStyle(fontWeight: FontWeight.w400),
-                          textAlign: TextAlign.start,
-                        ),
-                      ],
+      child: InkWell(
+        onTap: () => context.pushNamed("event", extra: event),
+        child: Card(
+          child: SizedBox(
+            height: 150,
+            width: 300,
+            child: Column(
+              children: [
+                const Text('Next Event'),
+                const Divider(height: 15),
+                Wrap(
+                  children: [
+                  getImage(event),
+                    Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(
+                            event.name,
+                            style: const TextStyle(
+                                fontWeight: FontWeight.w600, fontSize: 18),
+                            textAlign: TextAlign.start,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Text(
+                           DateFormat.yMMMMEEEEd().format(event.startTime),
+                            style: const TextStyle(fontWeight: FontWeight.w400),
+                            textAlign: TextAlign.start,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Text(
+                            event.location,
+                            style: const TextStyle(fontWeight: FontWeight.w400),
+                            textAlign: TextAlign.start,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          /*Text(
+                            event.sponsoringOrganization,
+                            style: const TextStyle(fontWeight: FontWeight.w400),
+                            textAlign: TextAlign.start,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),*/
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -674,7 +715,7 @@ class HomeScreenTab extends ConsumerWidget {
     Widget getAppbarProfileImage() {
       return FutureBuilder(
           future: isOrg
-              ? imagesRepository.retrieveImage('2', org!.id)
+              ? imagesRepository.retrieveImage('2', user!.id)
               : imagesRepository.retrieveImage('3', user!.id),
           builder: (context, snapshot) {
             final String imageUrl = snapshot.data ?? 'No initial data';
@@ -729,7 +770,7 @@ class HomeScreenTab extends ConsumerWidget {
         height: h,
         child: Column(
           children: [
-            _topSection(w, isOrg),
+            _topSection(w, isOrg, org, student),
             Flexible(
               child: ListView(
                 scrollDirection: Axis.vertical,
@@ -803,12 +844,9 @@ class HomeScreenTab extends ConsumerWidget {
                             ],
                           ),
                         )
-                      : const AnnouncementCard(),
-                  isOrg
-                      ? const SizedBox(
-                          height: 0,
-                        )
-                      : const AnnouncementCard(),
+                      : ListView(scrollDirection: Axis.vertical, children: [
+           for (var announcement in announcements) AnnouncementCard(announcement: announcement)
+            ]),
                   isOrg
                       ? const SizedBox(height: 0)
                       : Row(
@@ -842,16 +880,16 @@ class HomeScreenTab extends ConsumerWidget {
                         child: Column(
                           children: [
                             isOrg
-                                ? const Text(
-                                    "73%",
+                                ? Text(
+                                    ((student!.totalVolunteerHours / student!.semesterVolunteerHourGoal) / 100).toString(),
                                     style: TextStyle(fontSize: 40),
                                   )
                                 : CircularPercentIndicator(
                                     radius: 40.0,
                                     lineWidth: 5.0,
-                                    percent: 0.95,
-                                    center: const Text(
-                                      "19/20",
+                                    percent: (student!.totalVolunteerHours / student!.semesterVolunteerHourGoal) > 100 ? 1.0 : (student!.totalVolunteerHours / student!.semesterVolunteerHourGoal) / 100,
+                                    center: Text(
+                                      student!.semesterVolunteerHourGoal.toString(),
                                       style: TextStyle(fontSize: 15),
                                     ),
                                     progressColor:
@@ -887,12 +925,12 @@ class HomeScreenTab extends ConsumerWidget {
                           ? SizedBox(
                               height: 0,
                             )
-                          : const Padding(
+                          : Padding(
                               padding: EdgeInsets.all(8.0),
                               child: Column(
                                 children: [
                                   Text(
-                                    '144',
+                                   student!.totalVolunteerHours.toString(),
                                     style: TextStyle(fontSize: 40),
                                   ),
                                   Text('Total Points'),

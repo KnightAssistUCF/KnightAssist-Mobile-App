@@ -416,7 +416,6 @@ class _CalendarState extends State<Calendar> {
     return Consumer(
       builder: (context, ref, child) {
         final imagesRepository = ref.watch(imagesRepositoryProvider);
-
        final authRepository = ref.watch(authRepositoryProvider);
     final organizationsRepository = ref.watch(organizationsRepositoryProvider);
     organizationsRepository.fetchOrganizationsList();

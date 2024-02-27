@@ -404,9 +404,12 @@ class EventsRepository {
           List<CheckedInStudent> checkins = [];
           List<Review> reviews = [];
 
-          for (dynamic s in eventData[0]['attendees']) {
+if (eventData[0]['attendees'] != null) {
+ for (dynamic s in eventData[0]['attendees']) {
             attendees.add(s);
           }
+}
+         
           for (dynamic s in eventData[0]['registeredVolunteers']) {
             registeredVolunteers.add(s);
           }
