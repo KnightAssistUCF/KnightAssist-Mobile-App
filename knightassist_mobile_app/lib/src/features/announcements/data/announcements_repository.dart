@@ -28,7 +28,7 @@ class AnnouncementsRepository {
     var uri = Uri.https('knightassist-43ab3aeaada9.herokuapp.com',
         '/api/favoritedOrgsAnnouncements', params);
     var response = await http.get(uri);
-    print(response.body);
+    //print(response.body);
     Map<String, dynamic> map = jsonDecode(response.body);
     switch (response.statusCode) {
       case 200:
@@ -78,7 +78,7 @@ class AnnouncementsRepository {
     var uri = Uri.https('knightassist-43ab3aeaada9.herokuapp.com',
         '/api/loadAllOrgAnnouncements', params);
     var response = await http.get(uri);
-    print(response.body);
+    //print(response.body);
     Map<String, dynamic> map = jsonDecode(response.body);
     switch (response.statusCode) {
       case 200:

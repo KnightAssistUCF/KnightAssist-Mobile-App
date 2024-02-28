@@ -83,7 +83,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
             ref.watch(organizationsRepositoryProvider);
         final studentRepository = ref.watch(studentsRepositoryProvider);
         final eventsRepository = ref.watch(eventsRepositoryProvider);
-        final announcementsRepository = ref.watch(announcementsRepositoryProvider);
+        final announcementsRepository =
+            ref.watch(announcementsRepositoryProvider);
         organizationsRepository.fetchOrganizationsList();
         if (user?.role == 'student') {
           studentRepository.fetchStudent(user!.id);
@@ -92,28 +93,41 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
           eventsRepository
               .fetchEventsByOrg(user!.id)
               .then((value) => setState(() {
-                    value.sort((a, b) => a.startTime.compareTo(b.startTime),);
-                    events.add(value.elementAt(value.length-1));
-                    events.add(value.elementAt(value.length-2));
+                    value.sort(
+                      (a, b) => a.startTime.compareTo(b.startTime),
+                    );
+                    events = [
+                      value.elementAt(value.length - 1),
+                      value.elementAt(value.length - 2)
+                    ];
                   }));
-   
         } else {
           eventsRepository
               .fetchEventsByStudent(user!.id)
               .then((value) => setState(() {
-                      value.sort((a, b) => a.startTime.compareTo(b.startTime),);
-                    events.add(value.elementAt(value.length-1));
-                    events.add(value.elementAt(value.length-2));
+                    value.sort(
+                      (a, b) => a.startTime.compareTo(b.startTime),
+                    );
+                    events = [
+                      value.elementAt(value.length - 1),
+                      value.elementAt(value.length - 2)
+                    ];
                   }));
         }
 
 // TODO: load an org's announcements for org and fav org announcements for students (requires non null user to get org name)
-         announcementsRepository.fetchOrgAnnouncements('My Organization!',
-      '657e15abf893392ca98665d1').then((value) => setState(() {
-        value.sort((a,b) => a.date.compareTo(b.date),);
-        announcements.add(value.elementAt(value.length-1));
-        announcements.add(value.elementAt(value.length-2));
-      }));
+        announcementsRepository
+            .fetchOrgAnnouncements(
+                'My Organization!', '657e15abf893392ca98665d1')
+            .then((value) => setState(() {
+                  value.sort(
+                    (a, b) => a.date.compareTo(b.date),
+                  );
+                  announcements = [
+                    value.elementAt(value.length - 1),
+                    value.elementAt(value.length - 2)
+                  ];
+                }));
 
         return Scaffold(
           floatingActionButton: isOrg
@@ -484,9 +498,9 @@ _topSection(double width, bool isOrg, Organization? org, StudentUser? student) {
           ),
           SizedBox(
             height: 175,
-            //child: ListView(scrollDirection: Axis.horizontal, children: [
-           //for (var event in events) EventCard(event: event)
-            //]),
+            child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: [for (var event in events) EventCard(event: event)]),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -540,17 +554,19 @@ class AnnouncementCard extends StatelessWidget {
     return ResponsiveCenter(
       maxContentWidth: Breakpoint.tablet,
       child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Card(
-            shape: RoundedRectangleBorder(
-              side: const BorderSide(
-                color: Colors.black26,
-                width: 1.0,
-              ),
-              borderRadius: BorderRadius.circular(20.0),
+        padding: const EdgeInsets.all(10.0),
+        child: Card(
+          shape: RoundedRectangleBorder(
+            side: const BorderSide(
+              color: Colors.black26,
+              width: 1.0,
             ),
-            color: Colors.white,
-            elevation: 5,
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          color: Colors.white,
+          elevation: 5,
+          child: InkWell(
+            onTap: () => context.pushNamed("announcement", extra: announcement),
             child: Padding(
               padding: const EdgeInsets.all(15.0),
               child: Wrap(
@@ -569,7 +585,8 @@ class AnnouncementCard extends StatelessWidget {
                   const SizedBox(width: 5),
                   Text(
                     announcement.title,
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.w600),
                     textAlign: TextAlign.justify,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -595,7 +612,9 @@ class AnnouncementCard extends StatelessWidget {
                 ],
               ),
             ),
-          )),
+          ),
+        ),
+      ),
     );
   }
 }
@@ -608,33 +627,37 @@ class EventCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final imagesRepository = ref.watch(imagesRepositoryProvider);
 
-  Widget getImage(Event event) {
-          return FutureBuilder(
-              future: imagesRepository.retrieveImage('1', event.id),
-              builder: (context, snapshot) {
-                final String imageUrl = snapshot.data ?? 'No initial data';
-                final String state = snapshot.connectionState.toString();
-                return ClipRRect(
-                    borderRadius: BorderRadius.circular(12.0),
-                    child: Image(
-                        image: NetworkImage(imageUrl), height: 50, width: 50, fit: BoxFit.cover,));
-              });
-        }
+    Widget getImage(Event event) {
+      return FutureBuilder(
+          future: imagesRepository.retrieveImage('1', event.id),
+          builder: (context, snapshot) {
+            final String imageUrl = snapshot.data ?? 'No initial data';
+            final String state = snapshot.connectionState.toString();
+            return ClipRRect(
+                borderRadius: BorderRadius.circular(12.0),
+                child: Image(
+                  image: NetworkImage(imageUrl),
+                  height: 50,
+                  width: 50,
+                  fit: BoxFit.cover,
+                ));
+          });
+    }
 
     return Center(
-      child: InkWell(
-        onTap: () => context.pushNamed("event", extra: event),
-        child: Card(
+      child: Card(
+        child: InkWell(
+          onTap: () => context.pushNamed("event", extra: event),
           child: SizedBox(
             height: 150,
-            width: 300,
+            width: 320,
             child: Column(
               children: [
                 const Text('Next Event'),
                 const Divider(height: 15),
                 Wrap(
                   children: [
-                  getImage(event),
+                    getImage(event),
                     Padding(
                       padding: EdgeInsets.all(8.0),
                       child: Column(
@@ -650,7 +673,7 @@ class EventCard extends ConsumerWidget {
                             overflow: TextOverflow.ellipsis,
                           ),
                           Text(
-                           DateFormat.yMMMMEEEEd().format(event.startTime),
+                            DateFormat.yMMMMEEEEd().format(event.startTime),
                             style: const TextStyle(fontWeight: FontWeight.w400),
                             textAlign: TextAlign.start,
                             maxLines: 1,
@@ -697,6 +720,7 @@ class HomeScreenTab extends ConsumerWidget {
     final studentsRepository = ref.watch(studentsRepositoryProvider);
     final user = authRepository.currentUser;
     final imagesRepository = ref.watch(imagesRepositoryProvider);
+    final eventsRepository = ref.watch(eventsRepositoryProvider);
     bool isOrg = user?.role == "organization";
     bool isStudent = user?.role == "student";
     Organization? org;
@@ -844,9 +868,11 @@ class HomeScreenTab extends ConsumerWidget {
                             ],
                           ),
                         )
-                      : ListView(scrollDirection: Axis.vertical, children: [
-           for (var announcement in announcements) AnnouncementCard(announcement: announcement)
-            ]),
+                      : Column(children: [
+                          for (var announcement in announcements)
+                            AnnouncementCard(announcement: announcement)
+                        ]),
+                  SizedBox(),
                   isOrg
                       ? const SizedBox(height: 0)
                       : Row(
@@ -881,23 +907,29 @@ class HomeScreenTab extends ConsumerWidget {
                           children: [
                             isOrg
                                 ? Text(
-                                    ((student!.totalVolunteerHours / student!.semesterVolunteerHourGoal) / 100).toString(),
+                                    (org?.favorites.length).toString(),
                                     style: TextStyle(fontSize: 40),
                                   )
                                 : CircularPercentIndicator(
                                     radius: 40.0,
                                     lineWidth: 5.0,
-                                    percent: (student!.totalVolunteerHours / student!.semesterVolunteerHourGoal) > 100 ? 1.0 : (student!.totalVolunteerHours / student!.semesterVolunteerHourGoal) / 100,
+                                    percent: (student!.totalVolunteerHours /
+                                                student!
+                                                    .semesterVolunteerHourGoal) >
+                                            100
+                                        ? 1.0
+                                        : (student!.totalVolunteerHours /
+                                                student!
+                                                    .semesterVolunteerHourGoal) /
+                                            100,
                                     center: Text(
-                                      student!.semesterVolunteerHourGoal.toString(),
+                                      '${student.totalVolunteerHours}/${student!.semesterVolunteerHourGoal}',
                                       style: TextStyle(fontSize: 15),
                                     ),
                                     progressColor:
                                         const Color.fromARGB(255, 91, 78, 119),
                                   ),
-                            Text(isOrg
-                                ? 'Event Attendance Rate'
-                                : 'Semester Goal'),
+                            Text(isOrg ? 'Followers' : 'Semester Goal'),
                           ],
                         ),
                       ),
@@ -905,38 +937,27 @@ class HomeScreenTab extends ConsumerWidget {
                         padding: EdgeInsets.all(8.0),
                         child: Column(
                           children: [
-                            Text(
-                              isOrg
-                                  ? organizationsRepository
-                                          .getOrganization(user!.id)
-                                          ?.eventsArray
-                                          .length
-                                          .toString() ??
-                                      '0'
-                                  : '255',
-                              style: TextStyle(fontSize: 40),
-                            ),
-                            Text(
-                                isOrg ? 'Upcoming Shifts' : 'Cumulative Hours'),
+                            isOrg
+                                ? FutureBuilder(
+                                    future: eventsRepository
+                                        .fetchEventsByOrg(user!.id),
+                                    builder: (context, snapshot) {
+                                      final String state =
+                                          snapshot.connectionState.toString();
+                                      return Text(
+                                        snapshot.data?.length.toString() ??
+                                            'No initial data',
+                                        style: TextStyle(fontSize: 40),
+                                      );
+                                    })
+                                : Text(
+                                    student!.totalVolunteerHours.toString(),
+                                    style: TextStyle(fontSize: 40),
+                                  ),
+                            Text(isOrg ? 'Events Hosted' : 'Cumulative Hours'),
                           ],
                         ),
                       ),
-                      isOrg
-                          ? SizedBox(
-                              height: 0,
-                            )
-                          : Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Column(
-                                children: [
-                                  Text(
-                                   student!.totalVolunteerHours.toString(),
-                                    style: TextStyle(fontSize: 40),
-                                  ),
-                                  Text('Total Points'),
-                                ],
-                              ),
-                            ),
                     ],
                   ),
                 ],
