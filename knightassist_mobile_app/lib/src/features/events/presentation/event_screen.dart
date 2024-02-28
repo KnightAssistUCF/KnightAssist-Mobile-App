@@ -67,7 +67,7 @@ class EventScreen extends ConsumerWidget {
           });
     }
 
-      Widget getAppbarProfileImage() {
+    Widget getAppbarProfileImage() {
       return FutureBuilder(
           future: isOrg
               ? imagesRepository.retrieveImage('2', org!.id)
@@ -84,7 +84,6 @@ class EventScreen extends ConsumerWidget {
             );
           });
     }
-
 
     return Scaffold(
       appBar: AppBar(
@@ -110,7 +109,7 @@ class EventScreen extends ConsumerWidget {
             padding: const EdgeInsets.all(8.0),
             child: GestureDetector(
               onTap: () {
-                  if (isOrg) {
+                if (isOrg) {
                   context.pushNamed("organization", extra: userOrg);
                 } else if (isStudent) {
                   context.pushNamed("profileScreen", extra: student);
@@ -120,14 +119,7 @@ class EventScreen extends ConsumerWidget {
               },
               child: Tooltip(
                 message: 'Go to your profile',
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(25.0),
-                  child: const Image(
-                      semanticLabel: 'Profile picture',
-                      image: AssetImage(
-                          'assets/profile pictures/icon_paintbrush.png'),
-                      height: 20),
-                ),
+                child: getAppbarProfileImage(),
               ),
             ),
           )
@@ -431,14 +423,19 @@ class _TabBarEventState extends State<TabBarEvent>
                   ListView(
                     children: [
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: event.eventTags.isEmpty? const Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text("This event has no tags.", style: TextStyle(fontSize: Sizes.p20),),
-                        ) : Wrap(
-                        children: [for (var tag in event.eventTags) Tags(tag: tag)]
-                        )
-                      ),
+                          padding: const EdgeInsets.all(8.0),
+                          child: event.eventTags.isEmpty
+                              ? const Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Text(
+                                    "This event has no tags.",
+                                    style: TextStyle(fontSize: Sizes.p20),
+                                  ),
+                                )
+                              : Wrap(children: [
+                                  for (var tag in event.eventTags)
+                                    Tags(tag: tag)
+                                ])),
                     ],
                   ),
                 ],

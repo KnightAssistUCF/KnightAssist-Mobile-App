@@ -40,7 +40,6 @@ class EditOrganizationProfile extends ConsumerWidget {
     final user = authRepository.currentUser;
     Organization? userOrg = organizationsRepository.getOrganization(user!.id);
 
-
     Widget getAppbarProfileImage() {
       return FutureBuilder(
           future: imagesRepository.retrieveImage('2', user!.id),
@@ -78,17 +77,11 @@ class EditOrganizationProfile extends ConsumerWidget {
             padding: const EdgeInsets.all(8.0),
             child: GestureDetector(
               onTap: () {
-                  context.pushNamed("organization", extra: userOrg);
+                context.pushNamed("organization", extra: userOrg);
               },
               child: Tooltip(
                 message: 'Go to your profile',
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(25.0),
-                  child: Image(
-                      semanticLabel: 'Profile picture',
-                      image: AssetImage(organization.logoUrl),
-                      height: 20),
-                ),
+                child: getAppbarProfileImage(),
               ),
             ),
           )
@@ -155,61 +148,84 @@ class _OrganizationTopState extends State<OrganizationTop> {
     final Organization organization = this.organization;
     final double width = this.width;
 
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        Column(
+    return Consumer(
+      builder: (context, ref, child) {
+        final authRepository = ref.watch(authRepositoryProvider);
+        final organizationsRepository =
+            ref.watch(organizationsRepositoryProvider);
+        final imagesRepository = ref.watch(imagesRepositoryProvider);
+        final eventsRepository = ref.watch(eventsRepositoryProvider);
+        eventsRepository.fetchEventsList();
+        final user = authRepository.currentUser;
+        Organization? org;
+
+        org = organizationsRepository.getOrganization(user!.id);
+
+        Widget getOrgBackgroundImage() {
+          return FutureBuilder(
+              future: imagesRepository.retrieveImage('4', org!.id),
+              builder: (context, snapshot) {
+                final String imageUrl = snapshot.data ?? 'No initial data';
+                final String state = snapshot.connectionState.toString();
+                return Container(
+                  width: width,
+                  height: 200,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      fit: BoxFit.fill,
+                      image: NetworkImage(imageUrl),
+                    ),
+                  ),
+                );
+              });
+        }
+
+        return Stack(
+          alignment: Alignment.center,
           children: [
-            Container(
-              width: width,
-              height: 200,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  fit: BoxFit.fill,
-                  image: AssetImage(organization.backgroundUrl == ''
-                      ? 'assets/orgdefaultbackground.png'
-                      : organization.backgroundUrl),
+            Column(
+              children: [
+                getOrgBackgroundImage(),
+                const SizedBox(
+                  height: 50,
                 ),
-              ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    controller: _nameController,
+                    //initialValue: organization.name,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Organization Name',
+                    ),
+                  ),
+                )
+              ],
             ),
-            const SizedBox(
-              height: 50,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextFormField(
-                controller: _nameController,
-                //initialValue: organization.name,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Organization Name',
+            Positioned(
+              top: 90.0,
+              child: Container(
+                padding: const EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 2,
+                      blurRadius: 5,
+                      offset: const Offset(0, 3),
+                    ),
+                  ],
+                ),
+                child: EditProfileImage(
+                  organization: organization,
                 ),
               ),
             )
           ],
-        ),
-        Positioned(
-          top: 90.0,
-          child: Container(
-            padding: const EdgeInsets.all(5),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
-                  spreadRadius: 2,
-                  blurRadius: 5,
-                  offset: const Offset(0, 3),
-                ),
-              ],
-            ),
-            child: EditProfileImage(
-              organization: organization,
-            ),
-          ),
-        )
-      ],
+        );
+      },
     );
   }
 }
@@ -702,21 +718,43 @@ class _EditProfileImageState extends State<EditProfileImage> {
 
   @override
   Widget build(BuildContext context) {
-    return EditableImage(
-      onChange: _directUpdateImage,
-      image: _organizationPicFile != null
-          ? Image.file(_organizationPicFile!, fit: BoxFit.cover)
-          : Image(image: AssetImage(organization.logoUrl)),
-      size: 150,
-      imagePickerTheme: ThemeData(
-        primaryColor: Colors.yellow,
-        shadowColor: Colors.deepOrange,
-        colorScheme: const ColorScheme.light(background: Colors.indigo),
-        iconTheme: const IconThemeData(color: Colors.red),
-        fontFamily: 'Papyrus',
-      ),
-      imageBorder: Border.all(color: Colors.lime, width: 2),
-      editIconBorder: Border.all(color: Colors.purple, width: 2),
+    return Consumer(
+      builder: (context, ref, child) {
+        final authRepository = ref.watch(authRepositoryProvider);
+        final organizationsRepository =
+            ref.watch(organizationsRepositoryProvider);
+        final user = authRepository.currentUser;
+        final org = organizationsRepository.getOrganization(user!.id);
+        final imagesRepository = ref.watch(imagesRepositoryProvider);
+
+        Widget getEditableProfileImage() {
+          return FutureBuilder(
+              future: imagesRepository.retrieveImage('2', user.id),
+              builder: (context, snapshot) {
+                final String imageUrl = snapshot.data ?? 'No initial data';
+                final String state = snapshot.connectionState.toString();
+                return EditableImage(
+                  onChange: _directUpdateImage,
+                  image: _organizationPicFile != null
+                      ? Image.file(_organizationPicFile!, fit: BoxFit.cover)
+                      : Image(image: NetworkImage(imageUrl)),
+                  size: 150,
+                  imagePickerTheme: ThemeData(
+                    primaryColor: Colors.yellow,
+                    shadowColor: Colors.deepOrange,
+                    colorScheme:
+                        const ColorScheme.light(background: Colors.indigo),
+                    iconTheme: const IconThemeData(color: Colors.red),
+                    fontFamily: 'Papyrus',
+                  ),
+                  imageBorder: Border.all(color: Colors.lime, width: 2),
+                  editIconBorder: Border.all(color: Colors.purple, width: 2),
+                );
+              });
+        }
+
+        return getEditableProfileImage();
+      },
     );
   }
 }
