@@ -69,6 +69,23 @@ class _EditEventState extends ConsumerState<EditEvent> {
     final eventsRepository = ref.watch(eventsRepositoryProvider);
     final authRepository = ref.watch(authRepositoryProvider);
     final user = authRepository.currentUser;
+    final imagesRepository = ref.watch(imagesRepositoryProvider);
+
+    Widget getAppbarProfileImage() {
+      return FutureBuilder(
+          future: imagesRepository.retrieveImage('2', user!.id),
+          builder: (context, snapshot) {
+            final String imageUrl = snapshot.data ?? 'No initial data';
+            final String state = snapshot.connectionState.toString();
+            return ClipRRect(
+              borderRadius: BorderRadius.circular(25.0),
+              child: Image(
+                  semanticLabel: 'Profile picture',
+                  image: NetworkImage(imageUrl),
+                  height: 20),
+            );
+          });
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -97,14 +114,7 @@ class _EditEventState extends ConsumerState<EditEvent> {
               },
               child: Tooltip(
                 message: 'Go to your profile',
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(25.0),
-                  child: const Image(
-                      semanticLabel: 'Profile picture',
-                      image: AssetImage(
-                          'assets/profile pictures/icon_paintbrush.png'),
-                      height: 20),
-                ),
+                child: getAppbarProfileImage(),
               ),
             ),
           )

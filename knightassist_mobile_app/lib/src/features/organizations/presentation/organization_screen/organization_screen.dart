@@ -27,8 +27,7 @@ class OrganizationScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
-     final authRepository = ref.watch(authRepositoryProvider);
+    final authRepository = ref.watch(authRepositoryProvider);
     final organizationsRepository = ref.watch(organizationsRepositoryProvider);
     organizationsRepository.fetchOrganizationsList();
     final studentsRepository = ref.watch(studentsRepositoryProvider);
@@ -65,6 +64,7 @@ class OrganizationScreen extends ConsumerWidget {
             );
           });
     }
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: true,
@@ -86,13 +86,14 @@ class OrganizationScreen extends ConsumerWidget {
             padding: const EdgeInsets.all(8.0),
             child: GestureDetector(
               onTap: () {
-   if (isOrg) {
+                if (isOrg) {
                   context.pushNamed("organization", extra: org);
                 } else if (isStudent) {
                   context.pushNamed("profileScreen", extra: student);
                 } else {
                   context.pushNamed(AppRoute.signIn.name);
-                }              },
+                }
+              },
               child: Tooltip(
                 message: 'Go to your profile',
                 child: getAppbarProfileImage(),
@@ -545,76 +546,95 @@ class _TabBarOrgState extends State<TabBarOrg> with TickerProviderStateMixin {
                                 ),
                               ),
                             ),
-                            Text("Working Hours per Week"),
-                            Text("Monday:"),
-                            organization.workingHoursPerWeek.monday?.start == null? SizedBox(height: 0) :
-                            Text(DateFormat.jm().format(organization.workingHoursPerWeek.monday
-                            !.start!)),
-                            Text("-"),
-                            organization.workingHoursPerWeek.monday?.end == null? SizedBox(height: 0) :
-                            Text(DateFormat.jm().format(organization.workingHoursPerWeek.monday
-                            !.end!)), 
-                             Text("Tuesday:"),
-                            organization.workingHoursPerWeek.tuesday?.start == null? SizedBox(height: 0) :
-                            Text(DateFormat.jm().format(organization.workingHoursPerWeek.tuesday
-                            !.start!)),
-                            Text("-"),
-                            organization.workingHoursPerWeek.tuesday?.end == null? SizedBox(height: 0) :
-                            Text(DateFormat.jm().format(organization.workingHoursPerWeek.tuesday
-                            !.end!)), 
-                             Text("Wednesday:"),
-                            organization.workingHoursPerWeek.wednesday?.start == null? SizedBox(height: 0) :
-                            Text(DateFormat.jm().format(organization.workingHoursPerWeek.wednesday
-                            !.start!)),
-                            Text("-"),
-                            organization.workingHoursPerWeek.wednesday?.end == null? SizedBox(height: 0) :
-                            Text(DateFormat.jm().format(organization.workingHoursPerWeek.wednesday
-                            !.end!)), 
-                             Text("Thursday:"),
-                            organization.workingHoursPerWeek.thursday?.start == null? SizedBox(height: 0) :
-                            Text(DateFormat.jm().format(organization.workingHoursPerWeek.thursday
-                            !.start!)),
-                            Text("-"),
-                            organization.workingHoursPerWeek.thursday?.end == null? SizedBox(height: 0) :
-                            Text(DateFormat.jm().format(organization.workingHoursPerWeek.thursday
-                            !.end!)), 
-                             Text("Friday:"),
-                            organization.workingHoursPerWeek.friday?.start == null? SizedBox(height: 0) :
-                            Text(DateFormat.jm().format(organization.workingHoursPerWeek.friday
-                            !.start!)),
-                            Text("-"),
-                            organization.workingHoursPerWeek.friday?.end == null? SizedBox(height: 0) :
-                            Text(DateFormat.jm().format(organization.workingHoursPerWeek.friday
-                            !.end!)), 
-                             Text("Saturday:"),
-                            organization.workingHoursPerWeek.saturday?.start == null? SizedBox(height: 0) :
-                            Text(DateFormat.jm().format(organization.workingHoursPerWeek.saturday
-                            !.start!)),
-                            Text("-"),
-                            organization.workingHoursPerWeek.saturday?.end == null? SizedBox(height: 0) :
-                            Text(DateFormat.jm().format(organization.workingHoursPerWeek.saturday
-                            !.end!)), 
-                             Text("Sunday:"),
-                            organization.workingHoursPerWeek.sunday?.start == null? SizedBox(height: 0) :
-                            Text(DateFormat.jm().format(organization.workingHoursPerWeek.sunday
-                            !.start!)),
-                            Text("-"),
-                            organization.workingHoursPerWeek.sunday?.end == null? SizedBox(height: 0) :
-                            Text(DateFormat.jm().format(organization.workingHoursPerWeek.sunday
-                            !.end!)), 
+                      Text("Working Hours per Week"),
+                      Text("Monday:"),
+                      organization.workingHoursPerWeek.monday?.start == null
+                          ? SizedBox(height: 0)
+                          : Text(DateFormat.jm().format(
+                              organization.workingHoursPerWeek.monday!.start!)),
+                      Text("-"),
+                      organization.workingHoursPerWeek.monday?.end == null
+                          ? SizedBox(height: 0)
+                          : Text(DateFormat.jm().format(
+                              organization.workingHoursPerWeek.monday!.end!)),
+                      Text("Tuesday:"),
+                      organization.workingHoursPerWeek.tuesday?.start == null
+                          ? SizedBox(height: 0)
+                          : Text(DateFormat.jm().format(organization
+                              .workingHoursPerWeek.tuesday!.start!)),
+                      Text("-"),
+                      organization.workingHoursPerWeek.tuesday?.end == null
+                          ? SizedBox(height: 0)
+                          : Text(DateFormat.jm().format(
+                              organization.workingHoursPerWeek.tuesday!.end!)),
+                      Text("Wednesday:"),
+                      organization.workingHoursPerWeek.wednesday?.start == null
+                          ? SizedBox(height: 0)
+                          : Text(DateFormat.jm().format(organization
+                              .workingHoursPerWeek.wednesday!.start!)),
+                      Text("-"),
+                      organization.workingHoursPerWeek.wednesday?.end == null
+                          ? SizedBox(height: 0)
+                          : Text(DateFormat.jm().format(organization
+                              .workingHoursPerWeek.wednesday!.end!)),
+                      Text("Thursday:"),
+                      organization.workingHoursPerWeek.thursday?.start == null
+                          ? SizedBox(height: 0)
+                          : Text(DateFormat.jm().format(organization
+                              .workingHoursPerWeek.thursday!.start!)),
+                      Text("-"),
+                      organization.workingHoursPerWeek.thursday?.end == null
+                          ? SizedBox(height: 0)
+                          : Text(DateFormat.jm().format(
+                              organization.workingHoursPerWeek.thursday!.end!)),
+                      Text("Friday:"),
+                      organization.workingHoursPerWeek.friday?.start == null
+                          ? SizedBox(height: 0)
+                          : Text(DateFormat.jm().format(
+                              organization.workingHoursPerWeek.friday!.start!)),
+                      Text("-"),
+                      organization.workingHoursPerWeek.friday?.end == null
+                          ? SizedBox(height: 0)
+                          : Text(DateFormat.jm().format(
+                              organization.workingHoursPerWeek.friday!.end!)),
+                      Text("Saturday:"),
+                      organization.workingHoursPerWeek.saturday?.start == null
+                          ? SizedBox(height: 0)
+                          : Text(DateFormat.jm().format(organization
+                              .workingHoursPerWeek.saturday!.start!)),
+                      Text("-"),
+                      organization.workingHoursPerWeek.saturday?.end == null
+                          ? SizedBox(height: 0)
+                          : Text(DateFormat.jm().format(
+                              organization.workingHoursPerWeek.saturday!.end!)),
+                      Text("Sunday:"),
+                      organization.workingHoursPerWeek.sunday?.start == null
+                          ? SizedBox(height: 0)
+                          : Text(DateFormat.jm().format(
+                              organization.workingHoursPerWeek.sunday!.start!)),
+                      Text("-"),
+                      organization.workingHoursPerWeek.sunday?.end == null
+                          ? SizedBox(height: 0)
+                          : Text(DateFormat.jm().format(
+                              organization.workingHoursPerWeek.sunday!.end!)),
                     ],
                   ),
                   ListView(
                     children: [
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: organization.categoryTags.isEmpty? const Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text("This organization has no tags.", style: TextStyle(fontSize: Sizes.p20),),
-                        ) : Wrap(
-                        children: [for (var tag in organization.categoryTags) Tags(tag: tag)]
-                        )
-                      ),
+                          padding: const EdgeInsets.all(8.0),
+                          child: organization.categoryTags.isEmpty
+                              ? const Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Text(
+                                    "This organization has no tags.",
+                                    style: TextStyle(fontSize: Sizes.p20),
+                                  ),
+                                )
+                              : Wrap(children: [
+                                  for (var tag in organization.categoryTags)
+                                    Tags(tag: tag)
+                                ])),
                     ],
                   ),
                   ListView(
