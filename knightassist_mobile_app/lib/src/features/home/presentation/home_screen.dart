@@ -734,6 +734,7 @@ class HomeScreenTab extends ConsumerWidget {
     final user = authRepository.currentUser;
     final imagesRepository = ref.watch(imagesRepositoryProvider);
     final eventsRepository = ref.watch(eventsRepositoryProvider);
+    final announcementsRepository = ref.watch(announcementsRepositoryProvider);
     bool isOrg = user?.role == "organization";
     bool isStudent = user?.role == "student";
     Organization? org;
@@ -773,11 +774,44 @@ class HomeScreenTab extends ConsumerWidget {
       );
     }
 
+     Widget getNotifOrgProfileImage(PushNotification n) {
+      return FutureBuilder(
+          future: imagesRepository.retrieveImage('2', n.orgId),
+          builder: (context, snapshot) {
+            final String imageUrl = snapshot.data ?? 'No initial data';
+            final String state = snapshot.connectionState.toString();
+            return ClipRRect(
+              borderRadius: BorderRadius.circular(25.0),
+              child: Image(
+                  semanticLabel: 'Organization Profile picture',
+                  image: NetworkImage(imageUrl),
+                  height: 20),
+            );
+          });
+    }
+
     List<PopupMenuItem<dynamic>> _getNotifItems() {
       List<PopupMenuItem<dynamic>> list = [];
 
       for (PushNotification n in notifications) {
-        list.add(PopupMenuItem(child: Text(n.message)));
+        list.add(PopupMenuItem(
+          onTap: () {
+            if (n.type_is == 'event') {
+              Event? e;
+              context.pushNamed("event", extra: eventsRepository.getEvent(n.eventId));
+              //extra: eventsRepository.fetchEventsList().then((value) => e = value.firstWhere((element) => element.id == n.eventId)));
+            } else if (n.type_is == 'orgAnnouncement') {
+              Announcement? a;
+              announcementsRepository.fetchOrgAnnouncements(n.orgName, n.orgId).then((value) => a = value.firstWhere((element) => n.message.contains(element.title)));
+              context.pushNamed("announcement", extra: a);
+            }
+          },
+          child: Wrap(
+          children: [
+            getNotifOrgProfileImage(n),
+            Text(n.message),
+          ],
+        )));
       }
       return list;
     }
