@@ -14,6 +14,8 @@ import 'package:knightassist_mobile_app/src/features/events/presentation/events_
 import 'package:knightassist_mobile_app/src/features/events/presentation/feedback_list_screen.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/qr_scanner.dart';
 import 'package:knightassist_mobile_app/src/features/images/data/images_repository.dart';
+import 'package:knightassist_mobile_app/src/features/notifications/data/notifications_repository.dart';
+import 'package:knightassist_mobile_app/src/features/notifications/domain/notification.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/data/organizations_repository.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/presentation/update_screen.dart';
@@ -24,6 +26,7 @@ import 'package:percent_indicator/percent_indicator.dart';
 
 List<Event> events = [];
 List<Announcement> announcements = [];
+List<PushNotification> notifications = [];
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key, required});
@@ -85,6 +88,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
         final eventsRepository = ref.watch(eventsRepositoryProvider);
         final announcementsRepository =
             ref.watch(announcementsRepositoryProvider);
+        final notificationsRepository =
+            ref.watch(notificationsRepositoryProvider);
         organizationsRepository.fetchOrganizationsList();
         if (user?.role == 'student') {
           studentRepository.fetchStudent(user!.id);
@@ -112,6 +117,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                       value.elementAt(value.length - 1),
                       value.elementAt(value.length - 2)
                     ];
+                  }));
+        }
+
+        if (user.role == 'student') {
+          notificationsRepository
+              .pushNotifications(user.id)
+              .then((value) => setState(() {
+                    notifications = value;
                   }));
         }
 
@@ -754,22 +767,41 @@ class HomeScreenTab extends ConsumerWidget {
           });
     }
 
+    PopupMenuItem _buildPopupMenuItem(String message) {
+      return PopupMenuItem(
+        child: Text(message),
+      );
+    }
+
+    List<PopupMenuItem<dynamic>> _getNotifItems() {
+      List<PopupMenuItem<dynamic>> list = [];
+
+      for (PushNotification n in notifications) {
+        list.add(PopupMenuItem(child: Text(n.message)));
+      }
+      return list;
+    }
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: true,
         actions: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: IconButton(
-              onPressed: () {},
-              tooltip: 'View notifications',
-              icon: const Icon(
-                Icons.notifications_outlined,
-                color: Colors.white,
-                semanticLabel: 'Notifications',
-              ),
-            ),
-          ),
+          isStudent
+              ? Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: PopupMenuButton(
+                    tooltip: 'View notifications',
+                    icon: const Icon(
+                      Icons.notifications_outlined,
+                      color: Colors.white,
+                      semanticLabel: 'Notifications',
+                    ),
+                    itemBuilder: (ctx) => _getNotifItems(),
+                  ),
+                )
+              : const SizedBox(
+                  height: 0,
+                ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: GestureDetector(
