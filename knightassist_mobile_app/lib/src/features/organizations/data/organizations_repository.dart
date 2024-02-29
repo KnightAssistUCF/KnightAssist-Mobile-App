@@ -127,15 +127,69 @@ class OrganizationsRepository {
               backgroundUrl: orgData['backgroundUrl'] ?? '',
               eventsArray: eventsArray,
               location: orgData['location'] ?? '',
-              workingHoursPerWeek: orgData['workingHoursPerWeek'] == null? WorkingHoursPerWeek() : WorkingHoursPerWeek(
-                monday: orgData['workingHoursPerWeek']['monday'] == null? WeekDay() : WeekDay(start: DateTime.parse(orgData['workingHoursPerWeek']['monday']['start']), end: DateTime.parse(orgData['workingHoursPerWeek']['monday']['end'])),
-                tuesday: orgData['workingHoursPerWeek']['tuesday'] == null? WeekDay() : WeekDay(start: DateTime.parse(orgData['workingHoursPerWeek']['tuesday']['start']), end: DateTime.parse(orgData['workingHoursPerWeek']['tuesday']['end'])),
-                wednesday: orgData['workingHoursPerWeek']['wednesday'] == null? WeekDay() : WeekDay(start: DateTime.parse(orgData['workingHoursPerWeek']['wednesday']['start']), end: DateTime.parse(orgData['workingHoursPerWeek']['wednesday']['end'])),
-                thursday: orgData['workingHoursPerWeek']['thursday'] == null? WeekDay() : WeekDay(start: DateTime.parse(orgData['workingHoursPerWeek']['thursday']['start']), end: DateTime.parse(orgData['workingHoursPerWeek']['thursday']['end'])),
-                friday: orgData['workingHoursPerWeek']['friday'] == null? WeekDay() : WeekDay(start: DateTime.parse(orgData['workingHoursPerWeek']['friday']['start']), end: DateTime.parse(orgData['workingHoursPerWeek']['friday']['end'])),
-                saturday: orgData['workingHoursPerWeek']['saturday'] == null? WeekDay() : WeekDay(start: DateTime.parse(orgData['workingHoursPerWeek']['saturday']['start']), end: DateTime.parse(orgData['workingHoursPerWeek']['saturday']['end'])),
-                sunday: orgData['workingHoursPerWeek']['sunday'] == null? WeekDay() : WeekDay(start: DateTime.parse(orgData['workingHoursPerWeek']['sunday']['start']), end: DateTime.parse(orgData['workingHoursPerWeek']['sunday']['end'])),
-              ),
+              workingHoursPerWeek: orgData['workingHoursPerWeek'] == null
+                  ? WorkingHoursPerWeek()
+                  : WorkingHoursPerWeek(
+                      monday: orgData['workingHoursPerWeek']['monday'] == null
+                          ? WeekDay()
+                          : WeekDay(
+                              start: DateTime.parse(
+                                  orgData['workingHoursPerWeek']['monday']
+                                      ['start']),
+                              end: DateTime.parse(orgData['workingHoursPerWeek']
+                                  ['monday']['end'])),
+                      tuesday: orgData['workingHoursPerWeek']['tuesday'] == null
+                          ? WeekDay()
+                          : WeekDay(
+                              start: DateTime.parse(
+                                  orgData['workingHoursPerWeek']['tuesday']
+                                      ['start']),
+                              end: DateTime.parse(orgData['workingHoursPerWeek']
+                                  ['tuesday']['end'])),
+                      wednesday: orgData['workingHoursPerWeek']['wednesday'] ==
+                              null
+                          ? WeekDay()
+                          : WeekDay(
+                              start: DateTime.parse(
+                                  orgData['workingHoursPerWeek']['wednesday']
+                                      ['start']),
+                              end: DateTime.parse(orgData['workingHoursPerWeek']
+                                  ['wednesday']['end'])),
+                      thursday: orgData['workingHoursPerWeek']['thursday'] ==
+                              null
+                          ? WeekDay()
+                          : WeekDay(
+                              start: DateTime.parse(
+                                  orgData['workingHoursPerWeek']['thursday']
+                                      ['start']),
+                              end: DateTime.parse(orgData['workingHoursPerWeek']
+                                  ['thursday']['end'])),
+                      friday: orgData['workingHoursPerWeek']['friday'] == null
+                          ? WeekDay()
+                          : WeekDay(
+                              start: DateTime.parse(
+                                  orgData['workingHoursPerWeek']['friday']
+                                      ['start']),
+                              end: DateTime.parse(orgData['workingHoursPerWeek']
+                                  ['friday']['end'])),
+                      saturday: orgData['workingHoursPerWeek']['saturday'] ==
+                              null
+                          ? WeekDay()
+                          : WeekDay(
+                              start: DateTime.parse(
+                                  orgData['workingHoursPerWeek']['saturday']
+                                      ['start']),
+                              end: DateTime.parse(orgData['workingHoursPerWeek']
+                                  ['saturday']['end'])),
+                      sunday: orgData['workingHoursPerWeek']['sunday'] == null
+                          ? WeekDay()
+                          : WeekDay(
+                              start: DateTime.parse(
+                                  orgData['workingHoursPerWeek']['sunday']
+                                      ['start']),
+                              end: DateTime.parse(orgData['workingHoursPerWeek']
+                                  ['sunday']['end'])),
+                    ),
               recoveryTokenForOrg: orgData['recoveryTokenForORG'],
               confirmTokenForOrg: orgData['confirmTokenForORG'],
               emailTokenForOrg: orgData['EmailTokenForORG'],
@@ -201,7 +255,8 @@ class OrganizationsRepository {
       String? backgroundUrl,
       List<String>? events,
       String? location,
-      List<String>? categoryTags) async {
+      List<String>? categoryTags,
+      WorkingHoursPerWeek? workingHoursPerWeek) async {
     Map<String, dynamic> params = {'organizationID': organizationID};
     if (name != null) params['name'] = name;
     if (password != null) params['password'] = password;
@@ -213,13 +268,17 @@ class OrganizationsRepository {
     if (favorites != null) params['favorites'] = favorites;
     if (updates != null) params['updates'] = updates;
     if (calendarLink != null) params['calendarLink'] = calendarLink;
-    if (contact != null) params['contact'] = contact;
+    if (contact != null) params['contact'] = contact.toJson();
     if (isActive != null) params['isActive'] = isActive;
-    if (eventHappeningNow != null)
+    if (eventHappeningNow != null) {
       params['eventHappeningNow'] = eventHappeningNow;
+    }
     if (backgroundUrl != null) params['backgroundUrl'] = backgroundUrl;
     if (events != null) params['events'] = events;
     if (categoryTags != null) params['categoryTags'] = categoryTags;
+    if (workingHoursPerWeek != null) {
+      params['workingHoursPerWeek '] = workingHoursPerWeek.toJson();
+    }
 
     var uri = Uri.parse(
         "https://knightassist-43ab3aeaada9.herokuapp.com/api/editOrganizationProfile");

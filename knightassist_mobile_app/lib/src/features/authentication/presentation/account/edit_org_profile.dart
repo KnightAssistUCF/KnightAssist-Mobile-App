@@ -610,80 +610,33 @@ class _TabBarOrgState extends State<TabBarOrg> with TickerProviderStateMixin {
                           ),
                           Text("Working Hours per Week"),
                           Text("Monday:"),
-                          organization.workingHoursPerWeek.monday?.start == null
-                              ? SizedBox(height: 0)
-                              : Text(DateFormat.jm().format(organization
-                                  .workingHoursPerWeek.monday!.start!)),
+                          SelectTime(day: "monday", end: false, org: org!),
                           Text("-"),
-                          organization.workingHoursPerWeek.monday?.end == null
-                              ? SizedBox(height: 0)
-                              : Text(DateFormat.jm().format(organization
-                                  .workingHoursPerWeek.monday!.end!)),
+                          SelectTime(day: "monday", end: true, org: org),
                           Text("Tuesday:"),
-                          organization.workingHoursPerWeek.tuesday?.start ==
-                                  null
-                              ? SizedBox(height: 0)
-                              : Text(DateFormat.jm().format(organization
-                                  .workingHoursPerWeek.tuesday!.start!)),
+                          SelectTime(day: "tuesday", end: false, org: org),
                           Text("-"),
-                          organization.workingHoursPerWeek.tuesday?.end == null
-                              ? SizedBox(height: 0)
-                              : Text(DateFormat.jm().format(organization
-                                  .workingHoursPerWeek.tuesday!.end!)),
+                          SelectTime(day: "tuesday", end: true, org: org),
                           Text("Wednesday:"),
-                          organization.workingHoursPerWeek.wednesday?.start ==
-                                  null
-                              ? SizedBox(height: 0)
-                              : Text(DateFormat.jm().format(organization
-                                  .workingHoursPerWeek.wednesday!.start!)),
+                          SelectTime(day: "wednesday", end: false, org: org),
                           Text("-"),
-                          organization.workingHoursPerWeek.wednesday?.end ==
-                                  null
-                              ? SizedBox(height: 0)
-                              : Text(DateFormat.jm().format(organization
-                                  .workingHoursPerWeek.wednesday!.end!)),
+                          SelectTime(day: "wednesday", end: true, org: org),
                           Text("Thursday:"),
-                          organization.workingHoursPerWeek.thursday?.start ==
-                                  null
-                              ? SizedBox(height: 0)
-                              : Text(DateFormat.jm().format(organization
-                                  .workingHoursPerWeek.thursday!.start!)),
+                          SelectTime(day: "thursday", end: false, org: org),
                           Text("-"),
-                          organization.workingHoursPerWeek.thursday?.end == null
-                              ? SizedBox(height: 0)
-                              : Text(DateFormat.jm().format(organization
-                                  .workingHoursPerWeek.thursday!.end!)),
+                          SelectTime(day: "thursday", end: true, org: org),
                           Text("Friday:"),
-                          organization.workingHoursPerWeek.friday?.start == null
-                              ? SizedBox(height: 0)
-                              : Text(DateFormat.jm().format(organization
-                                  .workingHoursPerWeek.friday!.start!)),
+                          SelectTime(day: "friday", end: false, org: org),
                           Text("-"),
-                          organization.workingHoursPerWeek.friday?.end == null
-                              ? SizedBox(height: 0)
-                              : Text(DateFormat.jm().format(organization
-                                  .workingHoursPerWeek.friday!.end!)),
+                          SelectTime(day: "friday", end: true, org: org),
                           Text("Saturday:"),
-                          organization.workingHoursPerWeek.saturday?.start ==
-                                  null
-                              ? SizedBox(height: 0)
-                              : Text(DateFormat.jm().format(organization
-                                  .workingHoursPerWeek.saturday!.start!)),
+                          SelectTime(day: "saturday", end: false, org: org),
                           Text("-"),
-                          organization.workingHoursPerWeek.saturday?.end == null
-                              ? SizedBox(height: 0)
-                              : Text(DateFormat.jm().format(organization
-                                  .workingHoursPerWeek.saturday!.end!)),
+                          SelectTime(day: "saturday", end: true, org: org),
                           Text("Sunday:"),
-                          organization.workingHoursPerWeek.sunday?.start == null
-                              ? SizedBox(height: 0)
-                              : Text(DateFormat.jm().format(organization
-                                  .workingHoursPerWeek.sunday!.start!)),
+                          SelectTime(day: "sunday", end: false, org: org),
                           Text("-"),
-                          organization.workingHoursPerWeek.sunday?.end == null
-                              ? SizedBox(height: 0)
-                              : Text(DateFormat.jm().format(organization
-                                  .workingHoursPerWeek.sunday!.end!)),
+                          SelectTime(day: "sunday", end: true, org: org),
                         ],
                       ),
                     ],
@@ -754,7 +707,8 @@ class _TabBarOrgState extends State<TabBarOrg> with TickerProviderStateMixin {
                           org?.backgroundUrl,
                           eventIDs,
                           org?.location,
-                          org?.categoryTags);
+                          org?.categoryTags,
+                          org.workingHoursPerWeek);
                     },
                   ),
                 ),
@@ -1004,7 +958,113 @@ class _SelectTimeState extends State<SelectTime> {
         await showTimePicker(context: context, initialTime: _getInitialTime());
     if (picked != null && picked != _getInitialTime()) {
       setState(() {
-        // TODO: change org stats here based on day selected
+        if (end) {
+          if (day == 'monday') {
+            if (org.workingHoursPerWeek.monday == null) {
+              org.workingHoursPerWeek.monday =
+                  WeekDay(end: DateTime(picked.hour, picked.minute));
+            }
+            org.workingHoursPerWeek.monday!.end =
+                DateTime(picked.hour, picked.minute);
+          }
+          if (day == 'tuesday') {
+            if (org.workingHoursPerWeek.tuesday == null) {
+              org.workingHoursPerWeek.tuesday =
+                  WeekDay(end: DateTime(picked.hour, picked.minute));
+            }
+            org.workingHoursPerWeek.tuesday!.end =
+                DateTime(picked.hour, picked.minute);
+          }
+          if (day == 'wednesday') {
+            if (org.workingHoursPerWeek.wednesday == null) {
+              org.workingHoursPerWeek.wednesday =
+                  WeekDay(end: DateTime(picked.hour, picked.minute));
+            }
+            org.workingHoursPerWeek.wednesday!.end =
+                DateTime(picked.hour, picked.minute);
+          }
+          if (day == 'thursday') {
+            if (org.workingHoursPerWeek.thursday == null) {
+              org.workingHoursPerWeek.thursday =
+                  WeekDay(end: DateTime(picked.hour, picked.minute));
+            }
+            org.workingHoursPerWeek.thursday!.end =
+                DateTime(picked.hour, picked.minute);
+          }
+          if (day == 'friday') {
+            if (org.workingHoursPerWeek.friday == null) {
+              org.workingHoursPerWeek.friday =
+                  WeekDay(end: DateTime(picked.hour, picked.minute));
+            }
+            org.workingHoursPerWeek.friday!.end =
+                DateTime(picked.hour, picked.minute);
+          }
+          if (day == 'saturday') {
+            if (org.workingHoursPerWeek.saturday == null) {
+              org.workingHoursPerWeek.saturday =
+                  WeekDay(end: DateTime(picked.hour, picked.minute));
+            }
+            org.workingHoursPerWeek.saturday!.end =
+                DateTime(picked.hour, picked.minute);
+          }
+          if (day == 'sunday') {
+            if (org.workingHoursPerWeek.sunday == null) {
+              org.workingHoursPerWeek.sunday =
+                  WeekDay(end: DateTime(picked.hour, picked.minute));
+            }
+            org.workingHoursPerWeek.sunday!.end =
+                DateTime(picked.hour, picked.minute);
+          }
+        } else if (day == 'monday') {
+          if (org.workingHoursPerWeek.monday == null) {
+            org.workingHoursPerWeek.monday =
+                WeekDay(start: DateTime(picked.hour, picked.minute));
+          }
+          org.workingHoursPerWeek.monday!.start =
+              DateTime(picked.hour, picked.minute);
+        } else if (day == 'tuesday') {
+          if (org.workingHoursPerWeek.tuesday == null) {
+            org.workingHoursPerWeek.tuesday =
+                WeekDay(start: DateTime(picked.hour, picked.minute));
+          }
+          org.workingHoursPerWeek.tuesday!.start =
+              DateTime(picked.hour, picked.minute);
+        } else if (day == 'wednesday') {
+          if (org.workingHoursPerWeek.wednesday == null) {
+            org.workingHoursPerWeek.wednesday =
+                WeekDay(start: DateTime(picked.hour, picked.minute));
+          }
+          org.workingHoursPerWeek.wednesday!.start =
+              DateTime(picked.hour, picked.minute);
+        } else if (day == 'thursday') {
+          if (org.workingHoursPerWeek.thursday == null) {
+            org.workingHoursPerWeek.thursday =
+                WeekDay(start: DateTime(picked.hour, picked.minute));
+          }
+          org.workingHoursPerWeek.thursday!.start =
+              DateTime(picked.hour, picked.minute);
+        } else if (day == 'friday') {
+          if (org.workingHoursPerWeek.friday == null) {
+            org.workingHoursPerWeek.friday =
+                WeekDay(start: DateTime(picked.hour, picked.minute));
+          }
+          org.workingHoursPerWeek.friday!.start =
+              DateTime(picked.hour, picked.minute);
+        } else if (day == 'saturday') {
+          if (org.workingHoursPerWeek.saturday == null) {
+            org.workingHoursPerWeek.saturday =
+                WeekDay(start: DateTime(picked.hour, picked.minute));
+          }
+          org.workingHoursPerWeek.saturday!.start =
+              DateTime(picked.hour, picked.minute);
+        } else if (day == 'sunday') {
+          if (org.workingHoursPerWeek.sunday == null) {
+            org.workingHoursPerWeek.sunday =
+                WeekDay(start: DateTime(picked.hour, picked.minute));
+          }
+          org.workingHoursPerWeek.sunday!.start =
+              DateTime(picked.hour, picked.minute);
+        }
       });
     }
   }
@@ -1012,13 +1072,67 @@ class _SelectTimeState extends State<SelectTime> {
   @override
   Widget build(BuildContext context) {
     String endText = end ? 'End' : 'Start';
+
+    Text getTimeText() {
+      DateTime? orgTime;
+
+      if (day == 'monday') {
+        if (end) {
+          orgTime = org.workingHoursPerWeek.monday?.end ?? DateTime.now();
+        } else {
+          orgTime = org.workingHoursPerWeek.monday?.start ?? DateTime.now();
+        }
+      }
+      if (day == 'tuesday') {
+        if (end) {
+          orgTime = org.workingHoursPerWeek.tuesday?.end ?? DateTime.now();
+        } else {
+          orgTime = org.workingHoursPerWeek.tuesday?.start ?? DateTime.now();
+        }
+      }
+      if (day == 'wednesday') {
+        if (end) {
+          orgTime = org.workingHoursPerWeek.wednesday?.end ?? DateTime.now();
+        } else {
+          orgTime = org.workingHoursPerWeek.wednesday?.start ?? DateTime.now();
+        }
+      }
+      if (day == 'thursday') {
+        if (end) {
+          orgTime = org.workingHoursPerWeek.thursday?.end ?? DateTime.now();
+        } else {
+          orgTime = org.workingHoursPerWeek.thursday?.start ?? DateTime.now();
+        }
+      }
+      if (day == 'friday') {
+        if (end) {
+          orgTime = org.workingHoursPerWeek.friday?.end ?? DateTime.now();
+        } else {
+          orgTime = org.workingHoursPerWeek.friday?.start ?? DateTime.now();
+        }
+      }
+      if (day == 'saturday') {
+        if (end) {
+          orgTime = org.workingHoursPerWeek.saturday?.end ?? DateTime.now();
+        } else {
+          orgTime = org.workingHoursPerWeek.saturday?.start ?? DateTime.now();
+        }
+      }
+      if (day == 'sunday') {
+        if (end) {
+          orgTime = org.workingHoursPerWeek.sunday?.end ?? DateTime.now();
+        } else {
+          orgTime = org.workingHoursPerWeek.sunday?.start ?? DateTime.now();
+        }
+      }
+
+      return Text(
+          TimeOfDay.fromDateTime(orgTime ?? DateTime.now()).format(context));
+    }
+
     return Column(
       children: [
-        Center(
-            // TODO: change text based on day selected
-            child: Text(
-                TimeOfDay.fromDateTime(org.workingHoursPerWeek.monday!.end!)
-                    .format(context))),
+        Center(child: getTimeText()),
         const SizedBox(
           width: 10,
         ),

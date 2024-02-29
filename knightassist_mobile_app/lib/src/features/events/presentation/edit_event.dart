@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:knightassist_mobile_app/src/common_widgets/alert_dialogs.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/data/auth_repository.dart';
 import 'package:knightassist_mobile_app/src/features/events/data/events_repository.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
@@ -271,8 +272,8 @@ class _EditEventState extends ConsumerState<EditEvent> {
                 padding: const EdgeInsets.all(8.0),
                 child: ElevatedButton(
                     onPressed: () {
-                      //eventsRepository.deleteEvent(
-                      //event.sponsoringOrganization, event.id);
+                      eventsRepository.deleteEvent(
+                          event.sponsoringOrganization, event.id);
                       Navigator.pop(context);
                     },
                     child: const Padding(
