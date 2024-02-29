@@ -796,6 +796,8 @@ class HomeScreenTab extends ConsumerWidget {
       for (PushNotification n in notifications) {
         list.add(PopupMenuItem(
           onTap: () {
+            // TODO: add markasread api call here
+            n.read = false;
             if (n.type_is == 'event') {
               Event? e;
               context.pushNamed("event", extra: eventsRepository.getEvent(n.eventId));
@@ -808,6 +810,7 @@ class HomeScreenTab extends ConsumerWidget {
           },
           child: Wrap(
           children: [
+            n.read == true? SizedBox(height: 0,) : Icon(Icons.circle, color: Colors.red,),
             getNotifOrgProfileImage(n),
             Text(n.message),
           ],
