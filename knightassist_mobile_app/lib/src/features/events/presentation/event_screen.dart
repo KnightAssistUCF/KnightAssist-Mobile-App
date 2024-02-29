@@ -70,7 +70,7 @@ class EventScreen extends ConsumerWidget {
     Widget getAppbarProfileImage() {
       return FutureBuilder(
           future: isOrg
-              ? imagesRepository.retrieveImage('2', org!.id)
+              ? imagesRepository.retrieveImage('2', user!.id)
               : imagesRepository.retrieveImage('3', user!.id),
           builder: (context, snapshot) {
             final String imageUrl = snapshot.data ?? 'No initial data';
