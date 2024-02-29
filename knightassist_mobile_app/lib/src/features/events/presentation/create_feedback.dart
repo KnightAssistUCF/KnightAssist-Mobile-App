@@ -73,10 +73,10 @@ class CreateFeedback extends ConsumerWidget {
         ]),
         Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text((DateFormat.yMMMMEEEEd().format(event.date)))),
+            child: Text((DateFormat.yMMMMEEEEd().format(event.startTime)))),
         Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text((DateFormat.jmv().format(event.date)))),
+            child: Text((DateFormat.jmv().format(event.startTime)))),
         Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(

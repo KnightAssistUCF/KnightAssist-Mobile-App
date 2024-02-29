@@ -1,3 +1,6 @@
+import 'package:knightassist_mobile_app/src/features/announcements/domain/announcement.dart';
+import 'package:knightassist_mobile_app/src/features/announcements/presentation/announcement_screen/announcement_screen.dart';
+import 'package:knightassist_mobile_app/src/features/announcements/presentation/announcements_list/announcements_list_screen.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/data/auth_repository.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/account/account_screen.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/account/edit_org_profile.dart';
@@ -8,9 +11,13 @@ import 'package:knightassist_mobile_app/src/features/authentication/presentation
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/register/register_emailconfirm_screen.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/register/register_organization_screen.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/register/register_student_screen.dart';
+import 'package:knightassist_mobile_app/src/features/authentication/presentation/sign_in/forgot_password.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/sign_in/sign_in_screen.dart';
+import 'package:knightassist_mobile_app/src/features/events/data/events_repository.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
+import 'package:knightassist_mobile_app/src/features/events/domain/event_history.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/feedback.dart';
+import 'package:knightassist_mobile_app/src/features/events/presentation/event_history/event_history_list_screen.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/feedback_detail.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/bottombar.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/calendar.dart';
@@ -20,20 +27,29 @@ import 'package:knightassist_mobile_app/src/features/events/presentation/edit_ev
 import 'package:knightassist_mobile_app/src/features/events/presentation/event_history_detail.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/event_history_screen.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/event_screen.dart';
-import 'package:knightassist_mobile_app/src/features/events/presentation/events_list_screen.dart';
+import 'package:knightassist_mobile_app/src/features/events/presentation/events_list_screen.dart'
+    as prefix;
 import 'package:knightassist_mobile_app/src/features/events/presentation/feedback_list_screen.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/postScan.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/qr_scanner.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/viewRSVPs.dart';
 import 'package:knightassist_mobile_app/src/features/home/presentation/home_screen.dart';
+import 'package:knightassist_mobile_app/src/features/events/presentation/events_list/events_list_screen.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
-import 'package:knightassist_mobile_app/src/features/organizations/domain/update.dart';
-import 'package:knightassist_mobile_app/src/features/organizations/presentation/create_update.dart';
-import 'package:knightassist_mobile_app/src/features/organizations/presentation/edit_update.dart';
-import 'package:knightassist_mobile_app/src/features/organizations/presentation/organization_screen.dart';
-import 'package:knightassist_mobile_app/src/features/organizations/presentation/organizations_list_screen.dart';
+import 'package:knightassist_mobile_app/src/features/organizations/domain/update.dart'
+    as prefix;
+import 'package:knightassist_mobile_app/src/features/announcements/presentation/create_announcement.dart';
+import 'package:knightassist_mobile_app/src/features/announcements/presentation/edit_announcement.dart';
+import 'package:knightassist_mobile_app/src/features/leaderboard/presentation/leaderboard.dart';
+import 'package:knightassist_mobile_app/src/features/organizations/presentation/organization_screen.dart'
+    as prefix;
+import 'package:knightassist_mobile_app/src/features/organizations/presentation/organizations_list/fav_orgs_list.dart';
+import 'package:knightassist_mobile_app/src/features/organizations/presentation/organizations_list/organizations_list.dart';
+import 'package:knightassist_mobile_app/src/features/organizations/presentation/organizations_list/organizations_list_screen.dart';
+import 'package:knightassist_mobile_app/src/features/organizations/presentation/organization_screen/organization_screen.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/presentation/update_detail.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/presentation/update_screen.dart';
+import 'package:knightassist_mobile_app/src/features/students/domain/student_user.dart';
 import 'package:knightassist_mobile_app/src/routing/go_router_refresh_stream.dart';
 import 'package:knightassist_mobile_app/src/routing/not_found_screen.dart';
 import 'package:flutter/material.dart';
@@ -67,16 +83,21 @@ enum AppRoute {
   postScan,
   createEvent,
   createFeedback,
-  createUpdate,
+  createAnnouncement,
   editEvent,
-  editUpdate,
+  editAnnouncement,
   viewRSVPs,
   editOrgProfile,
+  forgotPassword,
+  leaderboard,
+  announcements,
+  favoriteOrgs
 }
 
 @Riverpod(keepAlive: true)
 GoRouter goRouter(GoRouterRef ref) {
   final authRepository = ref.watch(authRepositoryProvider);
+  final isLoggedIn = authRepository.currentUser != null;
   return GoRouter(
       initialLocation: '/',
       debugLogDiagnostics: false,
@@ -88,9 +109,9 @@ GoRouter goRouter(GoRouterRef ref) {
             return '/';
           }
         } else {
-          //if (path == '/account') {
-          //return '/';
-          //}
+          if (path == '/account') {
+            return '/';
+          }
         }
         return null;
       },
@@ -100,31 +121,9 @@ GoRouter goRouter(GoRouterRef ref) {
         GoRoute(
             path: '/',
             name: AppRoute.home.name,
-            builder: (context, state) => PostScan(
-                  event: Event(
-                      id: '1',
-                      name: 'concert',
-                      description:
-                          'really cool music, need someone to serve food',
-                      location: 'addition financial arena',
-                      date: DateTime.fromMillisecondsSinceEpoch(1699875173000),
-                      sponsoringOrganization:
-                          'Organization X is really long !!!!! !!!!! !!!!! !!!!!',
-                      attendees: [],
-                      registeredVolunteers: [],
-                      picLink: 'assets/profile pictures/icon_leaf.png',
-                      startTime:
-                          DateTime.fromMillisecondsSinceEpoch(1699875173000),
-                      endTime:
-                          DateTime.fromMillisecondsSinceEpoch(1699875173099),
-                      eventTags: ['music', 'food'],
-                      semester: 'Fall 2023',
-                      maxAttendees: 1000,
-                      createdAt:
-                          DateTime.fromMillisecondsSinceEpoch(1700968029),
-                      updatedAt: DateTime.now(),
-                      feedback: []),
-                ), // TEMP, change this to whatever screen you want to test (will need to rerun)
+            builder: (context, state) => isLoggedIn
+                ? HomeScreen()
+                : SignInScreen(), // TEMP, change this to whatever screen you want to test (will need to rerun)
             routes: [
               GoRoute(
                   path: 'events',
@@ -154,8 +153,25 @@ GoRouter goRouter(GoRouterRef ref) {
                         name: 'organization',
                         builder: (context, state) {
                           Organization org = state.extra as Organization;
-                          //final orgID = state.pathParameters['id']!;
-                          return OrganizationScreen(organization: org);
+                          //final String orgID =
+                          //state.pathParameters['id']!;
+                          return OrganizationScreen(organizationID: org.id);
+                        })
+                  ]),
+              GoRoute(
+                  path: 'announcements',
+                  name: AppRoute.announcements.name,
+                  builder: (context, state) {
+                    return const AnnouncementsListScreen();
+                  },
+                  routes: [
+                    GoRoute(
+                        path: 'announcement',
+                        name: 'announcement',
+                        builder: (context, state) {
+                          Announcement announcement =
+                              state.extra as Announcement;
+                          return AnnouncementScreen(announcement: announcement);
                         })
                   ]),
               GoRoute(
@@ -191,21 +207,23 @@ GoRouter goRouter(GoRouterRef ref) {
                       fullscreenDialog: true, child: HomeScreen())),
               GoRoute(
                   path: 'profileScreen',
-                  name: AppRoute.profileScreen.name,
-                  pageBuilder: (context, state) => const MaterialPage(
-                      fullscreenDialog: true, child: ProfileScreen())),
+                  name: 'profileScreen',
+                  builder: (context, state) {
+                    StudentUser s = state.extra as StudentUser;
+                    return ProfileScreen(student: s);
+                  }),
               GoRoute(
                   path: 'eventHistory',
                   name: AppRoute.eventHistory.name,
                   builder: (context, state) {
-                    return const EventHistoryScreen();
+                    return const EventHistoryListScreen();
                   },
                   routes: [
                     GoRoute(
                         path: 'historydetail',
                         name: 'historydetail',
                         builder: (context, state) {
-                          Event ev = state.extra as Event;
+                          EventHistory ev = state.extra as EventHistory;
                           //final eventID = state.pathParameters['id']!;
                           return HistoryDetailScreen(event: ev);
                         })
@@ -214,16 +232,16 @@ GoRouter goRouter(GoRouterRef ref) {
                   path: 'updates',
                   name: AppRoute.updates.name,
                   builder: (context, state) {
-                    return const UpdateScreen();
+                    return const AnnouncementsListScreen();
                   },
                   routes: [
                     GoRoute(
-                        path: 'updatedetail',
-                        name: 'updatedetail',
+                        path: 'announcementdetail',
+                        name: 'announcementdetail',
                         builder: (context, state) {
-                          Update u = state.extra as Update;
-                          //final updateID = state.pathParameters['id']!;
-                          return UpdateDetailScreen(update: u);
+                          Announcement a = state.extra as Announcement;
+                          //final announcementID = state.pathParameters['id']!;
+                          return AnnouncementDetails(announcement: a);
                         })
                   ]),
               GoRoute(
@@ -291,10 +309,10 @@ GoRouter goRouter(GoRouterRef ref) {
                     return CreateFeedback(event: e);
                   }),
               GoRoute(
-                  path: 'createupdate',
-                  name: AppRoute.createUpdate.name,
-                  pageBuilder: (context, state) => const MaterialPage(
-                      fullscreenDialog: true, child: CreateUpdate())),
+                  path: 'createannouncement',
+                  name: AppRoute.createAnnouncement.name,
+                  pageBuilder: (context, state) => MaterialPage(
+                      fullscreenDialog: true, child: CreateAnnouncement())),
               GoRoute(
                   path: 'editevent',
                   name: 'editevent',
@@ -304,12 +322,12 @@ GoRouter goRouter(GoRouterRef ref) {
                     return EditEvent(event: e);
                   }),
               GoRoute(
-                  path: 'editupdate',
-                  name: 'editupdate',
+                  path: 'editannouncement',
+                  name: 'editannouncement',
                   builder: (context, state) {
-                    Update u = state.extra as Update;
-                    //final updateID = state.pathParameters['id']!;
-                    return EditUpdate(update: u);
+                    Announcement a = state.extra as Announcement;
+                    //final announcementID = state.pathParameters['id']!;
+                    return EditAnnouncement(announcement: a);
                   }),
               GoRoute(
                   path: 'viewrsvps',
@@ -327,6 +345,22 @@ GoRouter goRouter(GoRouterRef ref) {
                     //final updateID = state.pathParameters['id']!;
                     return EditOrganizationProfile(organization: org);
                   }),
+              GoRoute(
+                  path: 'forgotpassword',
+                  name: AppRoute.forgotPassword.name,
+                  pageBuilder: (context, state) => const MaterialPage(
+                      fullscreenDialog: true, child: ForgotPassword())),
+              GoRoute(
+                  path: 'leaderboard',
+                  name: AppRoute.leaderboard.name,
+                  pageBuilder: (context, state) => const MaterialPage(
+                      fullscreenDialog: true, child: leaderboard())),
+              GoRoute(
+                  path: 'favoriteorgs',
+                  name: AppRoute.favoriteOrgs.name,
+                  pageBuilder: (context, state) => const MaterialPage(
+                      fullscreenDialog: true,
+                      child: FavoriteOrganizationsListScreen())),
             ])
       ],
       errorBuilder: (context, state) => const NotFoundScreen());

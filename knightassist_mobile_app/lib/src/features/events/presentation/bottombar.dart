@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:knightassist_mobile_app/src/features/events/presentation/events_list/events_list_screen.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/events_list_screen.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/feedback_list_screen.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/qr_scanner.dart';

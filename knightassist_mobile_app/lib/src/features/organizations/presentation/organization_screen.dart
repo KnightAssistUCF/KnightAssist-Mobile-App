@@ -356,7 +356,7 @@ class _TabBarOrgState extends State<TabBarOrg> with TickerProviderStateMixin {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          organization.description,
+                          organization.description ?? '',
                           style: const TextStyle(fontSize: 20),
                         ),
                       ),
@@ -367,56 +367,60 @@ class _TabBarOrgState extends State<TabBarOrg> with TickerProviderStateMixin {
                       Wrap(
                         alignment: WrapAlignment.center,
                         children: [
-                          organization.contact.socialMedia.instagram == ''
+                          organization.contact!.socialMedia!.instagram == ''
                               ? const SizedBox(
                                   height: 0,
                                 )
                               : IconButton(
                                   onPressed: () async {
                                     final Uri url = Uri.parse(organization
-                                        .contact.socialMedia.instagram);
+                                            .contact!.socialMedia?.instagram ??
+                                        '');
                                     if (!await launchUrl(url)) {
                                       throw Exception('Could not launch $url');
                                     }
                                   },
                                   icon:
                                       const FaIcon(FontAwesomeIcons.instagram)),
-                          organization.contact.socialMedia.facebook == ''
+                          organization.contact!.socialMedia!.facebook == ''
                               ? const SizedBox(
                                   height: 0,
                                 )
                               : IconButton(
                                   onPressed: () async {
                                     final Uri url = Uri.parse(organization
-                                        .contact.socialMedia.facebook);
+                                            .contact!.socialMedia!.facebook ??
+                                        '');
                                     if (!await launchUrl(url)) {
                                       throw Exception('Could not launch $url');
                                     }
                                   },
                                   icon:
                                       const FaIcon(FontAwesomeIcons.facebook)),
-                          organization.contact.socialMedia.twitter == ''
+                          organization.contact!.socialMedia?.twitter == ''
                               ? const SizedBox(
                                   height: 0,
                                 )
                               : IconButton(
                                   onPressed: () async {
                                     final Uri url = Uri.parse(organization
-                                        .contact.socialMedia.twitter);
+                                            .contact!.socialMedia?.twitter ??
+                                        '');
                                     if (!await launchUrl(url)) {
                                       throw Exception('Could not launch $url');
                                     }
                                   },
                                   icon:
                                       const FaIcon(FontAwesomeIcons.xTwitter)),
-                          organization.contact.socialMedia.linkedIn == ''
+                          organization.contact!.socialMedia?.linkedin == ''
                               ? const SizedBox(
                                   height: 0,
                                 )
                               : IconButton(
                                   onPressed: () async {
                                     final Uri url = Uri.parse(organization
-                                        .contact.socialMedia.linkedIn);
+                                            .contact!.socialMedia!.linkedin ??
+                                        '');
                                     if (!await launchUrl(url)) {
                                       throw Exception('Could not launch $url');
                                     }
@@ -431,7 +435,7 @@ class _TabBarOrgState extends State<TabBarOrg> with TickerProviderStateMixin {
                           child: TextButton(
                             onPressed: () async {
                               final Uri url = Uri.parse(
-                                  'mailto:${organization.contact.email}?subject=Hello from KnightAssist&body=I am interested in volunteering with your organization!	');
+                                  'mailto:${organization.contact?.email}?subject=Hello from KnightAssist&body=I am interested in volunteering with your organization!	');
                               if (!await launchUrl(url)) {
                                 throw Exception('Could not launch $url');
                               }
@@ -439,7 +443,7 @@ class _TabBarOrgState extends State<TabBarOrg> with TickerProviderStateMixin {
                             child: Wrap(children: [
                               const Icon(Icons.email_outlined),
                               Text(
-                                organization.contact.email,
+                                organization.contact?.email ?? '',
                                 style: const TextStyle(fontSize: 20),
                               ),
                             ]),
@@ -453,7 +457,7 @@ class _TabBarOrgState extends State<TabBarOrg> with TickerProviderStateMixin {
                           child: TextButton(
                             onPressed: () async {
                               final Uri url = Uri.parse(
-                                  'tel:${organization.contact.phone}');
+                                  'tel:${organization.contact?.phone}');
                               if (!await launchUrl(url)) {
                                 throw Exception('Could not launch $url');
                               }
@@ -461,7 +465,7 @@ class _TabBarOrgState extends State<TabBarOrg> with TickerProviderStateMixin {
                             child: Wrap(children: [
                               const Icon(Icons.phone_rounded),
                               Text(
-                                organization.contact.phone,
+                                organization.contact?.phone ?? '',
                                 style: const TextStyle(fontSize: 20),
                               ),
                             ]),
@@ -476,13 +480,13 @@ class _TabBarOrgState extends State<TabBarOrg> with TickerProviderStateMixin {
                             const SizedBox(width: 5),
                             const Icon(Icons.location_on),
                             Text(
-                              organization.location,
+                              organization.location ?? '',
                               style: const TextStyle(fontSize: 20),
                             ),
                           ]),
                         ),
                       ),
-                      organization.contact.website == ''
+                      organization.contact?.website == ''
                           ? const SizedBox(height: 0)
                           : Padding(
                               padding: const EdgeInsets.all(8.0),
@@ -490,8 +494,8 @@ class _TabBarOrgState extends State<TabBarOrg> with TickerProviderStateMixin {
                                 alignment: Alignment.centerLeft,
                                 child: TextButton(
                                   onPressed: () async {
-                                    final Uri url =
-                                        Uri.parse(organization.contact.website);
+                                    final Uri url = Uri.parse(
+                                        organization.contact!.website ?? '');
                                     if (!await launchUrl(url)) {
                                       throw Exception('Could not launch $url');
                                     }
@@ -499,7 +503,7 @@ class _TabBarOrgState extends State<TabBarOrg> with TickerProviderStateMixin {
                                   child: Wrap(children: [
                                     const Icon(Icons.computer),
                                     Text(
-                                      organization.contact.website,
+                                      organization.contact!.website ?? '',
                                       style: const TextStyle(fontSize: 20),
                                     ),
                                   ]),

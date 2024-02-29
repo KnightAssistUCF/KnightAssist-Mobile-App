@@ -2,15 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:knightassist_mobile_app/src/features/announcements/domain/announcement.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
-import 'package:knightassist_mobile_app/src/features/organizations/domain/update.dart';
+import 'package:knightassist_mobile_app/src/features/organizations/domain/update.dart'
+    as prefix;
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 
-class EditUpdate extends ConsumerWidget {
-  EditUpdate({super.key, required this.update});
+class EditAnnouncement extends ConsumerWidget {
+  EditAnnouncement({super.key, required this.announcement});
 
-  Update update;
+  Announcement announcement;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -61,8 +63,8 @@ class EditUpdate extends ConsumerWidget {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: TextFormField(
-            initialValue: update.title,
-            decoration: InputDecoration(
+            initialValue: announcement.title,
+            decoration: const InputDecoration(
               border: OutlineInputBorder(),
               labelText: 'Announcement Title',
             ),
@@ -77,8 +79,8 @@ class EditUpdate extends ConsumerWidget {
                 maxLines: null,
                 expands: true,
                 keyboardType: TextInputType.multiline,
-                initialValue: update.content,
-                decoration: InputDecoration(
+                initialValue: announcement.content,
+                decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     filled: false,
                     hintText: 'Announcement Description'),
@@ -91,8 +93,8 @@ class EditUpdate extends ConsumerWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: ElevatedButton(
                     onPressed: () {},
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                    child: const Padding(
+                      padding: EdgeInsets.all(8.0),
                       child: Text(
                         'Update',
                         style: TextStyle(fontSize: 20),
@@ -103,8 +105,8 @@ class EditUpdate extends ConsumerWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: ElevatedButton(
                     onPressed: () {},
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                    child: const Padding(
+                      padding: EdgeInsets.all(8.0),
                       child: Text(
                         'Delete',
                         style: TextStyle(fontSize: 20),

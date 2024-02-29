@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:knightassist_mobile_app/src/common_widgets/responsive_center.dart';
 import 'package:knightassist_mobile_app/src/constants/breakpoints.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
+import 'package:knightassist_mobile_app/src/features/events/presentation/events_list/events_list_screen.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/events_list_screen.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/feedback_list_screen.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/qr_scanner.dart';
@@ -11,11 +12,12 @@ import 'package:knightassist_mobile_app/src/features/home/presentation/home_scre
 import 'package:knightassist_mobile_app/src/features/organizations/domain/contact.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/socialMedia.dart';
-import 'package:knightassist_mobile_app/src/features/organizations/domain/update.dart';
+import 'package:knightassist_mobile_app/src/features/organizations/domain/update.dart'
+    as prefix;
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 import 'package:intl/intl.dart';
 
-List<Organization> organizations = [
+/*List<Organization> organizations = [
   Organization(
       id: '1',
       name: 'Test Org',
@@ -257,7 +259,7 @@ List<Organization> organizations = [
       emailValidated: false,
       createdAt: DateTime.fromMillisecondsSinceEpoch(1701030257000),
       updatedAt: DateTime.now())
-];
+];*/
 
 class UpdateScreen extends StatefulWidget {
   const UpdateScreen({super.key});
@@ -341,7 +343,7 @@ class _UpdateScreenState extends State<UpdateScreen>
                       //),
                       onPressed: () {
                         if (index == 0) {
-                          context.pushNamed(AppRoute.createUpdate.name);
+                          context.pushNamed(AppRoute.createAnnouncement.name);
                         } else {
                           context.pushNamed(AppRoute.createEvent.name);
                         }
@@ -648,7 +650,7 @@ class UpdateCard extends StatelessWidget {
                                     fontWeight: FontWeight.w600, fontSize: 18),
                                 textAlign: TextAlign.start,
                               ),
-                              subtitle: Wrap(children: [
+                              /*subtitle: Wrap(children: [
                                 ClipRRect(
                                     borderRadius: BorderRadius.circular(25.0),
                                     child: Image(
@@ -666,7 +668,7 @@ class UpdateCard extends StatelessWidget {
                                     textAlign: TextAlign.start,
                                   ),
                                 ),
-                              ]),
+                              ]),*/
                               trailing: Text(
                                 DateFormat('yyyy-MM-dd').format(update.date),
                                 style: const TextStyle(
@@ -749,8 +751,8 @@ class UpdateScreenTab extends ConsumerWidget {
         child: Column(
           children: [
             _topSection(w),
-            Flexible(
-              child: ListView.builder(
+            //Flexible(
+            /*child: ListView.builder(
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
                   itemCount: organizations.length,
@@ -775,8 +777,8 @@ class UpdateScreenTab extends ConsumerWidget {
                                     .sponsor);
                           });
                     }
-                  }),
-            )
+                  }),*/
+            //)
           ],
         ),
       ),

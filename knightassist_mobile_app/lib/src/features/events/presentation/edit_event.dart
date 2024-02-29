@@ -5,10 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:knightassist_mobile_app/src/common_widgets/alert_dialogs.dart';
+import 'package:knightassist_mobile_app/src/features/authentication/data/auth_repository.dart';
+import 'package:knightassist_mobile_app/src/features/events/data/events_repository.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
+import 'package:knightassist_mobile_app/src/features/images/data/images_repository.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/update.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:flutter/services.dart';
 
 DateTime selectedDate = DateTime.now();
 TimeOfDay selectedStartTime = TimeOfDay.now();
@@ -17,15 +23,70 @@ File? _eventPicFile;
 DateTime endDate = DateTime
     .now(); // used for events that have a different start date and end date
 
-class EditEvent extends ConsumerWidget {
-  EditEvent({super.key, required this.event});
-
-  Event event;
+class EditEvent extends ConsumerStatefulWidget {
+  final Event event;
+  const EditEvent({super.key, required this.event});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<EditEvent> createState() => _EditEventState();
+}
+
+class _EditEventState extends ConsumerState<EditEvent> {
+  late final Event event;
+  final _formKey = GlobalKey<FormState>();
+  final _node = FocusScopeNode();
+  final _titleController = TextEditingController();
+  final _descriptionController = TextEditingController();
+  final _locationController = TextEditingController();
+  final _maxVolunteersController = TextEditingController();
+
+  String get title => _titleController.text;
+  String get description => _descriptionController.text;
+  String get location => _locationController.text;
+  String get maxVolunteers => _maxVolunteersController.text;
+
+  var _submitted = false;
+
+  @override
+  void initState() {
+    event = widget.event;
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _node.dispose();
+    _titleController.dispose();
+    _descriptionController.dispose();
+    _locationController.dispose();
+    _maxVolunteersController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
+    final eventsRepository = ref.watch(eventsRepositoryProvider);
+    final authRepository = ref.watch(authRepositoryProvider);
+    final user = authRepository.currentUser;
+    final imagesRepository = ref.watch(imagesRepositoryProvider);
+
+    Widget getAppbarProfileImage() {
+      return FutureBuilder(
+          future: imagesRepository.retrieveImage('2', user!.id),
+          builder: (context, snapshot) {
+            final String imageUrl = snapshot.data ?? 'No initial data';
+            final String state = snapshot.connectionState.toString();
+            return ClipRRect(
+              borderRadius: BorderRadius.circular(25.0),
+              child: Image(
+                  semanticLabel: 'Profile picture',
+                  image: NetworkImage(imageUrl),
+                  height: 20),
+            );
+          });
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -54,14 +115,7 @@ class EditEvent extends ConsumerWidget {
               },
               child: Tooltip(
                 message: 'Go to your profile',
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(25.0),
-                  child: const Image(
-                      semanticLabel: 'Profile picture',
-                      image: AssetImage(
-                          'assets/profile pictures/icon_paintbrush.png'),
-                      height: 20),
-                ),
+                child: getAppbarProfileImage(),
               ),
             ),
           )
@@ -74,8 +128,9 @@ class EditEvent extends ConsumerWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextFormField(
-              initialValue: event.name,
-              decoration: InputDecoration(
+              controller: _titleController,
+              //initialValue: event.name,
+              decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Event Title',
               ),
@@ -87,17 +142,18 @@ class EditEvent extends ConsumerWidget {
                 width: 240,
                 height: 120,
                 child: TextFormField(
+                  controller: _descriptionController,
                   maxLines: null,
                   expands: true,
                   keyboardType: TextInputType.multiline,
-                  initialValue: event.description,
-                  decoration: InputDecoration(
+                  //initialValue: event.description,
+                  decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       filled: false,
                       hintText: 'Event Description'),
                 )),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           SelectDate(
@@ -107,27 +163,39 @@ class EditEvent extends ConsumerWidget {
             event: event,
           ),
           SizedBox(
-              height: 70,
+              height: 100,
               width: 50,
               child: SelectTime(
                 event: event,
               )),
           SizedBox(
-              height: 70,
+              height: 90,
               width: 50,
               child: SelectEndTime(
                 event: event,
               )),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextFormField(
-              initialValue: event.location,
+              controller: _locationController,
+              //initialValue: event.location,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Event Location',
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              controller: _maxVolunteersController,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Max Volunteers',
               ),
             ),
           ),
@@ -155,20 +223,6 @@ class EditEvent extends ConsumerWidget {
                     event: event,
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Center(
-                    child: ElevatedButton(
-                        onPressed: () {},
-                        child: const Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text(
-                            'Delete Image (reverts to default)',
-                            style: TextStyle(fontSize: 15),
-                          ),
-                        )),
-                  ),
-                ),
               ],
             ),
           ),
@@ -177,9 +231,37 @@ class EditEvent extends ConsumerWidget {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ElevatedButton(
-                    onPressed: () {},
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                    onPressed: () {
+                      DateTime startTime = DateTime(
+                          selectedDate.year,
+                          selectedDate.month,
+                          selectedDate.day,
+                          selectedStartTime.hour,
+                          selectedEndTime.minute);
+
+                      DateTime endTime = DateTime(
+                          selectedDate.year,
+                          selectedDate.month,
+                          selectedDate.day,
+                          selectedEndTime.hour,
+                          selectedEndTime.minute);
+
+                      eventsRepository.editEvent(
+                          event.id,
+                          event.sponsoringOrganization,
+                          title,
+                          description,
+                          location,
+                          startTime,
+                          endTime,
+                          _eventPicFile?.path ??
+                              'assets/orgdefaultbackground.png',
+                          event.eventTags,
+                          event.semester.toString(),
+                          int.parse(maxVolunteers));
+                    },
+                    child: const Padding(
+                      padding: EdgeInsets.all(8.0),
                       child: Text(
                         'Update Event',
                         style: TextStyle(fontSize: 20),
@@ -189,9 +271,13 @@ class EditEvent extends ConsumerWidget {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ElevatedButton(
-                    onPressed: () {},
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                    onPressed: () {
+                      eventsRepository.deleteEvent(
+                          event.sponsoringOrganization, event.id);
+                      Navigator.pop(context);
+                    },
+                    child: const Padding(
+                      padding: EdgeInsets.all(8.0),
                       child: Text(
                         'Delete Event',
                         style: TextStyle(fontSize: 20),
@@ -226,12 +312,12 @@ class _SelectDateState extends State<SelectDate> {
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
         context: context,
-        initialDate: event.date,
+        initialDate: event.startTime,
         firstDate: DateTime(2023, 8),
         lastDate: DateTime(2101));
-    if (picked != null && picked != event.date) {
+    if (picked != null && picked != event.startTime) {
       setState(() {
-        event.date = picked;
+        event.startTime = picked;
       });
     }
   }
@@ -240,7 +326,7 @@ class _SelectDateState extends State<SelectDate> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Center(child: Text(DateFormat.yMMMMEEEEd().format(event.date))),
+        Center(child: Text(DateFormat.yMMMMEEEEd().format(event.startTime))),
         SizedBox(
           width: 10,
         ),
@@ -295,7 +381,7 @@ class _SelectTimeState extends State<SelectTime> {
         Center(
             child:
                 Text(TimeOfDay.fromDateTime(event.startTime).format(context))),
-        SizedBox(
+        const SizedBox(
           width: 10,
         ),
         Padding(
@@ -345,7 +431,7 @@ class _SelectEndTimeState extends State<SelectEndTime> {
       children: [
         Center(
             child: Text(TimeOfDay.fromDateTime(event.endTime).format(context))),
-        SizedBox(
+        const SizedBox(
           width: 10,
         ),
         Padding(
@@ -371,6 +457,10 @@ class EditImage extends StatefulWidget {
 class _EditImageState extends State<EditImage> {
   late final Event event;
 
+  File? get imagePlaceHolder => null;
+
+  set imagePlaceHolder(File? imagePlaceHolder) {}
+
   @override
   void initState() {
     super.initState();
@@ -385,23 +475,73 @@ class _EditImageState extends State<EditImage> {
     });
   }
 
+  Future<void> _deleteImage() async {
+    File imagePlaceHolder;
+
+    _setPlaceHolder() async {
+      this.imagePlaceHolder = await ImageUtils.imageToFile(
+          imageName: "orgdefaultbackground", ext: "png");
+    }
+
+    setState(() {
+      _eventPicFile = this.imagePlaceHolder;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return EditableImage(
-      onChange: _directUpdateImage,
-      image: _eventPicFile != null
-          ? Image.file(_eventPicFile!, fit: BoxFit.cover)
-          : Image(image: AssetImage(event.picLink)),
-      size: 150,
-      imagePickerTheme: ThemeData(
-        primaryColor: Colors.yellow,
-        shadowColor: Colors.deepOrange,
-        colorScheme: const ColorScheme.light(background: Colors.indigo),
-        iconTheme: const IconThemeData(color: Colors.red),
-        fontFamily: 'Papyrus',
-      ),
-      imageBorder: Border.all(color: Colors.lime, width: 2),
-      editIconBorder: Border.all(color: Colors.purple, width: 2),
+    return Consumer(
+      builder: (context, ref, child) {
+        final imagesRepository = ref.watch(imagesRepositoryProvider);
+
+        Widget getEditableImage() {
+          return FutureBuilder(
+              future: imagesRepository.retrieveImage('1', event.id),
+              builder: (context, snapshot) {
+                final String imageUrl = snapshot.data ?? 'No initial data';
+                final String state = snapshot.connectionState.toString();
+                return EditableImage(
+                  onChange: _directUpdateImage,
+                  image: _eventPicFile != null
+                      ? Image.file(_eventPicFile!, fit: BoxFit.cover)
+                      : Image(image: NetworkImage(imageUrl)),
+                  size: 150,
+                  imagePickerTheme: ThemeData(
+                    primaryColor: Colors.yellow,
+                    shadowColor: Colors.deepOrange,
+                    colorScheme:
+                        const ColorScheme.light(background: Colors.indigo),
+                    iconTheme: const IconThemeData(color: Colors.red),
+                    fontFamily: 'Papyrus',
+                  ),
+                  imageBorder: Border.all(color: Colors.lime, width: 2),
+                  editIconBorder: Border.all(color: Colors.purple, width: 2),
+                );
+              });
+        }
+
+        return Column(
+          children: [
+            getEditableImage(),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Center(
+                child: ElevatedButton(
+                    onPressed: () {
+                      _deleteImage();
+                    },
+                    child: const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        'Delete Image (reverts to default)',
+                        style: TextStyle(fontSize: 15),
+                      ),
+                    )),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
@@ -455,7 +595,7 @@ class _MultiDayEventState extends State<MultiDayEvent> {
     return Column(
       children: [
         CheckboxListTile(
-          title: Text(
+          title: const Text(
             "Multi-Day Event (end date different than start date)",
             textAlign: TextAlign.center,
           ),
@@ -474,7 +614,7 @@ class _MultiDayEventState extends State<MultiDayEvent> {
             children: [
               Center(
                   child: Text(DateFormat.yMMMMEEEEd().format(event.endTime))),
-              SizedBox(
+              const SizedBox(
                 width: 10,
               ),
               Padding(
@@ -489,5 +629,17 @@ class _MultiDayEventState extends State<MultiDayEvent> {
         ),
       ],
     );
+  }
+}
+
+class ImageUtils {
+  static Future<File> imageToFile(
+      {required String imageName, required String ext}) async {
+    var bytes = await rootBundle.load('assets/$imageName.$ext');
+    String tempPath = (await getTemporaryDirectory()).path;
+    File file = File('$tempPath/profile.png');
+    await file.writeAsBytes(
+        bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes));
+    return file;
   }
 }

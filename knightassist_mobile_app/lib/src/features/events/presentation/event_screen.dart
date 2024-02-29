@@ -2,8 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:knightassist_mobile_app/src/common_widgets/tags.dart';
+import 'package:knightassist_mobile_app/src/constants/app_sizes.dart';
+import 'package:knightassist_mobile_app/src/features/authentication/data/auth_repository.dart';
+import 'package:knightassist_mobile_app/src/features/events/data/events_repository.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
+import 'package:knightassist_mobile_app/src/features/images/data/images_repository.dart';
+import 'package:knightassist_mobile_app/src/features/organizations/data/organizations_repository.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
+import 'package:knightassist_mobile_app/src/features/rsvp/presentation/rsvp_widget.dart';
+import 'package:knightassist_mobile_app/src/features/students/data/students_repository.dart';
+import 'package:knightassist_mobile_app/src/features/students/domain/student_user.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 
 class EventScreen extends ConsumerWidget {
@@ -11,13 +20,70 @@ class EventScreen extends ConsumerWidget {
   //final String eventID;
   final Event event;
 
-  bool curOrg =
-      true; // true if the organization who made the event is viewing it (shows edit button)
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
+
+    final organizationsRepository = ref.read(organizationsRepositoryProvider);
+    organizationsRepository.fetchOrganizationsList();
+    final org =
+        organizationsRepository.getOrganization(event.sponsoringOrganization);
+    final authRepository = ref.read(authRepositoryProvider);
+    final imagesRepository = ref.watch(imagesRepositoryProvider);
+    final user = authRepository.currentUser;
+    final eventsRepository = ref.read(eventsRepositoryProvider);
+    final studentsRepository = ref.read(studentsRepositoryProvider);
+    bool isStudent = user?.role == "student";
+
+    studentsRepository.fetchEventAttendees(event.id);
+
+    bool curOrg = (user?.id == event.sponsoringOrganization);
+    // true if the organization who made the event is viewing it (shows edit button)
+
+    bool isOrg = (user?.role == 'organization');
+
+    Organization? userOrg;
+    StudentUser? student;
+
+    if (isOrg) {
+      userOrg = organizationsRepository.getOrganization(user!.id);
+    }
+
+    if (isStudent) {
+      studentsRepository.fetchStudent(user!.id);
+      student = studentsRepository.getStudent();
+    }
+
+    Widget getImage() {
+      return FutureBuilder(
+          future: imagesRepository.retrieveImage('2', org!.id),
+          builder: (context, snapshot) {
+            final String imageUrl = snapshot.data ?? 'No initial data';
+            final String state = snapshot.connectionState.toString();
+            return ClipRRect(
+                borderRadius: BorderRadius.circular(25.0),
+                child: Image(image: NetworkImage(imageUrl), height: 50));
+          });
+    }
+
+    Widget getAppbarProfileImage() {
+      return FutureBuilder(
+          future: isOrg
+              ? imagesRepository.retrieveImage('2', user!.id)
+              : imagesRepository.retrieveImage('3', user!.id),
+          builder: (context, snapshot) {
+            final String imageUrl = snapshot.data ?? 'No initial data';
+            final String state = snapshot.connectionState.toString();
+            return ClipRRect(
+              borderRadius: BorderRadius.circular(25.0),
+              child: Image(
+                  semanticLabel: 'Profile picture',
+                  image: NetworkImage(imageUrl),
+                  height: 20),
+            );
+          });
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -43,18 +109,17 @@ class EventScreen extends ConsumerWidget {
             padding: const EdgeInsets.all(8.0),
             child: GestureDetector(
               onTap: () {
-                context.pushNamed(AppRoute.profileScreen.name);
+                if (isOrg) {
+                  context.pushNamed("organization", extra: userOrg);
+                } else if (isStudent) {
+                  context.pushNamed("profileScreen", extra: student);
+                } else {
+                  context.pushNamed(AppRoute.signIn.name);
+                }
               },
               child: Tooltip(
                 message: 'Go to your profile',
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(25.0),
-                  child: const Image(
-                      semanticLabel: 'Profile picture',
-                      image: AssetImage(
-                          'assets/profile pictures/icon_paintbrush.png'),
-                      height: 20),
-                ),
+                child: getAppbarProfileImage(),
               ),
             ),
           )
@@ -71,26 +136,22 @@ class EventScreen extends ConsumerWidget {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextButton(
-                  onPressed: () => context.pushNamed(AppRoute.organization.name,
-                      extra: event.sponsoringOrganization),
+                  onPressed: () =>
+                      context.pushNamed(AppRoute.organization.name, extra: org),
                   child: Wrap(
                     children: [
-                      ClipRRect(
-                          borderRadius: BorderRadius.circular(25.0),
-                          child: const Image(
-                              image: AssetImage('assets/example.png'),
-                              height: 50)),
+                      getImage(),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          event.sponsoringOrganization,
+                          org?.name ?? '',
                           style: const TextStyle(
                               fontWeight: FontWeight.w400, fontSize: 25),
                           textAlign: TextAlign.start,
                         ),
                       ),
-                      curOrg
-                          ? SizedBox(
+                      isOrg
+                          ? const SizedBox(
                               height: 0,
                             )
                           : const OrganizationFav(),
@@ -149,26 +210,11 @@ class EventScreen extends ConsumerWidget {
                             ),
                           ),
                         )
-                      : ElevatedButton(
-                          // shows rsvp button for student
-                          onPressed: () {
-                            //context.pushNamed(AppRoute.events.name);
-                          },
-                          style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all(
-                                  const Color.fromARGB(255, 91, 78, 119))),
-                          child: const Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Wrap(
-                              children: [
-                                Text(
-                                  'RSVP',
-                                  style: TextStyle(fontSize: 20),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
+                      : isOrg
+                          ? const SizedBox(
+                              height: 0,
+                            )
+                          : RSVPWidget(event: event),
                 ),
               ),
             )
@@ -181,36 +227,52 @@ class EventScreen extends ConsumerWidget {
 
 _title(double width, Event e) {
   return Builder(builder: (context) {
-    return Stack(children: [
-      Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: MediaQuery.of(context).size.width,
-            height: 200,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                fit: BoxFit.fill,
-                image: AssetImage(e.picLink),
+    return Consumer(
+      builder: (context, ref, child) {
+        final imagesRepository = ref.watch(imagesRepositoryProvider);
+
+        Widget getImage() {
+          return FutureBuilder(
+              future: imagesRepository.retrieveImage('1', e.id),
+              builder: (context, snapshot) {
+                final String imageUrl = snapshot.data ?? 'No initial data';
+                final String state = snapshot.connectionState.toString();
+                return Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: 200,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      fit: BoxFit.cover,
+                      image: NetworkImage(imageUrl),
+                    ),
+                  ),
+                );
+              });
+        }
+
+        return Stack(children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              getImage(),
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    e.name,
+                    style: const TextStyle(
+                        fontSize: 40,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w900),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                e.name,
-                style: const TextStyle(
-                    fontSize: 40,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w900),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ),
-        ],
-      ),
-    ]);
+        ]);
+      },
+    );
   });
 }
 
@@ -286,7 +348,7 @@ class _TabBarEventState extends State<TabBarEvent>
     final difference = event.endTime.difference(event.startTime).inHours;
 
     return DefaultTabController(
-      length: 2,
+      length: 3,
       child: Scaffold(
         body: Column(
           children: [
@@ -294,6 +356,7 @@ class _TabBarEventState extends State<TabBarEvent>
               tabs: [
                 Tab(icon: Text("Details")),
                 Tab(icon: Text("Description")),
+                Tab(icon: Text("Tags")),
               ],
             ),
             Expanded(
@@ -316,7 +379,7 @@ class _TabBarEventState extends State<TabBarEvent>
                         child: Wrap(children: [
                           const Icon(Icons.calendar_month),
                           Text(
-                            DateFormat.yMMMMEEEEd().format(event.date),
+                            DateFormat.yMMMMEEEEd().format(event.startTime),
                             style: const TextStyle(fontSize: 20),
                           ),
                         ]),
@@ -339,7 +402,7 @@ class _TabBarEventState extends State<TabBarEvent>
                         child: Wrap(children: [
                           const Icon(Icons.person),
                           Text(
-                            "x / ${event.maxAttendees} spots reserved",
+                            "${event.attendees.length} / ${event.maxAttendees} spots reserved",
                             style: const TextStyle(fontSize: 20),
                           ),
                         ]),
@@ -356,7 +419,25 @@ class _TabBarEventState extends State<TabBarEvent>
                         ),
                       ),
                     ],
-                  )
+                  ),
+                  ListView(
+                    children: [
+                      Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: event.eventTags.isEmpty
+                              ? const Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Text(
+                                    "This event has no tags.",
+                                    style: TextStyle(fontSize: Sizes.p20),
+                                  ),
+                                )
+                              : Wrap(children: [
+                                  for (var tag in event.eventTags)
+                                    Tags(tag: tag)
+                                ])),
+                    ],
+                  ),
                 ],
               ),
             ),

@@ -22,22 +22,32 @@ class SignInScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Sign In')),
-      body: const Column(
+      body: ListView(
         children: [
-          Image(
+          const Image(
             image: AssetImage('assets/KnightAssistCoA3.png'),
             height: 60,
           ),
-          Text('welcome to',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
-          Text('KnightAssist',
-              style: TextStyle(fontSize: 30, fontWeight: FontWeight.w700)),
-          Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Text('easier volunteering is just a step away!',
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400)),
+          const Center(
+            child: Text('welcome to',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
           ),
-          SignInContents(),
+          const Center(
+            child: Text('KnightAssist',
+                style: TextStyle(fontSize: 30, fontWeight: FontWeight.w700)),
+          ),
+          const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Center(
+              child: Text('easier volunteering is just a step away!',
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
+            ),
+          ),
+          SignInContents(
+            onSignedIn: () {
+              context.pushNamed(AppRoute.homeScreen.name);
+            },
+          ),
         ],
       ),
     );
@@ -119,7 +129,7 @@ class _SignInContentsState extends ConsumerState<SignInContents>
               controller: _emailController,
               decoration: InputDecoration(
                 labelText: 'Email',
-                hintText: 'test@test.com',
+                hintText: 'user@example.com',
                 enabled: !state.isLoading,
               ),
               autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -161,6 +171,13 @@ class _SignInContentsState extends ConsumerState<SignInContents>
                 onPressed: state.isLoading ? null : () => _submit(),
               ),
             ),
+            CustomTextButton(
+              text: 'Forgout your password?',
+              style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
+              onPressed: () => state.isLoading
+                  ? null
+                  : context.pushNamed(AppRoute.forgotPassword.name),
+            ),
             gapH8,
             const Row(children: <Widget>[
               Expanded(
@@ -168,7 +185,10 @@ class _SignInContentsState extends ConsumerState<SignInContents>
                 padding: EdgeInsets.all(8.0),
                 child: Divider(),
               )),
-              Text("OR"),
+              Text(
+                "OR",
+                style: TextStyle(fontWeight: FontWeight.w600),
+              ),
               Expanded(
                   child: Padding(
                 padding: EdgeInsets.all(8.0),
@@ -177,7 +197,7 @@ class _SignInContentsState extends ConsumerState<SignInContents>
             ]),
             CustomTextButton(
               text: 'Register as a Student',
-              style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 15),
+              style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
               onPressed: () => state.isLoading
                   ? null
                   : context.pushNamed(AppRoute.registerStudent.name),
@@ -185,7 +205,7 @@ class _SignInContentsState extends ConsumerState<SignInContents>
             gapH4,
             CustomTextButton(
               text: 'Register as an Organization',
-              style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 15),
+              style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
               onPressed: () => state.isLoading
                   ? null
                   : context.pushNamed(AppRoute.registerOrg.name),

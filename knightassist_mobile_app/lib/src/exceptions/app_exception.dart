@@ -35,3 +35,10 @@ class OrganizationNotFoundException extends AppException {
   OrganizationNotFoundException()
       : super('org-not-found', 'Organization not found');
 }
+
+// Admins must use web app
+class AdminLogInException extends AppException {
+  AdminLogInException()
+      : super('admin-log-in',
+            'Admins must use the KnightAssist web application to access admin functionality.');
+}
