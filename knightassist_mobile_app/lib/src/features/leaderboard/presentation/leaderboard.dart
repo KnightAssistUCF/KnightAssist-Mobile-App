@@ -12,7 +12,9 @@ import 'package:knightassist_mobile_app/src/features/home/presentation/home_scre
 import 'package:knightassist_mobile_app/src/features/images/data/images_repository.dart';
 import 'package:knightassist_mobile_app/src/features/leaderboard/data/leaderboard_repository.dart';
 import 'package:knightassist_mobile_app/src/features/leaderboard/domain/leaderboard_entry.dart';
+import 'package:knightassist_mobile_app/src/features/organizations/data/organizations_repository.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/presentation/update_screen.dart';
+import 'package:knightassist_mobile_app/src/features/students/data/students_repository.dart';
 import 'package:knightassist_mobile_app/src/features/students/domain/student_user.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 import 'package:intl/intl.dart';
@@ -44,6 +46,33 @@ class _leaderboardState extends State<leaderboard> {
         leaderboardRepository.fetchLeaderboard().then((value) => setState(() {
               leaders = value;
             }));
+
+        final imagesRepository = ref.watch(imagesRepositoryProvider);
+        final authRepository = ref.watch(authRepositoryProvider);
+        final organizationsRepository =
+            ref.watch(organizationsRepositoryProvider);
+        organizationsRepository.fetchOrganizationsList();
+        final user = authRepository.currentUser;
+        bool isOrg = user?.role == "organization";
+
+        Widget getAppbarProfileImage() {
+          return FutureBuilder(
+              future: isOrg
+                  ? imagesRepository.retrieveImage('2', user!.id)
+                  : imagesRepository.retrieveImage('3', user!.id),
+              builder: (context, snapshot) {
+                final String imageUrl = snapshot.data ?? 'No initial data';
+                final String state = snapshot.connectionState.toString();
+                return ClipRRect(
+                  borderRadius: BorderRadius.circular(25.0),
+                  child: Image(
+                      semanticLabel: 'Profile picture',
+                      image: NetworkImage(imageUrl),
+                      height: 20),
+                );
+              });
+        }
+
         return Scaffold(
           appBar: AppBar(
             title: const Text(
@@ -73,14 +102,7 @@ class _leaderboardState extends State<leaderboard> {
                   },
                   child: Tooltip(
                     message: 'Go to your profile',
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(25.0),
-                      child: const Image(
-                          semanticLabel: 'Profile picture',
-                          image: AssetImage(
-                              'assets/profile pictures/icon_paintbrush.png'),
-                          height: 20),
-                    ),
+                    child: getAppbarProfileImage(),
                   ),
                 ),
               )
