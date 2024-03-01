@@ -838,14 +838,20 @@ class HomeScreenTab extends ConsumerWidget {
           isStudent
               ? Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: PopupMenuButton(
-                    tooltip: 'View notifications',
-                    icon: const Icon(
-                      Icons.notifications_outlined,
-                      color: Colors.white,
-                      semanticLabel: 'Notifications',
+                  child: Badge(
+                    label: Text(notifications
+                        .where((element) => element.read == false)
+                        .length
+                        .toString()),
+                    child: PopupMenuButton(
+                      tooltip: 'View notifications',
+                      icon: const Icon(
+                        Icons.notifications_outlined,
+                        color: Colors.white,
+                        semanticLabel: 'Notifications',
+                      ),
+                      itemBuilder: (ctx) => _getNotifItems(),
                     ),
-                    itemBuilder: (ctx) => _getNotifItems(),
                   ),
                 )
               : const SizedBox(
