@@ -24,7 +24,7 @@ class NotificationsRepository {
         '/api/pushNotifications', params);
     var response = await http.get(uri);
     var body = json.decode(response.body);
-    print(body);
+    //print(body);
     final dynamic notificationList = jsonDecode(response.body);
     switch (response.statusCode) {
       case 200:

@@ -579,7 +579,8 @@ class AnnouncementCard extends StatelessWidget {
           color: Colors.white,
           elevation: 5,
           child: InkWell(
-            onTap: () => context.pushNamed("announcement", extra: announcement),
+            onTap: () =>
+                context.pushNamed("announcementdetail", extra: announcement),
             child: Padding(
               padding: const EdgeInsets.all(15.0),
               child: Wrap(
@@ -774,7 +775,7 @@ class HomeScreenTab extends ConsumerWidget {
       );
     }
 
-     Widget getNotifOrgProfileImage(PushNotification n) {
+    Widget getNotifOrgProfileImage(PushNotification n) {
       return FutureBuilder(
           future: imagesRepository.retrieveImage('2', n.orgId),
           builder: (context, snapshot) {
@@ -795,26 +796,37 @@ class HomeScreenTab extends ConsumerWidget {
 
       for (PushNotification n in notifications) {
         list.add(PopupMenuItem(
-          onTap: () {
-            // TODO: add markasread api call here
-            n.read = false;
-            if (n.type_is == 'event') {
-              Event? e;
-              context.pushNamed("event", extra: eventsRepository.getEvent(n.eventId));
-              //extra: eventsRepository.fetchEventsList().then((value) => e = value.firstWhere((element) => element.id == n.eventId)));
-            } else if (n.type_is == 'orgAnnouncement') {
-              Announcement? a;
-              announcementsRepository.fetchOrgAnnouncements(n.orgName, n.orgId).then((value) => a = value.firstWhere((element) => n.message.contains(element.title)));
-              context.pushNamed("announcement", extra: a);
-            }
-          },
-          child: Wrap(
-          children: [
-            n.read == true? SizedBox(height: 0,) : Icon(Icons.circle, color: Colors.red,),
-            getNotifOrgProfileImage(n),
-            Text(n.message),
-          ],
-        )));
+            onTap: () {
+              // TODO: add markasread api call here
+              n.read = false;
+              if (n.type_is == 'event') {
+                Event? e;
+                context.pushNamed("event",
+                    extra: eventsRepository.getEvent(n.eventId));
+                //extra: eventsRepository.fetchEventsList().then((value) => e = value.firstWhere((element) => element.id == n.eventId)));
+              } else if (n.type_is == 'orgAnnouncement') {
+                Announcement? a;
+                announcementsRepository
+                    .fetchOrgAnnouncements(n.orgName, n.orgId)
+                    .then((value) => a = value.firstWhere(
+                        (element) => n.message.contains(element.title)));
+                context.pushNamed("announcementdetail", extra: a);
+              }
+            },
+            child: Wrap(
+              children: [
+                n.read == true
+                    ? SizedBox(
+                        height: 0,
+                      )
+                    : Icon(
+                        Icons.circle,
+                        color: Colors.red,
+                      ),
+                getNotifOrgProfileImage(n),
+                Text(n.message),
+              ],
+            )));
       }
       return list;
     }
