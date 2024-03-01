@@ -781,12 +781,21 @@ class HomeScreenTab extends ConsumerWidget {
           builder: (context, snapshot) {
             final String imageUrl = snapshot.data ?? 'No initial data';
             final String state = snapshot.connectionState.toString();
-            return ClipRRect(
-              borderRadius: BorderRadius.circular(25.0),
-              child: Image(
-                  semanticLabel: 'Organization Profile picture',
-                  image: NetworkImage(imageUrl),
-                  height: 20),
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.black,
+                    border: Border.all(width: 0.5)),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(25.0),
+                  child: Image(
+                      semanticLabel: 'Organization Profile picture',
+                      image: NetworkImage(imageUrl),
+                      height: 20),
+                ),
+              ),
             );
           });
     }
@@ -796,37 +805,53 @@ class HomeScreenTab extends ConsumerWidget {
 
       for (PushNotification n in notifications) {
         list.add(PopupMenuItem(
-            onTap: () {
-              // TODO: add markasread api call here
-              n.read = false;
-              if (n.type_is == 'event') {
-                Event? e;
-                context.pushNamed("event",
-                    extra: eventsRepository.getEvent(n.eventId));
-                //extra: eventsRepository.fetchEventsList().then((value) => e = value.firstWhere((element) => element.id == n.eventId)));
-              } else if (n.type_is == 'orgAnnouncement') {
-                Announcement? a;
-                announcementsRepository
-                    .fetchOrgAnnouncements(n.orgName, n.orgId)
-                    .then((value) => a = value.firstWhere(
-                        (element) => n.message.contains(element.title)));
-                context.pushNamed("announcementdetail", extra: a);
-              }
-            },
-            child: Wrap(
-              children: [
-                n.read == true
-                    ? SizedBox(
-                        height: 0,
-                      )
-                    : Icon(
-                        Icons.circle,
-                        color: Colors.red,
-                      ),
-                getNotifOrgProfileImage(n),
-                Text(n.message),
-              ],
-            )));
+          onTap: () {
+            // TODO: add markasread api call here
+            n.read = false;
+            if (n.type_is == 'event') {
+              Event? e;
+              context.pushNamed("event",
+                  extra: eventsRepository.getEvent(n.eventId));
+              //extra: eventsRepository.fetchEventsList().then((value) => e = value.firstWhere((element) => element.id == n.eventId)));
+            } else if (n.type_is == 'orgAnnouncement') {
+              Announcement? a;
+              announcementsRepository
+                  .fetchOrgAnnouncements(n.orgName, n.orgId)
+                  .then((value) => a = value.firstWhere(
+                      (element) => n.message.contains(element.title)));
+              context.pushNamed("announcementdetail", extra: a);
+            }
+          },
+          child: Container(
+            decoration: const BoxDecoration(
+                border:
+                    Border(bottom: BorderSide(color: Colors.grey, width: 1.0))),
+            child: ListTile(
+              leading: Wrap(
+                children: [
+                  getNotifOrgProfileImage(n),
+                  n.read == true
+                      ? const SizedBox(
+                          height: 0,
+                        )
+                      : const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Icon(
+                            Icons.circle,
+                            color: Colors.red,
+                            size: 10,
+                          ),
+                        ),
+                ],
+              ),
+              title: Text(
+                n.message,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ),
+        ));
       }
       return list;
     }
