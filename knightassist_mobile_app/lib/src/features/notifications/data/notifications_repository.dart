@@ -51,6 +51,28 @@ class NotificationsRepository {
         throw Exception(err);
     }
   }
+
+  Future<void> markAsRead(String userId, String message) async {
+    var uri = Uri.https('knightassist-43ab3aeaada9.herokuapp.com',
+        '/api/markAsRead');
+    var response = await http.post(uri,
+    headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, dynamic>{
+          'userId': userId,
+          'message': message,
+        }
+    ));
+    var body = json.decode(response.body);
+    switch (response.statusCode) {
+      case 200:
+       // Successful
+       default:
+       String err = body["error"];
+       throw Exception(err);
+    }
+  }
 }
 
 @Riverpod(keepAlive: true)

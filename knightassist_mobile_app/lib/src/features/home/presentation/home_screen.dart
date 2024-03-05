@@ -736,6 +736,8 @@ class HomeScreenTab extends ConsumerWidget {
     final imagesRepository = ref.watch(imagesRepositoryProvider);
     final eventsRepository = ref.watch(eventsRepositoryProvider);
     final announcementsRepository = ref.watch(announcementsRepositoryProvider);
+    final notificationsRepository =
+            ref.watch(notificationsRepositoryProvider);
     bool isOrg = user?.role == "organization";
     bool isStudent = user?.role == "student";
     Organization? org;
@@ -806,8 +808,8 @@ class HomeScreenTab extends ConsumerWidget {
       for (PushNotification n in notifications) {
         list.add(PopupMenuItem(
           onTap: () {
-            // TODO: add markasread api call here
-            n.read = false;
+            notificationsRepository.markAsRead(user!.id, n.message);
+            n.read = true;
             if (n.type_is == 'event') {
               Event? e;
               context.pushNamed("event",
