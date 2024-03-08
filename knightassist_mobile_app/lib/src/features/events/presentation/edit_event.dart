@@ -16,6 +16,13 @@ import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/services.dart';
 
+/*
+DATA NEEDED:
+- the full event object of the event being edited
+- the current user's profile image
+- the current user's ID
+*/
+
 DateTime selectedDate = DateTime.now();
 TimeOfDay selectedStartTime = TimeOfDay.now();
 TimeOfDay selectedEndTime = TimeOfDay.now();

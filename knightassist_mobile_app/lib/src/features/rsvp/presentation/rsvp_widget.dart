@@ -9,6 +9,12 @@ import 'package:knightassist_mobile_app/src/features/rsvp/presentation/rsvp_cont
 import 'package:knightassist_mobile_app/src/features/students/data/students_repository.dart';
 import 'package:knightassist_mobile_app/src/utils/async_value_ui.dart';
 
+/*
+DATA NEEDED:
+- the full event object of the event the student is changing their RSVP status for
+- the full studentuser object of the current user and their ID
+*/
+
 String bodyString = '';
 
 class RSVPWidget extends StatefulWidget {

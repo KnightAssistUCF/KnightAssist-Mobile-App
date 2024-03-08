@@ -15,6 +15,12 @@ import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:editable_image/editable_image.dart';
 
+/*
+DATA NEEDED:
+- the full studentuser object of user (this page is only shown to volunteers)
+- the current user's profile image
+*/
+
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key, required this.student});
   final StudentUser student;

@@ -15,6 +15,13 @@ import 'package:knightassist_mobile_app/src/features/students/domain/student_use
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 import 'package:intl/intl.dart';
 
+/*
+DATA NEEDED:
+- the list of volunteers who rsvped for the event
+- the profile picture and name of each user who rsvpd to the event
+- the current user's profile image
+*/
+
 List<StudentUser> rsvps = [];
 
 class viewRSVPsScreen extends StatefulWidget {

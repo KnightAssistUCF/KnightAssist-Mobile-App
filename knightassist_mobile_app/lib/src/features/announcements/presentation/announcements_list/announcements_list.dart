@@ -8,6 +8,11 @@ import 'package:knightassist_mobile_app/src/features/announcements/presentation/
 
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 
+/*
+DATA NEEDED:
+- the list of all announcements
+*/
+
 class AnnouncementsList extends ConsumerWidget {
   const AnnouncementsList({super.key});
 

@@ -9,6 +9,12 @@ import 'package:knightassist_mobile_app/src/features/organizations/domain/organi
 import 'package:knightassist_mobile_app/src/features/organizations/domain/update.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 
+/*
+DATA NEEDED:
+- the full event details of the event from the QR code that was scanned
+- the current user's profile image
+*/
+
 class PostScan extends ConsumerWidget {
   const PostScan({super.key, required this.event});
   final Event event;
@@ -17,7 +23,7 @@ class PostScan extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
-    bool checkIn = false; // false if a voluntter has checked out
+    bool checkIn = false; // false if a volunteer has checked out
     // this is to show the correct details
 
     final difference = event.endTime.difference(event.startTime).inHours;

@@ -17,6 +17,12 @@ import 'package:knightassist_mobile_app/src/utils/async_value_ui.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:settings_ui/settings_ui.dart';
 
+/*
+DATA NEEDED:
+- the current user's profile image and ID
+- the full studentuser object or organization object of current user
+*/
+
 class AccountScreen extends ConsumerWidget {
   const AccountScreen({super.key});
 

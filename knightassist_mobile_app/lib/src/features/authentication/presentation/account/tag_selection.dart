@@ -9,6 +9,12 @@ import 'package:knightassist_mobile_app/src/features/organizations/data/organiza
 import 'package:knightassist_mobile_app/src/features/students/data/students_repository.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 
+/*
+DATA NEEDED:
+- the studentuser or org object of the current user
+- the current user's profile image and ID
+*/
+
 List<String> tags = [
   "Education",
   "Technology",
@@ -80,9 +86,8 @@ class TagSelection extends ConsumerWidget {
 
     if (user?.role == 'student') {
       final studentsRepository = ref.watch(studentsRepositoryProvider);
-    final student = studentsRepository.fetchStudent(user!.id);
-    selectedTags = studentsRepository.getStudent()!.categoryTags;
-
+      final student = studentsRepository.fetchStudent(user!.id);
+      selectedTags = studentsRepository.getStudent()!.categoryTags;
     }
 
     return Scaffold(

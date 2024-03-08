@@ -6,6 +6,12 @@ import 'package:knightassist_mobile_app/src/common_widgets/responsive_scrollable
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/sign_in/sign_in_screen.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 
+/*
+DATA NEEDED:
+- the studentuser object of the current user
+- the current user's profile image and ID
+*/
+
 class SemesterGoal extends ConsumerWidget {
   const SemesterGoal({super.key});
 

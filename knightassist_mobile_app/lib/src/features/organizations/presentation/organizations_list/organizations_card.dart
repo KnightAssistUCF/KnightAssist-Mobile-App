@@ -7,6 +7,11 @@ import 'package:knightassist_mobile_app/src/constants/breakpoints.dart';
 import 'package:knightassist_mobile_app/src/features/images/data/images_repository.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
 
+/*
+DATA NEEDED:
+- the complete organization object for the organization being viewed
+*/
+
 class OrganizationCard extends StatefulWidget {
   final Organization? organization;
   final VoidCallback? onPressed;

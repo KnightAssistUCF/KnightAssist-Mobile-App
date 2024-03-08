@@ -6,6 +6,11 @@ import 'package:knightassist_mobile_app/src/common_widgets/responsive_scrollable
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/sign_in/sign_in_screen.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 
+/*
+DATA NEEDED:
+- the current user's ID and full studentuser or org object
+*/
+
 List<String> tags = [
   "Education",
   "Technology",

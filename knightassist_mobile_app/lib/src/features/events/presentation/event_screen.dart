@@ -15,6 +15,13 @@ import 'package:knightassist_mobile_app/src/features/students/data/students_repo
 import 'package:knightassist_mobile_app/src/features/students/domain/student_user.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 
+/*
+DATA NEEDED:
+- the full event details of the event being viewed
+- the full organization object of the event's sponsoring organization
+- the current user's profile image
+*/
+
 class EventScreen extends ConsumerWidget {
   EventScreen({super.key, required this.event});
   //final String eventID;

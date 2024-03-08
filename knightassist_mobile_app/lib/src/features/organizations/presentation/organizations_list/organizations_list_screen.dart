@@ -13,6 +13,12 @@ import 'package:knightassist_mobile_app/src/features/students/data/students_repo
 import 'package:knightassist_mobile_app/src/features/students/domain/student_user.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 
+/*
+DATA NEEDED:
+- the list of all organizations
+- the current user's profile image
+*/
+
 class OrganizationsListScreen extends ConsumerStatefulWidget {
   const OrganizationsListScreen({super.key});
 
@@ -62,32 +68,33 @@ class _OrganizationsListScreenState
         Organization? org;
         StudentUser? student;
 
-    if (isOrg) {
-      org = organizationsRepository.getOrganization(user!.id);
-    }
+        if (isOrg) {
+          org = organizationsRepository.getOrganization(user!.id);
+        }
 
-    if (isStudent) {
-      studentsRepository.fetchStudent(user!.id);
-      student = studentsRepository.getStudent();
-    }
+        if (isStudent) {
+          studentsRepository.fetchStudent(user!.id);
+          student = studentsRepository.getStudent();
+        }
 
-     Widget getAppbarProfileImage() {
-      return FutureBuilder(
-          future: isOrg
-              ? imagesRepository.retrieveImage('2', org!.id)
-              : imagesRepository.retrieveImage('3', user!.id),
-          builder: (context, snapshot) {
-            final String imageUrl = snapshot.data ?? 'No initial data';
-            final String state = snapshot.connectionState.toString();
-            return ClipRRect(
-              borderRadius: BorderRadius.circular(25.0),
-              child: Image(
-                  semanticLabel: 'Profile picture',
-                  image: NetworkImage(imageUrl),
-                  height: 20),
-            );
-          });
-    }
+        Widget getAppbarProfileImage() {
+          return FutureBuilder(
+              future: isOrg
+                  ? imagesRepository.retrieveImage('2', org!.id)
+                  : imagesRepository.retrieveImage('3', user!.id),
+              builder: (context, snapshot) {
+                final String imageUrl = snapshot.data ?? 'No initial data';
+                final String state = snapshot.connectionState.toString();
+                return ClipRRect(
+                  borderRadius: BorderRadius.circular(25.0),
+                  child: Image(
+                      semanticLabel: 'Profile picture',
+                      image: NetworkImage(imageUrl),
+                      height: 20),
+                );
+              });
+        }
+
         return Scaffold(
           appBar: AppBar(
             title: const Text(
@@ -114,12 +121,12 @@ class _OrganizationsListScreenState
                 child: GestureDetector(
                   onTap: () {
                     if (isOrg) {
-                  context.pushNamed("organization", extra: org);
-                } else if (isStudent) {
-                  context.pushNamed("profileScreen", extra: student);
-                } else {
-                  context.pushNamed(AppRoute.signIn.name);
-                }
+                      context.pushNamed("organization", extra: org);
+                    } else if (isStudent) {
+                      context.pushNamed("profileScreen", extra: student);
+                    } else {
+                      context.pushNamed(AppRoute.signIn.name);
+                    }
                   },
                   child: Tooltip(
                     message: 'Go to your profile',

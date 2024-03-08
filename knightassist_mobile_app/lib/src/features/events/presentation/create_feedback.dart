@@ -8,6 +8,11 @@ import 'package:knightassist_mobile_app/src/features/organizations/domain/organi
 import 'package:knightassist_mobile_app/src/features/organizations/domain/update.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 
+/*
+DATA NEEDED:
+- the current user's profile image and ID
+*/
+
 class CreateFeedback extends ConsumerWidget {
   final Event event;
   const CreateFeedback({super.key, required this.event});

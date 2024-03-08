@@ -24,6 +24,12 @@ import 'package:knightassist_mobile_app/src/features/students/domain/student_use
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
+/*DATA NEEDED:
+- current user name, profile image
+- if user is org: next events they are hosting, number of followers they have
+- if user is student: next events they rsvpd for, total volunteer hours, volunteer hour goal
+*/
+
 List<Event> events = [];
 List<Announcement> announcements = [];
 List<PushNotification> notifications = [];
@@ -736,8 +742,7 @@ class HomeScreenTab extends ConsumerWidget {
     final imagesRepository = ref.watch(imagesRepositoryProvider);
     final eventsRepository = ref.watch(eventsRepositoryProvider);
     final announcementsRepository = ref.watch(announcementsRepositoryProvider);
-    final notificationsRepository =
-            ref.watch(notificationsRepositoryProvider);
+    final notificationsRepository = ref.watch(notificationsRepositoryProvider);
     bool isOrg = user?.role == "organization";
     bool isStudent = user?.role == "student";
     Organization? org;
