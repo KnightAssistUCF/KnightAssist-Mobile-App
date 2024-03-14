@@ -14,17 +14,19 @@ class MyApp extends ConsumerWidget {
       restorationScopeId: 'app',
       onGenerateTitle: (BuildContext context) => 'KnightAssist',
       theme: ThemeData(
-          useMaterial3: true,
-          primarySwatch: Colors.grey,
-          fontFamily: 'League Spartan',
-          appBarTheme: const AppBarTheme(
-              backgroundColor: Color.fromARGB(255, 0, 108, 81),
-              foregroundColor: Colors.white,
-              elevation: 0),
-          elevatedButtonTheme: ElevatedButtonThemeData(
-              style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(255, 91, 78, 119),
-                  foregroundColor: Colors.white)),),
+        useMaterial3: true,
+        primarySwatch: Colors.grey,
+        fontFamily: 'League Spartan',
+        appBarTheme: const AppBarTheme(
+            backgroundColor: Color.fromARGB(255, 0, 108, 81),
+            foregroundColor: Colors.white,
+            elevation: 0),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+            style: ElevatedButton.styleFrom(
+                backgroundColor: const Color.fromARGB(255, 91, 78, 119),
+                foregroundColor: Colors.white)),
+      ),
+      darkTheme: ThemeData.dark(),
     );
   }
 }

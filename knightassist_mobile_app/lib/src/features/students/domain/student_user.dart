@@ -22,8 +22,8 @@ class StudentUser extends AppUser {
   List<String> favoritedOrganizations;
   List<String> eventsRsvp;
   List<String> eventsHistory;
-  int totalVolunteerHours;
-  int semesterVolunteerHourGoal;
+  double totalVolunteerHours;
+  double semesterVolunteerHourGoal;
   List<String> userStudentSemesters;
   List<String> categoryTags;
   String recoveryToken;

@@ -129,7 +129,7 @@ class AccountScreen extends ConsumerWidget {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Stack(alignment: Alignment.center, children: [
-                Positioned(
+                /*Positioned(
                   top: 65,
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -165,8 +165,8 @@ class AccountScreen extends ConsumerWidget {
                       ),
                     )),
                   ),
-                ),
-                Positioned(
+                ),*/
+                /*Positioned(
                   top: 15,
                   child: Align(
                     alignment: Alignment.center,
@@ -190,9 +190,10 @@ class AccountScreen extends ConsumerWidget {
                           : getStudentProfileImage(),
                     ),
                   ),
-                ),
+                ),*/
+                toggleTheme(),
                 //const Positioned(top: 215, child: UserDataTable()),
-                Positioned(
+                /*Positioned(
                   top: 215,
                   child: SizedBox(
                     height: MediaQuery.sizeOf(context).height,
@@ -266,12 +267,17 @@ class AccountScreen extends ConsumerWidget {
                               onPressed: (context) =>
                                   context.pushNamed(AppRoute.tagSelection.name),
                             ),
+                            /*SettingsTile.switchTile(
+                                initialValue: _mode =
+                                    _mode == ThemeMode.light ? false : true,
+                                onToggle: model.toggleMode(),
+                                title: Text('Dark Mode'))*/
                           ],
                         ),
                       ],
                     ),
                   ),
-                ),
+                ),*/
               ]),
             ),
           ],
@@ -309,5 +315,43 @@ class UserDataTable extends ConsumerWidget {
         maxLines: 2,
       ))
     ]);
+  }
+}
+
+class ThemeModel with ChangeNotifier {
+  ThemeMode _mode;
+  ThemeMode get mode => _mode;
+  ThemeModel({ThemeMode mode = ThemeMode.light}) : _mode = mode;
+
+  void toggleMode() {
+    _mode = _mode == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
+    notifyListeners();
+  }
+}
+
+class toggleTheme extends StatelessWidget {
+  final ValueNotifier<ThemeMode> _notifier = ValueNotifier(ThemeMode.light);
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<ThemeMode>(
+      valueListenable: _notifier,
+      builder: (_, mode, __) {
+        return MaterialApp(
+          theme: ThemeData.light(),
+          darkTheme: ThemeData.dark(),
+          themeMode: mode, // Decides which theme to show, light or dark.
+          home: Scaffold(
+            body: Center(
+              child: ElevatedButton(
+                onPressed: () => _notifier.value =
+                    mode == ThemeMode.light ? ThemeMode.dark : ThemeMode.light,
+                child: Text('Toggle Theme'),
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 }

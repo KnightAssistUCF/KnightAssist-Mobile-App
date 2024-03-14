@@ -255,8 +255,8 @@ class StudentsRepository {
       String? lastName,
       String? email,
       String? profilePicPath,
-      int? totalVolunteerHours,
-      int? semesterVolunteerHourGoal,
+      double? totalVolunteerHours,
+      double? semesterVolunteerHourGoal,
       List<String>? categoryTags) async {
     Map<String, dynamic> params = {'studentID': studentID};
     if (firstName != null) params['firstName'] = firstName;
