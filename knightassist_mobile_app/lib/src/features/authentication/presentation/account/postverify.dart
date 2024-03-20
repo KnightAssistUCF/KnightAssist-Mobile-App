@@ -93,7 +93,7 @@ class PostVerify extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Additional Questions'),
+        title: const Text('Additional Information'),
       ),
       body: ListView(
         children: [
@@ -102,12 +102,22 @@ class PostVerify extends ConsumerWidget {
             height: 60,
             alignment: Alignment.center,
           ),
-          isOrg? const SizedBox(height: 0) : const Text(
+          isOrg?  const Text(
+            'Write a description of your organizaion to show volunteers what it\'s about!.',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+            textAlign: TextAlign.center,
+          ) : const Text(
             'What is your semester volunteer hour goal?',
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
             textAlign: TextAlign.center,
           ),
-          isOrg? const SizedBox(height: 0) : _buildTextField(labelText: 'Semester Goal'),
+          isOrg? Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: _buildTextField(labelText: 'Description'),
+          ) : Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: _buildTextField(labelText: 'Semester Goal', numbersOnly: true),
+          ),
           Text(
             isOrg? 'Select up to 10 tags for your organization.' : 'What are your interests? Select up to 10 below:',
             style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
@@ -130,6 +140,14 @@ class PostVerify extends ConsumerWidget {
           const Padding(
             padding: EdgeInsets.all(8.0),
             child: BuildTextButton(),
+          ),
+           const Text(
+            'Be sure to go to your profile by tapping the icon in the top right or going to the account screen to edit more information!',
+            style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+                color: Colors.black87),
+            textAlign: TextAlign.center,
           ),
         ],
       ),
@@ -179,9 +197,9 @@ class BuildTextButton extends StatelessWidget {
   }
 }
 
-TextField _buildTextField({String labelText = '', bool obscureText = false}) {
+TextField _buildTextField({String labelText = '', bool obscureText = false, bool numbersOnly = false}) {
   return TextField(
-    keyboardType: TextInputType.number,
+    keyboardType: numbersOnly? TextInputType.number : TextInputType.name,
     cursorColor: Colors.black54,
     cursorWidth: 1,
     obscureText: obscureText,
