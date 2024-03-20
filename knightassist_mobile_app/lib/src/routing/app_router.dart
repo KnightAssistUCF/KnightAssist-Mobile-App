@@ -122,8 +122,8 @@ GoRouter goRouter(GoRouterRef ref) {
             path: '/',
             name: AppRoute.home.name,
             builder: (context, state) => isLoggedIn
-                ? PostVerify()
-                : PostVerify(), // TEMP, change this to whatever screen you want to test (will need to rerun)
+                ? HomeScreen()
+                : SignInScreen(), // TEMP, change this to whatever screen you want to test (will need to rerun)
             routes: [
               GoRoute(
                   path: 'events',
