@@ -27,7 +27,6 @@ class ImagesRepository {
     var uri = Uri.https('knightassist-43ab3aeaada9.herokuapp.com',
         '/api/retrieveImage', params);
     var response = await http.get(uri);
-    print('Response: ${response.body}');
     var body = jsonDecode(response.body);
     switch (response.statusCode) {
       case 200:

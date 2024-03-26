@@ -3,9 +3,15 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:knightassist_mobile_app/src/common_widgets/custom_text_button.dart';
 import 'package:knightassist_mobile_app/src/features/events/presentation/events_list/events_list_screen.dart';
 import 'package:knightassist_mobile_app/src/features/home/presentation/home_screen.dart';
+import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+
+import '../data/events_repository.dart';
+import '../domain/event.dart';
 
 class QRScanner extends StatefulWidget {
   const QRScanner({super.key});
@@ -53,12 +59,12 @@ class _QRScannerState extends State<QRScanner> {
   }
 }
 
-class QRCodeScanner extends StatefulWidget {
+class QRCodeScanner extends ConsumerStatefulWidget {
   @override
   _QRCodeScannerState createState() => _QRCodeScannerState();
 }
 
-class _QRCodeScannerState extends State<QRCodeScanner> {
+class _QRCodeScannerState extends ConsumerState<QRCodeScanner> {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   Barcode? result;
   QRViewController? controller;
@@ -75,6 +81,46 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
 
   @override
   Widget build(BuildContext context) {
+    final eventsRepository = ref.watch(eventsRepositoryProvider);
+
+    Widget buildCheckInOutButton(Barcode result) {
+      String text = 'Check In';
+      if (result.code!.substring(result.code!.length - 3) == 'out') {
+        text = 'Check Out';
+      }
+      return FutureBuilder(
+        future: eventsRepository.fetchEventsList(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.hasError) {
+              return Center(
+                child: Text(
+                  '${snapshot.error} occurred',
+                  style: const TextStyle(fontSize: 18),
+                ),
+              );
+            } else if (snapshot.hasData) {
+              final event;
+              if (text == 'Check Out') {
+                event = eventsRepository.getEvent(
+                    result.code!.substring(0, result.code!.length - 3));
+              } else {
+                event = eventsRepository.getEvent(result.code!);
+              }
+              return CustomTextButton(
+                text: text,
+                onPressed: () =>
+                    context.pushNamed(AppRoute.postScan.name, extra: event),
+              );
+            }
+          }
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        },
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('QR Code Scanner'),
@@ -92,9 +138,8 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
             flex: 1,
             child: Center(
               child: (result != null)
-                  ? Text(
-                      'Barcode Type: ${describeEnum(result!.format)}   Data: ${result!.code}')
-                  : Text('Scan a code'),
+                  ? buildCheckInOutButton(result!)
+                  : const Text('Scan a code'),
             ),
           )
         ],
