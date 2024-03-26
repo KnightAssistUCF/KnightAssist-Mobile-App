@@ -27,6 +27,7 @@ class ImagesRepository {
     var uri = Uri.https('knightassist-43ab3aeaada9.herokuapp.com',
         '/api/retrieveImage', params);
     var response = await http.get(uri);
+    print('Response: ${response.body}');
     var body = jsonDecode(response.body);
     switch (response.statusCode) {
       case 200:
@@ -43,28 +44,29 @@ class ImagesRepository {
       "typeOfImage": typeOfImage,
       "id": idOfEntity,
     };
-    
-      var stream = new http.ByteStream(DelegatingStream.typed(imageFile.openRead()));
-      
-      var length = await imageFile.length();
 
-    var uri = Uri.https('knightassist-43ab3aeaada9.herokuapp.com',
-        '/api/storeImage', params);
-      
-      // create multipart request for including image file
-      var request = new http.MultipartRequest("POST", uri);
+    var stream =
+        new http.ByteStream(DelegatingStream.typed(imageFile.openRead()));
 
-      var multipartFile = new http.MultipartFile('file', stream, length,
-          filename: basename(imageFile.path));
-      request.files.add(multipartFile);
+    var length = await imageFile.length();
 
-      var response = await request.send();
-      print(response.statusCode);
+    var uri = Uri.https(
+        'knightassist-43ab3aeaada9.herokuapp.com', '/api/storeImage', params);
 
-      // listen for response
-      response.stream.transform(utf8.decoder).listen((value) {
-        print(value);
-      });
+    // create multipart request for including image file
+    var request = new http.MultipartRequest("POST", uri);
+
+    var multipartFile = new http.MultipartFile('file', stream, length,
+        filename: basename(imageFile.path));
+    request.files.add(multipartFile);
+
+    var response = await request.send();
+    print(response.statusCode);
+
+    // listen for response
+    response.stream.transform(utf8.decoder).listen((value) {
+      print(value);
+    });
   }
 }
 

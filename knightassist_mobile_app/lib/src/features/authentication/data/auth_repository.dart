@@ -63,7 +63,6 @@ class AuthRepository {
           List<String> favOrgs = [];
           List<String> eventsRSVP = [];
           List<String> eventsHistory = [];
-          List<String> userStudentSemesters = [];
           List<String> categoryTags = [];
 
           for (dynamic s in user['favoritedOrganizations']) {
@@ -74,9 +73,6 @@ class AuthRepository {
           }
           for (dynamic s in user['eventsHistory']) {
             eventsHistory.add(s);
-          }
-          for (dynamic s in user['userStudentSemesters']) {
-            userStudentSemesters.add(s);
           }
           for (dynamic s in user['categoryTags']) {
             categoryTags.add(s);
@@ -89,19 +85,16 @@ class AuthRepository {
                   email: user['email'],
                   firstName: user['firstName'],
                   lastName: user['lastName'],
-                  profilePicture: user['profilePicture'],
                   favoritedOrganizations: favOrgs,
                   eventsRsvp: eventsRSVP,
                   eventsHistory: eventsHistory,
                   totalVolunteerHours: user['totalVolunteerHours'],
                   semesterVolunteerHourGoal: user['semesterVolunteerHourGoal'],
-                  userStudentSemesters: userStudentSemesters,
                   categoryTags: categoryTags,
                   recoveryToken: user['recoveryToken'] ?? '',
                   confirmToken: user['confirmToken'] ?? '',
                   emailToken: user['EmailToken'] ?? '',
                   emailValidated: user['EmailValidated'],
-                  studentId: user['studentID'] ?? '',
                   password: user['password'],
                   createdAt: DateTime.parse(user['createdAt']),
                   updatedAt: DateTime.parse(user['updatedAt']),

@@ -36,7 +36,6 @@ class StudentsRepository {
           List<String> favoritedOrganizations = [];
           List<String> eventsRSVP = [];
           List<String> eventsHistory = [];
-          List<String> userStudentSemesters = [];
           List<String> tags = [];
 
           for (dynamic s in studentData['favoritedOrganizations']) {
@@ -47,9 +46,6 @@ class StudentsRepository {
           }
           for (dynamic s in studentData['eventsHistory']) {
             eventsHistory.add(s);
-          }
-          for (dynamic s in studentData['userStudentSemesters']) {
-            userStudentSemesters.add(s);
           }
           if (studentData['categoryTags'] != null) {
             for (dynamic s in studentData['categoryTags']) {
@@ -62,20 +58,17 @@ class StudentsRepository {
               email: studentData['email'] ?? '',
               firstName: studentData['firstName'] ?? '',
               lastName: studentData['lastName'] ?? '',
-              profilePicture: studentData['profilePicPath'] ?? '',
               favoritedOrganizations: favoritedOrganizations,
               eventsRsvp: eventsRSVP,
               eventsHistory: eventsHistory,
               totalVolunteerHours: studentData['totalVolunteerHours'],
               semesterVolunteerHourGoal:
                   studentData['semesterVolunteerHourGoal'],
-              userStudentSemesters: userStudentSemesters,
               categoryTags: tags,
               recoveryToken: studentData['recoveryToken'] ?? '',
               confirmToken: studentData['confirmToken'] ?? '',
               emailToken: studentData['EmailToken'] ?? '',
               emailValidated: studentData['emailValidated'] ?? false,
-              studentId: studentData['studentID'] ?? '',
               password: studentData['password'] ?? '',
               createdAt:
                   DateTime.parse(studentData['createdAt']) ?? DateTime.now(),
@@ -122,7 +115,6 @@ class StudentsRepository {
           List<String> favoritedOrganizations = [];
           List<String> eventsRSVP = [];
           List<String> eventsHistory = [];
-          List<String> userStudentSemesters = [];
           List<String> tags = [];
 
           for (dynamic s in studentData['favoritedOrganizations']) {
@@ -133,9 +125,6 @@ class StudentsRepository {
           }
           for (dynamic s in studentData['eventsHistory']) {
             eventsHistory.add(s);
-          }
-          for (dynamic s in studentData['userStudentSemesters']) {
-            userStudentSemesters.add(s);
           }
           if (studentData['categoryTags'] != null) {
             for (dynamic s in studentData['categoryTags']) {
@@ -148,20 +137,17 @@ class StudentsRepository {
               email: studentData['email'] ?? '',
               firstName: studentData['firstName'] ?? '',
               lastName: studentData['lastName'] ?? '',
-              profilePicture: studentData['profilePicPath'] ?? '',
               favoritedOrganizations: favoritedOrganizations,
               eventsRsvp: eventsRSVP,
               eventsHistory: eventsHistory,
               totalVolunteerHours: studentData['totalVolunteerHours'],
               semesterVolunteerHourGoal:
                   studentData['semesterVolunteerHourGoal'],
-              userStudentSemesters: userStudentSemesters,
               categoryTags: tags,
               recoveryToken: studentData['recoveryToken'] ?? '',
               confirmToken: studentData['confirmToken'] ?? '',
               emailToken: studentData['EmailToken'] ?? '',
               emailValidated: studentData['emailValidated'] ?? false,
-              studentId: studentData['studentID'] ?? '',
               password: studentData['password'] ?? '',
               createdAt:
                   DateTime.parse(studentData['createdAt']) ?? DateTime.now(),
@@ -187,13 +173,12 @@ class StudentsRepository {
     var uri = Uri.https(
         'knightassist-43ab3aeaada9.herokuapp.com', '/api/userSearch', params);
     var response = await http.get(uri);
-
+    print(response);
     final dynamic studentData = jsonDecode(response.body);
 
     List<String> favoritedOrganizations = [];
     List<String> eventsRSVP = [];
     List<String> eventsHistory = [];
-    List<String> userStudentSemesters = [];
     List<String> tags = [];
 
     for (dynamic s in studentData['favoritedOrganizations']) {
@@ -204,9 +189,6 @@ class StudentsRepository {
     }
     for (dynamic s in studentData['eventsHistory']) {
       eventsHistory.add(s);
-    }
-    for (dynamic s in studentData['userStudentSemesters']) {
-      userStudentSemesters.add(s);
     }
     if (studentData['categoryTags'] != null) {
       for (dynamic s in studentData['categoryTags']) {
@@ -219,19 +201,16 @@ class StudentsRepository {
         email: studentData['email'] ?? '',
         firstName: studentData['firstName'] ?? '',
         lastName: studentData['lastName'] ?? '',
-        profilePicture: studentData['profilePicPath'] ?? '',
         favoritedOrganizations: favoritedOrganizations,
         eventsRsvp: eventsRSVP,
         eventsHistory: eventsHistory,
         totalVolunteerHours: studentData['totalVolunteerHours'],
         semesterVolunteerHourGoal: studentData['semesterVolunteerHourGoal'],
-        userStudentSemesters: userStudentSemesters,
         categoryTags: tags,
         recoveryToken: studentData['recoveryToken'] ?? '',
         confirmToken: studentData['confirmToken'] ?? '',
         emailToken: studentData['EmailToken'] ?? '',
         emailValidated: studentData['emailValidated'] ?? false,
-        studentId: studentData['studentID'] ?? '',
         password: studentData['password'] ?? '',
         createdAt: DateTime.parse(studentData['createdAt']) ?? DateTime.now(),
         updatedAt: DateTime.parse(studentData['updatedAt']) ?? DateTime.now(),
