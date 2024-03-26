@@ -623,6 +623,7 @@ class EventCard extends ConsumerWidget {
           future: imagesRepository.retrieveImage('1', event.id),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
+              print("Done 1!");
               // If we got an error
               if (snapshot.hasError) {
                 return Center(
@@ -634,6 +635,7 @@ class EventCard extends ConsumerWidget {
 
                 // if we got our data
               } else if (snapshot.hasData) {
+                print("Clear 1!");
                 final String imageUrl = snapshot.data!;
                 return ClipRRect(
                     borderRadius: BorderRadius.circular(12.0),
@@ -737,13 +739,13 @@ class HomeScreenTab extends ConsumerWidget {
       await organizationsRepository.fetchOrganizationsList();
 
       if (isOrg) {
-        org = organizationsRepository.getOrganization(user!.id);
+        return organizationsRepository.getOrganization(user!.id);
       }
 
       if (isStudent) {
         await studentsRepository.fetchStudent(user!.id);
         //print("isStudent");
-        student = studentsRepository.getStudent();
+        return studentsRepository.getStudent();
       }
     }
 
@@ -754,6 +756,7 @@ class HomeScreenTab extends ConsumerWidget {
               : imagesRepository.retrieveImage('3', user!.id),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
+              print("Done 2!");
               if (snapshot.hasError) {
                 return Center(
                   child: Text(
@@ -762,6 +765,7 @@ class HomeScreenTab extends ConsumerWidget {
                   ),
                 );
               } else if (snapshot.hasData) {
+                print("Clear 2!");
                 final String imageUrl = snapshot.data!;
                 return ClipRRect(
                   borderRadius: BorderRadius.circular(25.0),
@@ -818,7 +822,10 @@ class HomeScreenTab extends ConsumerWidget {
         future: _fetchData(),
         builder: (ctx, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
+            print("Done 3!");
+            print("3: {$snapshot.data}");
             if (snapshot.hasError) {
+              print("Error 3!");
               return Center(
                 child: Text(
                   '{$snapshot.error} occurred',
@@ -826,6 +833,7 @@ class HomeScreenTab extends ConsumerWidget {
                 ),
               );
             } else if (snapshot.hasData) {
+              print("Clear 3!");
               final data = snapshot.data;
               if (data is StudentUser) {
                 student = data;
@@ -834,7 +842,7 @@ class HomeScreenTab extends ConsumerWidget {
               }
 
               // Widget here
-              Container(
+              return Container(
                 height: h,
                 child: Column(
                   children: [
@@ -994,9 +1002,11 @@ class HomeScreenTab extends ConsumerWidget {
                                             builder: (context, snapshot) {
                                               if (snapshot.connectionState ==
                                                   ConnectionState.done) {
+                                                print("Done 4!");
                                                 if (snapshot.hasError) {
                                                   return Center();
                                                 } else if (snapshot.hasData) {
+                                                  print("Clear 4!");
                                                   return Text(
                                                     snapshot.data!.length
                                                         .toString(),
@@ -1031,6 +1041,7 @@ class HomeScreenTab extends ConsumerWidget {
               );
             }
           }
+          print("Weird 3!");
           return const Center(
             child: CircularProgressIndicator(),
           );

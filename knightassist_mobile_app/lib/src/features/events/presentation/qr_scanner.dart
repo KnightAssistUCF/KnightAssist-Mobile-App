@@ -92,6 +92,7 @@ class _QRCodeScannerState extends ConsumerState<QRCodeScanner> {
         future: eventsRepository.fetchEventsList(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
+            print("QR Done!");
             if (snapshot.hasError) {
               return Center(
                 child: Text(
@@ -100,12 +101,16 @@ class _QRCodeScannerState extends ConsumerState<QRCodeScanner> {
                 ),
               );
             } else if (snapshot.hasData) {
+              print("QR Clear!");
               final event;
               if (text == 'Check Out') {
                 event = eventsRepository.getEvent(
                     result.code!.substring(0, result.code!.length - 3));
               } else {
                 event = eventsRepository.getEvent(result.code!);
+              }
+              if (event == null) {
+                return Text('Invalid QR Code.');
               }
               return CustomTextButton(
                 text: text,
