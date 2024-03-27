@@ -100,12 +100,13 @@ class _QRCodeScannerState extends ConsumerState<QRCodeScanner> {
           if (snapshot.connectionState == ConnectionState.done) {
             print("QR Done!");
             if (snapshot.hasError) {
+              print(snapshot.error);
               return Center(
                 child: Text(
                   '${snapshot.error} occurred',
                   style: const TextStyle(fontSize: 18),
                 ),
-              );
+              ); 
             } else if (snapshot.hasData) {
               print("QR Clear!");
               final event;
