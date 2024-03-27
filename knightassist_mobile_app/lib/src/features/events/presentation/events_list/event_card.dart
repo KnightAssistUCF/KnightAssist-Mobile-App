@@ -12,6 +12,12 @@ import 'package:knightassist_mobile_app/src/features/rsvp/data/rsvp_repository.d
 import 'package:knightassist_mobile_app/src/features/rsvp/presentation/rsvp_widget.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 
+/*
+DATA NEEDED:
+- the event's name, image, start time, end time, location, and number of rsvpd volunteers
+- the name and profile picture of the organization who sponsored the event
+*/
+
 class EventCard extends ConsumerWidget {
   const EventCard({super.key, required this.event, this.onPressed});
 
@@ -121,8 +127,7 @@ class EventCard extends ConsumerWidget {
                         sponsor?.name ?? '',
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
-                        style:
-                            const TextStyle(fontWeight: FontWeight.w400),
+                        style: const TextStyle(fontWeight: FontWeight.w400),
                         textAlign: TextAlign.start,
                       ),
                     ),

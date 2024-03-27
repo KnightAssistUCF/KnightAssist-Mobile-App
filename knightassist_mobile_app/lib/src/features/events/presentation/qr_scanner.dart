@@ -12,6 +12,12 @@ import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 import '../data/events_repository.dart';
 import '../domain/event.dart';
+/*
+DATA NEEDED:
+- the event object from gathered from the ID scanned in the QR code
+- send to the correct screen (check in or check out) based on the QR code scanned
+- show an error popup if there is an error (user already checked in, or scans a checkout code without checking in, etc)
+*/
 
 class QRScanner extends StatefulWidget {
   const QRScanner({super.key});

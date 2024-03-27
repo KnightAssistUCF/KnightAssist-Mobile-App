@@ -8,6 +8,12 @@ import 'package:knightassist_mobile_app/src/features/organizations/domain/update
     as prefix;
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 
+/*
+DATA NEEDED:
+- the complete object of the update being viewed
+- the current user's profile image
+*/
+
 class UpdateDetailScreen extends ConsumerWidget {
   const UpdateDetailScreen({super.key, required this.update});
   final Update update;

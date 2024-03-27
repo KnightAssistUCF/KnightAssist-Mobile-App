@@ -14,6 +14,11 @@ import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/services.dart';
 
+/*
+DATA NEEDED:
+- the current user's profile image and ID
+*/
+
 DateTime selectedDate = DateTime.now();
 TimeOfDay selectedStartTime = TimeOfDay.now();
 TimeOfDay selectedEndTime = TimeOfDay.now();

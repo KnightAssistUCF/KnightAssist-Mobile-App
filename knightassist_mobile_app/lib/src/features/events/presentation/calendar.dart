@@ -18,6 +18,13 @@ import 'package:knightassist_mobile_app/src/features/students/domain/student_use
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+/*
+DATA NEEDED:
+- user's profile picture
+- if current user is student: all events they rsvpd for with names, start and end times, and images
+- if current user is org: all events they are hosting with names, start and end times, and images
+*/
+
 List<Event> events = [];
 
 class CalendarView extends StatefulWidget {

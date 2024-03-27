@@ -7,6 +7,13 @@ import 'package:knightassist_mobile_app/src/features/events/domain/event_history
 import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 
+/*
+DATA NEEDED:
+- the full details of the event history object being viewed
+- the full event object of the event the history is for
+- the current user's profile image
+*/
+
 class HistoryDetailScreen extends ConsumerWidget {
   const HistoryDetailScreen({super.key, required this.event});
   final EventHistory event;

@@ -21,6 +21,12 @@ import 'package:knightassist_mobile_app/src/features/students/domain/student_use
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+/*
+DATA NEEDED:
+- the complete organization object of the organization being viewed
+- the current user's profile image and ID
+*/
+
 class OrganizationScreen extends ConsumerWidget {
   const OrganizationScreen({super.key, required this.organizationID});
   final String organizationID;

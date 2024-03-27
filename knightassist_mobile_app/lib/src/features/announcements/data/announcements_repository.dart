@@ -122,11 +122,11 @@ class AnnouncementsRepository {
   }
 
   Future<List<Announcement>> searchAnnouncements(String query) async {
-    assert(
-      _announcements.value.length <= 100,
-      'Client-side search should only be performed if the number of announcements is small. '
-      'Consider doing server-side search for larger datasets.',
-    );
+    //assert(
+    //_announcements.value.length <= 100,
+    //'Client-side search should only be performed if the number of announcements is small. '
+    //'Consider doing server-side search for larger datasets.',
+    //);
     final announcementsList = await fetchOrgAnnouncements(
       'Bird Helpers Unite',
       '657e15abf893392ca98665d1',

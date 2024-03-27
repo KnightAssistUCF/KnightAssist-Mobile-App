@@ -4,6 +4,12 @@ import 'package:knightassist_mobile_app/src/constants/app_sizes.dart';
 import 'package:knightassist_mobile_app/src/features/announcements/presentation/announcements_list/announcements_list.dart';
 import 'package:knightassist_mobile_app/src/features/announcements/presentation/announcements_list/announcements_search_text_field.dart';
 
+/*
+DATA NEEDED:
+- the list of all announcements
+- the current user's profile picture
+*/
+
 class AnnouncementsListScreen extends StatefulWidget {
   const AnnouncementsListScreen({super.key});
 

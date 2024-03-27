@@ -19,6 +19,14 @@ import 'package:knightassist_mobile_app/src/features/students/domain/student_use
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 import 'package:intl/intl.dart';
 
+/*
+DATA NEEDED:
+- the global leaderboard of all students if current user is a student
+- the leaderboard for an org if user is an org
+- the profile picture and name of each user in the leaderboard
+- the current user's profile image
+*/
+
 List<LeaderboardEntry> leaders = [];
 
 class leaderboard extends StatefulWidget {

@@ -9,6 +9,12 @@ import 'package:knightassist_mobile_app/src/features/organizations/domain/update
     as prefix;
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 
+/*
+DATA NEEDED:
+- the full object of the update that is viewed
+- the current user's profile image and ID
+*/
+
 class EditAnnouncement extends ConsumerWidget {
   EditAnnouncement({super.key, required this.announcement});
 

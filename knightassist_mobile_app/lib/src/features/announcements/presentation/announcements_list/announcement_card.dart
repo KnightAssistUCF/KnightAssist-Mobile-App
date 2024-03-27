@@ -5,6 +5,12 @@ import 'package:intl/intl.dart';
 import 'package:knightassist_mobile_app/src/constants/app_sizes.dart';
 import 'package:knightassist_mobile_app/src/features/announcements/domain/announcement.dart';
 
+/*
+DATA NEEDED:
+- the full object of the announcement being viewed
+- the full object of the organization who made the announcement
+*/
+
 class AnnouncementCard extends ConsumerWidget {
   const AnnouncementCard(
       {super.key, required this.announcement, this.onPressed});
