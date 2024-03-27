@@ -120,8 +120,8 @@ class _QRCodeScannerState extends ConsumerState<QRCodeScanner> {
               }
               return CustomTextButton(
                 text: text,
-                onPressed: () =>
-                    context.pushNamed(AppRoute.postScan.name, extra: event),
+                onPressed: () => context.pushNamed(AppRoute.postScan.name,
+                    extra: {'event': event, 'checkIn': text == 'Check In'}),
               );
             }
           }

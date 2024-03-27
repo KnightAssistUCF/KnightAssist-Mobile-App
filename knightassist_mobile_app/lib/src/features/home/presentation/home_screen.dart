@@ -96,57 +96,42 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
             ref.watch(announcementsRepositoryProvider);
         final notificationsRepository =
             ref.watch(notificationsRepositoryProvider);
-        organizationsRepository.fetchOrganizationsList();
-        if (user?.role == 'student') {
-          studentRepository.fetchStudent(user!.id);
-        }
-        if (isOrg) {
-          eventsRepository
-              .fetchEventsByOrg(user!.id)
-              .then((value) => setState(() {
-                    value.sort(
-                      (a, b) => a.startTime.compareTo(b.startTime),
-                    );
-                    events = [
-                      value.elementAt(value.length - 1),
-                      value.elementAt(value.length - 2)
-                    ];
-                  }));
-        } else {
-          eventsRepository
-              .fetchEventsByStudent(user!.id)
-              .then((value) => setState(() {
-                    value.sort(
-                      (a, b) => a.startTime.compareTo(b.startTime),
-                    );
-                    events = [
-                      value.elementAt(value.length - 1),
-                      value.elementAt(value.length - 2)
-                    ];
-                  }));
-        }
 
-        if (user.role == 'student') {
-          notificationsRepository
-              .pushNotifications(user.id)
-              .then((value) => setState(() {
-                    notifications = value;
-                  }));
-        }
+        dynamic fetchData() async {
+          organizationsRepository.fetchOrganizationsList();
 
-// TODO: load an org's announcements for org and fav org announcements for students (requires non null user to get org name)
-        announcementsRepository
-            .fetchOrgAnnouncements(
-                'My Organization!', '657e15abf893392ca98665d1')
-            .then((value) => setState(() {
-                  value.sort(
-                    (a, b) => a.date.compareTo(b.date),
-                  );
-                  announcements = [
-                    value.elementAt(value.length - 1),
-                    value.elementAt(value.length - 2)
-                  ];
-                }));
+          if (isOrg) {
+            eventsRepository
+                .fetchEventsByOrg(user!.id)
+                .then((value) => setState(() {
+                      value.sort(
+                        (a, b) => a.startTime.compareTo(b.startTime),
+                      );
+                      events = [
+                        value.elementAt(value.length - 1),
+                        value.elementAt(value.length - 2)
+                      ];
+                    }));
+          } else {
+            studentRepository.fetchStudent(user!.id);
+            eventsRepository
+                .fetchEventsByStudent(user!.id)
+                .then((value) => setState(() {
+                      value.sort(
+                        (a, b) => a.startTime.compareTo(b.startTime),
+                      );
+                      events = [
+                        value.elementAt(value.length - 1),
+                        value.elementAt(value.length - 2)
+                      ];
+                    }));
+            notificationsRepository
+                .pushNotifications(user.id)
+                .then((value) => setState(() {
+                      notifications = value;
+                    }));
+          }
+        }
 
         return Scaffold(
           floatingActionButton: isOrg
@@ -651,16 +636,29 @@ class EventCard extends ConsumerWidget {
       return FutureBuilder(
           future: imagesRepository.retrieveImage('1', event.id),
           builder: (context, snapshot) {
-            final String imageUrl = snapshot.data ?? 'No initial data';
-            final String state = snapshot.connectionState.toString();
-            return ClipRRect(
-                borderRadius: BorderRadius.circular(12.0),
-                child: Image(
-                  image: NetworkImage(imageUrl),
-                  height: 50,
-                  width: 50,
-                  fit: BoxFit.cover,
-                ));
+            if (snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.hasError) {
+                return Center(
+                  child: Text(
+                    '${snapshot.error} occurred',
+                    style: const TextStyle(fontSize: 18),
+                  ),
+                );
+              } else if (snapshot.hasData) {
+                final String imageUrl = snapshot.data!;
+                return ClipRRect(
+                    borderRadius: BorderRadius.circular(12.0),
+                    child: Image(
+                      image: NetworkImage(imageUrl),
+                      height: 50,
+                      width: 50,
+                      fit: BoxFit.cover,
+                    ));
+              }
+            }
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
           });
     }
 
@@ -736,7 +734,7 @@ class HomeScreenTab extends ConsumerWidget {
 
     final authRepository = ref.watch(authRepositoryProvider);
     final organizationsRepository = ref.watch(organizationsRepositoryProvider);
-    organizationsRepository.fetchOrganizationsList();
+
     final studentsRepository = ref.watch(studentsRepositoryProvider);
     final user = authRepository.currentUser;
     final imagesRepository = ref.watch(imagesRepositoryProvider);
@@ -747,15 +745,39 @@ class HomeScreenTab extends ConsumerWidget {
     bool isStudent = user?.role == "student";
     Organization? org;
     StudentUser? student;
+    List<Announcement> announcements = [];
 
-    if (isOrg) {
-      org = organizationsRepository.getOrganization(user!.id);
-    }
+    dynamic fetchData() async {
+      await organizationsRepository.fetchOrganizationsList();
+      if (isOrg) {
+        org = organizationsRepository.getOrganization(user!.id);
 
-    if (isStudent) {
-      studentsRepository.fetchStudent(user!.id);
-      //print("isStudent");
-      student = studentsRepository.getStudent();
+        final temp = await announcementsRepository
+            .fetchOrgAnnouncements(authRepository.currentUser!.id);
+        temp.sort(
+          (a, b) => a.date.compareTo(b.date),
+        );
+        announcements = [
+          temp.elementAt(temp.length - 1),
+          temp.elementAt(temp.length - 2)
+        ];
+      }
+
+      if (isStudent) {
+        await studentsRepository.fetchStudent(user!.id);
+        //print("isStudent");
+        student = studentsRepository.getStudent();
+        final temp = await announcementsRepository
+            .fetchStudentFavOrgAnnouncements(authRepository.currentUser!.id);
+        temp.sort(
+          (a, b) => a.date.compareTo(b.date),
+        );
+        announcements = [
+          temp.elementAt(temp.length - 1),
+          temp.elementAt(temp.length - 2)
+        ];
+      }
+      return 'Success';
     }
 
     Widget getAppbarProfileImage() {
@@ -764,14 +786,27 @@ class HomeScreenTab extends ConsumerWidget {
               ? imagesRepository.retrieveImage('2', user!.id)
               : imagesRepository.retrieveImage('3', user!.id),
           builder: (context, snapshot) {
-            final String imageUrl = snapshot.data ?? 'No initial data';
-            final String state = snapshot.connectionState.toString();
-            return ClipRRect(
-              borderRadius: BorderRadius.circular(25.0),
-              child: Image(
-                  semanticLabel: 'Profile picture',
-                  image: NetworkImage(imageUrl),
-                  height: 20),
+            if (snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.hasError) {
+                return Center(
+                  child: Text(
+                    '${snapshot.error} occurred',
+                    style: const TextStyle(fontSize: 18),
+                  ),
+                );
+              } else if (snapshot.hasData) {
+                final String imageUrl = snapshot.data!;
+                return ClipRRect(
+                  borderRadius: BorderRadius.circular(25.0),
+                  child: Image(
+                      semanticLabel: 'Profile picture',
+                      image: NetworkImage(imageUrl),
+                      height: 20),
+                );
+              }
+            }
+            return const Center(
+              child: CircularProgressIndicator(),
             );
           });
     }
@@ -786,23 +821,36 @@ class HomeScreenTab extends ConsumerWidget {
       return FutureBuilder(
           future: imagesRepository.retrieveImage('2', n.orgId),
           builder: (context, snapshot) {
-            final String imageUrl = snapshot.data ?? 'No initial data';
-            final String state = snapshot.connectionState.toString();
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.black,
-                    border: Border.all(width: 0.5)),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(25.0),
-                  child: Image(
-                      semanticLabel: 'Organization Profile picture',
-                      image: NetworkImage(imageUrl),
-                      height: 20),
-                ),
-              ),
+            if (snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.hasError) {
+                return Center(
+                  child: Text(
+                    '${snapshot.error} occurred',
+                    style: const TextStyle(fontSize: 18),
+                  ),
+                );
+              } else if (snapshot.hasData) {
+                final String imageUrl = snapshot.data!;
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.black,
+                        border: Border.all(width: 0.5)),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(25.0),
+                      child: Image(
+                          semanticLabel: 'Organization Profile picture',
+                          image: NetworkImage(imageUrl),
+                          height: 20),
+                    ),
+                  ),
+                );
+              }
+            }
+            return const Center(
+              child: CircularProgressIndicator(),
             );
           });
     }
@@ -822,9 +870,8 @@ class HomeScreenTab extends ConsumerWidget {
               //extra: eventsRepository.fetchEventsList().then((value) => e = value.firstWhere((element) => element.id == n.eventId)));
             } else if (n.type_is == 'orgAnnouncement') {
               Announcement? a;
-              announcementsRepository
-                  .fetchOrgAnnouncements(n.orgName, n.orgId)
-                  .then((value) => a = value.firstWhere(
+              announcementsRepository.fetchOrgAnnouncements(n.orgId).then(
+                  (value) => a = value.firstWhere(
                       (element) => n.message.contains(element.title)));
               context.pushNamed("announcementdetail", extra: a);
             }
@@ -909,181 +956,225 @@ class HomeScreenTab extends ConsumerWidget {
           )
         ],
       ),
-      body: Container(
-        height: h,
-        child: Column(
-          children: [
-            _topSection(w, isOrg, org, student),
-            Flexible(
-              child: ListView(
-                scrollDirection: Axis.vertical,
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: isOrg
-                        ? const SizedBox(
-                            height: 0,
-                          )
-                        : const Text(
-                            'Announcements',
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.w600),
+      body: FutureBuilder(
+        future: fetchData(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.hasError) {
+              return Center(
+                child: Text(
+                  '${snapshot.error} occurred',
+                  style: TextStyle(fontSize: 18),
+                ),
+              );
+            } else if (snapshot.hasData) {
+              return Container(
+                height: h,
+                child: Column(
+                  children: [
+                    _topSection(w, isOrg, org, student),
+                    Flexible(
+                      child: ListView(
+                        scrollDirection: Axis.vertical,
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: isOrg
+                                ? const SizedBox(
+                                    height: 0,
+                                  )
+                                : const Text(
+                                    'Announcements',
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w600),
+                                  ),
                           ),
-                  ),
-                  isOrg
-                      ? Center(
-                          child: OverflowBar(
+                          isOrg
+                              ? Center(
+                                  child: OverflowBar(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Card(
+                                          child: SizedBox(
+                                            width: (w / 2) - 30,
+                                            height: 100,
+                                            child: InkWell(
+                                              onTap: () => context.pushNamed(
+                                                  AppRoute
+                                                      .createAnnouncement.name),
+                                              child: const Center(
+                                                child: Column(children: [
+                                                  Icon(Icons.campaign),
+                                                  Text(
+                                                    "Create Announcement",
+                                                    style: TextStyle(
+                                                        fontSize: 20,
+                                                        fontWeight:
+                                                            FontWeight.w600),
+                                                    textAlign: TextAlign.center,
+                                                  )
+                                                ]),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Card(
+                                          child: SizedBox(
+                                            width: (w / 2) - 30,
+                                            height: 100,
+                                            child: InkWell(
+                                              onTap: () => context.pushNamed(
+                                                  AppRoute.createEvent.name),
+                                              child: const Center(
+                                                child: Column(children: [
+                                                  Icon(Icons.event),
+                                                  Text(
+                                                    "Create Event",
+                                                    style: TextStyle(
+                                                        fontSize: 20,
+                                                        fontWeight:
+                                                            FontWeight.w600),
+                                                    textAlign: TextAlign.center,
+                                                  )
+                                                ]),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                )
+                              : Column(children: [
+                                  for (var announcement in announcements)
+                                    AnnouncementCard(announcement: announcement)
+                                ]),
+                          SizedBox(),
+                          isOrg
+                              ? const SizedBox(height: 0)
+                              : Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    //Directionality(
+                                    //textDirection: TextDirection.rtl,
+                                    /*child:*/ TextButton(
+                                        onPressed: () {
+                                          context
+                                              .pushNamed(AppRoute.updates.name);
+                                        },
+                                        child: const Row(
+                                          children: [
+                                            Text('View All',
+                                                style: TextStyle(fontSize: 10)),
+                                            Icon(
+                                              Icons.arrow_forward_ios,
+                                              color: Colors.grey,
+                                              size: 15,
+                                            ),
+                                          ],
+                                        ))
+                                    //),
+                                  ],
+                                ),
+                          OverflowBar(
+                            alignment: MainAxisAlignment.center,
                             children: [
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: Card(
-                                  child: SizedBox(
-                                    width: (w / 2) - 30,
-                                    height: 100,
-                                    child: InkWell(
-                                      onTap: () => context.pushNamed(
-                                          AppRoute.createAnnouncement.name),
-                                      child: const Center(
-                                        child: Column(children: [
-                                          Icon(Icons.campaign),
-                                          Text(
-                                            "Create Announcement",
-                                            style: TextStyle(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.w600),
-                                            textAlign: TextAlign.center,
+                                child: Column(
+                                  children: [
+                                    isOrg
+                                        ? Text(
+                                            (org?.favorites.length).toString(),
+                                            style: TextStyle(fontSize: 40),
                                           )
-                                        ]),
-                                      ),
-                                    ),
-                                  ),
+                                        : CircularPercentIndicator(
+                                            radius: 40.0,
+                                            lineWidth: 5.0,
+                                            percent: (student!
+                                                            .totalVolunteerHours /
+                                                        student!
+                                                            .semesterVolunteerHourGoal) >
+                                                    100
+                                                ? 1.0
+                                                : (student!.totalVolunteerHours /
+                                                        student!
+                                                            .semesterVolunteerHourGoal) /
+                                                    100,
+                                            center: Text(
+                                              '${student!.totalVolunteerHours}/${student!.semesterVolunteerHourGoal}',
+                                              style: TextStyle(fontSize: 15),
+                                            ),
+                                            progressColor: const Color.fromARGB(
+                                                255, 91, 78, 119),
+                                          ),
+                                    Text(isOrg ? 'Followers' : 'Semester Goal'),
+                                  ],
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Card(
-                                  child: SizedBox(
-                                    width: (w / 2) - 30,
-                                    height: 100,
-                                    child: InkWell(
-                                      onTap: () => context
-                                          .pushNamed(AppRoute.createEvent.name),
-                                      child: const Center(
-                                        child: Column(children: [
-                                          Icon(Icons.event),
-                                          Text(
-                                            "Create Event",
-                                            style: TextStyle(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.w600),
-                                            textAlign: TextAlign.center,
-                                          )
-                                        ]),
-                                      ),
-                                    ),
-                                  ),
+                                padding: EdgeInsets.all(8.0),
+                                child: Column(
+                                  children: [
+                                    isOrg
+                                        ? FutureBuilder(
+                                            future: eventsRepository
+                                                .fetchEventsByOrg(user!.id),
+                                            builder: (context, snapshot) {
+                                              if (snapshot.connectionState ==
+                                                  ConnectionState.done) {
+                                                if (snapshot.hasError) {
+                                                  return Center(
+                                                    child: Text(
+                                                      '${snapshot.error} occurred',
+                                                      style: const TextStyle(
+                                                          fontSize: 18),
+                                                    ),
+                                                  );
+                                                } else if (snapshot.hasData) {
+                                                  return Text(
+                                                    snapshot.data!.length
+                                                        .toString(),
+                                                    style:
+                                                        TextStyle(fontSize: 40),
+                                                  );
+                                                }
+                                              }
+                                              return const Center(
+                                                child:
+                                                    CircularProgressIndicator(),
+                                              );
+                                            })
+                                        : Text(
+                                            student!.totalVolunteerHours
+                                                .toString(),
+                                            style: TextStyle(fontSize: 40),
+                                          ),
+                                    Text(isOrg
+                                        ? 'Events Hosted'
+                                        : 'Cumulative Hours'),
+                                  ],
                                 ),
-                              )
+                              ),
                             ],
                           ),
-                        )
-                      : Column(children: [
-                          for (var announcement in announcements)
-                            AnnouncementCard(announcement: announcement)
-                        ]),
-                  SizedBox(),
-                  isOrg
-                      ? const SizedBox(height: 0)
-                      : Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            //Directionality(
-                            //textDirection: TextDirection.rtl,
-                            /*child:*/ TextButton(
-                                onPressed: () {
-                                  context.pushNamed(AppRoute.updates.name);
-                                },
-                                child: const Row(
-                                  children: [
-                                    Text('View All',
-                                        style: TextStyle(fontSize: 10)),
-                                    Icon(
-                                      Icons.arrow_forward_ios,
-                                      color: Colors.grey,
-                                      size: 15,
-                                    ),
-                                  ],
-                                ))
-                            //),
-                          ],
-                        ),
-                  OverflowBar(
-                    alignment: MainAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          children: [
-                            isOrg
-                                ? Text(
-                                    (org?.favorites.length).toString(),
-                                    style: TextStyle(fontSize: 40),
-                                  )
-                                : CircularPercentIndicator(
-                                    radius: 40.0,
-                                    lineWidth: 5.0,
-                                    percent: (student!.totalVolunteerHours /
-                                                student!
-                                                    .semesterVolunteerHourGoal) >
-                                            100
-                                        ? 1.0
-                                        : (student!.totalVolunteerHours /
-                                                student!
-                                                    .semesterVolunteerHourGoal) /
-                                            100,
-                                    center: Text(
-                                      '${student.totalVolunteerHours}/${student!.semesterVolunteerHourGoal}',
-                                      style: TextStyle(fontSize: 15),
-                                    ),
-                                    progressColor:
-                                        const Color.fromARGB(255, 91, 78, 119),
-                                  ),
-                            Text(isOrg ? 'Followers' : 'Semester Goal'),
-                          ],
-                        ),
+                        ],
                       ),
-                      Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Column(
-                          children: [
-                            isOrg
-                                ? FutureBuilder(
-                                    future: eventsRepository
-                                        .fetchEventsByOrg(user!.id),
-                                    builder: (context, snapshot) {
-                                      final String state =
-                                          snapshot.connectionState.toString();
-                                      return Text(
-                                        snapshot.data?.length.toString() ??
-                                            'No initial data',
-                                        style: TextStyle(fontSize: 40),
-                                      );
-                                    })
-                                : Text(
-                                    student!.totalVolunteerHours.toString(),
-                                    style: TextStyle(fontSize: 40),
-                                  ),
-                            Text(isOrg ? 'Events Hosted' : 'Cumulative Hours'),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            )
-          ],
-        ),
+                    )
+                  ],
+                ),
+              );
+            }
+          }
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        },
       ),
       drawer: Drawer(
         child: ListView(

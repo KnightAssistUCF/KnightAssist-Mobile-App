@@ -70,15 +70,12 @@ class AnnouncementsRepository {
 
   // returns the list of all announcements from an organization
   Future<List<Announcement>> fetchOrgAnnouncements(
-      String organizationName, String organizationID) async {
-    Map<String, String?> params = {
-      "organizationName": organizationName,
-      "organizationID": organizationID
-    };
+      String organizationID) async {
+    Map<String, String?> params = {"organizationID": organizationID};
     var uri = Uri.https('knightassist-43ab3aeaada9.herokuapp.com',
-        '/api/loadAllOrgAnnouncements', params);
+        '/api/loadOwnOrgAnnouncements', params);
     var response = await http.get(uri);
-    //print(response.body);
+
     Map<String, dynamic> map = jsonDecode(response.body);
     switch (response.statusCode) {
       case 200:
@@ -128,7 +125,6 @@ class AnnouncementsRepository {
     //'Consider doing server-side search for larger datasets.',
     //);
     final announcementsList = await fetchOrgAnnouncements(
-      'Bird Helpers Unite',
       '657e15abf893392ca98665d1',
     ); // TODO: get value from auth
     return announcementsList

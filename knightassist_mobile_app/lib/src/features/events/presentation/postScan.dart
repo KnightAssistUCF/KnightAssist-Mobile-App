@@ -16,15 +16,14 @@ DATA NEEDED:
 */
 
 class PostScan extends ConsumerWidget {
-  const PostScan({super.key, required this.event});
+  const PostScan({super.key, required this.event, required this.checkIn});
   final Event event;
+  final bool checkIn;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
-    bool checkIn = false; // false if a volunteer has checked out
-    // this is to show the correct details
 
     final difference = event.endTime.difference(event.startTime).inHours;
 
