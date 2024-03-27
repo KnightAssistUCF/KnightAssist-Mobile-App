@@ -128,7 +128,7 @@ class AnnouncementsRepository {
       'Consider doing server-side search for larger datasets.',
     );
     final announcementsList = await fetchOrgAnnouncements(
-      'My Organization!',
+      'Bird Helpers Unite',
       '657e15abf893392ca98665d1',
     ); // TODO: get value from auth
     return announcementsList

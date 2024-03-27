@@ -22,7 +22,7 @@ class StudentUser extends AppUser {
   List<String> favoritedOrganizations;
   List<String> eventsRsvp;
   List<String> eventsHistory;
-  int totalVolunteerHours;
+  double totalVolunteerHours;
   int semesterVolunteerHourGoal;
   List<String> categoryTags;
   String recoveryToken;

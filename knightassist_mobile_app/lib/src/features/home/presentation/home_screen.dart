@@ -114,7 +114,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
       }
 
       await announcementsRepository
-          .fetchOrgAnnouncements('My Organization!', '657e15abf893392ca98665d1')
+          .fetchOrgAnnouncements(
+              'Bird Helpers Unite', '657e15abf893392ca98665d1')
           .then((value) => setState(() {
                 value.sort(
                   (a, b) => a.date.compareTo(b.date),
