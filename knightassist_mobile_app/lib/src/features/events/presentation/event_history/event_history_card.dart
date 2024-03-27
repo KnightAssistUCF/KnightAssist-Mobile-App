@@ -43,9 +43,12 @@ class EventHistoryCard extends ConsumerWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: ListTile(
                     contentPadding: EdgeInsets.zero,
+                    // Event history does not come with images
+                    /*
                     leading: ClipRRect(
                         borderRadius: BorderRadius.circular(12.0),
                         child: Image(image: AssetImage(''), height: 75)),
+                        */
                     title: Text(
                       eventHistory.name,
                       overflow: TextOverflow.ellipsis,

@@ -172,7 +172,7 @@ class _SignInContentsState extends ConsumerState<SignInContents>
               ),
             ),
             CustomTextButton(
-              text: 'Forgout your password?',
+              text: 'Forgot your password?',
               style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
               onPressed: () => state.isLoading
                   ? null
