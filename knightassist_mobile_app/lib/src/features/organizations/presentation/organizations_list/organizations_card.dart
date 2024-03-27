@@ -62,13 +62,26 @@ class _OrganizationCardState extends State<OrganizationCard> {
           return FutureBuilder(
               future: imagesRepository.retrieveImage('2', organization!.id),
               builder: (context, snapshot) {
-                final String imageUrl = snapshot.data ?? 'No initial data';
-                final String state = snapshot.connectionState.toString();
-                return ClipRRect(
-                  borderRadius: BorderRadius.circular(12.0),
-                  child: Image(
-                    image: NetworkImage(imageUrl),
-                  ),
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.hasError) {
+                    return Center(
+                      child: Text(
+                        '${snapshot.error} occurred',
+                        style: const TextStyle(fontSize: 18),
+                      ),
+                    );
+                  } else if (snapshot.hasData) {
+                    final String imageUrl = snapshot.data!;
+                    return ClipRRect(
+                      borderRadius: BorderRadius.circular(12.0),
+                      child: Image(
+                        image: NetworkImage(imageUrl),
+                      ),
+                    );
+                  }
+                }
+                return const Center(
+                  child: CircularProgressIndicator(),
                 );
               });
         }
@@ -77,20 +90,33 @@ class _OrganizationCardState extends State<OrganizationCard> {
           return FutureBuilder(
               future: imagesRepository.retrieveImage('4', organization!.id),
               builder: (context, snapshot) {
-                final String imageUrl = snapshot.data ?? 'No initial data';
-                final String state = snapshot.connectionState.toString();
-                return Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: 100,
-                  child: ClipRRect(
-                    borderRadius: const BorderRadius.horizontal(
-                        left: Radius.circular(20.0),
-                        right: Radius.circular(20.0)),
-                    child: Image(
-                      fit: BoxFit.cover,
-                      image: NetworkImage(imageUrl),
-                    ),
-                  ),
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.hasError) {
+                    return Center(
+                      child: Text(
+                        '${snapshot.error} occurred',
+                        style: const TextStyle(fontSize: 18),
+                      ),
+                    );
+                  } else if (snapshot.hasData) {
+                    final String imageUrl = snapshot.data!;
+                    return Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 100,
+                      child: ClipRRect(
+                        borderRadius: const BorderRadius.horizontal(
+                            left: Radius.circular(20.0),
+                            right: Radius.circular(20.0)),
+                        child: Image(
+                          fit: BoxFit.cover,
+                          image: NetworkImage(imageUrl),
+                        ),
+                      ),
+                    );
+                  }
+                }
+                return const Center(
+                  child: CircularProgressIndicator(),
                 );
               });
         }

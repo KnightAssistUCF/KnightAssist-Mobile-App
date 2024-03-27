@@ -59,14 +59,27 @@ class OrganizationScreen extends ConsumerWidget {
               ? imagesRepository.retrieveImage('2', org!.id)
               : imagesRepository.retrieveImage('3', user!.id),
           builder: (context, snapshot) {
-            final String imageUrl = snapshot.data ?? 'No initial data';
-            final String state = snapshot.connectionState.toString();
-            return ClipRRect(
-              borderRadius: BorderRadius.circular(25.0),
-              child: Image(
-                  semanticLabel: 'Profile picture',
-                  image: NetworkImage(imageUrl),
-                  height: 20),
+            if (snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.hasError) {
+                return Center(
+                  child: Text(
+                    '${snapshot.error} occurred',
+                    style: const TextStyle(fontSize: 18),
+                  ),
+                );
+              } else if (snapshot.hasData) {
+                final String imageUrl = snapshot.data!;
+                return ClipRRect(
+                  borderRadius: BorderRadius.circular(25.0),
+                  child: Image(
+                      semanticLabel: 'Profile picture',
+                      image: NetworkImage(imageUrl),
+                      height: 20),
+                );
+              }
+            }
+            return const Center(
+              child: CircularProgressIndicator(),
             );
           });
     }
@@ -247,32 +260,45 @@ class _OrganizationTopState extends State<OrganizationTop> {
           return FutureBuilder(
               future: imagesRepository.retrieveImage('2', organization.id),
               builder: (context, snapshot) {
-                final String imageUrl = snapshot.data ?? 'No initial data';
-                final String state = snapshot.connectionState.toString();
-                return Container(
-                  padding: const EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 2,
-                        blurRadius: 5,
-                        offset:
-                            const Offset(0, 3), // changes position of shadow
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.hasError) {
+                    return Center(
+                      child: Text(
+                        '${snapshot.error} occurred',
+                        style: const TextStyle(fontSize: 18),
                       ),
-                    ],
-                  ),
-                  child: ClipOval(
-                    child: SizedBox.fromSize(
-                      size: const Size.fromRadius(48),
-                      child: Image(
-                          semanticLabel: 'Organization profile picture',
-                          image: NetworkImage(imageUrl),
-                          fit: BoxFit.cover),
-                    ),
-                  ),
+                    );
+                  } else if (snapshot.hasData) {
+                    final String imageUrl = snapshot.data!;
+                    return Container(
+                      padding: const EdgeInsets.all(5),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 2,
+                            blurRadius: 5,
+                            offset: const Offset(
+                                0, 3), // changes position of shadow
+                          ),
+                        ],
+                      ),
+                      child: ClipOval(
+                        child: SizedBox.fromSize(
+                          size: const Size.fromRadius(48),
+                          child: Image(
+                              semanticLabel: 'Organization profile picture',
+                              image: NetworkImage(imageUrl),
+                              fit: BoxFit.cover),
+                        ),
+                      ),
+                    );
+                  }
+                }
+                return const Center(
+                  child: CircularProgressIndicator(),
                 );
               });
         }
@@ -281,17 +307,30 @@ class _OrganizationTopState extends State<OrganizationTop> {
           return FutureBuilder(
               future: imagesRepository.retrieveImage('4', organization.id),
               builder: (context, snapshot) {
-                final String imageUrl = snapshot.data ?? 'No initial data';
-                final String state = snapshot.connectionState.toString();
-                return Container(
-                  width: MediaQuery.sizeOf(context).width,
-                  height: 200,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      fit: BoxFit.fill,
-                      image: NetworkImage(imageUrl),
-                    ),
-                  ),
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.hasError) {
+                    return Center(
+                      child: Text(
+                        '${snapshot.error} occurred',
+                        style: const TextStyle(fontSize: 18),
+                      ),
+                    );
+                  } else if (snapshot.hasData) {
+                    final String imageUrl = snapshot.data!;
+                    return Container(
+                      width: MediaQuery.sizeOf(context).width,
+                      height: 200,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          fit: BoxFit.fill,
+                          image: NetworkImage(imageUrl),
+                        ),
+                      ),
+                    );
+                  }
+                }
+                return const Center(
+                  child: CircularProgressIndicator(),
                 );
               });
         }

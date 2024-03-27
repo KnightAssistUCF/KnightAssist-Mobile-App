@@ -59,14 +59,27 @@ class EventCard extends ConsumerWidget {
       return FutureBuilder(
           future: imagesRepository.retrieveImage('1', event.id),
           builder: (context, snapshot) {
-            final String imageUrl = snapshot.data ?? 'No initial data';
-            final String state = snapshot.connectionState.toString();
-            return Container(
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: NetworkImage(imageUrl), fit: BoxFit.cover)),
-              width: MediaQuery.sizeOf(context).width,
-              height: 100,
+            if (snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.hasError) {
+                return Center(
+                  child: Text(
+                    '${snapshot.error} occurred',
+                    style: const TextStyle(fontSize: 18),
+                  ),
+                );
+              } else if (snapshot.hasData) {
+                final String imageUrl = snapshot.data!;
+                return Container(
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: NetworkImage(imageUrl), fit: BoxFit.cover)),
+                  width: MediaQuery.sizeOf(context).width,
+                  height: 100,
+                );
+              }
+            }
+            return const Center(
+              child: CircularProgressIndicator(),
             );
           });
     }
@@ -75,11 +88,24 @@ class EventCard extends ConsumerWidget {
       return FutureBuilder(
           future: imagesRepository.retrieveImage('2', sponsor!.id),
           builder: (context, snapshot) {
-            final String imageUrl = snapshot.data ?? 'No initial data';
-            final String state = snapshot.connectionState.toString();
-            return ClipRRect(
-                borderRadius: BorderRadius.circular(25.0),
-                child: Image(image: NetworkImage(imageUrl), height: 20));
+            if (snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.hasError) {
+                return Center(
+                  child: Text(
+                    '${snapshot.error} occurred',
+                    style: const TextStyle(fontSize: 18),
+                  ),
+                );
+              } else if (snapshot.hasData) {
+                final String imageUrl = snapshot.data!;
+                return ClipRRect(
+                    borderRadius: BorderRadius.circular(25.0),
+                    child: Image(image: NetworkImage(imageUrl), height: 20));
+              }
+            }
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
           });
     }
 

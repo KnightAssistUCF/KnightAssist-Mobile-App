@@ -42,16 +42,29 @@ class EditOrganizationProfile extends ConsumerWidget {
 
     Widget getAppbarProfileImage() {
       return FutureBuilder(
-          future: imagesRepository.retrieveImage('2', user!.id),
+          future: imagesRepository.retrieveImage('2', user.id),
           builder: (context, snapshot) {
-            final String imageUrl = snapshot.data ?? 'No initial data';
-            final String state = snapshot.connectionState.toString();
-            return ClipRRect(
-              borderRadius: BorderRadius.circular(25.0),
-              child: Image(
-                  semanticLabel: 'Profile picture',
-                  image: NetworkImage(imageUrl),
-                  height: 20),
+            if (snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.hasError) {
+                return Center(
+                  child: Text(
+                    '${snapshot.error} occurred',
+                    style: const TextStyle(fontSize: 18),
+                  ),
+                );
+              } else if (snapshot.hasData) {
+                final String imageUrl = snapshot.data!;
+                return ClipRRect(
+                  borderRadius: BorderRadius.circular(25.0),
+                  child: Image(
+                      semanticLabel: 'Profile picture',
+                      image: NetworkImage(imageUrl),
+                      height: 20),
+                );
+              }
+            }
+            return const Center(
+              child: CircularProgressIndicator(),
             );
           });
     }
@@ -165,17 +178,30 @@ class _OrganizationTopState extends State<OrganizationTop> {
           return FutureBuilder(
               future: imagesRepository.retrieveImage('4', org!.id),
               builder: (context, snapshot) {
-                final String imageUrl = snapshot.data ?? 'No initial data';
-                final String state = snapshot.connectionState.toString();
-                return Container(
-                  width: width,
-                  height: 200,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      fit: BoxFit.fill,
-                      image: NetworkImage(imageUrl),
-                    ),
-                  ),
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.hasError) {
+                    return Center(
+                      child: Text(
+                        '${snapshot.error} occurred',
+                        style: const TextStyle(fontSize: 18),
+                      ),
+                    );
+                  } else if (snapshot.hasData) {
+                    final String imageUrl = snapshot.data!;
+                    return Container(
+                      width: width,
+                      height: 200,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          fit: BoxFit.fill,
+                          image: NetworkImage(imageUrl),
+                        ),
+                      ),
+                    );
+                  }
+                }
+                return const Center(
+                  child: CircularProgressIndicator(),
                 );
               });
         }
@@ -761,24 +787,38 @@ class _EditProfileImageState extends State<EditProfileImage> {
           return FutureBuilder(
               future: imagesRepository.retrieveImage('2', user.id),
               builder: (context, snapshot) {
-                final String imageUrl = snapshot.data ?? 'No initial data';
-                final String state = snapshot.connectionState.toString();
-                return EditableImage(
-                  onChange: _directUpdateImage,
-                  image: _organizationPicFile != null
-                      ? Image.file(_organizationPicFile!, fit: BoxFit.cover)
-                      : Image(image: NetworkImage(imageUrl)),
-                  size: 150,
-                  imagePickerTheme: ThemeData(
-                    primaryColor: Colors.yellow,
-                    shadowColor: Colors.deepOrange,
-                    colorScheme:
-                        const ColorScheme.light(background: Colors.indigo),
-                    iconTheme: const IconThemeData(color: Colors.red),
-                    fontFamily: 'Papyrus',
-                  ),
-                  imageBorder: Border.all(color: Colors.lime, width: 2),
-                  editIconBorder: Border.all(color: Colors.purple, width: 2),
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.hasError) {
+                    return Center(
+                      child: Text(
+                        '${snapshot.error} occurred',
+                        style: const TextStyle(fontSize: 18),
+                      ),
+                    );
+                  } else if (snapshot.hasData) {
+                    final String imageUrl = snapshot.data!;
+                    return EditableImage(
+                      onChange: _directUpdateImage,
+                      image: _organizationPicFile != null
+                          ? Image.file(_organizationPicFile!, fit: BoxFit.cover)
+                          : Image(image: NetworkImage(imageUrl)),
+                      size: 150,
+                      imagePickerTheme: ThemeData(
+                        primaryColor: Colors.yellow,
+                        shadowColor: Colors.deepOrange,
+                        colorScheme:
+                            const ColorScheme.light(background: Colors.indigo),
+                        iconTheme: const IconThemeData(color: Colors.red),
+                        fontFamily: 'Papyrus',
+                      ),
+                      imageBorder: Border.all(color: Colors.lime, width: 2),
+                      editIconBorder:
+                          Border.all(color: Colors.purple, width: 2),
+                    );
+                  }
+                }
+                return const Center(
+                  child: CircularProgressIndicator(),
                 );
               });
         }

@@ -92,7 +92,13 @@ class StudentsRepository {
         '/api/loadAllEventAttendees', params);
     var response = await http.get(uri);
     var body = jsonDecode(response.body);
-    final List<dynamic> dataList = jsonDecode(response.body);
+    List<dynamic> dataList;
+    if (body is Map) {
+      dataList = [];
+    } else {
+      dataList = jsonDecode(response.body) as List<dynamic>;
+    }
+
     //print("Responsebody:");
     //print(body);
     switch (response.statusCode) {

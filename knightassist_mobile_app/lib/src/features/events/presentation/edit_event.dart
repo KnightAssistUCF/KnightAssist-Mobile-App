@@ -83,14 +83,27 @@ class _EditEventState extends ConsumerState<EditEvent> {
       return FutureBuilder(
           future: imagesRepository.retrieveImage('2', user!.id),
           builder: (context, snapshot) {
-            final String imageUrl = snapshot.data ?? 'No initial data';
-            final String state = snapshot.connectionState.toString();
-            return ClipRRect(
-              borderRadius: BorderRadius.circular(25.0),
-              child: Image(
-                  semanticLabel: 'Profile picture',
-                  image: NetworkImage(imageUrl),
-                  height: 20),
+            if (snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.hasError) {
+                return Center(
+                  child: Text(
+                    '${snapshot.error} occurred',
+                    style: const TextStyle(fontSize: 18),
+                  ),
+                );
+              } else if (snapshot.hasData) {
+                final String imageUrl = snapshot.data!;
+                return ClipRRect(
+                  borderRadius: BorderRadius.circular(25.0),
+                  child: Image(
+                      semanticLabel: 'Profile picture',
+                      image: NetworkImage(imageUrl),
+                      height: 20),
+                );
+              }
+            }
+            return const Center(
+              child: CircularProgressIndicator(),
             );
           });
     }
@@ -505,24 +518,38 @@ class _EditImageState extends State<EditImage> {
           return FutureBuilder(
               future: imagesRepository.retrieveImage('1', event.id),
               builder: (context, snapshot) {
-                final String imageUrl = snapshot.data ?? 'No initial data';
-                final String state = snapshot.connectionState.toString();
-                return EditableImage(
-                  onChange: _directUpdateImage,
-                  image: _eventPicFile != null
-                      ? Image.file(_eventPicFile!, fit: BoxFit.cover)
-                      : Image(image: NetworkImage(imageUrl)),
-                  size: 150,
-                  imagePickerTheme: ThemeData(
-                    primaryColor: Colors.yellow,
-                    shadowColor: Colors.deepOrange,
-                    colorScheme:
-                        const ColorScheme.light(background: Colors.indigo),
-                    iconTheme: const IconThemeData(color: Colors.red),
-                    fontFamily: 'Papyrus',
-                  ),
-                  imageBorder: Border.all(color: Colors.lime, width: 2),
-                  editIconBorder: Border.all(color: Colors.purple, width: 2),
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.hasError) {
+                    return Center(
+                      child: Text(
+                        '${snapshot.error} occurred',
+                        style: const TextStyle(fontSize: 18),
+                      ),
+                    );
+                  } else if (snapshot.hasData) {
+                    final String imageUrl = snapshot.data!;
+                    return EditableImage(
+                      onChange: _directUpdateImage,
+                      image: _eventPicFile != null
+                          ? Image.file(_eventPicFile!, fit: BoxFit.cover)
+                          : Image(image: NetworkImage(imageUrl)),
+                      size: 150,
+                      imagePickerTheme: ThemeData(
+                        primaryColor: Colors.yellow,
+                        shadowColor: Colors.deepOrange,
+                        colorScheme:
+                            const ColorScheme.light(background: Colors.indigo),
+                        iconTheme: const IconThemeData(color: Colors.red),
+                        fontFamily: 'Papyrus',
+                      ),
+                      imageBorder: Border.all(color: Colors.lime, width: 2),
+                      editIconBorder:
+                          Border.all(color: Colors.purple, width: 2),
+                    );
+                  }
+                }
+                return const Center(
+                  child: CircularProgressIndicator(),
                 );
               });
         }
