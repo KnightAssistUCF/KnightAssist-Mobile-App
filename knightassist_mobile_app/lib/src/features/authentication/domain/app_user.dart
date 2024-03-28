@@ -1,5 +1,5 @@
 class AppUser {
-  const AppUser(
+  AppUser(
       {required this.id,
       required this.email,
       required this.role,
@@ -8,5 +8,5 @@ class AppUser {
   final String id;
   final String email;
   final String role;
-  final bool firstTimeLogin;
+  bool firstTimeLogin;
 }
