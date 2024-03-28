@@ -1,7 +1,11 @@
 import 'package:go_router/go_router.dart';
+import 'package:knightassist_mobile_app/src/features/authentication/data/auth_repository.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/sign_in/sign_in_controller.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/sign_in/auth_validators.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/sign_in/string_validators.dart';
+import 'package:knightassist_mobile_app/src/features/organizations/data/organizations_repository.dart';
+import 'package:knightassist_mobile_app/src/features/students/data/students_repository.dart';
+import 'package:knightassist_mobile_app/src/features/students/domain/student_user.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 import 'package:knightassist_mobile_app/src/utils/async_value_ui.dart';
 import 'package:knightassist_mobile_app/src/common_widgets/custom_text_button.dart';
@@ -12,14 +16,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SignInScreen extends StatelessWidget {
+class SignInScreen extends ConsumerWidget {
   const SignInScreen({super.key});
 
   static const emailKey = Key('email');
   static const passwordKey = Key('password');
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authRepository = ref.watch(authRepositoryProvider);
+    final studentsRepository = ref.watch(studentsRepositoryProvider);
+    final organizationsRepository = ref.watch(organizationsRepositoryProvider);
     return Scaffold(
       appBar: AppBar(title: const Text('Sign In')),
       body: ListView(
@@ -45,7 +52,27 @@ class SignInScreen extends StatelessWidget {
           ),
           SignInContents(
             onSignedIn: () {
-              context.pushNamed(AppRoute.homeScreen.name);
+              if (authRepository.currentUser?.role == 'student') {
+                StudentUser student;
+                studentsRepository
+                    .fetchStudent(authRepository.currentUser!.id)
+                    .then((value) => student = value);
+                if (student.firstTimeLogin) {
+                  context.pushNamed(AppRoute.postVerify.name);
+                } else {
+                  context.pushNamed(AppRoute.homeScreen.name);
+                }
+              } else {
+                organizationsRepository.fetchOrganizationsList();
+                final org = organizationsRepository
+                    .getOrganization(authRepository.currentUser!.id);
+                if (org!.firstTimeLogin) {
+                  context.pushNamed(AppRoute.postVerify.name);
+                } else {
+                  context.pushNamed(AppRoute.homeScreen.name);
+                }
+              }
+              //context.pushNamed(AppRoute.homeScreen.name);
             },
           ),
         ],
