@@ -55,7 +55,7 @@ class StudentUser extends AppUser {
     required this.firstTimeLogin,
     required this.createdAt,
     required this.updatedAt,
-  }) : super(id: '', email: '', role: '');
+  }) : super(id: '', email: '', role: '', firstTimeLogIn: false);
 
   factory StudentUser.fromJson(Map<String, dynamic> json) => StudentUser(
         id: json["_id"],

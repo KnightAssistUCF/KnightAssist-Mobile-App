@@ -52,27 +52,11 @@ class SignInScreen extends ConsumerWidget {
           ),
           SignInContents(
             onSignedIn: () {
-              if (authRepository.currentUser?.role == 'student') {
-                StudentUser student;
-                studentsRepository
-                    .fetchStudent(authRepository.currentUser!.id)
-                    .then((value) => student = value);
-                if (student.firstTimeLogin) {
-                  context.pushNamed(AppRoute.postVerify.name);
-                } else {
-                  context.pushNamed(AppRoute.homeScreen.name);
-                }
+              if (authRepository.currentUser!.firstTimeLogIn) {
+                context.pushNamed(AppRoute.postVerify.name);
               } else {
-                organizationsRepository.fetchOrganizationsList();
-                final org = organizationsRepository
-                    .getOrganization(authRepository.currentUser!.id);
-                if (org!.firstTimeLogin) {
-                  context.pushNamed(AppRoute.postVerify.name);
-                } else {
-                  context.pushNamed(AppRoute.homeScreen.name);
-                }
+                context.pushNamed(AppRoute.homeScreen.name);
               }
-              //context.pushNamed(AppRoute.homeScreen.name);
             },
           ),
         ],
