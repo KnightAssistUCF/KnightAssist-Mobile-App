@@ -62,8 +62,8 @@ class EventsRepository {
           for (dynamic s in eventData[0]['registeredVolunteers']) {
             registeredVolunteers.add(s);
           }
-          if (eventData[0]['tags'] != null) {
-            for (dynamic s in eventData[0]['tags']) {
+          if (eventData[0]['eventTags'] != null) {
+            for (dynamic s in eventData[0]['eventTags']) {
               tags.add(s);
             }
           }
