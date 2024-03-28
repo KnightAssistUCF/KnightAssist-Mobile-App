@@ -3,7 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:knightassist_mobile_app/src/common_widgets/primary_button.dart';
 import 'package:knightassist_mobile_app/src/common_widgets/responsive_scrollable_card.dart';
+import 'package:knightassist_mobile_app/src/features/authentication/data/auth_repository.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/presentation/sign_in/sign_in_screen.dart';
+import 'package:knightassist_mobile_app/src/features/organizations/data/organizations_repository.dart';
+import 'package:knightassist_mobile_app/src/features/students/data/students_repository.dart';
+import 'package:knightassist_mobile_app/src/features/students/domain/student_user.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 
 /*
@@ -71,9 +75,25 @@ class PostVerify extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final authRepository = ref.watch(authRepositoryProvider);
+    final user = authRepository.currentUser;
+    bool isOrg = user?.role == 'organization';
+    final organizationsRepository = ref.watch(organizationsRepositoryProvider);
+
+    StudentUser? student = null;
+
+    organizationsRepository.fetchOrganizationsList();
+    final org = organizationsRepository.getOrganization(user?.id ?? '');
+
+    final studentRepository = ref.watch(studentsRepositoryProvider);
+    if (user?.role == 'student') {
+      studentRepository.fetchStudent(user!.id);
+      student = studentRepository.getStudent();
+    }
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Additional Questions'),
+        title: const Text('Additional Information'),
       ),
       body: ListView(
         children: [
@@ -82,27 +102,37 @@ class PostVerify extends ConsumerWidget {
             height: 60,
             alignment: Alignment.center,
           ),
-          const Text(
+          isOrg?  const Text(
+            'Write a description of your organizaion to show volunteers what it\'s about!.',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+            textAlign: TextAlign.center,
+          ) : const Text(
             'What is your semester volunteer hour goal?',
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
             textAlign: TextAlign.center,
           ),
-          _buildTextField(labelText: 'Semester Goal'),
-          const Text(
-            'What are your interests? Select up to 10 below:',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+          isOrg? Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: _buildTextField(labelText: 'Description'),
+          ) : Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: _buildTextField(labelText: 'Semester Goal', numbersOnly: true),
+          ),
+          Text(
+            isOrg? 'Select up to 10 tags for your organization.' : 'What are your interests? Select up to 10 below:',
+            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
             textAlign: TextAlign.center,
           ),
-          const Text(
-            'This helps connect you to relevant organizations and events.',
-            style: TextStyle(
+          Text(
+            isOrg? 'This helps connect interested volunteers to your organization by suggesting them recommendations.' : 'This helps connect you to relevant organizations and events.',
+            style: const TextStyle(
                 fontSize: 15,
                 fontWeight: FontWeight.w500,
                 color: Colors.black87),
             textAlign: TextAlign.center,
           ),
           Padding(
-            padding: EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8.0),
             child: Wrap(
                 spacing: 5.0,
                 children: [for (var tag in tags) ChooseTags(tag: tag)]),
@@ -110,6 +140,14 @@ class PostVerify extends ConsumerWidget {
           const Padding(
             padding: EdgeInsets.all(8.0),
             child: BuildTextButton(),
+          ),
+           const Text(
+            'Be sure to go to your profile by tapping the icon in the top right or going to the account screen to edit more information!',
+            style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+                color: Colors.black87),
+            textAlign: TextAlign.center,
           ),
         ],
       ),
@@ -123,6 +161,7 @@ class BuildTextButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextButton(
+      // TODO: add api call here
       onPressed: () => showDialog(
           context: context,
           builder: (BuildContext context) => AlertDialog(
@@ -158,9 +197,9 @@ class BuildTextButton extends StatelessWidget {
   }
 }
 
-TextField _buildTextField({String labelText = '', bool obscureText = false}) {
+TextField _buildTextField({String labelText = '', bool obscureText = false, bool numbersOnly = false}) {
   return TextField(
-    keyboardType: TextInputType.number,
+    keyboardType: numbersOnly? TextInputType.number : TextInputType.name,
     cursorColor: Colors.black54,
     cursorWidth: 1,
     obscureText: obscureText,
