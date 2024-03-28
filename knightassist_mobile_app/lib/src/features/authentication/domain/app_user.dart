@@ -3,10 +3,10 @@ class AppUser {
       {required this.id,
       required this.email,
       required this.role,
-      required this.firstTimeLogIn});
+      required this.firstTimeLogin});
 
   final String id;
   final String email;
   final String role;
-  final bool firstTimeLogIn;
+  final bool firstTimeLogin;
 }

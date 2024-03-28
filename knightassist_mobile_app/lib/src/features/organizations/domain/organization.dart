@@ -75,7 +75,7 @@ class Organization extends AppUser {
     required this.profilePicPath,
     required this.role,
     required this.firstTimeLogin,
-  }) : super(id: '', email: '', role: '', firstTimeLogIn: false);
+  }) : super(id: '', email: '', role: '', firstTimeLogin: false);
 
   factory Organization.fromJson(Map<String, dynamic> json) => Organization(
         contact: Contact.fromJson(json["contact"]),

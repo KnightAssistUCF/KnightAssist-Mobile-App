@@ -31,7 +31,6 @@ class StudentUser extends AppUser {
   bool emailValidated;
   DateTime createdAt;
   DateTime updatedAt;
-
   bool firstTimeLogin;
 
   StudentUser({
@@ -55,7 +54,7 @@ class StudentUser extends AppUser {
     required this.firstTimeLogin,
     required this.createdAt,
     required this.updatedAt,
-  }) : super(id: '', email: '', role: '', firstTimeLogIn: false);
+  }) : super(id: '', email: '', role: '', firstTimeLogin: false);
 
   factory StudentUser.fromJson(Map<String, dynamic> json) => StudentUser(
         id: json["_id"],

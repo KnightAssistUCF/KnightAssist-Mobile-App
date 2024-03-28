@@ -52,7 +52,7 @@ class SignInScreen extends ConsumerWidget {
           ),
           SignInContents(
             onSignedIn: () {
-              if (authRepository.currentUser!.firstTimeLogIn) {
+              if (authRepository.currentUser!.firstTimeLogin) {
                 context.pushNamed(AppRoute.postVerify.name);
               } else {
                 context.pushNamed(AppRoute.homeScreen.name);
