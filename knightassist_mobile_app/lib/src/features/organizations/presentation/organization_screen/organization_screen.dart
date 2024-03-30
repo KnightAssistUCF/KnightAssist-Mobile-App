@@ -190,16 +190,18 @@ class OrganizationDetails extends ConsumerWidget {
                       padding: const EdgeInsets.all(8.0),
                       child: Center(
                         child: ElevatedButton(
-                          child: const Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Text(
-                              "Edit Profile",
-                              style: TextStyle(fontSize: 20),
+                            child: const Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text(
+                                "Edit Profile",
+                                style: TextStyle(fontSize: 20),
+                              ),
                             ),
-                          ),
-                          onPressed: () => context.pushNamed("editorgprofile",
-                              extra: organization),
-                        ),
+                            onPressed: () {
+                              context.pushNamed("editorgprofile",
+                                  extra: organization);
+                              print(organization.contact!.website);
+                            }),
                       ),
                     )
                   : const SizedBox(

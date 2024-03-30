@@ -15,17 +15,17 @@ class SocialMedia {
 
   factory SocialMedia.fromMap(Map<String, dynamic> map) {
     return SocialMedia(
-        facebook: map['facebook'] ?? '',
-        twitter: map['twitter'] ?? '',
-        instagram: map['instagram'] ?? '',
-        linkedIn: map['linkedIn'] ?? '',
-      );
+      facebook: map['facebook'] ?? '',
+      twitter: map['twitter'] ?? '',
+      instagram: map['instagram'] ?? '',
+      linkedIn: map['linkedin'] ?? '',
+    );
   }
 
   Map<String, dynamic> toMap() => {
         'facebook': facebook,
         'twitter': twitter,
         'instagram': instagram,
-        'linkedIn': linkedIn,
+        'linkedin': linkedIn,
       };
 }

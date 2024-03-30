@@ -712,9 +712,20 @@ class _TabBarOrgState extends State<TabBarOrg> with TickerProviderStateMixin {
                       if (website != '') {
                         org.contact?.website = website;
                       }
-                      if (email != '') {
-                        org.contact?.email = email;
+                      if (facebook != '') {
+                        org.contact?.socialMedia?.facebook = facebook;
                       }
+                      if (instagram != '') {
+                        org.contact?.socialMedia?.instagram = instagram;
+                      }
+                      if (twitter != '') {
+                        org.contact?.socialMedia?.twitter = twitter;
+                      }
+                      if (linkedin != '') {
+                        org.contact?.socialMedia?.linkedin = linkedin;
+                      }
+
+                      //print(org.contact?.toJson());
 
                       organizationsRepository.editOrganization(
                           user.id,
@@ -735,6 +746,8 @@ class _TabBarOrgState extends State<TabBarOrg> with TickerProviderStateMixin {
                           org?.location,
                           org?.categoryTags,
                           org.workingHoursPerWeek);
+                      //print(org.contact);
+                      //print(org.contact?.website);
                     },
                   ),
                 ),

@@ -92,7 +92,7 @@ class OrganizationsRepository {
               contact: orgData['contact'] == null
                   ? Contact()
                   : Contact(
-                      socialMedia: orgData['socialMedia'] == null
+                      socialMedia: orgData['contact']['socialMedia'] == null
                           ? SocialMedia()
                           : SocialMedia(
                               facebook: orgData['contact']['socialMedia']
@@ -201,6 +201,10 @@ class OrganizationsRepository {
               role: orgData['role'],
               firstTimeLogin: orgData['firstTimeLogin']);
 
+          //print(o.name);
+          //print(o.contact?.website);
+          //print(o.contact?.socialMedia?.facebook);
+
           list.add(o);
         }
 
@@ -303,6 +307,7 @@ class OrganizationsRepository {
           'eventHappeningNow': eventHappeningNow,
           'backgroundUrl': backgroundUrl,
           'eventsArray': events,
+          'workingHoursPerWeek': workingHoursPerWeek?.toJson()
         }));
     var body = jsonDecode(response.body);
     switch (response.statusCode) {
