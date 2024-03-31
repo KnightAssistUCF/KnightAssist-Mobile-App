@@ -30,6 +30,7 @@ TimeOfDay selectedEndTime = TimeOfDay.now();
 File? _eventPicFile;
 DateTime endDate = DateTime
     .now(); // used for events that have a different start date and end date
+List<String> selectedTags = [];
 
 class EditEvent extends ConsumerStatefulWidget {
   final Event event;
@@ -81,6 +82,8 @@ class _EditEventState extends ConsumerState<EditEvent> {
     final user = authRepository.currentUser;
     final imagesRepository = ref.watch(imagesRepositoryProvider);
     final organization = organizationsRepository.getOrganization(user!.id);
+
+    selectedTags = event.eventTags;
 
     Widget getAppbarProfileImage() {
       return FutureBuilder(
@@ -249,7 +252,25 @@ class _EditEventState extends ConsumerState<EditEvent> {
               ],
             ),
           ),
-          DropdownButtonExample(organization: organization),
+          const Center(
+            child: Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                "Event Tags",
+                style: TextStyle(fontSize: 17),
+              ),
+            ),
+          ),
+          const Center(
+            child: Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                "You can select tags for an event from the tags of your organization.",
+                style: TextStyle(fontSize: 14),
+              ),
+            ),
+          ),
+          TagsDropDown(organization: organization, event: event),
           Center(
             child: OverflowBar(children: [
               Padding(
@@ -280,7 +301,7 @@ class _EditEventState extends ConsumerState<EditEvent> {
                           endTime,
                           _eventPicFile?.path ??
                               'assets/orgdefaultbackground.png',
-                          event.eventTags,
+                          selectedTags,
                           event.semester.toString(),
                           int.parse(maxVolunteers));
                     },
@@ -470,16 +491,18 @@ class _SelectEndTimeState extends State<SelectEndTime> {
   }
 }
 
-class DropdownButtonExample extends StatefulWidget {
+class TagsDropDown extends StatefulWidget {
   Organization? organization;
-  DropdownButtonExample({super.key, required this.organization});
+  Event event;
+  TagsDropDown({super.key, required this.organization, required this.event});
 
   @override
-  State<DropdownButtonExample> createState() => _DropdownButtonExampleState();
+  State<TagsDropDown> createState() => _TagsDropDownState();
 }
 
-class _DropdownButtonExampleState extends State<DropdownButtonExample> {
+class _TagsDropDownState extends State<TagsDropDown> {
   late final Organization? organization;
+  late final Event event;
 
   @override
   void initState() {
@@ -510,7 +533,48 @@ class _DropdownButtonExampleState extends State<DropdownButtonExample> {
           .map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
           value: value,
-          child: Text(value),
+          enabled: false,
+          child: SizedBox(
+            height: 200,
+            width: 200,
+            child: StatefulBuilder(
+              builder: (context, menuSetState) {
+                final isSelected = selectedTags.contains(value);
+                return InkWell(
+                  onTap: () {
+                    isSelected
+                        ? selectedTags.remove(value)
+                        : selectedTags.add(value);
+                    //This rebuilds the StatefulWidget to update the button's text
+                    setState(() {});
+                    //This rebuilds the dropdownMenu Widget to update the check mark
+                    menuSetState(() {});
+                  },
+                  child: Container(
+                    height: double.infinity,
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Row(
+                      children: [
+                        if (isSelected)
+                          const Icon(Icons.check_box_outlined)
+                        else
+                          const Icon(Icons.check_box_outline_blank),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: Text(
+                            value,
+                            style: const TextStyle(
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
         );
       }).toList(),
     );
