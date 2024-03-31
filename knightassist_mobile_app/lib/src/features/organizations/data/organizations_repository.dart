@@ -141,9 +141,13 @@ class OrganizationsRepository {
                       tuesday: orgData['workingHoursPerWeek']['tuesday'] == null
                           ? WeekDay()
                           : WeekDay(
-                              start: DateTime.parse(
-                                  orgData['workingHoursPerWeek']['tuesday']
-                                      ['start']),
+                              start: orgData['workingHoursPerWeek']['tuesday']
+                                          ['start'] ==
+                                      null
+                                  ? DateTime.now()
+                                  : DateTime.parse(
+                                      orgData['workingHoursPerWeek']['tuesday']
+                                          ['start']),
                               end: DateTime.parse(orgData['workingHoursPerWeek']
                                   ['tuesday']['end'])),
                       wednesday: orgData['workingHoursPerWeek']['wednesday'] ==
@@ -294,11 +298,10 @@ class OrganizationsRepository {
           'id': organizationID,
           'name': name,
           'email': email,
-          'password': password,
+          //'password': password,
           'description': description,
           'logoUrl': logoUrl,
           'favorites': favorites,
-          'updates': updates,
           'calendarLink': calendarLink,
           'location': location,
           'categoryTags': categoryTags,
