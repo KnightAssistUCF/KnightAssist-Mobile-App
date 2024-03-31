@@ -729,7 +729,7 @@ class _TabBarOrgState extends State<TabBarOrg> with TickerProviderStateMixin {
 
                       organizationsRepository.editOrganization(
                           user.id,
-                          org?.password ?? '',
+                          null, // you cannot edit your password on this page
                           org?.name ?? '',
                           email,
                           description,

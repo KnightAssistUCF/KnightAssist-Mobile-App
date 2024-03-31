@@ -263,17 +263,28 @@ class StudentsRepository {
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
-        body: jsonEncode(<String, dynamic>{
-          'id': studentID,
-          'firstName': firstName,
-          'lastName': lastName,
-          'email': email,
-          'password': password,
-          'profilePicPath': profilePicPath,
-          'categoryTags': categoryTags,
-          'totalVolunteerHours': totalVolunteerHours,
-          'semesterVolunteerHourGoal': semesterVolunteerHourGoal,
-        }));
+        body: password == null
+            ? jsonEncode(<String, dynamic>{
+                'id': studentID,
+                'firstName': firstName,
+                'lastName': lastName,
+                'email': email,
+                'profilePicPath': profilePicPath,
+                'categoryTags': categoryTags,
+                'totalVolunteerHours': totalVolunteerHours,
+                'semesterVolunteerHourGoal': semesterVolunteerHourGoal,
+              })
+            : jsonEncode(<String, dynamic>{
+                'id': studentID,
+                'firstName': firstName,
+                'lastName': lastName,
+                'email': email,
+                'password': password,
+                'profilePicPath': profilePicPath,
+                'categoryTags': categoryTags,
+                'totalVolunteerHours': totalVolunteerHours,
+                'semesterVolunteerHourGoal': semesterVolunteerHourGoal,
+              }));
     var body = jsonDecode(response.body);
     switch (response.statusCode) {
       case 200:

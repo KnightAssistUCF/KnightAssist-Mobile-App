@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:knightassist_mobile_app/src/common_widgets/alert_dialogs.dart';
 import 'package:knightassist_mobile_app/src/common_widgets/responsive_center.dart';
 import 'package:knightassist_mobile_app/src/common_widgets/responsive_scrollable_card.dart';
 import 'package:knightassist_mobile_app/src/constants/breakpoints.dart';
@@ -54,7 +55,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     _firstNameController.text = student.firstName;
     _lastNameController.text = student.lastName;
     _emailController.text = student.email;
-    _passwordController.text = student.password;
+    //_passwordController.text = student.password; (student.password is encrypted so using this value in the API will not keep their same password)
   }
 
   @override
@@ -158,6 +159,46 @@ class _ProfileScreenState extends State<ProfileScreen> {
               });
         }
 
+        showConfirmDialog(BuildContext context) {
+          Widget okButton = TextButton(
+            child: Text("OK"),
+            onPressed: () {
+              studentsRepository.editStudent(
+                  student!.id,
+                  (password == '' || password == null) ? null : password,
+                  firstName,
+                  lastName,
+                  email,
+                  student.profilePicPath,
+                  student.totalVolunteerHours,
+                  student.semesterVolunteerHourGoal,
+                  student.categoryTags);
+              Navigator.of(context).pop();
+            },
+          );
+
+          Widget cancelButton = TextButton(
+            child: Text("Cancel"),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          );
+
+          AlertDialog alert = AlertDialog(
+            title: Text("Confirmation"),
+            content:
+                Text("Are you sure you want to edit your profile information?"),
+            actions: [okButton, cancelButton],
+          );
+
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return alert;
+            },
+          );
+        }
+
         return Scaffold(
           appBar: AppBar(
             title: const Text(
@@ -223,16 +264,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   padding: const EdgeInsets.all(8.0),
                   child: ElevatedButton(
                     onPressed: () => {
-                      studentsRepository.editStudent(
-                          student!.id,
-                          password,
-                          firstName,
-                          lastName,
-                          email,
-                          student.profilePicPath,
-                          student.totalVolunteerHours,
-                          student.semesterVolunteerHourGoal,
-                          student.categoryTags)
+                      showConfirmDialog(context),
                     },
                     child: const Padding(
                       padding: EdgeInsets.all(8.0),
