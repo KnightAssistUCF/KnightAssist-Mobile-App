@@ -182,52 +182,118 @@ class AuthRepository {
                       monday: user['workingHoursPerWeek']['monday'] == null
                           ? WeekDay()
                           : WeekDay(
-                              start: DateTime.parse(user['workingHoursPerWeek']
-                                  ['monday']['start']),
-                              end: DateTime.parse(user['workingHoursPerWeek']
+                              start: user['workingHoursPerWeek']['monday']
+                                          ['start'] ==
+                                      null
+                                  ? null
+                                  : DateTime.parse(
+                                  user['workingHoursPerWeek']['monday']
+                                      ['start']),
+                              end: user['workingHoursPerWeek']['monday']
+                                          ['end'] ==
+                                      null
+                                  ? null
+                                  :  DateTime.parse(user['workingHoursPerWeek']
                                   ['monday']['end'])),
                       tuesday: user['workingHoursPerWeek']['tuesday'] == null
                           ? WeekDay()
                           : WeekDay(
-                              start: DateTime.parse(user['workingHoursPerWeek']
-                                  ['tuesday']['start']),
-                              end: DateTime.parse(user['workingHoursPerWeek']
-                                  ['tuesday']['end'])),
+                              start: user['workingHoursPerWeek']['tuesday']
+                                          ['start'] ==
+                                      null
+                                  ? null
+                                  : DateTime.parse(
+                                      user['workingHoursPerWeek']['tuesday']
+                                          ['start']),
+                              end: user['workingHoursPerWeek']['tuesday']
+                                          ['end'] ==
+                                      null
+                                  ? null
+                                  : DateTime.parse(
+                                      user['workingHoursPerWeek']['tuesday']
+                                          ['end'])),
                       wednesday: user['workingHoursPerWeek']['wednesday'] ==
                               null
                           ? WeekDay()
                           : WeekDay(
-                              start: DateTime.parse(user['workingHoursPerWeek']
-                                  ['wednesday']['start']),
-                              end: DateTime.parse(user['workingHoursPerWeek']
+                              start: user['workingHoursPerWeek']['wednesday']
+                                          ['start'] ==
+                                      null
+                                  ? null
+                                  : DateTime.parse(
+                                  user['workingHoursPerWeek']['wednesday']
+                                      ['start']),
+                              end: user['workingHoursPerWeek']['wednesday']
+                                          ['end'] ==
+                                      null
+                                  ? null
+                                  : DateTime.parse(user['workingHoursPerWeek']
                                   ['wednesday']['end'])),
-                      thursday: user['workingHoursPerWeek']['thursday'] == null
+                      thursday: user['workingHoursPerWeek']['thursday'] ==
+                              null
                           ? WeekDay()
                           : WeekDay(
-                              start: DateTime.parse(user['workingHoursPerWeek']
-                                  ['thursday']['start']),
-                              end: DateTime.parse(user['workingHoursPerWeek']
+                              start: user['workingHoursPerWeek']['thursday']
+                                          ['start'] ==
+                                      null
+                                  ? null
+                                  : DateTime.parse(
+                                  user['workingHoursPerWeek']['thursday']
+                                      ['start']),
+                              end: user['workingHoursPerWeek']['thursday']
+                                          ['end'] ==
+                                      null
+                                  ? null
+                                  : DateTime.parse(user['workingHoursPerWeek']
                                   ['thursday']['end'])),
                       friday: user['workingHoursPerWeek']['friday'] == null
                           ? WeekDay()
                           : WeekDay(
-                              start: DateTime.parse(user['workingHoursPerWeek']
-                                  ['friday']['start']),
-                              end: DateTime.parse(user['workingHoursPerWeek']
+                              start: user['workingHoursPerWeek']['friday']
+                                          ['start'] ==
+                                      null
+                                  ? null
+                                  :DateTime.parse(
+                                  user['workingHoursPerWeek']['friday']
+                                      ['start']),
+                              end: user['workingHoursPerWeek']['friday']
+                                          ['end'] ==
+                                      null
+                                  ? null
+                                  :DateTime.parse(user['workingHoursPerWeek']
                                   ['friday']['end'])),
-                      saturday: user['workingHoursPerWeek']['saturday'] == null
+                      saturday: user['workingHoursPerWeek']['saturday'] ==
+                              null
                           ? WeekDay()
                           : WeekDay(
-                              start: DateTime.parse(user['workingHoursPerWeek']
-                                  ['saturday']['start']),
-                              end: DateTime.parse(user['workingHoursPerWeek']
+                              start: user['workingHoursPerWeek']['saturday']
+                                          ['start'] ==
+                                      null
+                                  ? null
+                                  :DateTime.parse(
+                                  user['workingHoursPerWeek']['saturday']
+                                      ['start']),
+                              end: user['workingHoursPerWeek']['saturday']
+                                          ['end'] ==
+                                      null
+                                  ? null
+                                  :DateTime.parse(user['workingHoursPerWeek']
                                   ['saturday']['end'])),
                       sunday: user['workingHoursPerWeek']['sunday'] == null
                           ? WeekDay()
                           : WeekDay(
-                              start: DateTime.parse(user['workingHoursPerWeek']
-                                  ['sunday']['start']),
-                              end: DateTime.parse(user['workingHoursPerWeek']
+                              start: user['workingHoursPerWeek']['sunday']
+                                          ['start'] ==
+                                      null
+                                  ? null
+                                  :DateTime.parse(
+                                  user['workingHoursPerWeek']['sunday']
+                                      ['start']),
+                              end: user['workingHoursPerWeek']['sunday']
+                                          ['end'] ==
+                                      null
+                                  ? null
+                                  :DateTime.parse(user['workingHoursPerWeek']
                                   ['sunday']['end'])),
                     ),
               recoveryTokenForOrg: user['recoveryTokenForORG'],

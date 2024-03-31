@@ -10,6 +10,7 @@ import 'package:knightassist_mobile_app/src/features/authentication/data/auth_re
 import 'package:knightassist_mobile_app/src/features/events/data/events_repository.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
 import 'package:knightassist_mobile_app/src/features/images/data/images_repository.dart';
+import 'package:knightassist_mobile_app/src/features/organizations/data/organizations_repository.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/update.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
@@ -76,8 +77,10 @@ class _EditEventState extends ConsumerState<EditEvent> {
     double w = MediaQuery.of(context).size.width;
     final eventsRepository = ref.watch(eventsRepositoryProvider);
     final authRepository = ref.watch(authRepositoryProvider);
+    final organizationsRepository = ref.watch(organizationsRepositoryProvider);
     final user = authRepository.currentUser;
     final imagesRepository = ref.watch(imagesRepositoryProvider);
+    final organization = organizationsRepository.getOrganization(user!.id);
 
     Widget getAppbarProfileImage() {
       return FutureBuilder(
@@ -246,6 +249,7 @@ class _EditEventState extends ConsumerState<EditEvent> {
               ],
             ),
           ),
+          DropdownButtonExample(organization: organization),
           Center(
             child: OverflowBar(children: [
               Padding(
@@ -462,6 +466,53 @@ class _SelectEndTimeState extends State<SelectEndTime> {
           ),
         ),
       ],
+    );
+  }
+}
+
+class DropdownButtonExample extends StatefulWidget {
+  Organization? organization;
+  DropdownButtonExample({super.key, required this.organization});
+
+  @override
+  State<DropdownButtonExample> createState() => _DropdownButtonExampleState();
+}
+
+class _DropdownButtonExampleState extends State<DropdownButtonExample> {
+  late final Organization? organization;
+
+  @override
+  void initState() {
+    super.initState();
+    organization = widget.organization;
+  }
+
+  late String dropdownValue = organization!.categoryTags.first;
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButton<String>(
+      value: dropdownValue,
+      icon: const Icon(Icons.arrow_downward),
+      elevation: 16,
+      style: const TextStyle(color: Colors.deepPurple),
+      underline: Container(
+        height: 2,
+        color: Colors.deepPurpleAccent,
+      ),
+      onChanged: (String? value) {
+        // This is called when the user selects an item.
+        setState(() {
+          dropdownValue = value!;
+        });
+      },
+      items: organization?.categoryTags
+          .map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(value),
+        );
+      }).toList(),
     );
   }
 }
