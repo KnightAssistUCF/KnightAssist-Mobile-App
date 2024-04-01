@@ -76,18 +76,6 @@ class EditOrganizationProfile extends ConsumerWidget {
         actions: <Widget>[
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: IconButton(
-              onPressed: () {},
-              tooltip: 'View notifications',
-              icon: const Icon(
-                Icons.notifications_outlined,
-                color: Colors.white,
-                semanticLabel: 'Notifications',
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
             child: GestureDetector(
               onTap: () {
                 context.pushNamed("organization", extra: userOrg);

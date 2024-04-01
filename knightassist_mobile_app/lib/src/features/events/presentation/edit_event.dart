@@ -59,6 +59,10 @@ class _EditEventState extends ConsumerState<EditEvent> {
   @override
   void initState() {
     event = widget.event;
+    _titleController.text = event.name;
+    _descriptionController.text = event.description;
+    _locationController.text = event.location;
+    _maxVolunteersController.text = event.maxAttendees.toString();
     super.initState();
   }
 
@@ -123,21 +127,9 @@ class _EditEventState extends ConsumerState<EditEvent> {
         actions: <Widget>[
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: IconButton(
-              onPressed: () {},
-              tooltip: 'View notifications',
-              icon: const Icon(
-                Icons.notifications_outlined,
-                color: Colors.white,
-                semanticLabel: 'Notifications',
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
             child: GestureDetector(
               onTap: () {
-                context.pushNamed(AppRoute.profileScreen.name);
+                context.pushNamed("organization", extra: organization);
               },
               child: Tooltip(
                 message: 'Go to your profile',
