@@ -118,6 +118,87 @@ class _EditEventState extends ConsumerState<EditEvent> {
           });
     }
 
+    showConfirmDialog(BuildContext context) {
+      Widget okButton = TextButton(
+        child: Text("OK"),
+        onPressed: () {
+          DateTime startTime = DateTime(selectedDate.year, selectedDate.month,
+              selectedDate.day, selectedStartTime.hour, selectedEndTime.minute);
+
+          DateTime endTime = DateTime(selectedDate.year, selectedDate.month,
+              selectedDate.day, selectedEndTime.hour, selectedEndTime.minute);
+
+          eventsRepository.editEvent(
+              event.id,
+              event.sponsoringOrganization,
+              title,
+              description,
+              location,
+              startTime,
+              endTime,
+              _eventPicFile?.path ?? 'assets/orgdefaultbackground.png',
+              selectedTags,
+              event.semester.toString(),
+              int.parse(maxVolunteers));
+          Navigator.of(context).pop();
+        },
+      );
+
+      Widget cancelButton = TextButton(
+        child: Text("Cancel"),
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+      );
+
+      AlertDialog alert = AlertDialog(
+        title: Text("Confirmation"),
+        content: Text("Are you sure you want to edit this event?"),
+        actions: [okButton, cancelButton],
+      );
+
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return alert;
+        },
+      );
+    }
+
+    showDeleteDialog(BuildContext context) {
+      Widget okButton = TextButton(
+        child: Text("OK"),
+        onPressed: () {
+          eventsRepository.deleteEvent(event.sponsoringOrganization, event.id);
+          Navigator.pop(context);
+        },
+      );
+
+      Widget cancelButton = TextButton(
+        child: Text("Cancel"),
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+      );
+
+      AlertDialog alert = AlertDialog(
+        title: Text(
+          "Caution",
+          style: TextStyle(color: Colors.red, fontWeight: FontWeight.w800),
+        ),
+        content: Text(
+            "Are you sure you want to delete this event? This action cannot be undone."),
+        actions: [okButton, cancelButton],
+      );
+
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return alert;
+        },
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -269,33 +350,7 @@ class _EditEventState extends ConsumerState<EditEvent> {
                 padding: const EdgeInsets.all(8.0),
                 child: ElevatedButton(
                     onPressed: () {
-                      DateTime startTime = DateTime(
-                          selectedDate.year,
-                          selectedDate.month,
-                          selectedDate.day,
-                          selectedStartTime.hour,
-                          selectedEndTime.minute);
-
-                      DateTime endTime = DateTime(
-                          selectedDate.year,
-                          selectedDate.month,
-                          selectedDate.day,
-                          selectedEndTime.hour,
-                          selectedEndTime.minute);
-
-                      eventsRepository.editEvent(
-                          event.id,
-                          event.sponsoringOrganization,
-                          title,
-                          description,
-                          location,
-                          startTime,
-                          endTime,
-                          _eventPicFile?.path ??
-                              'assets/orgdefaultbackground.png',
-                          selectedTags,
-                          event.semester.toString(),
-                          int.parse(maxVolunteers));
+                      showConfirmDialog(context);
                     },
                     child: const Padding(
                       padding: EdgeInsets.all(8.0),
@@ -309,9 +364,7 @@ class _EditEventState extends ConsumerState<EditEvent> {
                 padding: const EdgeInsets.all(8.0),
                 child: ElevatedButton(
                     onPressed: () {
-                      eventsRepository.deleteEvent(
-                          event.sponsoringOrganization, event.id);
-                      Navigator.pop(context);
+                      showDeleteDialog(context);
                     },
                     child: const Padding(
                       padding: EdgeInsets.all(8.0),

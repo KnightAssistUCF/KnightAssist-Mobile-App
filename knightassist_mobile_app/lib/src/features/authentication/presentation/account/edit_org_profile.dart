@@ -344,6 +344,92 @@ class _TabBarOrgState extends State<TabBarOrg> with TickerProviderStateMixin {
 
         final org = organizationsRepository.getOrganization(user!.id);
 
+        showConfirmDialog(BuildContext context) {
+          Widget okButton = TextButton(
+            child: Text("OK"),
+            onPressed: () {
+              List<String> updateIDs = [];
+              List<String> eventIDs = [];
+
+              for (Announcement a in org!.announcements) {
+                updateIDs.add(a.id);
+              }
+
+              for (Event e in org!.eventsArray) {
+                eventIDs.add(e.id);
+              }
+
+              if (email != '') {
+                org.contact?.email = email;
+              }
+              if (phone != '') {
+                org.contact?.phone = phone;
+              }
+              if (website != '') {
+                org.contact?.website = website;
+              }
+              if (facebook != '') {
+                org.contact?.socialMedia?.facebook = facebook;
+              }
+              if (instagram != '') {
+                org.contact?.socialMedia?.instagram = instagram;
+              }
+              if (twitter != '') {
+                org.contact?.socialMedia?.twitter = twitter;
+              }
+              if (linkedin != '') {
+                org.contact?.socialMedia?.linkedin = linkedin;
+              }
+
+              //print(org.contact?.toJson());
+
+              organizationsRepository.editOrganization(
+                  user.id,
+                  null, // you cannot edit your password on this page
+                  org?.name ?? '',
+                  email,
+                  description,
+                  org?.logoUrl ?? '',
+                  org?.favorites ?? [],
+                  org?.favorites ?? [],
+                  updateIDs,
+                  org?.calendarLink,
+                  org?.contact,
+                  org?.isActive,
+                  org?.eventHappeningNow,
+                  org?.backgroundUrl,
+                  eventIDs,
+                  org?.location,
+                  org?.categoryTags,
+                  org.workingHoursPerWeek);
+              //print(org.contact);
+              //print(org.contact?.website);
+              Navigator.of(context).pop();
+            },
+          );
+
+          Widget cancelButton = TextButton(
+            child: Text("Cancel"),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          );
+
+          AlertDialog alert = AlertDialog(
+            title: Text("Confirmation"),
+            content:
+                Text("Are you sure you want to edit your profile information?"),
+            actions: [okButton, cancelButton],
+          );
+
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return alert;
+            },
+          );
+        }
+
         return DefaultTabController(
           length: 2,
           child: Scaffold(
@@ -680,62 +766,7 @@ class _TabBarOrgState extends State<TabBarOrg> with TickerProviderStateMixin {
                       ),
                     ),
                     onPressed: () {
-                      List<String> updateIDs = [];
-                      List<String> eventIDs = [];
-
-                      for (Announcement a in org!.announcements) {
-                        updateIDs.add(a.id);
-                      }
-
-                      for (Event e in org!.eventsArray) {
-                        eventIDs.add(e.id);
-                      }
-
-                      if (email != '') {
-                        org.contact?.email = email;
-                      }
-                      if (phone != '') {
-                        org.contact?.phone = phone;
-                      }
-                      if (website != '') {
-                        org.contact?.website = website;
-                      }
-                      if (facebook != '') {
-                        org.contact?.socialMedia?.facebook = facebook;
-                      }
-                      if (instagram != '') {
-                        org.contact?.socialMedia?.instagram = instagram;
-                      }
-                      if (twitter != '') {
-                        org.contact?.socialMedia?.twitter = twitter;
-                      }
-                      if (linkedin != '') {
-                        org.contact?.socialMedia?.linkedin = linkedin;
-                      }
-
-                      //print(org.contact?.toJson());
-
-                      organizationsRepository.editOrganization(
-                          user.id,
-                          null, // you cannot edit your password on this page
-                          org?.name ?? '',
-                          email,
-                          description,
-                          org?.logoUrl ?? '',
-                          org?.favorites ?? [],
-                          org?.favorites ?? [],
-                          updateIDs,
-                          org?.calendarLink,
-                          org?.contact,
-                          org?.isActive,
-                          org?.eventHappeningNow,
-                          org?.backgroundUrl,
-                          eventIDs,
-                          org?.location,
-                          org?.categoryTags,
-                          org.workingHoursPerWeek);
-                      //print(org.contact);
-                      //print(org.contact?.website);
+                      showConfirmDialog(context);
                     },
                   ),
                 ),
