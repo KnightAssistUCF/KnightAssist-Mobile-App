@@ -96,17 +96,18 @@ class RSVPRepository {
         'eventName': eventName
       }),
     );
-    var body = jsonDecode(response.body);
+    //
     switch (response.statusCode) {
       case 200:
         // Handle API cases
-        print(response.body);
+        //print(response.body);
         return "Cancelled RSVP for event.";
       case 400:
         return "Incorrect credentials provided.";
       case 404:
         return "Event or user not found.";
       default:
+        var body = jsonDecode(response.body);
         String err = body["error"];
         throw Exception(err);
     }

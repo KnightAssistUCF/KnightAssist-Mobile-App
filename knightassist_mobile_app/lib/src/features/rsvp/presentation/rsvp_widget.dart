@@ -53,6 +53,7 @@ class _RSVPWidgetState extends State<RSVPWidget> {
         final user = authRepository.currentUser;
         studentRepository.fetchEventAttendees(event.id);
         final student = studentRepository.getStudent();
+        final rsvpRepository = ref.watch(rsvpRepositoryProvider);
 
         bool eventFull = event.registeredVolunteers.length >= event.maxAttendees
             ? true
@@ -68,34 +69,52 @@ class _RSVPWidgetState extends State<RSVPWidget> {
           onPressed: () {
             if (alreadyRSVPd) {
               // cancel RSVP
-              ref
+              /*ref
                   .read(rSVPControllerProvider.notifier)
                   .cancelrsvp(event.id, event.name)
                   .then((value) {
                 setState(() {
                   bodyString = value;
                 });
-              });
+              });*/
+
+              rsvpRepository
+                  .cancelRSVP(student.id, event.id, event.name)
+                  .then((value) => setState(() {
+                        bodyString = value;
+
+                        showAlertDialog(context: context, title: bodyString);
+                      }));
 
               student.eventsRsvp.remove(event.id);
-
-              showAlertDialog(context: context, title: 'Canceled RSVP');
+              if (event.attendees.contains(student.id)) {
+                event.attendees.remove(student.id);
+              }
             } else if (eventFull) {
               // do nothing
             } else {
               // RSVP for event
-              ref
+              /*ref
                   .read(rSVPControllerProvider.notifier)
                   .rsvp(event.id, event.name)
                   .then((value) {
                 setState(() {
                   bodyString = value;
                 });
-              });
+              });*/
+
+              rsvpRepository
+                  .setRSVP(student.id, event.id, event.name)
+                  .then((value) => setState(() {
+                        bodyString = value;
+
+                        showAlertDialog(context: context, title: bodyString);
+                      }));
 
               student.eventsRsvp.add(event.id);
-
-              showAlertDialog(context: context, title: 'RSVPd');
+              if (!event.attendees.contains(student.id)) {
+                event.attendees.add(student.id);
+              }
             }
           },
           text: alreadyRSVPd
