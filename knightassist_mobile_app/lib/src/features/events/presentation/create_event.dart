@@ -25,6 +25,7 @@ TimeOfDay selectedEndTime = TimeOfDay.now();
 File? _eventPicFile;
 DateTime endDate = DateTime
     .now(); // used for events that have a different start date and end date
+List<String> selectedTags = [];
 
 class CreateEvent extends ConsumerStatefulWidget {
   const CreateEvent({super.key});
@@ -218,7 +219,7 @@ class _CreateEventState extends ConsumerState<CreateEvent> {
                       startTime,
                       endTime,
                       _eventPicFile?.path ?? 'assets/orgdefaultbackground.png',
-                      [],
+                      selectedTags,
                       '',
                       int.parse(maxVolunteers));
                 },
@@ -232,6 +233,94 @@ class _CreateEventState extends ConsumerState<CreateEvent> {
           ),
         ]),
       ),
+    );
+  }
+}
+
+class TagsDropDown extends StatefulWidget {
+  Organization? organization;
+  TagsDropDown({super.key, required this.organization});
+
+  @override
+  State<TagsDropDown> createState() => _TagsDropDownState();
+}
+
+class _TagsDropDownState extends State<TagsDropDown> {
+  late final Organization? organization;
+
+  @override
+  void initState() {
+    super.initState();
+    organization = widget.organization;
+  }
+
+  late String dropdownValue = organization!.categoryTags.first;
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButton<String>(
+      value: dropdownValue,
+      icon: const Icon(Icons.arrow_downward),
+      elevation: 16,
+      style: const TextStyle(color: Colors.deepPurple),
+      underline: Container(
+        height: 2,
+        color: Colors.deepPurpleAccent,
+      ),
+      onChanged: (String? value) {
+        // This is called when the user selects an item.
+        setState(() {
+          dropdownValue = value!;
+        });
+      },
+      items: organization?.categoryTags
+          .map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          enabled: false,
+          child: SizedBox(
+            height: 200,
+            width: 200,
+            child: StatefulBuilder(
+              builder: (context, menuSetState) {
+                final isSelected = selectedTags.contains(value);
+                return InkWell(
+                  onTap: () {
+                    isSelected
+                        ? selectedTags.remove(value)
+                        : selectedTags.add(value);
+                    //This rebuilds the StatefulWidget to update the button's text
+                    setState(() {});
+                    //This rebuilds the dropdownMenu Widget to update the check mark
+                    menuSetState(() {});
+                  },
+                  child: Container(
+                    height: double.infinity,
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Row(
+                      children: [
+                        if (isSelected)
+                          const Icon(Icons.check_box_outlined)
+                        else
+                          const Icon(Icons.check_box_outline_blank),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: Text(
+                            value,
+                            style: const TextStyle(
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        );
+      }).toList(),
     );
   }
 }

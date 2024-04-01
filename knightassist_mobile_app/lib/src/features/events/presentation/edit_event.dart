@@ -187,7 +187,7 @@ class _EditEventState extends ConsumerState<EditEvent> {
           style: TextStyle(color: Colors.red, fontWeight: FontWeight.w800),
         ),
         content: Text(
-            "Are you sure you want to delete this event? This action cannot be undone."),
+            "Are you sure you want to delete this event? This action cannot be undone. Doing so will remove this event from all volunteers' past and future history."),
         actions: [okButton, cancelButton],
       );
 
