@@ -97,7 +97,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
         final notificationsRepository =
             ref.watch(notificationsRepositoryProvider);
 
-        dynamic fetchData() async {
+        /*dynamic fetchData() async {
           organizationsRepository.fetchOrganizationsList();
 
           if (isOrg) {
@@ -131,7 +131,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                       notifications = value;
                     }));
           }
-        }
+        }*/
 
         return Scaffold(
           floatingActionButton: isOrg
@@ -502,9 +502,11 @@ _topSection(double width, bool isOrg, Organization? org, StudentUser? student) {
           ),
           SizedBox(
             height: 175,
-            child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: [for (var event in events) EventCard(event: event)]),
+            child: events.isEmpty
+                ? Text("You have no upcoming events.")
+                : ListView(scrollDirection: Axis.horizontal, children: [
+                    for (var event in events) EventCard(event: event)
+                  ]),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -748,7 +750,11 @@ class HomeScreenTab extends ConsumerWidget {
     List<Announcement> announcements = [];
 
     dynamic fetchData() async {
+      if (isOrg) {
+      } else {}
+
       await organizationsRepository.fetchOrganizationsList();
+
       if (isOrg) {
         org = organizationsRepository.getOrganization(user!.id);
 
@@ -760,6 +766,16 @@ class HomeScreenTab extends ConsumerWidget {
         announcements = [
           temp.elementAt(temp.length - 1),
           temp.elementAt(temp.length - 2)
+        ];
+
+        final tempevents = await eventsRepository.fetchEventsByOrg(user!.id);
+
+        tempevents.sort(
+          (a, b) => a.startTime.compareTo(b.startTime),
+        );
+        events = [
+          tempevents.elementAt(tempevents.length - 1),
+          tempevents.elementAt(tempevents.length - 2)
         ];
       }
 
@@ -776,6 +792,20 @@ class HomeScreenTab extends ConsumerWidget {
           temp.elementAt(temp.length - 1),
           temp.elementAt(temp.length - 2)
         ];
+
+        final tempevents =
+            await eventsRepository.fetchEventsByStudent(user!.id);
+
+        tempevents.sort(
+          (a, b) => a.startTime.compareTo(b.startTime),
+        );
+        events = [
+          tempevents.elementAt(tempevents.length - 1),
+          tempevents.elementAt(tempevents.length - 2)
+        ];
+
+        notifications =
+            await notificationsRepository.pushNotifications(user.id);
       }
       return 'Success';
     }
