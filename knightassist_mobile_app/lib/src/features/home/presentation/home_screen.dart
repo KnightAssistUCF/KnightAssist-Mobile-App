@@ -669,7 +669,7 @@ class EventCard extends ConsumerWidget {
         child: InkWell(
           onTap: () => context.pushNamed("event", extra: event),
           child: SizedBox(
-            height: 150,
+            height: 155,
             width: 320,
             child: Column(
               children: [
