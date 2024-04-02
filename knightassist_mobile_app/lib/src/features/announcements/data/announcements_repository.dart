@@ -137,7 +137,9 @@ class AnnouncementsRepository {
       List<Announcement> announcements, String title) {
     try {
       return announcements
-          .firstWhere((announcement) => announcement.title == title);
+          .firstWhere((announcement) => title.contains(announcement.title));
+      //  .firstWhere((announcement) => announcement.title == title);
+      // not using exact matches so that announcements can be found from within a notification message
     } catch (e) {
       return null;
     }

@@ -751,6 +751,7 @@ class HomeScreenTab extends ConsumerWidget {
 
     dynamic fetchData() async {
       await organizationsRepository.fetchOrganizationsList();
+      await eventsRepository.fetchEventsList();
 
       if (isOrg) {
         org = organizationsRepository.getOrganization(user!.id);
@@ -897,9 +898,7 @@ class HomeScreenTab extends ConsumerWidget {
               //extra: eventsRepository.fetchEventsList().then((value) => e = value.firstWhere((element) => element.id == n.eventId)));
             } else if (n.type_is == 'orgAnnouncement') {
               Announcement? a;
-              announcementsRepository.fetchOrgAnnouncements(n.orgId).then(
-                  (value) => a = value.firstWhere(
-                      (element) => n.message.contains(element.title)));
+              a = announcementsRepository.getAnnouncement(n.message);
               context.pushNamed("announcementdetail", extra: a);
             }
           },
@@ -908,22 +907,26 @@ class HomeScreenTab extends ConsumerWidget {
                 border:
                     Border(bottom: BorderSide(color: Colors.grey, width: 1.0))),
             child: ListTile(
-              leading: Wrap(
-                children: [
-                  getNotifOrgProfileImage(n),
-                  n.read == true
-                      ? const SizedBox(
-                          height: 0,
-                        )
-                      : const Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Icon(
-                            Icons.circle,
-                            color: Colors.red,
-                            size: 10,
+              leading: SizedBox(
+                height: 50,
+                width: 70,
+                child: Wrap(
+                  children: [
+                    getNotifOrgProfileImage(n),
+                    n.read == true
+                        ? const SizedBox(
+                            height: 0,
+                          )
+                        : const Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Icon(
+                              Icons.circle,
+                              color: Colors.red,
+                              size: 10,
+                            ),
                           ),
-                        ),
-                ],
+                  ],
+                ),
               ),
               title: Text(
                 n.message,
@@ -949,14 +952,18 @@ class HomeScreenTab extends ConsumerWidget {
                         .where((element) => element.read == false)
                         .length
                         .toString()),
-                    child: PopupMenuButton(
-                      tooltip: 'View notifications',
-                      icon: const Icon(
-                        Icons.notifications_outlined,
-                        color: Colors.white,
-                        semanticLabel: 'Notifications',
+                    child: SizedBox(
+                      //height: 200,
+                      //width: 50,
+                      child: PopupMenuButton(
+                        tooltip: 'View notifications',
+                        icon: const Icon(
+                          Icons.notifications_outlined,
+                          color: Colors.white,
+                          semanticLabel: 'Notifications',
+                        ),
+                        itemBuilder: (ctx) => _getNotifItems(),
                       ),
-                      itemBuilder: (ctx) => _getNotifItems(),
                     ),
                   ),
                 )
