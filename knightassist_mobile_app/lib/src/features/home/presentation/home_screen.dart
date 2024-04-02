@@ -750,9 +750,6 @@ class HomeScreenTab extends ConsumerWidget {
     List<Announcement> announcements = [];
 
     dynamic fetchData() async {
-      if (isOrg) {
-      } else {}
-
       await organizationsRepository.fetchOrganizationsList();
 
       if (isOrg) {

@@ -11,11 +11,13 @@ import 'package:knightassist_mobile_app/src/common_widgets/responsive_center.dar
 import 'package:knightassist_mobile_app/src/common_widgets/tags.dart';
 import 'package:knightassist_mobile_app/src/constants/app_sizes.dart';
 import 'package:knightassist_mobile_app/src/features/authentication/data/auth_repository.dart';
+import 'package:knightassist_mobile_app/src/features/events/data/events_repository.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
 import 'package:knightassist_mobile_app/src/features/images/data/images_repository.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/data/organizations_repository.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/presentation/organization_screen.dart';
+import 'package:knightassist_mobile_app/src/features/reviews/presentation/event_reviews/event_review_card.dart';
 import 'package:knightassist_mobile_app/src/features/students/data/students_repository.dart';
 import 'package:knightassist_mobile_app/src/features/students/domain/student_user.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
@@ -134,7 +136,7 @@ class OrganizationScreen extends ConsumerWidget {
                 : CustomScrollView(
                     slivers: [
                       ResponsiveSliverCenter(
-                        padding: const EdgeInsets.all(Sizes.p16),
+                        //padding: const EdgeInsets.all(Sizes.p16),
                         child: OrganizationDetails(organization: organization),
                       )
                     ],
@@ -155,6 +157,7 @@ class OrganizationDetails extends ConsumerWidget {
     final authRepository = ref.watch(authRepositoryProvider);
     bool isOrg = authRepository.currentUser?.role == 'organization';
     bool current = authRepository.currentUser?.id == organization.id;
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -200,7 +203,7 @@ class OrganizationDetails extends ConsumerWidget {
                             onPressed: () {
                               context.pushNamed("editorgprofile",
                                   extra: organization);
-                              print(organization.contact!.website);
+                              //print(organization.contact!.website);
                             }),
                       ),
                     )
@@ -418,328 +421,396 @@ class _TabBarOrgState extends State<TabBarOrg> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 4,
-      child: Scaffold(
-        body: Column(
-          children: [
-            const TabBar(
-              tabs: [
-                Tab(icon: Text("About")),
-                Tab(icon: Text("Contact")),
-                Tab(icon: Text("Tags")),
-                Tab(icon: Text("Ratings")),
-              ],
-            ),
-            Expanded(
-              child: TabBarView(
-                children: [
-                  ListView(
+    return Consumer(
+      builder: (context, ref, child) {
+        final eventsRepository = ref.watch(eventsRepositoryProvider);
+
+        List<Review> orgReviews = [];
+
+        double numRatings = 0;
+        double avgRating = 0;
+        double ratingSum = 0;
+
+        dynamic fetchData() async {
+          final orgEvents =
+              await eventsRepository.fetchEventsByOrg(organization.id);
+
+          for (Event e in orgEvents) {
+            for (Review rev in e.feedback) {
+              orgReviews.add(rev);
+              ratingSum += rev.rating;
+              numRatings += 1;
+            }
+          }
+
+          avgRating = ratingSum / numRatings;
+
+          return 'Success';
+        }
+
+        return DefaultTabController(
+          length: 4,
+          child: Scaffold(
+            body: Column(
+              children: [
+                const TabBar(
+                  tabs: [
+                    Tab(icon: Text("About")),
+                    Tab(icon: Text("Contact")),
+                    Tab(icon: Text("Tags")),
+                    Tab(icon: Text("Ratings")),
+                  ],
+                ),
+                Expanded(
+                  child: TabBarView(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          organization.description ?? '',
-                          style: const TextStyle(fontSize: 20),
-                        ),
-                      ),
-                    ],
-                  ),
-                  ListView(
-                    children: [
-                      Wrap(
-                        alignment: WrapAlignment.center,
+                      ListView(
                         children: [
-                          organization.contact?.socialMedia?.instagram == ''
-                              ? const SizedBox(
-                                  height: 0,
-                                )
-                              : IconButton(
-                                  onPressed: () async {
-                                    final Uri url = Uri.parse(organization
-                                            .contact?.socialMedia?.instagram ??
-                                        '');
-                                    if (!await launchUrl(url)) {
-                                      throw Exception('Could not launch $url');
-                                    }
-                                  },
-                                  icon:
-                                      const FaIcon(FontAwesomeIcons.instagram)),
-                          organization.contact?.socialMedia?.facebook == ''
-                              ? const SizedBox(
-                                  height: 0,
-                                )
-                              : IconButton(
-                                  onPressed: () async {
-                                    final Uri url = Uri.parse(organization
-                                            .contact?.socialMedia?.facebook ??
-                                        '');
-                                    if (!await launchUrl(url)) {
-                                      throw Exception('Could not launch $url');
-                                    }
-                                  },
-                                  icon:
-                                      const FaIcon(FontAwesomeIcons.facebook)),
-                          organization.contact?.socialMedia?.twitter == ''
-                              ? const SizedBox(
-                                  height: 0,
-                                )
-                              : IconButton(
-                                  onPressed: () async {
-                                    final Uri url = Uri.parse(organization
-                                            .contact?.socialMedia?.twitter ??
-                                        '');
-                                    if (!await launchUrl(url)) {
-                                      throw Exception('Could not launch $url');
-                                    }
-                                  },
-                                  icon:
-                                      const FaIcon(FontAwesomeIcons.xTwitter)),
-                          organization.contact?.socialMedia?.linkedin == ''
-                              ? const SizedBox(
-                                  height: 0,
-                                )
-                              : IconButton(
-                                  onPressed: () async {
-                                    final Uri url = Uri.parse(organization
-                                            .contact?.socialMedia?.linkedin ??
-                                        '');
-                                    if (!await launchUrl(url)) {
-                                      throw Exception('Could not launch $url');
-                                    }
-                                  },
-                                  icon: const FaIcon(FontAwesomeIcons.linkedin))
-                        ],
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          alignment: Alignment.centerLeft,
-                          child: TextButton(
-                            onPressed: () async {
-                              final Uri url = Uri.parse(
-                                  'mailto:${organization.contact?.email}?subject=Hello from KnightAssist&body=I am interested in volunteering with your organization!	');
-                              if (!await launchUrl(url)) {
-                                throw Exception('Could not launch $url');
-                              }
-                            },
-                            child: Wrap(children: [
-                              const Icon(Icons.email_outlined),
-                              Text(
-                                organization.contact?.email ?? '',
-                                style: const TextStyle(fontSize: 20),
-                              ),
-                            ]),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          alignment: Alignment.centerLeft,
-                          child: TextButton(
-                            onPressed: () async {
-                              final Uri url = Uri.parse(
-                                  'tel:${organization.contact?.phone}');
-                              if (!await launchUrl(url)) {
-                                throw Exception('Could not launch $url');
-                              }
-                            },
-                            child: Wrap(children: [
-                              const Icon(Icons.phone_rounded),
-                              Text(
-                                organization.contact?.phone ?? '',
-                                style: const TextStyle(fontSize: 20),
-                              ),
-                            ]),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          alignment: Alignment.centerLeft,
-                          child: Wrap(children: [
-                            const SizedBox(width: 5),
-                            const Icon(Icons.location_on),
-                            Text(
-                              organization.location ?? '',
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              organization.description ?? '',
                               style: const TextStyle(fontSize: 20),
                             ),
-                          ]),
-                        ),
+                          ),
+                        ],
                       ),
-                      organization.contact?.website == ''
-                          ? const SizedBox(height: 0)
-                          : Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Container(
-                                alignment: Alignment.centerLeft,
-                                child: TextButton(
-                                  onPressed: () async {
-                                    final Uri url = Uri.parse(
-                                        organization.contact?.website ?? '');
-                                    if (!await launchUrl(url)) {
-                                      throw Exception('Could not launch $url');
-                                    }
-                                  },
-                                  child: Wrap(children: [
-                                    const Icon(Icons.computer),
-                                    Text(
-                                      organization.contact?.website ?? '',
-                                      style: const TextStyle(fontSize: 20),
-                                    ),
-                                  ]),
-                                ),
+                      ListView(
+                        children: [
+                          Wrap(
+                            alignment: WrapAlignment.center,
+                            children: [
+                              organization.contact?.socialMedia?.instagram == ''
+                                  ? const SizedBox(
+                                      height: 0,
+                                    )
+                                  : IconButton(
+                                      onPressed: () async {
+                                        final Uri url = Uri.parse(organization
+                                                .contact
+                                                ?.socialMedia
+                                                ?.instagram ??
+                                            '');
+                                        if (!await launchUrl(url)) {
+                                          throw Exception(
+                                              'Could not launch $url');
+                                        }
+                                      },
+                                      icon: const FaIcon(
+                                          FontAwesomeIcons.instagram)),
+                              organization.contact?.socialMedia?.facebook == ''
+                                  ? const SizedBox(
+                                      height: 0,
+                                    )
+                                  : IconButton(
+                                      onPressed: () async {
+                                        final Uri url = Uri.parse(organization
+                                                .contact
+                                                ?.socialMedia
+                                                ?.facebook ??
+                                            '');
+                                        if (!await launchUrl(url)) {
+                                          throw Exception(
+                                              'Could not launch $url');
+                                        }
+                                      },
+                                      icon: const FaIcon(
+                                          FontAwesomeIcons.facebook)),
+                              organization.contact?.socialMedia?.twitter == ''
+                                  ? const SizedBox(
+                                      height: 0,
+                                    )
+                                  : IconButton(
+                                      onPressed: () async {
+                                        final Uri url = Uri.parse(organization
+                                                .contact
+                                                ?.socialMedia
+                                                ?.twitter ??
+                                            '');
+                                        if (!await launchUrl(url)) {
+                                          throw Exception(
+                                              'Could not launch $url');
+                                        }
+                                      },
+                                      icon: const FaIcon(
+                                          FontAwesomeIcons.xTwitter)),
+                              organization.contact?.socialMedia?.linkedin == ''
+                                  ? const SizedBox(
+                                      height: 0,
+                                    )
+                                  : IconButton(
+                                      onPressed: () async {
+                                        final Uri url = Uri.parse(organization
+                                                .contact
+                                                ?.socialMedia
+                                                ?.linkedin ??
+                                            '');
+                                        if (!await launchUrl(url)) {
+                                          throw Exception(
+                                              'Could not launch $url');
+                                        }
+                                      },
+                                      icon: const FaIcon(
+                                          FontAwesomeIcons.linkedin))
+                            ],
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              alignment: Alignment.centerLeft,
+                              child: TextButton(
+                                onPressed: () async {
+                                  final Uri url = Uri.parse(
+                                      'mailto:${organization.contact?.email}?subject=Hello from KnightAssist&body=I am interested in volunteering with your organization!	');
+                                  if (!await launchUrl(url)) {
+                                    throw Exception('Could not launch $url');
+                                  }
+                                },
+                                child: Wrap(children: [
+                                  const Icon(Icons.email_outlined),
+                                  Text(
+                                    organization.contact?.email ?? '',
+                                    style: const TextStyle(fontSize: 20),
+                                  ),
+                                ]),
                               ),
                             ),
-                      Text("Working Hours per Week"),
-                      Text("Monday:"),
-                      organization.workingHoursPerWeek.monday?.start == null
-                          ? SizedBox(height: 0)
-                          : Text(DateFormat.jm().format(
-                              organization.workingHoursPerWeek.monday!.start!)),
-                      Text("-"),
-                      organization.workingHoursPerWeek.monday?.end == null
-                          ? SizedBox(height: 0)
-                          : Text(DateFormat.jm().format(
-                              organization.workingHoursPerWeek.monday!.end!)),
-                      Text("Tuesday:"),
-                      organization.workingHoursPerWeek.tuesday?.start == null
-                          ? SizedBox(height: 0)
-                          : Text(DateFormat.jm().format(organization
-                              .workingHoursPerWeek.tuesday!.start!)),
-                      Text("-"),
-                      organization.workingHoursPerWeek.tuesday?.end == null
-                          ? SizedBox(height: 0)
-                          : Text(DateFormat.jm().format(
-                              organization.workingHoursPerWeek.tuesday!.end!)),
-                      Text("Wednesday:"),
-                      organization.workingHoursPerWeek.wednesday?.start == null
-                          ? SizedBox(height: 0)
-                          : Text(DateFormat.jm().format(organization
-                              .workingHoursPerWeek.wednesday!.start!)),
-                      Text("-"),
-                      organization.workingHoursPerWeek.wednesday?.end == null
-                          ? SizedBox(height: 0)
-                          : Text(DateFormat.jm().format(organization
-                              .workingHoursPerWeek.wednesday!.end!)),
-                      Text("Thursday:"),
-                      organization.workingHoursPerWeek.thursday?.start == null
-                          ? SizedBox(height: 0)
-                          : Text(DateFormat.jm().format(organization
-                              .workingHoursPerWeek.thursday!.start!)),
-                      Text("-"),
-                      organization.workingHoursPerWeek.thursday?.end == null
-                          ? SizedBox(height: 0)
-                          : Text(DateFormat.jm().format(
-                              organization.workingHoursPerWeek.thursday!.end!)),
-                      Text("Friday:"),
-                      organization.workingHoursPerWeek.friday?.start == null
-                          ? SizedBox(height: 0)
-                          : Text(DateFormat.jm().format(
-                              organization.workingHoursPerWeek.friday!.start!)),
-                      Text("-"),
-                      organization.workingHoursPerWeek.friday?.end == null
-                          ? SizedBox(height: 0)
-                          : Text(DateFormat.jm().format(
-                              organization.workingHoursPerWeek.friday!.end!)),
-                      Text("Saturday:"),
-                      organization.workingHoursPerWeek.saturday?.start == null
-                          ? SizedBox(height: 0)
-                          : Text(DateFormat.jm().format(organization
-                              .workingHoursPerWeek.saturday!.start!)),
-                      Text("-"),
-                      organization.workingHoursPerWeek.saturday?.end == null
-                          ? SizedBox(height: 0)
-                          : Text(DateFormat.jm().format(
-                              organization.workingHoursPerWeek.saturday!.end!)),
-                      Text("Sunday:"),
-                      organization.workingHoursPerWeek.sunday?.start == null
-                          ? SizedBox(height: 0)
-                          : Text(DateFormat.jm().format(
-                              organization.workingHoursPerWeek.sunday!.start!)),
-                      Text("-"),
-                      organization.workingHoursPerWeek.sunday?.end == null
-                          ? SizedBox(height: 0)
-                          : Text(DateFormat.jm().format(
-                              organization.workingHoursPerWeek.sunday!.end!)),
-                    ],
-                  ),
-                  ListView(
-                    children: [
-                      Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: organization.categoryTags.isEmpty
-                              ? const Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Text(
-                                    "This organization has no tags.",
-                                    style: TextStyle(fontSize: Sizes.p20),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              alignment: Alignment.centerLeft,
+                              child: TextButton(
+                                onPressed: () async {
+                                  final Uri url = Uri.parse(
+                                      'tel:${organization.contact?.phone}');
+                                  if (!await launchUrl(url)) {
+                                    throw Exception('Could not launch $url');
+                                  }
+                                },
+                                child: Wrap(children: [
+                                  const Icon(Icons.phone_rounded),
+                                  Text(
+                                    organization.contact?.phone ?? '',
+                                    style: const TextStyle(fontSize: 20),
                                   ),
-                                )
-                              : Wrap(children: [
-                                  for (var tag in organization.categoryTags)
-                                    Tags(tag: tag)
-                                ])),
+                                ]),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              alignment: Alignment.centerLeft,
+                              child: Wrap(children: [
+                                const SizedBox(width: 5),
+                                const Icon(Icons.location_on),
+                                Text(
+                                  organization.location ?? '',
+                                  style: const TextStyle(fontSize: 20),
+                                ),
+                              ]),
+                            ),
+                          ),
+                          organization.contact?.website == ''
+                              ? const SizedBox(height: 0)
+                              : Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Container(
+                                    alignment: Alignment.centerLeft,
+                                    child: TextButton(
+                                      onPressed: () async {
+                                        final Uri url = Uri.parse(
+                                            organization.contact?.website ??
+                                                '');
+                                        if (!await launchUrl(url)) {
+                                          throw Exception(
+                                              'Could not launch $url');
+                                        }
+                                      },
+                                      child: Wrap(children: [
+                                        const Icon(Icons.computer),
+                                        Text(
+                                          organization.contact?.website ?? '',
+                                          style: const TextStyle(fontSize: 20),
+                                        ),
+                                      ]),
+                                    ),
+                                  ),
+                                ),
+                          Text("Working Hours per Week"),
+                          Text("Monday:"),
+                          organization.workingHoursPerWeek.monday?.start == null
+                              ? SizedBox(height: 0)
+                              : Text(DateFormat.jm().format(organization
+                                  .workingHoursPerWeek.monday!.start!)),
+                          Text("-"),
+                          organization.workingHoursPerWeek.monday?.end == null
+                              ? SizedBox(height: 0)
+                              : Text(DateFormat.jm().format(organization
+                                  .workingHoursPerWeek.monday!.end!)),
+                          Text("Tuesday:"),
+                          organization.workingHoursPerWeek.tuesday?.start ==
+                                  null
+                              ? SizedBox(height: 0)
+                              : Text(DateFormat.jm().format(organization
+                                  .workingHoursPerWeek.tuesday!.start!)),
+                          Text("-"),
+                          organization.workingHoursPerWeek.tuesday?.end == null
+                              ? SizedBox(height: 0)
+                              : Text(DateFormat.jm().format(organization
+                                  .workingHoursPerWeek.tuesday!.end!)),
+                          Text("Wednesday:"),
+                          organization.workingHoursPerWeek.wednesday?.start ==
+                                  null
+                              ? SizedBox(height: 0)
+                              : Text(DateFormat.jm().format(organization
+                                  .workingHoursPerWeek.wednesday!.start!)),
+                          Text("-"),
+                          organization.workingHoursPerWeek.wednesday?.end ==
+                                  null
+                              ? SizedBox(height: 0)
+                              : Text(DateFormat.jm().format(organization
+                                  .workingHoursPerWeek.wednesday!.end!)),
+                          Text("Thursday:"),
+                          organization.workingHoursPerWeek.thursday?.start ==
+                                  null
+                              ? SizedBox(height: 0)
+                              : Text(DateFormat.jm().format(organization
+                                  .workingHoursPerWeek.thursday!.start!)),
+                          Text("-"),
+                          organization.workingHoursPerWeek.thursday?.end == null
+                              ? SizedBox(height: 0)
+                              : Text(DateFormat.jm().format(organization
+                                  .workingHoursPerWeek.thursday!.end!)),
+                          Text("Friday:"),
+                          organization.workingHoursPerWeek.friday?.start == null
+                              ? SizedBox(height: 0)
+                              : Text(DateFormat.jm().format(organization
+                                  .workingHoursPerWeek.friday!.start!)),
+                          Text("-"),
+                          organization.workingHoursPerWeek.friday?.end == null
+                              ? SizedBox(height: 0)
+                              : Text(DateFormat.jm().format(organization
+                                  .workingHoursPerWeek.friday!.end!)),
+                          Text("Saturday:"),
+                          organization.workingHoursPerWeek.saturday?.start ==
+                                  null
+                              ? SizedBox(height: 0)
+                              : Text(DateFormat.jm().format(organization
+                                  .workingHoursPerWeek.saturday!.start!)),
+                          Text("-"),
+                          organization.workingHoursPerWeek.saturday?.end == null
+                              ? SizedBox(height: 0)
+                              : Text(DateFormat.jm().format(organization
+                                  .workingHoursPerWeek.saturday!.end!)),
+                          Text("Sunday:"),
+                          organization.workingHoursPerWeek.sunday?.start == null
+                              ? SizedBox(height: 0)
+                              : Text(DateFormat.jm().format(organization
+                                  .workingHoursPerWeek.sunday!.start!)),
+                          Text("-"),
+                          organization.workingHoursPerWeek.sunday?.end == null
+                              ? SizedBox(height: 0)
+                              : Text(DateFormat.jm().format(organization
+                                  .workingHoursPerWeek.sunday!.end!)),
+                        ],
+                      ),
+                      ListView(
+                        children: [
+                          Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: organization.categoryTags.isEmpty
+                                  ? const Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text(
+                                        "This organization has no tags.",
+                                        style: TextStyle(fontSize: Sizes.p20),
+                                      ),
+                                    )
+                                  : Wrap(children: [
+                                      for (var tag in organization.categoryTags)
+                                        Tags(tag: tag)
+                                    ])),
+                        ],
+                      ),
+                      FutureBuilder(
+                          future: fetchData(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.done) {
+                              if (snapshot.hasError) {
+                                return Center(
+                                  child: Text(
+                                    '${snapshot.error} occurred',
+                                    style: TextStyle(fontSize: 18),
+                                  ),
+                                );
+                              } else if (snapshot.hasData) {
+                                return ListView(children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      '${avgRating}',
+                                      style: const TextStyle(
+                                          fontSize: 30,
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                  ),
+                                  RatingBar.builder(
+                                    initialRating: avgRating,
+                                    ignoreGestures: true,
+                                    minRating: 1,
+                                    direction: Axis.horizontal,
+                                    allowHalfRating:
+                                        true, // displays half ratings for org averages
+                                    itemCount: 5,
+                                    itemPadding:
+                                        EdgeInsets.symmetric(horizontal: 4.0),
+                                    itemBuilder: (context, _) => Icon(
+                                      Icons.star,
+                                      color: Colors.amber,
+                                    ),
+                                    onRatingUpdate: (rating) {
+                                      //print(rating);
+                                      // feedback.rating = rating;
+                                    },
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      '${orgReviews.length} Total Reviews',
+                                      style: TextStyle(fontSize: 20),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 240,
+                                    width: 100,
+                                    child: ListView.builder(
+                                      scrollDirection: Axis.horizontal,
+                                      shrinkWrap: true,
+                                      physics: const ClampingScrollPhysics(),
+                                      itemCount: orgReviews.length,
+                                      itemBuilder: (context, index) =>
+                                          EventReviewCard(
+                                              orgReviews.elementAt(index)),
+                                    ),
+                                  )
+                                ]);
+                              }
+                            }
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }),
                     ],
                   ),
-                  ListView(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          '4.3',
-                          style: const TextStyle(
-                              fontSize: 30, fontWeight: FontWeight.w600),
-                        ),
-                      ),
-                      RatingBar.builder(
-                        initialRating: 4.3,
-                        ignoreGestures: true,
-                        minRating: 1,
-                        direction: Axis.horizontal,
-                        allowHalfRating:
-                            true, // displays half ratings for org averages
-                        itemCount: 5,
-                        itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-                        itemBuilder: (context, _) => Icon(
-                          Icons.star,
-                          color: Colors.amber,
-                        ),
-                        onRatingUpdate: (rating) {
-                          print(rating);
-                          // feedback.rating = rating;
-                        },
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          '${OrgFeedback.length} Total Reviews',
-                          style: TextStyle(fontSize: 20),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 240,
-                        width: 100,
-                        child: ListView.builder(
-                          // TODO: use retrieveAllFeedback api here
-                          scrollDirection: Axis.horizontal,
-                          shrinkWrap: true,
-                          physics: const ClampingScrollPhysics(),
-                          itemCount: OrgFeedback.length,
-                          itemBuilder: (context, index) => FeedbackCard(
-                              feedback: OrgFeedback.elementAt(index)),
-                        ),
-                      )
-                    ],
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }
