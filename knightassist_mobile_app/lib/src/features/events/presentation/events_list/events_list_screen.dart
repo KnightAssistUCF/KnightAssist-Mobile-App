@@ -14,6 +14,12 @@ import 'package:knightassist_mobile_app/src/features/students/data/students_repo
 import 'package:knightassist_mobile_app/src/features/students/domain/student_user.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 
+/*
+DATA NEEDED:
+- the full list of all events
+- the current user's profile image
+*/
+
 class EventsListScreen extends ConsumerStatefulWidget {
   const EventsListScreen({super.key, this.organizationID});
   final String? organizationID;
@@ -56,7 +62,7 @@ class _EventsListScreenState extends ConsumerState<EventsListScreen> {
             ref.watch(organizationsRepositoryProvider);
         final imagesRepository = ref.watch(imagesRepositoryProvider);
         final eventsRepository = ref.watch(eventsRepositoryProvider);
-        eventsRepository.fetchEventsList();
+
         final studentsRepository = ref.watch(studentsRepositoryProvider);
         final user = authRepository.currentUser;
         bool isOrg = user?.role == "organization";
@@ -64,32 +70,50 @@ class _EventsListScreenState extends ConsumerState<EventsListScreen> {
         Organization? org;
         StudentUser? student;
 
-         if (isOrg) {
-      org = organizationsRepository.getOrganization(user!.id);
-    }
+        dynamic fetchData() async {
+          await eventsRepository.fetchEventsList();
+          if (isOrg) {
+            org = organizationsRepository.getOrganization(user!.id);
+          }
 
-    if (isStudent) {
-      studentsRepository.fetchStudent(user!.id);
-      student = studentsRepository.getStudent();
-    }
+          if (isStudent) {
+            await studentsRepository.fetchStudent(user!.id);
+            student = studentsRepository.getStudent();
+          }
+          return 'Success';
+        }
 
-     Widget getAppbarProfileImage() {
-      return FutureBuilder(
-          future: isOrg
-              ? imagesRepository.retrieveImage('2', org!.id)
-              : imagesRepository.retrieveImage('3', user!.id),
-          builder: (context, snapshot) {
-            final String imageUrl = snapshot.data ?? 'No initial data';
-            final String state = snapshot.connectionState.toString();
-            return ClipRRect(
-              borderRadius: BorderRadius.circular(25.0),
-              child: Image(
-                  semanticLabel: 'Profile picture',
-                  image: NetworkImage(imageUrl),
-                  height: 20),
-            );
-          });
-    }
+        Widget getAppbarProfileImage() {
+          return FutureBuilder(
+              future: isOrg
+                  ? imagesRepository.retrieveImage('2', org!.id)
+                  : imagesRepository.retrieveImage('3', user!.id),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  print('Appbar Profile Image FB done');
+                  if (snapshot.hasError) {
+                    return Center(
+                      child: Text(
+                        '${snapshot.error} occurred',
+                        style: const TextStyle(fontSize: 18),
+                      ),
+                    );
+                  } else if (snapshot.hasData) {
+                    final String imageUrl = snapshot.data!;
+                    return ClipRRect(
+                      borderRadius: BorderRadius.circular(25.0),
+                      child: Image(
+                          semanticLabel: 'Profile picture',
+                          image: NetworkImage(imageUrl),
+                          height: 20),
+                    );
+                  }
+                }
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              });
+        }
 
         return Scaffold(
           appBar: AppBar(
@@ -112,23 +136,43 @@ class _EventsListScreenState extends ConsumerState<EventsListScreen> {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: GestureDetector(
-                  onTap: () {
-                      if (isOrg) {
-                  context.pushNamed("organization", extra: org);
-                } else if (isStudent) {
-                  context.pushNamed("profileScreen", extra: student);
-                } else {
-                  context.pushNamed(AppRoute.signIn.name);
-                }
-                  },
-                  child: Tooltip(
-                    message: 'Go to your profile',
-                    child: getAppbarProfileImage(),
-                  ),
-                ),
+              FutureBuilder(
+                future: fetchData(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    if (snapshot.hasError) {
+                      return Center(
+                        child: Text(
+                          '${snapshot.error} occurred',
+                          style: const TextStyle(fontSize: 18),
+                        ),
+                      );
+                    } else if (snapshot.hasData) {
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: GestureDetector(
+                          onTap: () {
+                            if (isOrg) {
+                              context.pushNamed("organization", extra: org);
+                            } else if (isStudent) {
+                              context.pushNamed("profileScreen",
+                                  extra: student);
+                            } else {
+                              context.pushNamed(AppRoute.signIn.name);
+                            }
+                          },
+                          child: Tooltip(
+                            message: 'Go to your profile',
+                            child: getAppbarProfileImage(),
+                          ),
+                        ),
+                      );
+                    }
+                  }
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                },
               )
             ],
           ),

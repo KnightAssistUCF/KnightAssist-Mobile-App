@@ -18,6 +18,13 @@ import 'package:knightassist_mobile_app/src/features/students/domain/student_use
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+/*
+DATA NEEDED:
+- user's profile picture
+- if current user is student: all events they rsvpd for with names, start and end times, and images
+- if current user is org: all events they are hosting with names, start and end times, and images
+*/
+
 List<Event> events = [];
 
 class CalendarView extends StatefulWidget {
@@ -440,12 +447,27 @@ class _CalendarState extends State<Calendar> {
           return FutureBuilder(
               future: imagesRepository.retrieveImage('1', event.id),
               builder: (context, snapshot) {
-                final String imageUrl = snapshot.data ?? 'No initial data';
-                final String state = snapshot.connectionState.toString();
-                return ClipRRect(
-                    borderRadius: BorderRadius.circular(12.0),
-                    child: Image(
-                        image: NetworkImage(imageUrl), height: 50, width: 50));
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.hasError) {
+                    return Center(
+                      child: Text(
+                        '${snapshot.error} occurred',
+                        style: const TextStyle(fontSize: 18),
+                      ),
+                    );
+                  } else if (snapshot.hasData) {
+                    final String imageUrl = snapshot.data!;
+                    return ClipRRect(
+                        borderRadius: BorderRadius.circular(12.0),
+                        child: Image(
+                            image: NetworkImage(imageUrl),
+                            height: 50,
+                            width: 50));
+                  }
+                }
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
               });
         }
 
@@ -455,14 +477,27 @@ class _CalendarState extends State<Calendar> {
                   ? imagesRepository.retrieveImage('2', org!.id)
                   : imagesRepository.retrieveImage('3', user!.id),
               builder: (context, snapshot) {
-                final String imageUrl = snapshot.data ?? 'No initial data';
-                final String state = snapshot.connectionState.toString();
-                return ClipRRect(
-                  borderRadius: BorderRadius.circular(25.0),
-                  child: Image(
-                      semanticLabel: 'Profile picture',
-                      image: NetworkImage(imageUrl),
-                      height: 20),
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.hasError) {
+                    return Center(
+                      child: Text(
+                        '${snapshot.error} occurred',
+                        style: const TextStyle(fontSize: 18),
+                      ),
+                    );
+                  } else if (snapshot.hasData) {
+                    final String imageUrl = snapshot.data!;
+                    return ClipRRect(
+                      borderRadius: BorderRadius.circular(25.0),
+                      child: Image(
+                          semanticLabel: 'Profile picture',
+                          image: NetworkImage(imageUrl),
+                          height: 20),
+                    );
+                  }
+                }
+                return const Center(
+                  child: CircularProgressIndicator(),
                 );
               });
         }

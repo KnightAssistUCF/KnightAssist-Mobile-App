@@ -70,15 +70,12 @@ class AnnouncementsRepository {
 
   // returns the list of all announcements from an organization
   Future<List<Announcement>> fetchOrgAnnouncements(
-      String organizationName, String organizationID) async {
-    Map<String, String?> params = {
-      "organizationName": organizationName,
-      "organizationID": organizationID
-    };
+      String organizationID) async {
+    Map<String, String?> params = {"organizationID": organizationID};
     var uri = Uri.https('knightassist-43ab3aeaada9.herokuapp.com',
-        '/api/loadAllOrgAnnouncements', params);
+        '/api/loadOwnOrgAnnouncements', params);
     var response = await http.get(uri);
-    //print(response.body);
+
     Map<String, dynamic> map = jsonDecode(response.body);
     switch (response.statusCode) {
       case 200:
@@ -122,13 +119,12 @@ class AnnouncementsRepository {
   }
 
   Future<List<Announcement>> searchAnnouncements(String query) async {
-    assert(
-      _announcements.value.length <= 100,
-      'Client-side search should only be performed if the number of announcements is small. '
-      'Consider doing server-side search for larger datasets.',
-    );
+    //assert(
+    //_announcements.value.length <= 100,
+    //'Client-side search should only be performed if the number of announcements is small. '
+    //'Consider doing server-side search for larger datasets.',
+    //);
     final announcementsList = await fetchOrgAnnouncements(
-      'My Organization!',
       '657e15abf893392ca98665d1',
     ); // TODO: get value from auth
     return announcementsList
@@ -141,7 +137,9 @@ class AnnouncementsRepository {
       List<Announcement> announcements, String title) {
     try {
       return announcements
-          .firstWhere((announcement) => announcement.title == title);
+          .firstWhere((announcement) => title.contains(announcement.title));
+      //  .firstWhere((announcement) => announcement.title == title);
+      // not using exact matches so that announcements can be found from within a notification message
     } catch (e) {
       return null;
     }

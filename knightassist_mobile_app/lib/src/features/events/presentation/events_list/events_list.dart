@@ -20,9 +20,12 @@ class EventsList extends ConsumerWidget {
     final studentRepository = ref.watch(studentsRepositoryProvider);
     final authRepository = ref.watch(authRepositoryProvider);
     final user = authRepository.currentUser;
-    organizationsRepository.fetchOrganizationsList();
-    if (user?.role == 'student') {
-      studentRepository.fetchStudent(user!.id);
+
+    dynamic fetchData() async {
+      organizationsRepository.fetchOrganizationsList();
+      if (user?.role == 'student') {
+        studentRepository.fetchStudent(user!.id);
+      }
     }
 
     return AsyncValueWidget<List<Event>>(

@@ -19,6 +19,14 @@ import 'package:knightassist_mobile_app/src/features/students/domain/student_use
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 import 'package:intl/intl.dart';
 
+/*
+DATA NEEDED:
+- the global leaderboard of all students if current user is a student
+- the leaderboard for an org if user is an org
+- the profile picture and name of each user in the leaderboard
+- the current user's profile image
+*/
+
 List<LeaderboardEntry> leaders = [];
 
 class leaderboard extends StatefulWidget {
@@ -61,14 +69,27 @@ class _leaderboardState extends State<leaderboard> {
                   ? imagesRepository.retrieveImage('2', user!.id)
                   : imagesRepository.retrieveImage('3', user!.id),
               builder: (context, snapshot) {
-                final String imageUrl = snapshot.data ?? 'No initial data';
-                final String state = snapshot.connectionState.toString();
-                return ClipRRect(
-                  borderRadius: BorderRadius.circular(25.0),
-                  child: Image(
-                      semanticLabel: 'Profile picture',
-                      image: NetworkImage(imageUrl),
-                      height: 20),
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.hasError) {
+                    return Center(
+                      child: Text(
+                        '${snapshot.error} occurred',
+                        style: const TextStyle(fontSize: 18),
+                      ),
+                    );
+                  } else if (snapshot.hasData) {
+                    final String imageUrl = snapshot.data!;
+                    return ClipRRect(
+                      borderRadius: BorderRadius.circular(25.0),
+                      child: Image(
+                          semanticLabel: 'Profile picture',
+                          image: NetworkImage(imageUrl),
+                          height: 20),
+                    );
+                  }
+                }
+                return const Center(
+                  child: CircularProgressIndicator(),
                 );
               });
         }
@@ -239,11 +260,25 @@ class VolunteerCard extends StatelessWidget {
           return FutureBuilder(
               future: imagesRepository.retrieveImage('3', volunteer.id),
               builder: (context, snapshot) {
-                final String imageUrl = snapshot.data ?? 'No initial data';
-                final String state = snapshot.connectionState.toString();
-                return ClipRRect(
-                    borderRadius: BorderRadius.circular(12.0),
-                    child: Image(image: NetworkImage(imageUrl), height: 75));
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.hasError) {
+                    return Center(
+                      child: Text(
+                        '${snapshot.error} occurred',
+                        style: const TextStyle(fontSize: 18),
+                      ),
+                    );
+                  } else if (snapshot.hasData) {
+                    final String imageUrl = snapshot.data!;
+                    return ClipRRect(
+                        borderRadius: BorderRadius.circular(12.0),
+                        child:
+                            Image(image: NetworkImage(imageUrl), height: 75));
+                  }
+                }
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
               });
         }
 

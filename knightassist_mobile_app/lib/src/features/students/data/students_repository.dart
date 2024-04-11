@@ -36,7 +36,6 @@ class StudentsRepository {
           List<String> favoritedOrganizations = [];
           List<String> eventsRSVP = [];
           List<String> eventsHistory = [];
-          List<String> userStudentSemesters = [];
           List<String> tags = [];
 
           for (dynamic s in studentData['favoritedOrganizations']) {
@@ -47,9 +46,6 @@ class StudentsRepository {
           }
           for (dynamic s in studentData['eventsHistory']) {
             eventsHistory.add(s);
-          }
-          for (dynamic s in studentData['userStudentSemesters']) {
-            userStudentSemesters.add(s);
           }
           if (studentData['categoryTags'] != null) {
             for (dynamic s in studentData['categoryTags']) {
@@ -62,20 +58,17 @@ class StudentsRepository {
               email: studentData['email'] ?? '',
               firstName: studentData['firstName'] ?? '',
               lastName: studentData['lastName'] ?? '',
-              profilePicture: studentData['profilePicPath'] ?? '',
               favoritedOrganizations: favoritedOrganizations,
               eventsRsvp: eventsRSVP,
               eventsHistory: eventsHistory,
               totalVolunteerHours: studentData['totalVolunteerHours'],
               semesterVolunteerHourGoal:
                   studentData['semesterVolunteerHourGoal'],
-              userStudentSemesters: userStudentSemesters,
               categoryTags: tags,
               recoveryToken: studentData['recoveryToken'] ?? '',
               confirmToken: studentData['confirmToken'] ?? '',
               emailToken: studentData['EmailToken'] ?? '',
               emailValidated: studentData['emailValidated'] ?? false,
-              studentId: studentData['studentID'] ?? '',
               password: studentData['password'] ?? '',
               createdAt:
                   DateTime.parse(studentData['createdAt']) ?? DateTime.now(),
@@ -99,7 +92,13 @@ class StudentsRepository {
         '/api/loadAllEventAttendees', params);
     var response = await http.get(uri);
     var body = jsonDecode(response.body);
-    final List<dynamic> dataList = jsonDecode(response.body);
+    List<dynamic> dataList;
+    if (body is Map) {
+      dataList = [];
+    } else {
+      dataList = jsonDecode(response.body) as List<dynamic>;
+    }
+
     //print("Responsebody:");
     //print(body);
     switch (response.statusCode) {
@@ -122,7 +121,6 @@ class StudentsRepository {
           List<String> favoritedOrganizations = [];
           List<String> eventsRSVP = [];
           List<String> eventsHistory = [];
-          List<String> userStudentSemesters = [];
           List<String> tags = [];
 
           for (dynamic s in studentData['favoritedOrganizations']) {
@@ -133,9 +131,6 @@ class StudentsRepository {
           }
           for (dynamic s in studentData['eventsHistory']) {
             eventsHistory.add(s);
-          }
-          for (dynamic s in studentData['userStudentSemesters']) {
-            userStudentSemesters.add(s);
           }
           if (studentData['categoryTags'] != null) {
             for (dynamic s in studentData['categoryTags']) {
@@ -148,20 +143,17 @@ class StudentsRepository {
               email: studentData['email'] ?? '',
               firstName: studentData['firstName'] ?? '',
               lastName: studentData['lastName'] ?? '',
-              profilePicture: studentData['profilePicPath'] ?? '',
               favoritedOrganizations: favoritedOrganizations,
               eventsRsvp: eventsRSVP,
               eventsHistory: eventsHistory,
               totalVolunteerHours: studentData['totalVolunteerHours'],
               semesterVolunteerHourGoal:
                   studentData['semesterVolunteerHourGoal'],
-              userStudentSemesters: userStudentSemesters,
               categoryTags: tags,
               recoveryToken: studentData['recoveryToken'] ?? '',
               confirmToken: studentData['confirmToken'] ?? '',
               emailToken: studentData['EmailToken'] ?? '',
               emailValidated: studentData['emailValidated'] ?? false,
-              studentId: studentData['studentID'] ?? '',
               password: studentData['password'] ?? '',
               createdAt:
                   DateTime.parse(studentData['createdAt']) ?? DateTime.now(),
@@ -187,13 +179,12 @@ class StudentsRepository {
     var uri = Uri.https(
         'knightassist-43ab3aeaada9.herokuapp.com', '/api/userSearch', params);
     var response = await http.get(uri);
-
+    print(response);
     final dynamic studentData = jsonDecode(response.body);
 
     List<String> favoritedOrganizations = [];
     List<String> eventsRSVP = [];
     List<String> eventsHistory = [];
-    List<String> userStudentSemesters = [];
     List<String> tags = [];
 
     for (dynamic s in studentData['favoritedOrganizations']) {
@@ -204,9 +195,6 @@ class StudentsRepository {
     }
     for (dynamic s in studentData['eventsHistory']) {
       eventsHistory.add(s);
-    }
-    for (dynamic s in studentData['userStudentSemesters']) {
-      userStudentSemesters.add(s);
     }
     if (studentData['categoryTags'] != null) {
       for (dynamic s in studentData['categoryTags']) {
@@ -219,19 +207,16 @@ class StudentsRepository {
         email: studentData['email'] ?? '',
         firstName: studentData['firstName'] ?? '',
         lastName: studentData['lastName'] ?? '',
-        profilePicture: studentData['profilePicPath'] ?? '',
         favoritedOrganizations: favoritedOrganizations,
         eventsRsvp: eventsRSVP,
         eventsHistory: eventsHistory,
         totalVolunteerHours: studentData['totalVolunteerHours'],
         semesterVolunteerHourGoal: studentData['semesterVolunteerHourGoal'],
-        userStudentSemesters: userStudentSemesters,
         categoryTags: tags,
         recoveryToken: studentData['recoveryToken'] ?? '',
         confirmToken: studentData['confirmToken'] ?? '',
         emailToken: studentData['EmailToken'] ?? '',
         emailValidated: studentData['emailValidated'] ?? false,
-        studentId: studentData['studentID'] ?? '',
         password: studentData['password'] ?? '',
         createdAt: DateTime.parse(studentData['createdAt']) ?? DateTime.now(),
         updatedAt: DateTime.parse(studentData['updatedAt']) ?? DateTime.now(),
@@ -255,7 +240,7 @@ class StudentsRepository {
       String? lastName,
       String? email,
       String? profilePicPath,
-      int? totalVolunteerHours,
+      num? totalVolunteerHours,
       int? semesterVolunteerHourGoal,
       List<String>? categoryTags) async {
     Map<String, dynamic> params = {'studentID': studentID};
@@ -278,17 +263,28 @@ class StudentsRepository {
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
-        body: jsonEncode(<String, dynamic>{
-          'id': studentID,
-          'firstName': firstName,
-          'lastName': lastName,
-          'email': email,
-          'password': password,
-          'profilePicPath': profilePicPath,
-          'categoryTags': categoryTags,
-          'totalVolunteerHours': totalVolunteerHours,
-          'semesterVolunteerHourGoal': semesterVolunteerHourGoal,
-        }));
+        body: password == null
+            ? jsonEncode(<String, dynamic>{
+                'id': studentID,
+                'firstName': firstName,
+                'lastName': lastName,
+                'email': email,
+                'profilePicPath': profilePicPath,
+                'categoryTags': categoryTags,
+                'totalVolunteerHours': totalVolunteerHours,
+                'semesterVolunteerHourGoal': semesterVolunteerHourGoal,
+              })
+            : jsonEncode(<String, dynamic>{
+                'id': studentID,
+                'firstName': firstName,
+                'lastName': lastName,
+                'email': email,
+                'password': password,
+                'profilePicPath': profilePicPath,
+                'categoryTags': categoryTags,
+                'totalVolunteerHours': totalVolunteerHours,
+                'semesterVolunteerHourGoal': semesterVolunteerHourGoal,
+              }));
     var body = jsonDecode(response.body);
     switch (response.statusCode) {
       case 200:

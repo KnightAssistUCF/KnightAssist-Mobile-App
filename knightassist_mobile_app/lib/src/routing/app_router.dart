@@ -288,12 +288,14 @@ GoRouter goRouter(GoRouterRef ref) {
                   pageBuilder: (context, state) => const MaterialPage(
                       fullscreenDialog: true, child: PostVerify())),
               GoRoute(
-                  path: 'postscan',
-                  name: 'postscan',
+                  path: 'postScan',
+                  name: AppRoute.postScan.name,
                   builder: (context, state) {
-                    Event ev = state.extra as Event;
+                    final temp = state.extra as Map<String, dynamic>;
+                    Event ev = temp['event'] as Event;
+                    bool checkIn = temp['checkIn'] as bool;
                     //final eventID = state.pathParameters['id']!;
-                    return PostScan(event: ev);
+                    return PostScan(event: ev, checkIn: checkIn);
                   }),
               GoRoute(
                   path: 'createevent',

@@ -6,8 +6,8 @@ import 'package:knightassist_mobile_app/src/constants/app_sizes.dart';
 import 'package:knightassist_mobile_app/src/constants/breakpoints.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
 import 'package:knightassist_mobile_app/src/features/reviews/data/reviews_repository.dart';
-import 'package:knightassist_mobile_app/src/features/reviews/domain/review.dart'
-    as prefix;
+//import 'package:knightassist_mobile_app/src/features/reviews/domain/review.dart'
+//as prefix;
 import 'package:knightassist_mobile_app/src/features/reviews/presentation/event_reviews/event_review_card.dart';
 
 class EventReviewsList extends ConsumerWidget {
@@ -25,7 +25,7 @@ class EventReviewsList extends ConsumerWidget {
             maxContentWidth: Breakpoint.tablet,
             padding: const EdgeInsets.symmetric(
                 horizontal: Sizes.p16, vertical: Sizes.p8),
-            child: EventReviewCard(reviews[index] as prefix.Review),
+            child: EventReviewCard(reviews[index] as Review),
           ),
           childCount: reviews.length,
         ),

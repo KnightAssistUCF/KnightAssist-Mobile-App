@@ -19,6 +19,12 @@ import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 
 import '../domain/organization.dart';
 
+/*
+DATA NEEDED:
+- the list of all organizations
+- the current user's profile image
+*/
+
 /*List<Organization> organizations = [
   Organization(
       id: '1',

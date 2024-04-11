@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:knightassist_mobile_app/src/common_widgets/alert_dialogs.dart';
 import 'package:knightassist_mobile_app/src/common_widgets/responsive_center.dart';
 import 'package:knightassist_mobile_app/src/common_widgets/responsive_scrollable_card.dart';
 import 'package:knightassist_mobile_app/src/constants/breakpoints.dart';
@@ -14,6 +15,12 @@ import 'package:knightassist_mobile_app/src/features/students/domain/student_use
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:editable_image/editable_image.dart';
+
+/*
+DATA NEEDED:
+- the full studentuser object of user (this page is only shown to volunteers)
+- the current user's profile image
+*/
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key, required this.student});
@@ -48,7 +55,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     _firstNameController.text = student.firstName;
     _lastNameController.text = student.lastName;
     _emailController.text = student.email;
-    _passwordController.text = student.password;
+    //_passwordController.text = student.password; (student.password is encrypted so using this value in the API will not keep their same password)
   }
 
   @override
@@ -87,14 +94,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
           return FutureBuilder(
               future: imagesRepository.retrieveImage('3', student!.id),
               builder: (context, snapshot) {
-                final String imageUrl = snapshot.data ?? 'No initial data';
-                final String state = snapshot.connectionState.toString();
-                return ClipRRect(
-                  borderRadius: BorderRadius.circular(25.0),
-                  child: Image(
-                      semanticLabel: 'Profile picture',
-                      image: NetworkImage(imageUrl),
-                      height: 20),
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.hasError) {
+                    return Center(
+                      child: Text(
+                        '${snapshot.error} occurred',
+                        style: const TextStyle(fontSize: 18),
+                      ),
+                    );
+                  } else if (snapshot.hasData) {
+                    final String imageUrl = snapshot.data!;
+                    return ClipRRect(
+                      borderRadius: BorderRadius.circular(25.0),
+                      child: Image(
+                          semanticLabel: 'Profile picture',
+                          image: NetworkImage(imageUrl),
+                          height: 20),
+                    );
+                  }
+                }
+                return const Center(
+                  child: CircularProgressIndicator(),
                 );
               });
         }
@@ -103,26 +123,80 @@ class _ProfileScreenState extends State<ProfileScreen> {
           return FutureBuilder(
               future: imagesRepository.retrieveImage('3', student!.id),
               builder: (context, snapshot) {
-                final String imageUrl = snapshot.data ?? 'No initial data';
-                final String state = snapshot.connectionState.toString();
-                return EditableImage(
-                  onChange: _directUpdateImage,
-                  image: _profilePicFile != null
-                      ? Image.file(_profilePicFile!, fit: BoxFit.cover)
-                      : Image(image: NetworkImage(imageUrl)),
-                  size: 150,
-                  imagePickerTheme: ThemeData(
-                    primaryColor: Colors.yellow,
-                    shadowColor: Colors.deepOrange,
-                    colorScheme:
-                        const ColorScheme.light(background: Colors.indigo),
-                    iconTheme: const IconThemeData(color: Colors.red),
-                    fontFamily: 'Papyrus',
-                  ),
-                  imageBorder: Border.all(color: Colors.lime, width: 2),
-                  editIconBorder: Border.all(color: Colors.purple, width: 2),
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.hasError) {
+                    return Center(
+                      child: Text(
+                        '${snapshot.error} occurred',
+                        style: const TextStyle(fontSize: 18),
+                      ),
+                    );
+                  } else if (snapshot.hasData) {
+                    final String imageUrl = snapshot.data!;
+                    return EditableImage(
+                      onChange: _directUpdateImage,
+                      image: _profilePicFile != null
+                          ? Image.file(_profilePicFile!, fit: BoxFit.cover)
+                          : Image(image: NetworkImage(imageUrl)),
+                      size: 150,
+                      imagePickerTheme: ThemeData(
+                        primaryColor: Colors.yellow,
+                        shadowColor: Colors.deepOrange,
+                        colorScheme:
+                            const ColorScheme.light(background: Colors.indigo),
+                        iconTheme: const IconThemeData(color: Colors.red),
+                        fontFamily: 'Papyrus',
+                      ),
+                      imageBorder: Border.all(color: Colors.lime, width: 2),
+                      editIconBorder:
+                          Border.all(color: Colors.purple, width: 2),
+                    );
+                  }
+                }
+                return const Center(
+                  child: CircularProgressIndicator(),
                 );
               });
+        }
+
+        showConfirmDialog(BuildContext context) {
+          Widget okButton = TextButton(
+            child: Text("OK"),
+            onPressed: () {
+              studentsRepository.editStudent(
+                  student!.id,
+                  (password == '' || password == null) ? null : password,
+                  firstName,
+                  lastName,
+                  email,
+                  student.profilePicPath,
+                  student.totalVolunteerHours,
+                  student.semesterVolunteerHourGoal,
+                  student.categoryTags);
+              Navigator.of(context).pop();
+            },
+          );
+
+          Widget cancelButton = TextButton(
+            child: Text("Cancel"),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          );
+
+          AlertDialog alert = AlertDialog(
+            title: Text("Confirmation"),
+            content:
+                Text("Are you sure you want to edit your profile information?"),
+            actions: [okButton, cancelButton],
+          );
+
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return alert;
+            },
+          );
         }
 
         return Scaffold(
@@ -190,16 +264,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   padding: const EdgeInsets.all(8.0),
                   child: ElevatedButton(
                     onPressed: () => {
-                      studentsRepository.editStudent(
-                          student!.id,
-                          password,
-                          firstName,
-                          lastName,
-                          email,
-                          student.profilePicPath,
-                          student.totalVolunteerHours,
-                          student.semesterVolunteerHourGoal,
-                          student.categoryTags)
+                      showConfirmDialog(context),
                     },
                     child: const Padding(
                       padding: EdgeInsets.all(8.0),

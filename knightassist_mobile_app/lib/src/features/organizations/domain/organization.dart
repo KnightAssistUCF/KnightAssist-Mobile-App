@@ -75,7 +75,7 @@ class Organization extends AppUser {
     required this.profilePicPath,
     required this.role,
     required this.firstTimeLogin,
-  }) : super(id: '', email: '', role: '');
+  }) : super(id: '', email: '', role: '', firstTimeLogin: false);
 
   factory Organization.fromJson(Map<String, dynamic> json) => Organization(
         contact: Contact.fromJson(json["contact"]),
@@ -94,7 +94,8 @@ class Organization extends AppUser {
         calendarLink: json["calendarLink"],
         isActive: json["isActive"],
         eventHappeningNow: json["eventHappeningNow"],
-        workingHoursPerWeek: WorkingHoursPerWeek.fromJson(json["workingHoursPerWeek"]),
+        workingHoursPerWeek:
+            WorkingHoursPerWeek.fromJson(json["workingHoursPerWeek"]),
         backgroundUrl: json["backgroundURL"],
         eventsArray: List<dynamic>.from(json["eventsArray"].map((x) => x)),
         location: json["location"],
@@ -240,17 +241,17 @@ class WorkingHoursPerWeek {
   WeekDay? saturday;
   WeekDay? sunday;
 
-  WorkingHoursPerWeek({
-    this.monday,
-    this.tuesday,
-    this.wednesday,
-    this.thursday,
-    this.friday,
-    this.saturday,
-    this.sunday
-  });
+  WorkingHoursPerWeek(
+      {this.monday,
+      this.tuesday,
+      this.wednesday,
+      this.thursday,
+      this.friday,
+      this.saturday,
+      this.sunday});
 
-  factory WorkingHoursPerWeek.fromJson(Map<String, dynamic> json) => WorkingHoursPerWeek(
+  factory WorkingHoursPerWeek.fromJson(Map<String, dynamic> json) =>
+      WorkingHoursPerWeek(
         monday: WeekDay.fromJson(json["monday"]),
         tuesday: WeekDay.fromJson(json["tuesday"]),
         wednesday: WeekDay.fromJson(json["wednesday"]),
@@ -285,10 +286,8 @@ class WeekDay {
         end: DateTime.parse(json["end"]),
       );
 
-  Map<String, dynamic> toJson() => {
-        "start": start?.toIso8601String(),
-        "end": end?.toIso8601String()
-      };
+  Map<String, dynamic> toJson() =>
+      {"start": start?.toIso8601String(), "end": end?.toIso8601String()};
 }
 
 

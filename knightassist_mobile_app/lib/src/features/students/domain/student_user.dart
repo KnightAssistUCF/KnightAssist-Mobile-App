@@ -13,18 +13,17 @@ String studentUserToJson(StudentUser data) => json.encode(data.toJson());
 
 class StudentUser extends AppUser {
   String id;
-  String studentId;
   String firstName;
   String lastName;
+  String role;
   String email;
   String password;
-  String profilePicture;
+  String profilePicPath;
   List<String> favoritedOrganizations;
   List<String> eventsRsvp;
   List<String> eventsHistory;
-  int totalVolunteerHours;
+  num totalVolunteerHours;
   int semesterVolunteerHourGoal;
-  List<String> userStudentSemesters;
   List<String> categoryTags;
   String recoveryToken;
   String confirmToken;
@@ -32,52 +31,43 @@ class StudentUser extends AppUser {
   bool emailValidated;
   DateTime createdAt;
   DateTime updatedAt;
-  String profilePicPath;
-  String role;
   bool firstTimeLogin;
 
   StudentUser({
     required this.id,
-    required this.studentId,
     required this.firstName,
     required this.lastName,
+    required this.role,
     required this.email,
     required this.password,
-    required this.profilePicture,
+    required this.profilePicPath,
     required this.favoritedOrganizations,
     required this.eventsRsvp,
     required this.eventsHistory,
     required this.totalVolunteerHours,
     required this.semesterVolunteerHourGoal,
-    required this.userStudentSemesters,
     required this.categoryTags,
     required this.recoveryToken,
     required this.confirmToken,
     required this.emailToken,
     required this.emailValidated,
+    required this.firstTimeLogin,
     required this.createdAt,
     required this.updatedAt,
-    required this.profilePicPath,
-    required this.role,
-    required this.firstTimeLogin,
-  }) : super(id: '', email: '', role: '');
+  }) : super(id: '', email: '', role: '', firstTimeLogin: false);
 
   factory StudentUser.fromJson(Map<String, dynamic> json) => StudentUser(
         id: json["_id"],
-        studentId: json["studentID"],
         firstName: json["firstName"],
         lastName: json["lastName"],
         email: json["email"],
         password: json["password"],
-        profilePicture: json["profilePicture"],
         favoritedOrganizations:
             List<String>.from(json["favoritedOrganizations"].map((x) => x)),
         eventsRsvp: List<String>.from(json["eventsRSVP"].map((x) => x)),
         eventsHistory: List<String>.from(json["eventsHistory"].map((x) => x)),
         totalVolunteerHours: json["totalVolunteerHours"],
         semesterVolunteerHourGoal: json["semesterVolunteerHourGoal"],
-        userStudentSemesters:
-            List<String>.from(json["userStudentSemesters"].map((x) => x)),
         categoryTags: List<String>.from(json["categoryTags"].map((x) => x)),
         recoveryToken: json["recoveryToken"],
         confirmToken: json["confirmToken"],
@@ -92,20 +82,16 @@ class StudentUser extends AppUser {
 
   Map<String, dynamic> toJson() => {
         "_id": id,
-        "studentID": studentId,
         "firstName": firstName,
         "lastName": lastName,
         "email": email,
         "password": password,
-        "profilePicture": profilePicture,
         "favoritedOrganizations":
             List<dynamic>.from(favoritedOrganizations.map((x) => x)),
         "eventsRSVP": List<dynamic>.from(eventsRsvp.map((x) => x)),
         "eventsHistory": List<dynamic>.from(eventsHistory.map((x) => x)),
         "totalVolunteerHours": totalVolunteerHours,
         "semesterVolunteerHourGoal": semesterVolunteerHourGoal,
-        "userStudentSemesters":
-            List<dynamic>.from(userStudentSemesters.map((x) => x)),
         "categoryTags": List<dynamic>.from(categoryTags.map((x) => x)),
         "recoveryToken": recoveryToken,
         "confirmToken": confirmToken,

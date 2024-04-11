@@ -42,16 +42,29 @@ class EditOrganizationProfile extends ConsumerWidget {
 
     Widget getAppbarProfileImage() {
       return FutureBuilder(
-          future: imagesRepository.retrieveImage('2', user!.id),
+          future: imagesRepository.retrieveImage('2', user.id),
           builder: (context, snapshot) {
-            final String imageUrl = snapshot.data ?? 'No initial data';
-            final String state = snapshot.connectionState.toString();
-            return ClipRRect(
-              borderRadius: BorderRadius.circular(25.0),
-              child: Image(
-                  semanticLabel: 'Profile picture',
-                  image: NetworkImage(imageUrl),
-                  height: 20),
+            if (snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.hasError) {
+                return Center(
+                  child: Text(
+                    '${snapshot.error} occurred',
+                    style: const TextStyle(fontSize: 18),
+                  ),
+                );
+              } else if (snapshot.hasData) {
+                final String imageUrl = snapshot.data!;
+                return ClipRRect(
+                  borderRadius: BorderRadius.circular(25.0),
+                  child: Image(
+                      semanticLabel: 'Profile picture',
+                      image: NetworkImage(imageUrl),
+                      height: 20),
+                );
+              }
+            }
+            return const Center(
+              child: CircularProgressIndicator(),
             );
           });
     }
@@ -61,18 +74,6 @@ class EditOrganizationProfile extends ConsumerWidget {
         automaticallyImplyLeading: true,
         title: const Text('Edit Profile'),
         actions: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: IconButton(
-              onPressed: () {},
-              tooltip: 'View notifications',
-              icon: const Icon(
-                Icons.notifications_outlined,
-                color: Colors.white,
-                semanticLabel: 'Notifications',
-              ),
-            ),
-          ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: GestureDetector(
@@ -165,17 +166,30 @@ class _OrganizationTopState extends State<OrganizationTop> {
           return FutureBuilder(
               future: imagesRepository.retrieveImage('4', org!.id),
               builder: (context, snapshot) {
-                final String imageUrl = snapshot.data ?? 'No initial data';
-                final String state = snapshot.connectionState.toString();
-                return Container(
-                  width: width,
-                  height: 200,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      fit: BoxFit.fill,
-                      image: NetworkImage(imageUrl),
-                    ),
-                  ),
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.hasError) {
+                    return Center(
+                      child: Text(
+                        '${snapshot.error} occurred',
+                        style: const TextStyle(fontSize: 18),
+                      ),
+                    );
+                  } else if (snapshot.hasData) {
+                    final String imageUrl = snapshot.data!;
+                    return Container(
+                      width: width,
+                      height: 200,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          fit: BoxFit.fill,
+                          image: NetworkImage(imageUrl),
+                        ),
+                      ),
+                    );
+                  }
+                }
+                return const Center(
+                  child: CircularProgressIndicator(),
                 );
               });
         }
@@ -329,6 +343,92 @@ class _TabBarOrgState extends State<TabBarOrg> with TickerProviderStateMixin {
         organizationsRepository.fetchOrganizationsList();
 
         final org = organizationsRepository.getOrganization(user!.id);
+
+        showConfirmDialog(BuildContext context) {
+          Widget okButton = TextButton(
+            child: Text("OK"),
+            onPressed: () {
+              List<String> updateIDs = [];
+              List<String> eventIDs = [];
+
+              for (Announcement a in org!.announcements) {
+                updateIDs.add(a.id);
+              }
+
+              for (Event e in org!.eventsArray) {
+                eventIDs.add(e.id);
+              }
+
+              if (email != '') {
+                org.contact?.email = email;
+              }
+              if (phone != '') {
+                org.contact?.phone = phone;
+              }
+              if (website != '') {
+                org.contact?.website = website;
+              }
+              if (facebook != '') {
+                org.contact?.socialMedia?.facebook = facebook;
+              }
+              if (instagram != '') {
+                org.contact?.socialMedia?.instagram = instagram;
+              }
+              if (twitter != '') {
+                org.contact?.socialMedia?.twitter = twitter;
+              }
+              if (linkedin != '') {
+                org.contact?.socialMedia?.linkedin = linkedin;
+              }
+
+              //print(org.contact?.toJson());
+
+              organizationsRepository.editOrganization(
+                  user.id,
+                  null, // you cannot edit your password on this page
+                  org?.name ?? '',
+                  email,
+                  description,
+                  org?.logoUrl ?? '',
+                  org?.favorites ?? [],
+                  org?.favorites ?? [],
+                  updateIDs,
+                  org?.calendarLink,
+                  org?.contact,
+                  org?.isActive,
+                  org?.eventHappeningNow,
+                  org?.backgroundUrl,
+                  eventIDs,
+                  org?.location,
+                  org?.categoryTags,
+                  org.workingHoursPerWeek);
+              //print(org.contact);
+              //print(org.contact?.website);
+              Navigator.of(context).pop();
+            },
+          );
+
+          Widget cancelButton = TextButton(
+            child: Text("Cancel"),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          );
+
+          AlertDialog alert = AlertDialog(
+            title: Text("Confirmation"),
+            content:
+                Text("Are you sure you want to edit your profile information?"),
+            actions: [okButton, cancelButton],
+          );
+
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return alert;
+            },
+          );
+        }
 
         return DefaultTabController(
           length: 2,
@@ -666,49 +766,7 @@ class _TabBarOrgState extends State<TabBarOrg> with TickerProviderStateMixin {
                       ),
                     ),
                     onPressed: () {
-                      List<String> updateIDs = [];
-                      List<String> eventIDs = [];
-
-                      for (Announcement a in org!.announcements) {
-                        updateIDs.add(a.id);
-                      }
-
-                      for (Event e in org!.eventsArray) {
-                        eventIDs.add(e.id);
-                      }
-
-                      if (email != '') {
-                        org.contact?.email = email;
-                      }
-                      if (phone != '') {
-                        org.contact?.phone = phone;
-                      }
-                      if (website != '') {
-                        org.contact?.website = website;
-                      }
-                      if (email != '') {
-                        org.contact?.email = email;
-                      }
-
-                      organizationsRepository.editOrganization(
-                          user.id,
-                          org?.password ?? '',
-                          org?.name ?? '',
-                          email,
-                          description,
-                          org?.logoUrl ?? '',
-                          org?.favorites ?? [],
-                          org?.favorites ?? [],
-                          updateIDs,
-                          org?.calendarLink,
-                          org?.contact,
-                          org?.isActive,
-                          org?.eventHappeningNow,
-                          org?.backgroundUrl,
-                          eventIDs,
-                          org?.location,
-                          org?.categoryTags,
-                          org.workingHoursPerWeek);
+                      showConfirmDialog(context);
                     },
                   ),
                 ),
@@ -761,24 +819,38 @@ class _EditProfileImageState extends State<EditProfileImage> {
           return FutureBuilder(
               future: imagesRepository.retrieveImage('2', user.id),
               builder: (context, snapshot) {
-                final String imageUrl = snapshot.data ?? 'No initial data';
-                final String state = snapshot.connectionState.toString();
-                return EditableImage(
-                  onChange: _directUpdateImage,
-                  image: _organizationPicFile != null
-                      ? Image.file(_organizationPicFile!, fit: BoxFit.cover)
-                      : Image(image: NetworkImage(imageUrl)),
-                  size: 150,
-                  imagePickerTheme: ThemeData(
-                    primaryColor: Colors.yellow,
-                    shadowColor: Colors.deepOrange,
-                    colorScheme:
-                        const ColorScheme.light(background: Colors.indigo),
-                    iconTheme: const IconThemeData(color: Colors.red),
-                    fontFamily: 'Papyrus',
-                  ),
-                  imageBorder: Border.all(color: Colors.lime, width: 2),
-                  editIconBorder: Border.all(color: Colors.purple, width: 2),
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.hasError) {
+                    return Center(
+                      child: Text(
+                        '${snapshot.error} occurred',
+                        style: const TextStyle(fontSize: 18),
+                      ),
+                    );
+                  } else if (snapshot.hasData) {
+                    final String imageUrl = snapshot.data!;
+                    return EditableImage(
+                      onChange: _directUpdateImage,
+                      image: _organizationPicFile != null
+                          ? Image.file(_organizationPicFile!, fit: BoxFit.cover)
+                          : Image(image: NetworkImage(imageUrl)),
+                      size: 150,
+                      imagePickerTheme: ThemeData(
+                        primaryColor: Colors.yellow,
+                        shadowColor: Colors.deepOrange,
+                        colorScheme:
+                            const ColorScheme.light(background: Colors.indigo),
+                        iconTheme: const IconThemeData(color: Colors.red),
+                        fontFamily: 'Papyrus',
+                      ),
+                      imageBorder: Border.all(color: Colors.lime, width: 2),
+                      editIconBorder:
+                          Border.all(color: Colors.purple, width: 2),
+                    );
+                  }
+                }
+                return const Center(
+                  child: CircularProgressIndicator(),
                 );
               });
         }

@@ -17,6 +17,12 @@ import 'package:knightassist_mobile_app/src/utils/async_value_ui.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:settings_ui/settings_ui.dart';
 
+/*
+DATA NEEDED:
+- the current user's profile image and ID
+- the full studentuser object or organization object of current user
+*/
+
 class AccountScreen extends ConsumerWidget {
   const AccountScreen({super.key});
 
@@ -48,16 +54,29 @@ class AccountScreen extends ConsumerWidget {
       return FutureBuilder(
           future: imagesRepository.retrieveImage('2', org!.id),
           builder: (context, snapshot) {
-            final String imageUrl = snapshot.data ?? 'No initial data';
-            final String state = snapshot.connectionState.toString();
-            return ClipOval(
-              child: SizedBox.fromSize(
-                size: const Size.fromRadius(48),
-                child: Image(
-                    semanticLabel: 'User profile picture',
-                    image: NetworkImage(imageUrl),
-                    fit: BoxFit.cover),
-              ),
+            if (snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.hasError) {
+                return Center(
+                  child: Text(
+                    '${snapshot.error} occurred',
+                    style: const TextStyle(fontSize: 18),
+                  ),
+                );
+              } else if (snapshot.hasData) {
+                final String imageUrl = snapshot.data!;
+                return ClipOval(
+                  child: SizedBox.fromSize(
+                    size: const Size.fromRadius(48),
+                    child: Image(
+                        semanticLabel: 'User profile picture',
+                        image: NetworkImage(imageUrl),
+                        fit: BoxFit.cover),
+                  ),
+                );
+              }
+            }
+            return const Center(
+              child: CircularProgressIndicator(),
             );
           });
     }
@@ -66,16 +85,29 @@ class AccountScreen extends ConsumerWidget {
       return FutureBuilder(
           future: imagesRepository.retrieveImage('3', student!.id),
           builder: (context, snapshot) {
-            final String imageUrl = snapshot.data ?? 'No initial data';
-            final String state = snapshot.connectionState.toString();
-            return ClipOval(
-              child: SizedBox.fromSize(
-                size: const Size.fromRadius(48),
-                child: Image(
-                    semanticLabel: 'User profile picture',
-                    image: NetworkImage(imageUrl),
-                    fit: BoxFit.cover),
-              ),
+            if (snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.hasError) {
+                return Center(
+                  child: Text(
+                    '${snapshot.error} occurred',
+                    style: const TextStyle(fontSize: 18),
+                  ),
+                );
+              } else if (snapshot.hasData) {
+                final String imageUrl = snapshot.data!;
+                return ClipOval(
+                  child: SizedBox.fromSize(
+                    size: const Size.fromRadius(48),
+                    child: Image(
+                        semanticLabel: 'User profile picture',
+                        image: NetworkImage(imageUrl),
+                        fit: BoxFit.cover),
+                  ),
+                );
+              }
+            }
+            return const Center(
+              child: CircularProgressIndicator(),
             );
           });
     }

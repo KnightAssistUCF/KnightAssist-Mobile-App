@@ -9,6 +9,14 @@ import 'package:knightassist_mobile_app/src/features/organizations/domain/organi
 import 'package:knightassist_mobile_app/src/features/organizations/domain/update.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 
+/*
+DATA NEEDED:
+- the review's star rating, title, and content
+- the event the review was left for
+- the profile picture and name of the user who left the review
+- the current user's profile image
+*/
+
 class FeedbackDetailScreen extends ConsumerWidget {
   const FeedbackDetailScreen({super.key, required this.feedback});
   final EventFeedback feedback;

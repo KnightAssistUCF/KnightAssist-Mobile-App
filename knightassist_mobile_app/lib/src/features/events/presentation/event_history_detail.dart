@@ -2,10 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:knightassist_mobile_app/src/features/events/data/events_repository.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/event.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/event_history.dart';
+import 'package:knightassist_mobile_app/src/features/images/data/images_repository.dart';
 import 'package:knightassist_mobile_app/src/features/organizations/domain/organization.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
+
+/*
+DATA NEEDED:
+- the full details of the event history object being viewed
+- the full event object of the event the history is for
+- the current user's profile image
+*/
 
 class HistoryDetailScreen extends ConsumerWidget {
   const HistoryDetailScreen({super.key, required this.event});
@@ -17,6 +26,10 @@ class HistoryDetailScreen extends ConsumerWidget {
     double w = MediaQuery.of(context).size.width;
 
     final difference = event.checkOut.difference(event.checkIn).inHours;
+
+    final eventsRepository = ref.watch(eventsRepositoryProvider);
+    eventsRepository.fetchEventsList();
+    final eventObj = eventsRepository.getEvent(event.id);
 
     return Scaffold(
       appBar: AppBar(
@@ -60,7 +73,9 @@ class HistoryDetailScreen extends ConsumerWidget {
       ),
       body: ListView(scrollDirection: Axis.vertical, children: <Widget>[
         Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Padding(padding: const EdgeInsets.all(0.0), child: _title(w, event)),
+          Padding(
+              padding: const EdgeInsets.all(0.0),
+              child: _title(w, event, eventObj!)),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextButton(
@@ -112,13 +127,6 @@ class HistoryDetailScreen extends ConsumerWidget {
               style: const TextStyle(fontSize: 20),
             ),
           ),
-          const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Text(
-              "Points received: x",
-              style: TextStyle(fontSize: 20),
-            ),
-          ),
           Center(
             child: SizedBox(
               width: 300,
@@ -126,7 +134,7 @@ class HistoryDetailScreen extends ConsumerWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: ElevatedButton(
                   onPressed: () {
-                    context.pushNamed("event", extra: event);
+                    context.pushNamed("event", extra: eventObj);
                   },
                   style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(
@@ -152,29 +160,53 @@ class HistoryDetailScreen extends ConsumerWidget {
   }
 }
 
-_title(double width, EventHistory e) {
+_title(double width, EventHistory e, Event eventObj) {
   return Builder(builder: (context) {
-    return Stack(children: [
-      Center(
-        child: Column(
-          children: [
-            Container(
-              width: MediaQuery.of(context).size.width,
-              height: 200,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  fit: BoxFit.fill,
-                  image: NetworkImage(''),
+    return Consumer(
+      builder: (context, ref, child) {
+        final imagesRepository = ref.watch(imagesRepositoryProvider);
+        return Stack(children: [
+          FutureBuilder(
+              future: imagesRepository.retrieveImage('1', eventObj.id),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.hasError) {
+                    return Center(
+                      child: Text(
+                        '${snapshot.error} occurred',
+                        style: const TextStyle(fontSize: 18),
+                      ),
+                    );
+                  } else if (snapshot.hasData) {
+                    final String imageUrl = snapshot.data!;
+                    return Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 200,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          fit: BoxFit.fill,
+                          image: NetworkImage(imageUrl),
+                        ),
+                      ),
+                    );
+                  }
+                }
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }),
+          Center(
+            child: Column(
+              children: [
+                Text(
+                  e.name,
+                  style: const TextStyle(fontSize: 30, color: Colors.black),
                 ),
-              ),
+              ],
             ),
-            Text(
-              e.name,
-              style: const TextStyle(fontSize: 30, color: Colors.black),
-            ),
-          ],
-        ),
-      ),
-    ]);
+          ),
+        ]);
+      },
+    );
   });
 }

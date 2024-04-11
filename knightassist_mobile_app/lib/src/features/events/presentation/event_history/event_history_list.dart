@@ -7,6 +7,11 @@ import 'package:knightassist_mobile_app/src/features/events/presentation/event_h
 import 'package:knightassist_mobile_app/src/features/events/presentation/event_history/event_history_search_state_provider.dart';
 import 'package:knightassist_mobile_app/src/routing/app_router.dart';
 
+/* DATA NEEDED:
+- list of user's event history with event image, name, and hours attended
+- user's profile picture
+*/
+
 class EventHistoryList extends ConsumerWidget {
   const EventHistoryList({super.key});
 

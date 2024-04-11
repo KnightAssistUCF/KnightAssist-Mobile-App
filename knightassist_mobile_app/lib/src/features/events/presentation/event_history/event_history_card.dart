@@ -4,6 +4,7 @@ import 'package:knightassist_mobile_app/src/common_widgets/responsive_center.dar
 import 'package:knightassist_mobile_app/src/constants/app_sizes.dart';
 import 'package:knightassist_mobile_app/src/constants/breakpoints.dart';
 import 'package:knightassist_mobile_app/src/features/events/domain/event_history.dart';
+import 'package:knightassist_mobile_app/src/features/organizations/data/organizations_repository.dart';
 
 class EventHistoryCard extends ConsumerWidget {
   const EventHistoryCard(
@@ -43,9 +44,12 @@ class EventHistoryCard extends ConsumerWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: ListTile(
                     contentPadding: EdgeInsets.zero,
+                    // Event history does not come with images
+                    /*
                     leading: ClipRRect(
                         borderRadius: BorderRadius.circular(12.0),
                         child: Image(image: AssetImage(''), height: 75)),
+                        */
                     title: Text(
                       eventHistory.name,
                       overflow: TextOverflow.ellipsis,
@@ -59,7 +63,7 @@ class EventHistoryCard extends ConsumerWidget {
                       children: [
                         Text(
                           //event.sponsoringOrganization,
-                          'sponsor org',
+                          eventHistory.org,
                           overflow: TextOverflow.ellipsis,
                           maxLines: 3,
                           style: const TextStyle(fontWeight: FontWeight.w400),

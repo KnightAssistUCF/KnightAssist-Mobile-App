@@ -92,7 +92,7 @@ class OrganizationsRepository {
               contact: orgData['contact'] == null
                   ? Contact()
                   : Contact(
-                      socialMedia: orgData['socialMedia'] == null
+                      socialMedia: orgData['contact']['socialMedia'] == null
                           ? SocialMedia()
                           : SocialMedia(
                               facebook: orgData['contact']['socialMedia']
@@ -133,61 +133,118 @@ class OrganizationsRepository {
                       monday: orgData['workingHoursPerWeek']['monday'] == null
                           ? WeekDay()
                           : WeekDay(
-                              start: DateTime.parse(
+                              start: orgData['workingHoursPerWeek']['monday']
+                                          ['start'] ==
+                                      null
+                                  ? null
+                                  : DateTime.parse(
                                   orgData['workingHoursPerWeek']['monday']
                                       ['start']),
-                              end: DateTime.parse(orgData['workingHoursPerWeek']
+                              end: orgData['workingHoursPerWeek']['monday']
+                                          ['end'] ==
+                                      null
+                                  ? null
+                                  :  DateTime.parse(orgData['workingHoursPerWeek']
                                   ['monday']['end'])),
                       tuesday: orgData['workingHoursPerWeek']['tuesday'] == null
                           ? WeekDay()
                           : WeekDay(
-                              start: DateTime.parse(
-                                  orgData['workingHoursPerWeek']['tuesday']
-                                      ['start']),
-                              end: DateTime.parse(orgData['workingHoursPerWeek']
-                                  ['tuesday']['end'])),
+                              start: orgData['workingHoursPerWeek']['tuesday']
+                                          ['start'] ==
+                                      null
+                                  ? null
+                                  : DateTime.parse(
+                                      orgData['workingHoursPerWeek']['tuesday']
+                                          ['start']),
+                              end: orgData['workingHoursPerWeek']['tuesday']
+                                          ['end'] ==
+                                      null
+                                  ? null
+                                  : DateTime.parse(
+                                      orgData['workingHoursPerWeek']['tuesday']
+                                          ['end'])),
                       wednesday: orgData['workingHoursPerWeek']['wednesday'] ==
                               null
                           ? WeekDay()
                           : WeekDay(
-                              start: DateTime.parse(
+                              start: orgData['workingHoursPerWeek']['wednesday']
+                                          ['start'] ==
+                                      null
+                                  ? null
+                                  : DateTime.parse(
                                   orgData['workingHoursPerWeek']['wednesday']
                                       ['start']),
-                              end: DateTime.parse(orgData['workingHoursPerWeek']
+                              end: orgData['workingHoursPerWeek']['wednesday']
+                                          ['end'] ==
+                                      null
+                                  ? null
+                                  : DateTime.parse(orgData['workingHoursPerWeek']
                                   ['wednesday']['end'])),
                       thursday: orgData['workingHoursPerWeek']['thursday'] ==
                               null
                           ? WeekDay()
                           : WeekDay(
-                              start: DateTime.parse(
+                              start: orgData['workingHoursPerWeek']['thursday']
+                                          ['start'] ==
+                                      null
+                                  ? null
+                                  : DateTime.parse(
                                   orgData['workingHoursPerWeek']['thursday']
                                       ['start']),
-                              end: DateTime.parse(orgData['workingHoursPerWeek']
+                              end: orgData['workingHoursPerWeek']['thursday']
+                                          ['end'] ==
+                                      null
+                                  ? null
+                                  : DateTime.parse(orgData['workingHoursPerWeek']
                                   ['thursday']['end'])),
                       friday: orgData['workingHoursPerWeek']['friday'] == null
                           ? WeekDay()
                           : WeekDay(
-                              start: DateTime.parse(
+                              start: orgData['workingHoursPerWeek']['friday']
+                                          ['start'] ==
+                                      null
+                                  ? null
+                                  :DateTime.parse(
                                   orgData['workingHoursPerWeek']['friday']
                                       ['start']),
-                              end: DateTime.parse(orgData['workingHoursPerWeek']
+                              end: orgData['workingHoursPerWeek']['friday']
+                                          ['end'] ==
+                                      null
+                                  ? null
+                                  :DateTime.parse(orgData['workingHoursPerWeek']
                                   ['friday']['end'])),
                       saturday: orgData['workingHoursPerWeek']['saturday'] ==
                               null
                           ? WeekDay()
                           : WeekDay(
-                              start: DateTime.parse(
+                              start: orgData['workingHoursPerWeek']['saturday']
+                                          ['start'] ==
+                                      null
+                                  ? null
+                                  :DateTime.parse(
                                   orgData['workingHoursPerWeek']['saturday']
                                       ['start']),
-                              end: DateTime.parse(orgData['workingHoursPerWeek']
+                              end: orgData['workingHoursPerWeek']['saturday']
+                                          ['end'] ==
+                                      null
+                                  ? null
+                                  :DateTime.parse(orgData['workingHoursPerWeek']
                                   ['saturday']['end'])),
                       sunday: orgData['workingHoursPerWeek']['sunday'] == null
                           ? WeekDay()
                           : WeekDay(
-                              start: DateTime.parse(
+                              start: orgData['workingHoursPerWeek']['sunday']
+                                          ['start'] ==
+                                      null
+                                  ? null
+                                  :DateTime.parse(
                                   orgData['workingHoursPerWeek']['sunday']
                                       ['start']),
-                              end: DateTime.parse(orgData['workingHoursPerWeek']
+                              end: orgData['workingHoursPerWeek']['sunday']
+                                          ['end'] ==
+                                      null
+                                  ? null
+                                  :DateTime.parse(orgData['workingHoursPerWeek']
                                   ['sunday']['end'])),
                     ),
               recoveryTokenForOrg: orgData['recoveryTokenForORG'],
@@ -200,6 +257,10 @@ class OrganizationsRepository {
               profilePicPath: orgData['profilePicPath'],
               role: orgData['role'],
               firstTimeLogin: orgData['firstTimeLogin']);
+
+          //print(o.name);
+          //print(o.contact?.website);
+          //print(o.contact?.socialMedia?.facebook);
 
           list.add(o);
         }
@@ -286,24 +347,42 @@ class OrganizationsRepository {
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
-        body: jsonEncode(<String, dynamic>{
-          'id': organizationID,
-          'name': name,
-          'email': email,
-          'password': password,
-          'description': description,
-          'logoUrl': logoUrl,
-          'favorites': favorites,
-          'updates': updates,
-          'calendarLink': calendarLink,
-          'location': location,
-          'categoryTags': categoryTags,
-          'contact': contact?.toJson(),
-          'isActive': isActive,
-          'eventHappeningNow': eventHappeningNow,
-          'backgroundUrl': backgroundUrl,
-          'eventsArray': events,
-        }));
+        body: password == null
+            ? jsonEncode(<String, dynamic>{
+                'id': organizationID,
+                'name': name,
+                'email': email,
+                'description': description,
+                'logoUrl': logoUrl,
+                'favorites': favorites,
+                'calendarLink': calendarLink,
+                'location': location,
+                'categoryTags': categoryTags,
+                'contact': contact?.toJson(),
+                'isActive': isActive,
+                'eventHappeningNow': eventHappeningNow,
+                'backgroundUrl': backgroundUrl,
+                'eventsArray': events,
+                'workingHoursPerWeek': workingHoursPerWeek?.toJson()
+              })
+            : jsonEncode(<String, dynamic>{
+                'id': organizationID,
+                'name': name,
+                'email': email,
+                'password': password,
+                'description': description,
+                'logoUrl': logoUrl,
+                'favorites': favorites,
+                'calendarLink': calendarLink,
+                'location': location,
+                'categoryTags': categoryTags,
+                'contact': contact?.toJson(),
+                'isActive': isActive,
+                'eventHappeningNow': eventHappeningNow,
+                'backgroundUrl': backgroundUrl,
+                'eventsArray': events,
+                'workingHoursPerWeek': workingHoursPerWeek?.toJson()
+              }));
     var body = jsonDecode(response.body);
     switch (response.statusCode) {
       case 200:
@@ -388,20 +467,17 @@ class OrganizationsRepository {
               email: studentData['email'],
               firstName: studentData['firstName'],
               lastName: studentData['lastName'],
-              profilePicture: studentData['profilePicPath'],
               favoritedOrganizations: favoritedOrganizations,
               eventsRsvp: eventsRSVP,
               eventsHistory: eventsHistory,
               totalVolunteerHours: studentData['totalVolunteerHours'],
               semesterVolunteerHourGoal:
                   studentData['semesterVolunteerHourGoal'],
-              userStudentSemesters: userStudentSemesters,
               categoryTags: tags,
               recoveryToken: studentData['recoveryToken'],
               confirmToken: studentData['confirmTokeb'],
               emailToken: studentData['EmailToken'],
               emailValidated: studentData['emailValidated'],
-              studentId: studentData['studentID'] ?? '',
               password: studentData['password'],
               createdAt: studentData['createdAt'],
               updatedAt: studentData['updatedAt'],
