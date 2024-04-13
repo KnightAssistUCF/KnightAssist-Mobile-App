@@ -165,7 +165,7 @@ _title(double width, EventHistory e, Event eventObj) {
     return Consumer(
       builder: (context, ref, child) {
         final imagesRepository = ref.watch(imagesRepositoryProvider);
-        return Stack(children: [
+        return Column(children: [
           FutureBuilder(
               future: imagesRepository.retrieveImage('1', eventObj.id),
               builder: (context, snapshot) {
