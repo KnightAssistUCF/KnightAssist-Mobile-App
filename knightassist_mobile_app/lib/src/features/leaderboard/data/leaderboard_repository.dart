@@ -40,7 +40,9 @@ class LeaderboardRepository {
             eventsRSVP.add(s);
           }
           for (dynamic s in studentData['eventsHistory']) {
-            eventsHistory.add(s);
+            if (s != null) {
+              eventsHistory.add(s);
+            }
           }
           if (studentData['userStudentSemesters'] != null) {
             for (dynamic s in studentData['userStudentSemesters']) {
