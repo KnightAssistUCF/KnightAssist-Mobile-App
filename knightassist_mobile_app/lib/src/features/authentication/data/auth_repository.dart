@@ -72,7 +72,9 @@ class AuthRepository {
             eventsRSVP.add(s);
           }
           for (dynamic s in user['eventsHistory']) {
-            eventsHistory.add(s);
+            if (s!=null) {
+              eventsHistory.add(s);
+            }
           }
           for (dynamic s in user['categoryTags']) {
             categoryTags.add(s);
