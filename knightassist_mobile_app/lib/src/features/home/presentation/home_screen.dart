@@ -808,44 +808,7 @@ class HomeScreenTab extends ConsumerWidget {
       return 'Success';
     }
 
-    Widget getAppbarProfileImage() {
-      return FutureBuilder(
-          future: isOrg
-              ? imagesRepository.retrieveImage('2', user!.id)
-              : imagesRepository.retrieveImage('3', user!.id),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              if (snapshot.hasError) {
-                return Center(
-                  child: Text(
-                    '${snapshot.error} occurred',
-                    style: const TextStyle(fontSize: 18),
-                  ),
-                );
-              } else if (snapshot.hasData) {
-                final String imageUrl = snapshot.data!;
-                return ClipRRect(
-                  borderRadius: BorderRadius.circular(25.0),
-                  child: Image(
-                      semanticLabel: 'Profile picture',
-                      image: NetworkImage(imageUrl),
-                      height: 20),
-                );
-              }
-            }
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          });
-    }
-
-    PopupMenuItem _buildPopupMenuItem(String message) {
-      return PopupMenuItem(
-        child: Text(message),
-      );
-    }
-
-    Widget getNotifOrgProfileImage(PushNotification n) {
+      Widget getNotifOrgProfileImage(PushNotification n) {
       return FutureBuilder(
           future: imagesRepository.retrieveImage('2', n.orgId),
           builder: (context, snapshot) {
@@ -883,6 +846,37 @@ class HomeScreenTab extends ConsumerWidget {
           });
     }
 
+    Widget getAppbarProfileImage() {
+      return FutureBuilder(
+          future: isOrg
+              ? imagesRepository.retrieveImage('2', user!.id)
+              : imagesRepository.retrieveImage('3', user!.id),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.hasError) {
+                return Center(
+                  child: Text(
+                    '${snapshot.error} occurred',
+                    style: const TextStyle(fontSize: 18),
+                  ),
+                );
+              } else if (snapshot.hasData) {
+                final String imageUrl = snapshot.data!;
+                return ClipRRect(
+                  borderRadius: BorderRadius.circular(25.0),
+                  child: Image(
+                      semanticLabel: 'Profile picture',
+                      image: NetworkImage(imageUrl),
+                      height: 20),
+                );
+              }
+            }
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          });
+    }
+
     List<PopupMenuItem<dynamic>> _getNotifItems() {
       List<PopupMenuItem<dynamic>> list = [];
 
@@ -899,6 +893,7 @@ class HomeScreenTab extends ConsumerWidget {
             } else if (n.type_is == 'orgAnnouncement') {
               Announcement? a;
               a = announcementsRepository.getAnnouncement(n.message);
+              //a = announcementsRepository.fetchStudentFavOrgAnnouncements(user!.id).then((value) => a = value.firstWhere((element) => element.content == n.message)) as Announcement?;
               context.pushNamed("announcementdetail", extra: a);
             }
           },
@@ -940,6 +935,56 @@ class HomeScreenTab extends ConsumerWidget {
       return list;
     }
 
+     Future<Widget> getAppbarNotifBadge() async {
+      await announcementsRepository.fetchStudentFavOrgAnnouncements(user!.id);
+      await eventsRepository.fetchEventsList();
+
+      return FutureBuilder(
+          future: notificationsRepository.pushNotifications(user!.id),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.hasError) {
+                return Center(
+                  child: Text(
+                    '${snapshot.error} occurred',
+                    style: const TextStyle(fontSize: 18),
+                  ),
+                );
+              } else if (snapshot.hasData) {
+                final List<PushNotification> notifs = snapshot.data as List<PushNotification>;
+                return Badge(
+                  label: Text(notifs
+                      .where((element) => element.read == false)
+                      .length
+                      .toString()),
+                  child: SizedBox(
+                    //height: 200,
+                    //width: 50,
+                    child: PopupMenuButton(
+                      tooltip: 'View notifications',
+                      icon: const Icon(
+                        Icons.notifications_outlined,
+                        color: Colors.white,
+                        semanticLabel: 'Notifications',
+                      ),
+                      itemBuilder: (ctx) => _getNotifItems(),
+                    ),
+                  ),
+                );
+              }
+            }
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          });
+    }
+
+    PopupMenuItem _buildPopupMenuItem(String message) {
+      return PopupMenuItem(
+        child: Text(message),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: true,
@@ -947,23 +992,27 @@ class HomeScreenTab extends ConsumerWidget {
           isStudent
               ? Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Badge(
-                    label: Text(notifications
-                        .where((element) => element.read == false)
-                        .length
-                        .toString()),
-                    child: SizedBox(
-                      //height: 200,
-                      //width: 50,
-                      child: PopupMenuButton(
-                        tooltip: 'View notifications',
-                        icon: const Icon(
-                          Icons.notifications_outlined,
-                          color: Colors.white,
-                          semanticLabel: 'Notifications',
-                        ),
-                        itemBuilder: (ctx) => _getNotifItems(),
-                      ),
+                  child: Tooltip(
+                    message: 'View notifications',
+                    child: FutureBuilder<Widget>(
+                      future: getAppbarNotifBadge(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.done) {
+                          if (snapshot.hasError) {
+                            return Center(
+                              child: Text(
+                                '${snapshot.error} occurred',
+                                style: const TextStyle(fontSize: 18),
+                              ),
+                            );
+                          } else if (snapshot.hasData) {
+                            return snapshot.data!;
+                          }
+                        }
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      },
                     ),
                   ),
                 )
