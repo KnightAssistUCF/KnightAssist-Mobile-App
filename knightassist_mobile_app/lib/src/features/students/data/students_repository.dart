@@ -45,7 +45,9 @@ class StudentsRepository {
             eventsRSVP.add(s);
           }
           for (dynamic s in studentData['eventsHistory']) {
+            if (s != null) {
             eventsHistory.add(s);
+          }
           }
           if (studentData['categoryTags'] != null) {
             for (dynamic s in studentData['categoryTags']) {
@@ -130,7 +132,9 @@ class StudentsRepository {
             eventsRSVP.add(s);
           }
           for (dynamic s in studentData['eventsHistory']) {
+            if (s != null) {
             eventsHistory.add(s);
+          }
           }
           if (studentData['categoryTags'] != null) {
             for (dynamic s in studentData['categoryTags']) {
@@ -194,7 +198,9 @@ class StudentsRepository {
       eventsRSVP.add(s);
     }
     for (dynamic s in studentData['eventsHistory']) {
-      eventsHistory.add(s);
+      if (s != null) {
+        eventsHistory.add(s);
+      }
     }
     if (studentData['categoryTags'] != null) {
       for (dynamic s in studentData['categoryTags']) {
